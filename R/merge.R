@@ -12,6 +12,8 @@
 #' @param updateNA
 #' @param update_values
 #' @param verbose
+#' @param keep_y_in_x
+#' @param byexp
 #'
 #' @return
 #' @export
@@ -21,6 +23,7 @@
 merge <- function(x,
                   y,
                   by            = NULL,
+                  byexp         = NULL,
                   roll          = NULL,
                   yvars         = NULL,
                   type          = c("m:m", "m:1", "1:m", "1:1"),
@@ -29,6 +32,7 @@ merge <- function(x,
                   updateNA      = update_values,
                   reportvar     = "report",
                   reporttype    = c("character", "numeric"),
+                  keep_y_in_x   = FALSE,
                   verbose       = TRUE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -52,6 +56,25 @@ merge <- function(x,
     y <- data.table::copy(y)
   }
 
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #           Modify BY when is expression   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #           Consistency of join   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  tx <- gsub("([m1]):([m1])", "\\1", type)
+  ty <- gsub("([m1]):([m1])", "\\2", type)
+
+  if (tx == "1") {
+    join_consistency(x, by, "x")
+  }
+
+  if (ty == "1") {
+    join_consistency(x, by, "y")
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Manage by when Null   ---------
@@ -153,11 +176,7 @@ merge <- function(x,
       yvars <- yvars[!(yvars %in% upvars)]
 
     }
-
-
-  }
-
-
+  } # end of update vars
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
@@ -228,17 +247,35 @@ merge <- function(x,
 
     }
 
+    if (isFALSE(keep_y_in_x)) {
+      x[, (y.upvars) := NULL]
+    }
 
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Display results and cleaning   ---------
+  #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # cleaning temporary report variables
   x[,
     c("x_report", "y_report") := NULL
   ]
+
+  # rows to keep
+  if (keep  %in% c("master", "left") ) {
+
+    x <- x[get(reportvar)  != 2]
+
+  } else if (keep  %in% c("using", "right") ) {
+
+    x <- x[get(reportvar)  != 1]
+
+  } else if (keep  == "inner") {
+    x <- x[get(reportvar)  >= 3]
+  }
+
+
 
   # convert to characters if chosen
   if (reporttype == "character") {
@@ -284,10 +321,11 @@ merge <- function(x,
     }
   } # end of reporting joyn
 
-
+  # Report var
   if (dropreport) {
     x[, (reportvar) := NULL]
   }
+
 
   return(x)
 

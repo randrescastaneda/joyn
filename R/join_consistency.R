@@ -5,14 +5,14 @@ function(dt,  by, dtname = NULL) {
     mean(N)]
 
   if (m > 1) {
-    msg     <- glue::glue("databse {.field {dtname}} is not uniquely identified
-                          by {.code {by}}", wrap = TRUE)
+    msg     <- glue::glue("databse {dtname} is not uniquely
+                          identified by {glue::glue_collapse(glue::backtick(by),
+                          sep = ', ', last ='  and ')}")
     hint    <- "Check the join type, the key variables or the consistency of
     your data"
     rlang::abort(c(
       msg,
-      i = hint,
-      x = problem
+      i = hint
     ),
     class = "joyn_error"
     )
@@ -21,6 +21,3 @@ function(dt,  by, dtname = NULL) {
 
   return(invisible(TRUE))
 }
-"{glue::glue_collapse(glue::backtick(not_in_y),
-                            sep = ', ', last ='  and ')} \\
-                            not present in variable `y`"
