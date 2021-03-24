@@ -222,6 +222,10 @@ merge <- function(x,
 
     if (isTRUE(updateNA) && isFALSE(update_values)) {
 
+      for (i in seq_along(upvars)) {
+        update_NAs(x, upvars[i])
+      }
+
     }
 
 
