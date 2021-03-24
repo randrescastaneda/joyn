@@ -1,4 +1,14 @@
-function(dt,  by, dtname = NULL) {
+#' Title
+#'
+#' @param dt
+#' @param by
+#' @param dtname
+#'
+#' @return
+#' @export
+#'
+#' @examples
+join_consistency <- function(dt,  by, dtname = NULL) {
   m <- dt[, .N,
           by = mget(by)
   ][,
