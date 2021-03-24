@@ -11,7 +11,7 @@ merge(
   byexp = NULL,
   roll = NULL,
   yvars = NULL,
-  type = c("m:m", "m:1", "1:m", "1:1"),
+  join_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("both", "full", "left", "master", "right", "using", "inner"),
   update_values = FALSE,
   updateNA = update_values,

@@ -1,12 +1,15 @@
 Package: joyn
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Tool for diagnosys and useful features of joins of data frames 
 Version: 0.0.0.9001
 Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: person("R.Andres", "Castaneda", 
+                  email = "acastanedaa@worldbank.org",
+                  role = c("aut", "cre"))
+Description: Tool for diagnosys of joins of data frames. It combines the speed
+    `data.table`, the versatilit of `dplyr`, and the diagnosys and features of
+    the `merge` command in `Stata`.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/randrescastaneda/joyn

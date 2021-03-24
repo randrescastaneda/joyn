@@ -4,7 +4,7 @@
 #' @param y data frame: In Stata terminology, it is known as the using data
 #' @param by
 #' @param roll
-#' @param type
+#' @param join_type
 #' @param keep
 #' @param yvars
 #' @param reportvar
@@ -26,7 +26,7 @@ merge <- function(x,
                   byexp         = NULL,
                   roll          = NULL,
                   yvars         = NULL,
-                  type          = c("m:m", "m:1", "1:m", "1:1"),
+                  join_type     = c("m:m", "m:1", "1:m", "1:1"),
                   keep          = c("both", "full", "left", "master", "right", "using", "inner"),
                   update_values = FALSE,
                   updateNA      = update_values,
@@ -38,7 +38,7 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  type       <- match.arg(type)
+  join_type  <- match.arg(join_type)
   keep       <- match.arg(keep)
   reporttype <- match.arg(reporttype)
 
@@ -67,8 +67,8 @@ merge <- function(x,
   #           Consistency of join   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  tx <- gsub("([m1]):([m1])", "\\1", type)
-  ty <- gsub("([m1]):([m1])", "\\2", type)
+  tx <- gsub("([m1]):([m1])", "\\1", join_type)
+  ty <- gsub("([m1]):([m1])", "\\2", join_type)
 
   if (tx == "1") {
     join_consistency(x, by, "x")
