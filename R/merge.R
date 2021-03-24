@@ -9,6 +9,9 @@
 #' @param yvars
 #' @param reportvar
 #' @param reporttype
+#' @param updateNA
+#' @param update_values
+#' @param verbose
 #'
 #' @return
 #' @export
@@ -17,14 +20,16 @@
 #' @examples
 merge <- function(x,
                   y,
-                  by     = NULL,
-                  roll   = NULL,
-                  yvars  = NULL,
-                  type   = c("m:m", "m:1", "1:m", "1:1"),
-                  keep   = c("both", "full", "left", "master", "right", "using", "inner"),
-                  reportvar = "report",
-                  reporttype = c("character", "numeric")
-                  ) {
+                  by            = NULL,
+                  roll          = NULL,
+                  yvars         = NULL,
+                  type          = c("m:m", "m:1", "1:m", "1:1"),
+                  keep          = c("both", "full", "left", "master", "right", "using", "inner"),
+                  update_values = FALSE,
+                  updateNA      = update_values,
+                  reportvar     = "report",
+                  reporttype    = c("character", "numeric"),
+                  verbose       = TRUE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
@@ -57,8 +62,10 @@ merge <- function(x,
 
     if (length(by) == 0) {
       msg     <- "no common variable names in `x` and `y`"
-      hint    <- "Make sure all variables are spelled correctly. Check for upper cases"
-      problem <- "When `by = NULL`, joyn search for common variable names to be used as keys"
+      hint    <- "Make sure all variables are spelled correctly.
+      Check for upper and lower cases"
+      problem <- "When `by = NULL`, joyn search for common variable
+      names to be used as keys"
       rlang::abort(c(
                     msg,
                     i = hint,
@@ -69,7 +76,9 @@ merge <- function(x,
 
     }
 
-    cli::cli_alert_info("joining by {.code {by}}")
+    if (verbose) {
+      cli::cli_alert_info("joining by {.code {by}}")
+    }
 
   } # end of isnull by
 
@@ -104,12 +113,51 @@ merge <- function(x,
 
   # remove id variables
 
-  if (any(yvars %in% by)) {
+  if (any(yvars %in% by) && verbose) {
     cli::cli_alert("removing key variables {.code {yvars[yvars %in% by]}}
                    from {.field yvars}",
                    wrap =  TRUE)
   }
   yvars <- yvars[! yvars %in% by]
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Check variables in X   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  xvars <- names(x)
+  xvars <- xvars[!(xvars %in% by)]
+
+  upvars <- intersect(xvars, yvars)
+
+  if (length(upvars) != 0) {
+
+    if (isTRUE(updateNA) || isTRUE(update_values)) {
+      # rename vars in y so they are different to x's when joined
+      y.upvars <- paste0("y.", upvars)
+      newyvars <- yvars
+      newyvars[newyvars %in% upvars] <- y.upvars
+
+      setnames(y, old = yvars, new = newyvars)
+
+      yvars <- newyvars
+
+
+    } else {
+
+      if (verbose) {
+        cli::cli_alert_info("variable{?s} {.code {upvars}} in `y` {?is/are}
+                            ignored in merge
+                            because `updateNA` and `update_values` are FALSE.",
+                            wrap = TRUE)
+      }
+
+      yvars <- yvars[!(yvars %in% upvars)]
+
+    }
+
+
+  }
+
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
@@ -146,29 +194,64 @@ merge <- function(x,
   setnafill(x, fill = 0, cols = c("x_report", "y_report"))
 
   # report variable
-  if (is.character(reportvar)) {
+  if (isFALSE(reportvar) || is.null(reportvar)) {
 
-    if (reporttype == "character") {
+    reportvar  <- "report"
+    dropreport <- TRUE
 
-      x[,
-        (reportvar) := {
-          r <- x_report + y_report
-          q <- fcase(r == 1, "x",
-                     r == 2, "y",
-                     r == 3, "x & y",
-                     r == 4, "NA updated",
-                     r == 5, "value updated",
-                     r == 6, "not updated",
-                     default = "conflict. check")
-          q
-        }
-        ]
+  } else {
+    dropreport <- FALSE
+  }
 
-    } else {
 
-      x[, (reportvar) :=  x_report + y_report]
+  # report variable
+  x[, (reportvar) :=  x_report + y_report]
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Update x   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (length(upvars) != 0) {
+
+    if  (isTRUE(update_values)) {
+
+      for (i in seq_along(upvars)) {
+        update_values(x, upvars[i])
+      }
 
     }
+
+    if (isTRUE(updateNA) && isFALSE(update_values)) {
+
+    }
+
+
+  }
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Display results and cleaning   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  # cleaning temporary report variables
+  x[,
+    c("x_report", "y_report") := NULL
+  ]
+
+  # convert to characters if chosen
+  if (reporttype == "character") {
+    x[,
+      (reportvar) := fcase(get(reportvar) == 1, "x",
+                           get(reportvar) == 2, "y",
+                           get(reportvar) == 3, "x & y",
+                           get(reportvar) == 4, "NA updated",
+                           get(reportvar) == 5, "value updated",
+                           get(reportvar) == 6, "not updated",
+                           default        = "conflict. check")
+    ]
+
+  }
+
+  # Display results
+  if (verbose) {
 
     # Display results in screen
 
@@ -187,12 +270,20 @@ merge <- function(x,
       table(x[[reportvar]])
 
     }
+
+    if (all(x$report %in% c("x", "y") || x$report %in% c(1, 2))) {
+      cli::cli_alert_warning(
+        cli::col_red("you have no matchig obs. Make sure argument
+                             `by` is correct. Right now, `joyn` is joining by
+                             {.code {by}}"),
+        wrap = TRUE)
+    }
   } # end of reporting joyn
 
-  x[,
-    c("x_report", "y_report") := NULL
-  ]
 
+  if (dropreport) {
+    x[, (reportvar) := NULL]
+  }
 
   return(x)
 
