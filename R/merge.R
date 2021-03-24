@@ -8,6 +8,7 @@
 #' @param keep
 #' @param yvars
 #' @param reportvar
+#' @param reporttype
 #'
 #' @return
 #' @export
@@ -21,25 +22,31 @@ merge <- function(x,
                   yvars  = NULL,
                   type   = c("m:m", "m:1", "1:m", "1:1"),
                   keep   = c("both", "full", "left", "master", "right", "using", "inner"),
-                  reportvar = "report"
+                  reportvar = "report",
+                  reporttype = c("character", "numeric")
                   ) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  type       <- match.arg(type)
+  keep       <- match.arg(keep)
+  reporttype <- match.arg(reporttype)
+
 
   if (!(is.data.table(x))) {
     x <- as.data.table(x)
+  } else {
+    x <- data.table::copy(x)
   }
 
 
   if (!(is.data.table(y))) {
     y <- as.data.table(y)
+  } else {
+    y <- data.table::copy(y)
   }
 
-
-  type <- match.arg(type)
-  keep <- match.arg(keep)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Manage by when Null   ---------
@@ -105,7 +112,7 @@ merge <- function(x,
   yvars <- yvars[! yvars %in% by]
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #             create report variable   ---------
+  #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   yvars <- c(yvars, "y_report")
@@ -123,6 +130,14 @@ merge <- function(x,
     on = by,
     (yvars) := mget(i.yvars)]
 
+  # complement
+  ty <- y[!x,
+          on = by]
+
+  x <- rbindlist(l         = list(x, ty),
+                 use.names = TRUE,
+                 fill      = TRUE)
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -132,20 +147,47 @@ merge <- function(x,
 
   # report variable
   if (is.character(reportvar)) {
-    x[,
-      (reportvar) := {
-        r <- x_report + y_report
-        q <- fcase(r == 1, "only in x",
-                   r == 2, "only in y",
-                   r == 3, "in both",
-                   r == 4, "NA updated",
-                   r == 5, "value updated",
-                   r == 6, "not updated",
-                   default = "conflict. check")
-        q
-      }
-      ]
-  }
+
+    if (reporttype == "character") {
+
+      x[,
+        (reportvar) := {
+          r <- x_report + y_report
+          q <- fcase(r == 1, "x",
+                     r == 2, "y",
+                     r == 3, "x & y",
+                     r == 4, "NA updated",
+                     r == 5, "value updated",
+                     r == 6, "not updated",
+                     default = "conflict. check")
+          q
+        }
+        ]
+
+    } else {
+
+      x[, (reportvar) :=  x_report + y_report]
+
+    }
+
+    # Display results in screen
+
+    cli::cli_h2("JOYn Report")
+
+    if (requireNamespace("janitor", quietly = TRUE)) {
+
+      disp <- janitor::tabyl(x, !!reportvar)
+      disp <- janitor::adorn_totals(disp, "row")
+      disp <- janitor::adorn_pct_formatting(disp, digits = 1)
+
+      print(disp)
+
+    } else {
+
+      table(x[[reportvar]])
+
+    }
+  } # end of reporting joyn
 
   x[,
     c("x_report", "y_report") := NULL

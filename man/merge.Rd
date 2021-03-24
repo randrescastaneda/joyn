@@ -12,7 +12,8 @@ merge(
   yvars = NULL,
   type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("both", "full", "left", "master", "right", "using", "inner"),
-  reportvar = "report"
+  reportvar = "report",
+  reporttype = c("character", "numeric")
 )
 }
 \arguments{
@@ -20,7 +21,7 @@ merge(
 
 \item{y}{data frame: In Stata terminology, it is known as the using data}
 
-\item{reportvar}{}
+\item{reporttype}{}
 }
 \value{
 

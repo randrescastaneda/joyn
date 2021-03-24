@@ -13,8 +13,8 @@ x2 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 x  = 11:15)
 
 
-y2 = data.table(id = 1:2,
-                y  = c(11L, 15L))
+y2 = data.table(id = c(1, 2, 5),
+                y  = c(11L, 15L, 20L))
 
 
 y3 <- data.table(x=rep(c("b","a","c"),each=3),
