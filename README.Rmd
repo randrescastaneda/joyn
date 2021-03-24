@@ -57,6 +57,8 @@ y1
 # using commong variable `id` as key.
 merge(x1, y1)[]
 
+# keep just those observations that match
+merge(x1, y1, keep = "inner")[]
 
 
 ```

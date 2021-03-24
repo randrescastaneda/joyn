@@ -73,4 +73,17 @@ merge(x1, y1)[]
 #> 3:  2  1 13 15  x & y
 #> 4:  3  2 14 NA      x
 #> 5: NA NA 15 NA      x
+
+# keep just those observations that match
+merge(x1, y1, keep = "inner")[]
+#> i joining by `id`
+#> -- JOYn Report --
+#> 
+#>  report n percent
+#>   x & y 3  100.0%
+#>   Total 3  100.0%
+#>    id t  x  y report
+#> 1:  1 1 11 11  x & y
+#> 2:  1 2 12 11  x & y
+#> 3:  2 1 13 15  x & y
 ```
