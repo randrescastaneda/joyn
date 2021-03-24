@@ -9,10 +9,10 @@
 #'
 #' @examples
 join_consistency <- function(dt,  by, dtname = NULL) {
-  m <- dt[, .N,
-          by = mget(by)
-  ][,
-    mean(N)]
+  m <- dt[, .N,by = mget(by)
+          ][,
+            mean(N)
+            ]
 
   if (m > 1) {
     msg     <- glue::glue("databse {dtname} is not uniquely

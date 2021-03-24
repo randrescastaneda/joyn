@@ -8,6 +8,7 @@ merge(
   x,
   y,
   by = NULL,
+  byexp = NULL,
   roll = NULL,
   yvars = NULL,
   type = c("m:m", "m:1", "1:m", "1:1"),
@@ -16,6 +17,7 @@ merge(
   updateNA = update_values,
   reportvar = "report",
   reporttype = c("character", "numeric"),
+  keep_y_in_x = FALSE,
   verbose = TRUE
 )
 }
@@ -24,7 +26,7 @@ merge(
 
 \item{y}{data frame: In Stata terminology, it is known as the using data}
 
-\item{verbose}{}
+\item{byexp}{}
 }
 \value{
 

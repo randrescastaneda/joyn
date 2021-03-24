@@ -8,7 +8,7 @@
 #' @export
 #'
 #' @examples
-`fix_by_vars <- function(by, x, y) {
+fix_by_vars <- function(by, x, y) {
 
   byexp <- grep("==?", by, value = TRUE)
 
@@ -21,10 +21,22 @@
     setnames(x, xby, newkeys)
     setnames(y, yby, newkeys)
 
-    return(TRUE)
+    by[grepl("==?", by)] <- newkeys
+
+    return(list(by      = by,
+                xby     = xby,
+                yby     = yby,
+                tempkey = newkeys)
+           )
 
   } else {
-    return(FALSE)
+
+    return(list(by      = by,
+                xby     = NULL,
+                yby     = NULL,
+                tempkey = NULL)
+           )
+
   }
 
 }

@@ -60,6 +60,8 @@ merge <- function(x,
   #           Modify BY when is expression   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  fixby  <- fix_by_vars(by, x, y)
+  by     <- fixby$by
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #           Consistency of join   ---------
@@ -173,7 +175,8 @@ merge <- function(x,
                             wrap = TRUE)
       }
 
-      yvars <- yvars[!(yvars %in% upvars)]
+      yvars    <- yvars[!(yvars %in% upvars)]
+      y.upvars <- NULL
 
     }
   } # end of update vars
@@ -247,7 +250,7 @@ merge <- function(x,
 
     }
 
-    if (isFALSE(keep_y_in_x)) {
+    if (isFALSE(keep_y_in_x) && !is.null(y.upvars)) {
       x[, (y.upvars) := NULL]
     }
 
@@ -257,12 +260,12 @@ merge <- function(x,
   #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # cleaning temporary report variables
+  ## cleaning temporary report variables ----
   x[,
     c("x_report", "y_report") := NULL
   ]
 
-  # rows to keep
+  ## rows to keep -----
   if (keep  %in% c("master", "left") ) {
 
     x <- x[get(reportvar)  != 2]
@@ -276,8 +279,15 @@ merge <- function(x,
   }
 
 
+  ## Rename by variables -----
 
-  # convert to characters if chosen
+  if (!is.null(fixby$xby)) {
+    setnames(x, fixby$tempkey, fixby$xby)
+    setnames(y, fixby$tempkey, fixby$yby)
+  }
+
+
+  ## convert to characters if chosen -------
   if (reporttype == "character") {
     x[,
       (reportvar) := fcase(get(reportvar) == 1, "x",
@@ -291,7 +301,7 @@ merge <- function(x,
 
   }
 
-  # Display results
+  ## Display results------
   if (verbose) {
 
     # Display results in screen
