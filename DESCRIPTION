@@ -11,3 +11,14 @@ Encoding: UTF-8
 LazyData: true
 URL: https://github.com/randrescastaneda/joyn
 BugReports: https://github.com/randrescastaneda/joyn/issues
+Suggests: 
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Imports: 
+    rlang,
+    data.table,
+    glue,
+    cli
+Depends: 
+    R (>= 2.10)
+RoxygenNote: 7.1.1
