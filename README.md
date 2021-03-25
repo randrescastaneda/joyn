@@ -67,6 +67,7 @@ merge(x1, y1)[]
 #>       x 2   40.0%
 #>   x & y 3   60.0%
 #>   Total 5  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x  y report
 #> 1:  1  1 11 11  x & y
 #> 2:  1  2 12 11  x & y
@@ -82,6 +83,7 @@ merge(x1, y1, keep = "inner")[]
 #>  report n percent
 #>   x & y 3  100.0%
 #>   Total 3  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
 #>    id t  x  y report
 #> 1:  1 1 11 11  x & y
 #> 2:  1 2 12 11  x & y
@@ -115,6 +117,7 @@ merge(x2, y2)[]
 #>   x & y 1   11.1%
 #>       y 4   44.4%
 #>   Total 9  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y report
 #> 1:  1  1 16  1 11  x & y
 #> 2:  1  2 12 NA NA      x
@@ -137,24 +140,28 @@ merge(x2, y2, by = "id")[]
 #>   x & y 4   57.1%
 #>       y 2   28.6%
 #>   Total 7  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y report
 #> 1:  1  1 16  1 11  x & y
 #> 2:  1  2 12  1 11  x & y
 #> 3:  2  1 NA  2 15  x & y
 #> 4:  3  2 NA  3 10  x & y
 #> 5: NA NA 15 NA NA      x
-#> 6:  5 NA 18  5 20      y
-#> 7:  6 NA 19  6 13      y
+#> 6:  5 NA NA  5 20      y
+#> 7:  6 NA NA  6 13      y
 
 # update NAs in x variable form x
 merge(x2, y2, by = "id", updateNA = TRUE)[]
+#> 
 #> -- JOYn Report --
+#> 
 #>      report n percent
 #>  NA updated 2   28.6%
 #>           x 1   14.3%
 #>       x & y 2   28.6%
 #>           y 2   28.6%
 #>       Total 7  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y     report
 #> 1:  1  1 16  1 11      x & y
 #> 2:  1  2 12  1 11      x & y
@@ -166,13 +173,16 @@ merge(x2, y2, by = "id", updateNA = TRUE)[]
 
 # Update values in x with variables from y
 merge(x2, y2, by = "id", update_values = TRUE)[]
+#> 
 #> -- JOYn Report --
+#> 
 #>         report n percent
 #>    not updated 1   14.3%
 #>  value updated 1   14.3%
 #>          x & y 3   42.9%
 #>              y 2   28.6%
 #>          Total 7  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y        report
 #> 1:  1  1 16  1 11         x & y
 #> 2:  1  2 16  1 11 value updated
@@ -181,4 +191,25 @@ merge(x2, y2, by = "id", update_values = TRUE)[]
 #> 5: NA NA 15 NA NA   not updated
 #> 6:  5 NA NA  5 20             y
 #> 7:  6 NA NA  6 13             y
+
+
+# do not bring any variable from Y into x, just the report
+merge(x2, y2, by = "id", yvars = NULL)[]
+#> 
+#> -- JOYn Report --
+#> 
+#>  report n percent
+#>       x 1   14.3%
+#>   x & y 4   57.1%
+#>       y 2   28.6%
+#>   Total 7  100.0%
+#> ---------------------------------------------------------- End of JOYn report --
+#>    id  t  x report
+#> 1:  1  1 16  x & y
+#> 2:  1  2 12  x & y
+#> 3:  2  1 NA  x & y
+#> 4:  3  2 NA  x & y
+#> 5: NA NA 15      x
+#> 6:  5 NA NA      y
+#> 7:  6 NA NA      y
 ```

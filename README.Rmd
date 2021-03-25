@@ -78,5 +78,9 @@ merge(x2, y2, by = "id", updateNA = TRUE)[]
 # Update values in x with variables from y
 merge(x2, y2, by = "id", update_values = TRUE)[]
 
+
+# do not bring any variable from Y into x, just the report
+merge(x2, y2, by = "id", yvars = NULL)[]
+
 ```
 
