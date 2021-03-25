@@ -116,6 +116,7 @@
 <span class="co">#&gt;       x 2   40.0%</span>
 <span class="co">#&gt;   x &amp; y 3   60.0%</span>
 <span class="co">#&gt;   Total 5  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  t  x  y report</span>
 <span class="co">#&gt; 1:  1  1 11 11  x &amp; y</span>
 <span class="co">#&gt; 2:  1  2 12 11  x &amp; y</span>
@@ -131,10 +132,12 @@
 <span class="co">#&gt;  report n percent</span>
 <span class="co">#&gt;   x &amp; y 3  100.0%</span>
 <span class="co">#&gt;   Total 3  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id t  x  y report</span>
 <span class="co">#&gt; 1:  1 1 11 11  x &amp; y</span>
 <span class="co">#&gt; 2:  1 2 12 11  x &amp; y</span>
 <span class="co">#&gt; 3:  2 1 13 15  x &amp; y</span>
+
 
 <span class="va">x2</span> 
 <span class="co">#&gt;    id  t  x</span>
@@ -150,7 +153,114 @@
 <span class="co">#&gt; 2:  2  2 15 17</span>
 <span class="co">#&gt; 3:  5  5 20 18</span>
 <span class="co">#&gt; 4:  6  6 13 19</span>
-<span class="co">#&gt; 5:  3  3 10 20</span></code></pre></div>
+<span class="co">#&gt; 5:  3  3 10 20</span>
+
+
+<span class="co"># Bad merge for not specifying by argument</span>
+<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
+<span class="co">#&gt; i joining by `id` and `x`</span>
+<span class="co">#&gt; -- JOYn Report --</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  report n percent</span>
+<span class="co">#&gt;       x 4   44.4%</span>
+<span class="co">#&gt;   x &amp; y 1   11.1%</span>
+<span class="co">#&gt;       y 4   44.4%</span>
+<span class="co">#&gt;   Total 9  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
+<span class="co">#&gt;    id  t  x yd  y report</span>
+<span class="co">#&gt; 1:  1  1 16  1 11  x &amp; y</span>
+<span class="co">#&gt; 2:  1  2 12 NA NA      x</span>
+<span class="co">#&gt; 3:  2  1 NA NA NA      x</span>
+<span class="co">#&gt; 4:  3  2 NA NA NA      x</span>
+<span class="co">#&gt; 5: NA NA 15 NA NA      x</span>
+<span class="co">#&gt; 6:  2 NA 17  2 15      y</span>
+<span class="co">#&gt; 7:  5 NA 18  5 20      y</span>
+<span class="co">#&gt; 8:  6 NA 19  6 13      y</span>
+<span class="co">#&gt; 9:  3 NA 20  3 10      y</span>
+
+<span class="co"># good merge, ignoring variable x from y</span>
+<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
+<span class="co">#&gt; i variable `x` in `y` is ignored in merge because `updateNA` and</span>
+<span class="co">#&gt;   `update_values` are FALSE.</span>
+<span class="co">#&gt; -- JOYn Report --</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  report n percent</span>
+<span class="co">#&gt;       x 1   14.3%</span>
+<span class="co">#&gt;   x &amp; y 4   57.1%</span>
+<span class="co">#&gt;       y 2   28.6%</span>
+<span class="co">#&gt;   Total 7  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
+<span class="co">#&gt;    id  t  x yd  y report</span>
+<span class="co">#&gt; 1:  1  1 16  1 11  x &amp; y</span>
+<span class="co">#&gt; 2:  1  2 12  1 11  x &amp; y</span>
+<span class="co">#&gt; 3:  2  1 NA  2 15  x &amp; y</span>
+<span class="co">#&gt; 4:  3  2 NA  3 10  x &amp; y</span>
+<span class="co">#&gt; 5: NA NA 15 NA NA      x</span>
+<span class="co">#&gt; 6:  5 NA NA  5 20      y</span>
+<span class="co">#&gt; 7:  6 NA NA  6 13      y</span>
+
+<span class="co"># update NAs in x variable form x</span>
+<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, updateNA <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -- JOYn Report --</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;      report n percent</span>
+<span class="co">#&gt;  NA updated 2   28.6%</span>
+<span class="co">#&gt;           x 1   14.3%</span>
+<span class="co">#&gt;       x &amp; y 2   28.6%</span>
+<span class="co">#&gt;           y 2   28.6%</span>
+<span class="co">#&gt;       Total 7  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
+<span class="co">#&gt;    id  t  x yd  y     report</span>
+<span class="co">#&gt; 1:  1  1 16  1 11      x &amp; y</span>
+<span class="co">#&gt; 2:  1  2 12  1 11      x &amp; y</span>
+<span class="co">#&gt; 3:  2  1 17  2 15 NA updated</span>
+<span class="co">#&gt; 4:  3  2 20  3 10 NA updated</span>
+<span class="co">#&gt; 5: NA NA 15 NA NA          x</span>
+<span class="co">#&gt; 6:  5 NA 18  5 20          y</span>
+<span class="co">#&gt; 7:  6 NA 19  6 13          y</span>
+
+<span class="co"># Update values in x with variables from y</span>
+<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, update_values <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -- JOYn Report --</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;         report n percent</span>
+<span class="co">#&gt;    not updated 1   14.3%</span>
+<span class="co">#&gt;  value updated 1   14.3%</span>
+<span class="co">#&gt;          x &amp; y 3   42.9%</span>
+<span class="co">#&gt;              y 2   28.6%</span>
+<span class="co">#&gt;          Total 7  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
+<span class="co">#&gt;    id  t  x yd  y        report</span>
+<span class="co">#&gt; 1:  1  1 16  1 11         x &amp; y</span>
+<span class="co">#&gt; 2:  1  2 16  1 11 value updated</span>
+<span class="co">#&gt; 3:  2  1 NA  2 15         x &amp; y</span>
+<span class="co">#&gt; 4:  3  2 NA  3 10         x &amp; y</span>
+<span class="co">#&gt; 5: NA NA 15 NA NA   not updated</span>
+<span class="co">#&gt; 6:  5 NA NA  5 20             y</span>
+<span class="co">#&gt; 7:  6 NA NA  6 13             y</span>
+
+
+<span class="co"># do not bring any variable from Y into x, just the report</span>
+<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, yvars <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt; -- JOYn Report --</span>
+<span class="co">#&gt; </span>
+<span class="co">#&gt;  report n percent</span>
+<span class="co">#&gt;       x 1   14.3%</span>
+<span class="co">#&gt;   x &amp; y 4   57.1%</span>
+<span class="co">#&gt;       y 2   28.6%</span>
+<span class="co">#&gt;   Total 7  100.0%</span>
+<span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
+<span class="co">#&gt;    id  t  x report</span>
+<span class="co">#&gt; 1:  1  1 16  x &amp; y</span>
+<span class="co">#&gt; 2:  1  2 12  x &amp; y</span>
+<span class="co">#&gt; 3:  2  1 NA  x &amp; y</span>
+<span class="co">#&gt; 4:  3  2 NA  x &amp; y</span>
+<span class="co">#&gt; 5: NA NA 15      x</span>
+<span class="co">#&gt; 6:  5 NA NA      y</span>
+<span class="co">#&gt; 7:  6 NA NA      y</span></code></pre></div>
 </div>
 </div>
   </div>
