@@ -8,14 +8,14 @@ merge(
   x,
   y,
   by = NULL,
-  roll = NULL,
-  yvars = NULL,
+  yvars = TRUE,
   join_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("full", "left", "master", "right", "using", "inner"),
   update_values = FALSE,
   updateNA = update_values,
   reportvar = "report",
   reporttype = c("character", "numeric"),
+  roll = NULL,
   keep_y_in_x = FALSE,
   verbose = TRUE
 )
@@ -32,13 +32,13 @@ joyn will do a natural join, using all variables with common names across
 the two tables. A message lists the variables so that you can check they're
 right (to suppress the message, simply explicitly list the variables that
 you want to join). To join by different variables on x and y use a vector
-of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x,
-"b" in y, and "z" in both tables.}
-
-\item{roll}{double: \emph{to be implemented}}
+of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
+in y, and "z" in both tables.}
 
 \item{yvars}{character: Vector of variable names that will be kept after the
-merge. Be default it keeps all the varialbes in y into x.}
+merge. If TRUE (the default), it keeps all the brings all the variables in
+y into x. If FALSE or NULL, it does not bring any variable into x, but a
+report will be generated.}
 
 \item{join_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
 Default is \emph{"m:m"} since this is the default generally used in joins in R.
@@ -48,9 +48,9 @@ sections}).}
 
 \item{keep}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
 \emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
-regular behavior of joins in R, the objective of \code{joyn} is to present
-a diagnosys of the join, so that it must use by default a full join. Yet,
-if \emph{"left"} or \emph{"master"}, it keeps the observations that matched in both
+regular behavior of joins in R, the objective of \code{joyn} is to present a
+diagnosys of the join, so that it must use by default a full join. Yet, if
+\emph{"left"} or \emph{"master"}, it keeps the observations that matched in both
 tables and the ones that did not match in x. The ones in y will be
 discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations that
 matched in both tables and the ones that did not match in y. The ones in x
@@ -74,6 +74,8 @@ table, though a summary of the join will be display after concluding.}
 \emph{"character"}. If \emph{"numeric"}, the reporting variable will contain  numeric
 codes of the source and the contents of each observation in the joined
 table.}
+
+\item{roll}{double: \emph{to be implemented}}
 
 \item{keep_y_in_x}{logical: If TRUE, it will keep the original variable from
 y when both tables have common variable names. Thus, the prefix "y." will

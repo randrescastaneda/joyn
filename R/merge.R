@@ -11,8 +11,8 @@
 #'   the two tables. A message lists the variables so that you can check they're
 #'   right (to suppress the message, simply explicitly list the variables that
 #'   you want to join). To join by different variables on x and y use a vector
-#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x,
-#'   "b" in y, and "z" in both tables.
+#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x, "b"
+#'   in y, and "z" in both tables.
 #' @param join_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
 #'   Default is *"m:m"* since this is the default generally used in joins in R.
 #'   However, following Stata's recommendation, it is better to be explicit and
@@ -21,9 +21,9 @@
 #'
 #' @param keep character: One of *"full"*, *"left"*, *"master"*, *"right"*,
 #'   *"using"*, *"inner"*. Default is *"full"*. Even though this is not the
-#'   regular behavior of joins in R, the objective of `joyn` is to present
-#'   a diagnosys of the join, so that it must use by default a full join. Yet,
-#'   if *"left"* or *"master"*, it keeps the observations that matched in both
+#'   regular behavior of joins in R, the objective of `joyn` is to present a
+#'   diagnosys of the join, so that it must use by default a full join. Yet, if
+#'   *"left"* or *"master"*, it keeps the observations that matched in both
 #'   tables and the ones that did not match in x. The ones in y will be
 #'   discarded. If *"right"* or *"using"*, it keeps the observations that
 #'   matched in both tables and the ones that did not match in y. The ones in x
@@ -31,7 +31,9 @@
 #'   matched both tables.
 #' @param roll double: *to be implemented*
 #' @param yvars character: Vector of variable names that will be kept after the
-#'   merge. Be default it keeps all the varialbes in y into x.
+#'   merge. If TRUE (the default), it keeps all the brings all the variables in
+#'   y into x. If FALSE or NULL, it does not bring any variable into x, but a
+#'   report will be generated.
 #' @param reportvar character: Name of reporting variable. Default if "report".
 #'   This is the same as variable "_merge" in Stata after performing a merge. If
 #'   FALSE or NULL, the reporting variable will be excluded from the final
@@ -59,26 +61,26 @@
 #'
 #' @section Join types:
 #'
-#' Using the same wording of the [Stata
-#' manual](https://www.stata.com/manuals/dmerge.pdf)
+#'   Using the same wording of the [Stata
+#'   manual](https://www.stata.com/manuals/dmerge.pdf)
 #'
-#' **1:1**: specifies a one-to-one match merge. The variables specified in
-#' `by`  uniquely identify single observations in both table.
+#'   **1:1**: specifies a one-to-one match merge. The variables specified in
+#'   `by`  uniquely identify single observations in both table.
 #'
-#' **1:m and m:1**: specify _one-to-many_ and _many-to-one_ match merges,
-#' respectively. This means that one of the tables only one observation that
-#' uniquely identifies *many* (i.e, two or more) observations in the other
-#' table.
+#'   **1:m and m:1**: specify _one-to-many_ and _many-to-one_ match merges,
+#'   respectively. This means that one of the tables only one observation that
+#'   uniquely identifies *many* (i.e, two or more) observations in the other
+#'   table.
 #'
-#' **m:m** refers to _many-to-many merge_. variables in `by` does not uniquely
-#' identify the observations in either table. Matching is performed by
-#' combining observations with equal values in `by`; within matching values,
-#' the first observation in the master (i.e. left or x) table is matched with
-#' the first matching observation in the using (i.e. right or y) table; the
-#' second, with the second; and so on. If there is an unequal number of
-#' observations within a group, then the last observation of the shorter group
-#' is used repeatedly to match with subsequent observations of the longer
-#' group.
+#'   **m:m** refers to _many-to-many merge_. variables in `by` does not uniquely
+#'   identify the observations in either table. Matching is performed by
+#'   combining observations with equal values in `by`; within matching values,
+#'   the first observation in the master (i.e. left or x) table is matched with
+#'   the first matching observation in the using (i.e. right or y) table; the
+#'   second, with the second; and so on. If there is an unequal number of
+#'   observations within a group, then the last observation of the shorter group
+#'   is used repeatedly to match with subsequent observations of the longer
+#'   group.
 #' @examples
 #' # Simple merge
 #' library(data.table)
@@ -114,8 +116,7 @@
 merge <- function(x,
                   y,
                   by            = NULL,
-                  roll          = NULL,
-                  yvars         = NULL,
+                  yvars         = TRUE,
                   join_type     = c("m:m", "m:1", "1:m", "1:1"),
                   keep          = c("full", "left", "master",
                                     "right", "using", "inner"),
@@ -123,6 +124,7 @@ merge <- function(x,
                   updateNA      = update_values,
                   reportvar     = "report",
                   reporttype    = c("character", "numeric"),
+                  roll          = NULL,
                   keep_y_in_x   = FALSE,
                   verbose       = TRUE) {
 
@@ -202,10 +204,16 @@ merge <- function(x,
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (is.null(yvars)) {
+  if (isTRUE(yvars)) {
 
     yvars <- names(y)
     yvars <- yvars[! yvars %in% by]
+
+  }  else if (isFALSE(yvars) || is.null(yvars)) {
+
+    temp_yvar <- paste0("temp_var", floor(runif(1)*1000))
+    yvars     <- temp_yvar
+    y[, (temp_yvar) := 1]
 
   } else {
 
@@ -293,7 +301,10 @@ merge <- function(x,
 
   # complement
   ty <- y[!x,
-          on = by]
+          on = by
+          ][, .SD,
+            .SDcols = c(by, yvars)
+            ]
 
   x <- rbindlist(l         = list(x, ty),
                  use.names = TRUE,
@@ -377,6 +388,10 @@ merge <- function(x,
     setnames(y, fixby$tempkey, fixby$yby)
   }
 
+  ## Remove temporal yvars -----
+  if (exists("temp_yvar")) {
+    x[, (temp_yvar) := NULL]
+  }
 
   ## convert to characters if chosen -------
   if (reporttype == "character") {
@@ -412,6 +427,7 @@ merge <- function(x,
       table(x[[reportvar]])
 
     }
+    cli::cli_rule(right = "End of JOYn report")
 
     if (all(x$report %in% c("x", "y")) || all(x$report %in% c(1, 2))) {
       cli::cli_alert_warning(
