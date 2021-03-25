@@ -60,10 +60,23 @@ merge(x1, y1)[]
 # keep just those observations that match
 merge(x1, y1, keep = "inner")[]
 
+
 x2 
 
 y2
 
+
+# Bad merge for not specifying by argument
+merge(x2, y2)[]
+
+# good merge, ignoring variable x from y
+merge(x2, y2, by = "id")[]
+
+# update NAs in x variable form x
+merge(x2, y2, by = "id", updateNA = TRUE)[]
+
+# Update values in x with variables from y
+merge(x2, y2, by = "id", update_values = TRUE)[]
 
 ```
 
