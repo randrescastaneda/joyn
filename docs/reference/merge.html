@@ -141,13 +141,13 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>data frame: referred to <em>left</em> in R terminology, or
-<em>master</em> in Stata terminology.</p></td>
+      <td><p>data frame: referred to <em>left</em> in R terminology, or <em>master</em> in
+Stata terminology.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>data frame: referred to <em>right</em> in R terminology, or
-<em>using</em> in Stata terminology.</p></td>
+      <td><p>data frame: referred to <em>right</em> in R terminology, or <em>using</em> in
+Stata terminology.</p></td>
     </tr>
     <tr>
       <th>by</th>
@@ -166,28 +166,28 @@ of expressions. For example, <code>by = c("a = b", "z")</code> will use "a" in x
     <tr>
       <th>yvars</th>
       <td><p>character: Vector of variable names that will be kept after the
-merge. Be defatult it keeps all the varialbes in y into x.</p></td>
+merge. Be default it keeps all the varialbes in y into x.</p></td>
     </tr>
     <tr>
       <th>join_type</th>
-      <td><p>character: one of <em>"m:m"</em>, <em>"m:1"</em>, <em>"1:m"</em>,
-<em>"1:1"</em>. Default is <em>"m:m"</em> since this is the default generally
-used in joins in R. However, following Stata's recommendation, it is better
-to be explicit and use any of the other three join types (See details in
-<em>Join types sections</em>).</p></td>
+      <td><p>character: one of <em>"m:m"</em>, <em>"m:1"</em>, <em>"1:m"</em>, <em>"1:1"</em>.
+Default is <em>"m:m"</em> since this is the default generally used in joins in R.
+However, following Stata's recommendation, it is better to be explicit and
+use any of the other three join types (See details in <em>Join types
+sections</em>).</p></td>
     </tr>
     <tr>
       <th>keep</th>
-      <td><p>character: One of <em>"full"</em>, <em>"left"</em>, <em>"master"</em>,
-<em>"right"</em>, <em>"using"</em>, <em>"inner"</em>. Default is <em>"full"</em>.
-Even though this is not the regular behavior of joins in R, the objective
-of <code>joyn</code> is to present a diagnosys of the join, so that it must use
-by default a full join. Yet, if <em>"left"</em> or <em>"master"</em>, it keeps
-the observations that matched in both tables and the ones that did not
-match in x. The ones in y will be discarded. If <em>"right"</em> or
-<em>"using"</em>, it keeps the observations that matched in both tables and
-the ones that did not match in y. The ones in x will be discarded. If
-<em>"inner"</em>, it only keeps the observations that matched both tables.</p></td>
+      <td><p>character: One of <em>"full"</em>, <em>"left"</em>, <em>"master"</em>, <em>"right"</em>,
+<em>"using"</em>, <em>"inner"</em>. Default is <em>"full"</em>. Even though this is not the
+regular behavior of joins in R, the objective of <code>joyn</code> is to present
+a diagnosys of the join, so that it must use by default a full join. Yet,
+if <em>"left"</em> or <em>"master"</em>, it keeps the observations that matched in both
+tables and the ones that did not match in x. The ones in y will be
+discarded. If <em>"right"</em> or <em>"using"</em>, it keeps the observations that
+matched in both tables and the ones that did not match in y. The ones in x
+will be discarded. If <em>"inner"</em>, it only keeps the observations that
+matched both tables.</p></td>
     </tr>
     <tr>
       <th>update_values</th>
@@ -197,7 +197,7 @@ in x with the actual of variables in y with the same name as the ones in x.
     </tr>
     <tr>
       <th>updateNA</th>
-      <td><p>logical: If TRUE, it will update NA values ok all variables
+      <td><p>logical: If TRUE, it will update NA values of all variables
 in x with actual values of variables in y that have the same name as the
 ones in x. If FALSE, NA values won't be updated.</p></td>
     </tr>
@@ -210,10 +210,10 @@ table, though a summary of the join will be display after concluding.</p></td>
     </tr>
     <tr>
       <th>reporttype</th>
-      <td><p>charcter: One of <em>"character"</em> or <em>"numeric"</em>.
-Default is <em>"character"</em>. If <em>"numeric"</em>, the reporting variable
-will contain  numeric codes of the source and the contents of each
-observation in the joined table.</p></td>
+      <td><p>character: One of <em>"character"</em> or <em>"numeric"</em>. Default is
+<em>"character"</em>. If <em>"numeric"</em>, the reporting variable will contain  numeric
+codes of the source and the contents of each observation in the joined
+table.</p></td>
     </tr>
     <tr>
       <th>keep_y_in_x</th>
@@ -236,25 +236,23 @@ option). Default is TRUE.</p></td>
 
     
 
-<p>Using the same wording of the
-<a href='https://www.stata.com/manuals/dmerge.pdf'>Stata manual:</a></p><dl>
-<dt>1:1</dt><dd><p>specifies a one-to-one match merge. The variables specified in
-<code>by</code>  uniquely identify single observations in both table.</p></dd> <dt>1:m
-and m:1</dt><dd><p>specify one-to-many and many-to-one match merges, respectively.
-This means that one of the tables only one observation that uniquely
-identifies <em>many</em> (i.e, two or more) observations in the other table.</p></dd>
-<dt>m:m</dt><dd><p>many-to-many merge. variables in <code>by</code> does not uniquely
+
+<p>Using the same wording of the <a href='https://www.stata.com/manuals/dmerge.pdf'>Stata manual</a></p>
+<p><strong>1:1</strong>: specifies a one-to-one match merge. The variables specified in
+<code>by</code>  uniquely identify single observations in both table.</p>
+<p><strong>1:m and m:1</strong>: specify <em>one-to-many</em> and <em>many-to-one</em> match merges,
+respectively. This means that one of the tables only one observation that
+uniquely identifies <em>many</em> (i.e, two or more) observations in the other
+table.</p>
+<p><strong>m:m</strong> refers to <em>many-to-many merge</em>. variables in <code>by</code> does not uniquely
 identify the observations in either table. Matching is performed by
-combining observations with equal values in <code>by</code>; within matching
-values, the first observation in the master (i.e. left or x) table is
-matched with the first matching observation in the using (i.e. right or y)
-table; the second, with the second; and so on. If there is an unequal
-number of observations within a group, then the last observation of the
-shorter group is used repeatedly to match with subsequent observations of
-the longer group.</p></dd>
-
-</dl>
-
+combining observations with equal values in <code>by</code>; within matching values,
+the first observation in the master (i.e. left or x) table is matched with
+the first matching observation in the using (i.e. right or y) table; the
+second, with the second; and so on. If there is an unequal number of
+observations within a group, then the last observation of the shorter group
+is used repeatedly to match with subsequent observations of the longer
+group.</p>
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
