@@ -60,6 +60,10 @@ merge(x1, y1)[]
 # keep just those observations that match
 merge(x1, y1, keep = "inner")[]
 
+x2 
+
+y2
+
 
 ```
 
