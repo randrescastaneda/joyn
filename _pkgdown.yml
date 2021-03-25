@@ -17,5 +17,9 @@ navbar:
 reference:
 - title: functions
   contents:
+  - '`fix_by_vars`'
+  - '`join_consistency`'
   - '`merge`'
+  - '`update_NAs`'
+  - '`update_values`'
 

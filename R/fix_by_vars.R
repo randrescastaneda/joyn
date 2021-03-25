@@ -5,7 +5,6 @@
 #' @param y right table
 #'
 #' @return list
-
 fix_by_vars <- function(by, x, y) {
 
   byexp <- grep("==?", by, value = TRUE)
