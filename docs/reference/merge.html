@@ -40,7 +40,7 @@
 
 
 <meta property="og:title" content="Merge two tables — merge" />
-<meta property="og:description" content="Merge two tables" />
+<meta property="og:description" content="This is the main and, basically, the only function in joyn." />
 
 
 
@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9001</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@
     </div>
 
     <div class="ref-description">
-    <p>Merge two tables</p>
+    <p>This is the main and, basically, the only function in joyn.</p>
     </div>
 
     <pre class="usage"><span class='fu'>merge</span><span class='op'>(</span>
@@ -234,24 +234,25 @@ option). Default is TRUE.</p></td>
     <p>a data.table joining x and y.</p>
     <h2 class="hasAnchor" id="join-types"><a class="anchor" href="#join-types"></a>Join types</h2>
 
-    <p>Using the same wording of the
-  <a href='https://www.stata.com/manuals/dmerge.pdf'>Stata manual:</a></p><dl>
-  <dt>1:1</dt><dd><p>specifies a one-to-one match merge. The variables specified in
-  <code>by</code>  uniquely identify single observations in both table.</p></dd> <dt>1:m
-  and m:1</dt><dd><p>specify one-to-many and many-to-one match merges, respectively.
-  This means that one of the tables only one observation that uniquely
-  identifies <em>many</em> (i.e, two or more) observations in the other table.</p></dd>
-  <dt>m:m</dt><dd><p>many-to-many merge. variables in <code>by</code> does not uniquely
-  identify the observations in either table. Matching is performed by
-  combining observations with equal values in <code>by</code>; within matching
-  values, the first observation in the master (i.e. left or x) table is
-  matched with the first matching observation in the using (i.e. right or y)
-  table; the second, with the second; and so on. If there is an unequal
-  number of observations within a group, then the last observation of the
-  shorter group is used repeatedly to match with subsequent observations
-  ofthe longer group.</p></dd>
+    
 
-  
+<p>Using the same wording of the
+<a href='https://www.stata.com/manuals/dmerge.pdf'>Stata manual:</a></p><dl>
+<dt>1:1</dt><dd><p>specifies a one-to-one match merge. The variables specified in
+<code>by</code>  uniquely identify single observations in both table.</p></dd> <dt>1:m
+and m:1</dt><dd><p>specify one-to-many and many-to-one match merges, respectively.
+This means that one of the tables only one observation that uniquely
+identifies <em>many</em> (i.e, two or more) observations in the other table.</p></dd>
+<dt>m:m</dt><dd><p>many-to-many merge. variables in <code>by</code> does not uniquely
+identify the observations in either table. Matching is performed by
+combining observations with equal values in <code>by</code>; within matching
+values, the first observation in the master (i.e. left or x) table is
+matched with the first matching observation in the using (i.e. right or y)
+table; the second, with the second; and so on. If there is an unequal
+number of observations within a group, then the last observation of the
+shorter group is used repeatedly to match with subsequent observations of
+the longer group.</p></dd>
+
 </dl>
 
 

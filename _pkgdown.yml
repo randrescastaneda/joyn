@@ -1,0 +1,21 @@
+navbar:
+  structure:
+    left:
+    - start here
+    - reference
+    - articles
+    - news
+    right: github
+  components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/randrescastaneda/joyn/
+
+reference:
+- title: functions
+  contents:
+  - '`merge`'
+

@@ -2,50 +2,50 @@
 #'
 #' This is the main and, basically, the only function in joyn.
 #'
-#' @param x data frame: referred to \emph{left} in R terminology, or
-#'   \emph{master} in Stata terminology.
-#' @param y data frame: referred to \emph{right} in R terminology, or
-#'   \emph{using} in Stata terminology.
+#' @param x data frame: referred to *left* in R terminology, or *master* in
+#'   Stata terminology.
+#' @param y data frame: referred to *right* in R terminology, or *using* in
+#'   Stata terminology.
 #' @param by a character vector of variables to join by. If NULL, the default,
 #'   joyn will do a natural join, using all variables with common names across
 #'   the two tables. A message lists the variables so that you can check they're
 #'   right (to suppress the message, simply explicitly list the variables that
 #'   you want to join). To join by different variables on x and y use a vector
-#'   of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x,
+#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x,
 #'   "b" in y, and "z" in both tables.
-#' @param join_type character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"},
-#'   \emph{"1:1"}. Default is \emph{"m:m"} since this is the default generally
-#'   used in joins in R. However, following Stata's recommendation, it is better
-#'   to be explicit and use any of the other three join types (See details in
-#'   \emph{Join types sections}).
+#' @param join_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
+#'   Default is *"m:m"* since this is the default generally used in joins in R.
+#'   However, following Stata's recommendation, it is better to be explicit and
+#'   use any of the other three join types (See details in *Join types
+#'   sections*).
 #'
-#' @param keep character: One of \emph{"full"}, \emph{"left"}, \emph{"master"},
-#'   \emph{"right"}, \emph{"using"}, \emph{"inner"}. Default is \emph{"full"}.
-#'   Even though this is not the regular behavior of joins in R, the objective
-#'   of \code{joyn} is to present a diagnosys of the join, so that it must use
-#'   by default a full join. Yet, if \emph{"left"} or \emph{"master"}, it keeps
-#'   the observations that matched in both tables and the ones that did not
-#'   match in x. The ones in y will be discarded. If \emph{"right"} or
-#'   \emph{"using"}, it keeps the observations that matched in both tables and
-#'   the ones that did not match in y. The ones in x will be discarded. If
-#'   \emph{"inner"}, it only keeps the observations that matched both tables.
-#' @param roll double: \emph{to be implemented}
+#' @param keep character: One of *"full"*, *"left"*, *"master"*, *"right"*,
+#'   *"using"*, *"inner"*. Default is *"full"*. Even though this is not the
+#'   regular behavior of joins in R, the objective of `joyn` is to present
+#'   a diagnosys of the join, so that it must use by default a full join. Yet,
+#'   if *"left"* or *"master"*, it keeps the observations that matched in both
+#'   tables and the ones that did not match in x. The ones in y will be
+#'   discarded. If *"right"* or *"using"*, it keeps the observations that
+#'   matched in both tables and the ones that did not match in y. The ones in x
+#'   will be discarded. If *"inner"*, it only keeps the observations that
+#'   matched both tables.
+#' @param roll double: *to be implemented*
 #' @param yvars character: Vector of variable names that will be kept after the
-#'   merge. Be defatult it keeps all the varialbes in y into x.
+#'   merge. Be default it keeps all the varialbes in y into x.
 #' @param reportvar character: Name of reporting variable. Default if "report".
 #'   This is the same as variable "_merge" in Stata after performing a merge. If
 #'   FALSE or NULL, the reporting variable will be excluded from the final
 #'   table, though a summary of the join will be display after concluding.
-#' @param reporttype charcter: One of \emph{"character"} or \emph{"numeric"}.
-#'   Default is \emph{"character"}. If \emph{"numeric"}, the reporting variable
-#'   will contain  numeric codes of the source and the contents of each
-#'   observation in the joined table.
-#' @param updateNA logical: If TRUE, it will update NA values ok all variables
+#' @param reporttype character: One of *"character"* or *"numeric"*. Default is
+#'   *"character"*. If *"numeric"*, the reporting variable will contain  numeric
+#'   codes of the source and the contents of each observation in the joined
+#'   table.
+#' @param updateNA logical: If TRUE, it will update NA values of all variables
 #'   in x with actual values of variables in y that have the same name as the
 #'   ones in x. If FALSE, NA values won't be updated.
 #' @param update_values logical: If TRUE, it will update all values of variables
 #'   in x with the actual of variables in y with the same name as the ones in x.
-#'   \strong{NAs from y won't be used to update actual values in x}.
+#'   **NAs from y won't be used to update actual values in x**.
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
 #' @param keep_y_in_x logical: If TRUE, it will keep the original variable from
@@ -57,56 +57,28 @@
 #' @export
 #' @import data.table
 #'
-#' @section Join types: Using the same wording of the
-#'   \href{https://www.stata.com/manuals/dmerge.pdf}{Stata manual:} \describe{
-#'   \item{1:1}{specifies a one-to-one match merge. The variables specified in
-#'   \code{by}  uniquely identify single observations in both table.} \item{1:m
-#'   and m:1}{specify one-to-many and many-to-one match merges, respectively.
-#'   This means that one of the tables only one observation that uniquely
-#'   identifies \emph{many} (i.e, two or more) observations in the other table.}
-#'   \item{m:m}{many-to-many merge. variables in \code{by} does not uniquely
-#'   identify the observations in either table. Matching is performed by
-#'   combining observations with equal values in \code{by}; within matching
-#'   values, the first observation in the master (i.e. left or x) table is
-#'   matched with the first matching observation in the using (i.e. right or y)
-#'   table; the second, with the second; and so on. If there is an unequal
-#'   number of observations within a group, then the last observation of the
-#'   shorter group is used repeatedly to match with subsequent observations
-#'   ofthe longer group. }
+#' @section Join types:
 #'
-#'   }
+#' Using the same wording of the [Stata
+#' manual](https://www.stata.com/manuals/dmerge.pdf)
 #'
-#' @examples
-#' # Simple merge
-#' library(data.table)
-#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
-#' t  = c(1L, 2L, 1L, 2L, NA_integer_),
-#' x  = 11:15)
+#' **1:1**: specifies a one-to-one match merge. The variables specified in
+#' `by`  uniquely identify single observations in both table.
 #'
-#' y1 = data.table(id = 1:2,
-#'                 y  = c(11L, 15L))
+#' **1:m and m:1**: specify _one-to-many_ and _many-to-one_ match merges,
+#' respectively. This means that one of the tables only one observation that
+#' uniquely identifies *many* (i.e, two or more) observations in the other
+#' table.
 #'
-#' x2 = data.table(id = c(1, 1, 2, 3, NA),
-#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
-#'                 x  = c(16, 12, NA, NA, 15))
-#'
-#' y2 = data.table(id = c(1, 2, 5, 6, 3),
-#'               yd = c(1, 2, 5, 6, 3),
-#'               y  = c(11L, 15L, 20L, 13L, 10L),
-#'               x  = c(16:20))
-#' merge(x1, y1)
-#'
-#' # Bad merge for not specifying by argument
-#' merge(x2, y2)
-#'
-#' # good merge, ignoring variable x from y
-#' merge(x2, y2, by = "id")
-#'
-#' # update NAs in x variable form x
-#' merge(x2, y2, by = "id", updateNA = TRUE)
-#'
-#' # Update values in x with variables from y
-#' merge(x2, y2, by = "id", update_values = TRUE)
+#' **m:m** refers to _many-to-many merge_. variables in `by` does not uniquely
+#' identify the observations in either table. Matching is performed by
+#' combining observations with equal values in `by`; within matching values,
+#' the first observation in the master (i.e. left or x) table is matched with
+#' the first matching observation in the using (i.e. right or y) table; the
+#' second, with the second; and so on. If there is an unequal number of
+#' observations within a group, then the last observation of the shorter group
+#' is used repeatedly to match with subsequent observations of the longer
+#' group.
 merge <- function(x,
                   y,
                   by            = NULL,
