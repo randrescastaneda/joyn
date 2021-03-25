@@ -2,16 +2,18 @@
 % Please edit documentation in R/update_NAs.R
 \name{update_NAs}
 \alias{update_NAs}
-\title{Title}
+\title{Update NA values}
 \usage{
 update_NAs(dt, var)
 }
 \arguments{
-\item{var}{}
+\item{dt}{data.table}
+
+\item{var}{variable to be updated}
 }
 \value{
-
+data.table
 }
 \description{
-Title
+Update NA values
 }

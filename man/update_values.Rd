@@ -2,16 +2,18 @@
 % Please edit documentation in R/update_values.R
 \name{update_values}
 \alias{update_values}
-\title{Title}
+\title{update values in x with data from y}
 \usage{
 update_values(dt, var)
 }
 \arguments{
-\item{var}{}
+\item{dt}{joined table}
+
+\item{var}{variable to be updated}
 }
 \value{
-
+data.table
 }
 \description{
-Title
+update values in x with data from y
 }

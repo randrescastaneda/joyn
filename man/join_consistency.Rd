@@ -2,16 +2,20 @@
 % Please edit documentation in R/join_consistency.R
 \name{join_consistency}
 \alias{join_consistency}
-\title{Title}
+\title{Make sure the join type is correct}
 \usage{
 join_consistency(dt, by, dtname = NULL)
 }
 \arguments{
-\item{dtname}{}
+\item{dt}{either right of left table}
+
+\item{by}{by argument in merge}
+
+\item{dtname}{name of dt for displaying purposes}
 }
 \value{
-
+TRUE
 }
 \description{
-Title
+Make sure the join type is correct
 }

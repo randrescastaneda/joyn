@@ -1,13 +1,11 @@
-#' Title
+#' fix variable names in by argument
 #'
-#' @param by
-#' @param x
-#' @param y
+#' @param by argument from merge
+#' @param x left table
+#' @param y right table
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return list
+
 fix_by_vars <- function(by, x, y) {
 
   byexp <- grep("==?", by, value = TRUE)

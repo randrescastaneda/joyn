@@ -2,16 +2,20 @@
 % Please edit documentation in R/fix_by_vars.R
 \name{fix_by_vars}
 \alias{fix_by_vars}
-\title{Title}
+\title{fix variable names in by argument}
 \usage{
 fix_by_vars(by, x, y)
 }
 \arguments{
-\item{y}{}
+\item{by}{argument from merge}
+
+\item{x}{left table}
+
+\item{y}{right table}
 }
 \value{
-
+list
 }
 \description{
-Title
+fix variable names in by argument
 }

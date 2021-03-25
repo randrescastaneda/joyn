@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Merge two data.frames — merge • joyn</title>
+<title>Merge two tables — merge • joyn</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Merge two data.frames — merge" />
-<meta property="og:description" content="Merge two data.frames" />
+<meta property="og:title" content="Merge two tables — merge" />
+<meta property="og:description" content="Merge two tables" />
 
 
 
@@ -111,24 +111,23 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Merge two data.frames</h1>
+    <h1>Merge two tables</h1>
     <small class="dont-index">Source: <a href='https://github.com/randrescastaneda/joyn/blob/master/R/merge.R'><code>R/merge.R</code></a></small>
     <div class="hidden name"><code>merge.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>Merge two data.frames</p>
+    <p>Merge two tables</p>
     </div>
 
     <pre class="usage"><span class='fu'>merge</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>y</span>,
   by <span class='op'>=</span> <span class='cn'>NULL</span>,
-  byexp <span class='op'>=</span> <span class='cn'>NULL</span>,
   roll <span class='op'>=</span> <span class='cn'>NULL</span>,
   yvars <span class='op'>=</span> <span class='cn'>NULL</span>,
   join_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m:m"</span>, <span class='st'>"m:1"</span>, <span class='st'>"1:m"</span>, <span class='st'>"1:1"</span><span class='op'>)</span>,
-  keep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"both"</span>, <span class='st'>"full"</span>, <span class='st'>"left"</span>, <span class='st'>"master"</span>, <span class='st'>"right"</span>, <span class='st'>"using"</span>, <span class='st'>"inner"</span><span class='op'>)</span>,
+  keep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"full"</span>, <span class='st'>"left"</span>, <span class='st'>"master"</span>, <span class='st'>"right"</span>, <span class='st'>"using"</span>, <span class='st'>"inner"</span><span class='op'>)</span>,
   update_values <span class='op'>=</span> <span class='cn'>FALSE</span>,
   updateNA <span class='op'>=</span> <span class='va'>update_values</span>,
   reportvar <span class='op'>=</span> <span class='st'>"report"</span>,
@@ -142,22 +141,118 @@
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>data frame: In Stata terminology, it is known as the master data</p></td>
+      <td><p>data frame: referred to <em>left</em> in R terminology, or
+<em>master</em> in Stata terminology.</p></td>
     </tr>
     <tr>
       <th>y</th>
-      <td><p>data frame: In Stata terminology, it is known as the using data</p></td>
+      <td><p>data frame: referred to <em>right</em> in R terminology, or
+<em>using</em> in Stata terminology.</p></td>
     </tr>
     <tr>
-      <th>byexp</th>
-      <td></td>
+      <th>by</th>
+      <td><p>a character vector of variables to join by. If NULL, the default,
+joyn will do a natural join, using all variables with common names across
+the two tables. A message lists the variables so that you can check they're
+right (to suppress the message, simply explicitly list the variables that
+you want to join). To join by different variables on x and y use a vector
+of expressions. For example, <code>by = c("a = b", "z")</code> will use "a" in x,
+"b" in y, and "z" in both tables.</p></td>
+    </tr>
+    <tr>
+      <th>roll</th>
+      <td><p>double: <em>to be implemented</em></p></td>
+    </tr>
+    <tr>
+      <th>yvars</th>
+      <td><p>character: Vector of variable names that will be kept after the
+merge. Be defatult it keeps all the varialbes in y into x.</p></td>
+    </tr>
+    <tr>
+      <th>join_type</th>
+      <td><p>character: one of <em>"m:m"</em>, <em>"m:1"</em>, <em>"1:m"</em>,
+<em>"1:1"</em>. Default is <em>"m:m"</em> since this is the default generally
+used in joins in R. However, following Stata's recommendation, it is better
+to be explicit and use any of the other three join types (See details in
+<em>Join types sections</em>).</p></td>
+    </tr>
+    <tr>
+      <th>keep</th>
+      <td><p>character: One of <em>"full"</em>, <em>"left"</em>, <em>"master"</em>,
+<em>"right"</em>, <em>"using"</em>, <em>"inner"</em>. Default is <em>"full"</em>.
+Even though this is not the regular behavior of joins in R, the objective
+of <code>joyn</code> is to present a diagnosys of the join, so that it must use
+by default a full join. Yet, if <em>"left"</em> or <em>"master"</em>, it keeps
+the observations that matched in both tables and the ones that did not
+match in x. The ones in y will be discarded. If <em>"right"</em> or
+<em>"using"</em>, it keeps the observations that matched in both tables and
+the ones that did not match in y. The ones in x will be discarded. If
+<em>"inner"</em>, it only keeps the observations that matched both tables.</p></td>
+    </tr>
+    <tr>
+      <th>update_values</th>
+      <td><p>logical: If TRUE, it will update all values of variables
+in x with the actual of variables in y with the same name as the ones in x.
+<strong>NAs from y won't be used to update actual values in x</strong>.</p></td>
+    </tr>
+    <tr>
+      <th>updateNA</th>
+      <td><p>logical: If TRUE, it will update NA values ok all variables
+in x with actual values of variables in y that have the same name as the
+ones in x. If FALSE, NA values won't be updated.</p></td>
+    </tr>
+    <tr>
+      <th>reportvar</th>
+      <td><p>character: Name of reporting variable. Default if "report".
+This is the same as variable "_merge" in Stata after performing a merge. If
+FALSE or NULL, the reporting variable will be excluded from the final
+table, though a summary of the join will be display after concluding.</p></td>
+    </tr>
+    <tr>
+      <th>reporttype</th>
+      <td><p>charcter: One of <em>"character"</em> or <em>"numeric"</em>.
+Default is <em>"character"</em>. If <em>"numeric"</em>, the reporting variable
+will contain  numeric codes of the source and the contents of each
+observation in the joined table.</p></td>
+    </tr>
+    <tr>
+      <th>keep_y_in_x</th>
+      <td><p>logical: If TRUE, it will keep the original variable from
+y when both tables have common variable names. Thus, the prefix "y." will
+be added to the original name to distinguish from the resulting variable in
+the joined table.</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical: if FALSE, it won't display any message (programmer's
+option). Default is TRUE.</p></td>
     </tr>
     </table>
 
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    
+    <p>a data.table joining x and y.</p>
+    <h2 class="hasAnchor" id="join-types"><a class="anchor" href="#join-types"></a>Join types</h2>
 
+    <p>Using the same wording of the
+  <a href='https://www.stata.com/manuals/dmerge.pdf'>Stata manual:</a></p><dl>
+  <dt>1:1</dt><dd><p>specifies a one-to-one match merge. The variables specified in
+  <code>by</code>  uniquely identify single observations in both table.</p></dd> <dt>1:m
+  and m:1</dt><dd><p>specify one-to-many and many-to-one match merges, respectively.
+  This means that one of the tables only one observation that uniquely
+  identifies <em>many</em> (i.e, two or more) observations in the other table.</p></dd>
+  <dt>m:m</dt><dd><p>many-to-many merge. variables in <code>by</code> does not uniquely
+  identify the observations in either table. Matching is performed by
+  combining observations with equal values in <code>by</code>; within matching
+  values, the first observation in the master (i.e. left or x) table is
+  matched with the first matching observation in the using (i.e. right or y)
+  table; the second, with the second; and so on. If there is an unequal
+  number of observations within a group, then the last observation of the
+  shorter group is used repeatedly to match with subsequent observations
+  ofthe longer group.</p></dd>
+
+  
+</dl>
 
 
   </div>

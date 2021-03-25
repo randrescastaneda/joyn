@@ -1,12 +1,9 @@
-#' Title
+#' Update NA values
 #'
-#' @param dt
-#' @param var
+#' @param dt  data.table
+#' @param var variable to be updated
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return data.table
 update_NAs <- function(dt, var) {
 
   y.var <- paste0("y.", var)

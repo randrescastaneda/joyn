@@ -1,13 +1,10 @@
-#' Title
+#' Make sure the join type is correct
 #'
-#' @param dt
-#' @param by
-#' @param dtname
+#' @param dt either right of left table
+#' @param by by argument in merge
+#' @param dtname name of dt for displaying purposes
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return TRUE
 join_consistency <- function(dt,  by, dtname = NULL) {
   m <- dt[, .N,by = mget(by)
           ][,

@@ -1,12 +1,9 @@
-#' Title
+#' update values in x with data from y
 #'
-#' @param dt
-#' @param var
+#' @param dt joined table
+#' @param var variable to be updated
 #'
-#' @return
-#' @export
-#'
-#' @examples
+#' @return data.table
 update_values <- function(dt, var) {
 
   y.var <- paste0("y.", var)
