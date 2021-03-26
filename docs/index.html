@@ -21,8 +21,6 @@
 <![endif]-->
 </head>
 <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-home">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -35,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -43,6 +41,12 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -69,7 +73,7 @@
 <a href="#joyn" class="anchor"></a>joyn</h1></div>
 <!-- badges: start -->
 <!-- badges: end -->
-<p>The goal of <code>joyn</code> is to provide the user with a set of tools to analyze the quality of merging (i.e., joining) data frames, so that it is a <strong>JOY</strong> to join tables with <code>joyn</code>. This is inspired in the command <code>merge</code> of the statistical software <code>Stata</code>. Thus, it is not intended to be extremely fast, even though it uses the power of <code>data.table</code> indexing to perform the merges. The reason for <code>joyn</code> to be a little slower is than pure <code>data.table</code> is that it will always perform a full join of data in the same way the <code>Stata</code> does it. Yet, the user can select what data to keep (e.g., that left [master], right [using], inner join, or full join).</p>
+<p>The goal of <code>joyn</code> is to provide the user with a set of tools to analyze the quality of merging (i.e., joining) data frames, so that it is a <strong>JOY</strong> to join tables with <code>joyn</code>. This is inspired in the command <code>merge</code> of the statistical software <code>Stata</code>. Thus, it is not intended to be extremely fast, even though it uses the power of <code>data.table</code> indexing to perform the merges. The reason for <code>joyn</code> to be a little slower is than pure <code>data.table</code> is that it will always perform a full join of data in the same way the <code>Stata</code> does it. Yet, the user can select what data to keep (e.g., that left <span class="math display"><em>m</em><em>a</em><em>s</em><em>t</em><em>e</em><em>r</em></span>, right <span class="math display"><em>u</em><em>s</em><em>i</em><em>n</em><em>g</em></span>, inner join, or full join).</p>
 <p><code>joyn</code> presents several important features. The most important is the additional variable, <code>report</code>, which summarizes the result of the join (you can change the name if you want). In addition, it allows you to specify the kind of join you want to perform (i.e, m:m, m:1, 1:m, or 1:1). This ensures that your join does not produce unexpected outcome.</p>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
@@ -78,16 +82,16 @@
 <!-- ``` r -->
 <!-- install.packages("joyn") -->
 <!-- ``` -->
-<p>The development version from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>The development version from <a href="https://github.com/">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
-<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"randrescastaneda/joyn"</span><span class="op">)</span></code></pre></div>
+<span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"randrescastaneda/joyn"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn" class="external-link">joyn</a></span><span class="op">)</span>
+<code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn">joyn</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'joyn'</span>
 <span class="co">#&gt; The following object is masked from 'package:base':</span>
@@ -267,7 +271,7 @@
 
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <div class="links">
-<h2 data-toc-skip>Links</h2>
+<h2>Links</h2>
 <ul class="list-unstyled">
 <li>Browse source code at <br><a href="https://github.com/randrescastaneda/joyn/">https://​github.com/​randrescastaneda/​joyn/​</a>
 </li>
@@ -275,37 +279,30 @@
 </li>
 </ul>
 </div>
-
 <div class="license">
-<h2 data-toc-skip>License</h2>
+<h2>License</h2>
 <ul class="list-unstyled">
 <li><a href="LICENSE.html">Full license</a></li>
 <li><small><a href="https://opensource.org/licenses/mit-license.php">MIT</a> + file <a href="LICENSE-text.html">LICENSE</a></small></li>
 </ul>
 </div>
-
-
 <div class="developers">
-<h2 data-toc-skip>Developers</h2>
+<h2>Developers</h2>
 <ul class="list-unstyled">
 <li>R.Andres Castaneda <br><small class="roles"> Author, maintainer </small>  </li>
 </ul>
 </div>
-
-
 
   </div>
 </div>
 
 
       <footer><div class="copyright">
-  <p></p>
-<p>Developed by R.Andres Castaneda.</p>
+  <p>Developed by R.Andres Castaneda.</p>
 </div>
 
 <div class="pkgdown">
-  <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -313,8 +310,6 @@
 
   
 
-
-  
 
   </body>
 </html>

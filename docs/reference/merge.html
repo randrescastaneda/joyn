@@ -45,8 +45,6 @@
 
 
 
-
-
 <!-- mathjax -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script>
@@ -58,16 +56,9 @@
 
 
 
-
-  
-
-  
-
   </head>
 
   <body data-spy="scroll" data-target="#toc">
-    
-
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -81,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9002</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
       </span>
     </div>
 
@@ -89,6 +80,12 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -124,14 +121,14 @@
   <span class='va'>x</span>,
   <span class='va'>y</span>,
   by <span class='op'>=</span> <span class='cn'>NULL</span>,
-  roll <span class='op'>=</span> <span class='cn'>NULL</span>,
-  yvars <span class='op'>=</span> <span class='cn'>NULL</span>,
+  yvars <span class='op'>=</span> <span class='cn'>TRUE</span>,
   join_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m:m"</span>, <span class='st'>"m:1"</span>, <span class='st'>"1:m"</span>, <span class='st'>"1:1"</span><span class='op'>)</span>,
   keep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"full"</span>, <span class='st'>"left"</span>, <span class='st'>"master"</span>, <span class='st'>"right"</span>, <span class='st'>"using"</span>, <span class='st'>"inner"</span><span class='op'>)</span>,
   update_values <span class='op'>=</span> <span class='cn'>FALSE</span>,
   updateNA <span class='op'>=</span> <span class='va'>update_values</span>,
   reportvar <span class='op'>=</span> <span class='st'>"report"</span>,
   reporttype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"character"</span>, <span class='st'>"numeric"</span><span class='op'>)</span>,
+  roll <span class='op'>=</span> <span class='cn'>NULL</span>,
   keep_y_in_x <span class='op'>=</span> <span class='cn'>FALSE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
@@ -156,17 +153,15 @@ joyn will do a natural join, using all variables with common names across
 the two tables. A message lists the variables so that you can check they're
 right (to suppress the message, simply explicitly list the variables that
 you want to join). To join by different variables on x and y use a vector
-of expressions. For example, <code>by = c("a = b", "z")</code> will use "a" in x,
-"b" in y, and "z" in both tables.</p></td>
-    </tr>
-    <tr>
-      <th>roll</th>
-      <td><p>double: <em>to be implemented</em></p></td>
+of expressions. For example, <code>by = c("a = b", "z")</code> will use "a" in x, "b"
+in y, and "z" in both tables.</p></td>
     </tr>
     <tr>
       <th>yvars</th>
       <td><p>character: Vector of variable names that will be kept after the
-merge. Be default it keeps all the varialbes in y into x.</p></td>
+merge. If TRUE (the default), it keeps all the brings all the variables in
+y into x. If FALSE or NULL, it does not bring any variable into x, but a
+report will be generated.</p></td>
     </tr>
     <tr>
       <th>join_type</th>
@@ -180,9 +175,9 @@ sections</em>).</p></td>
       <th>keep</th>
       <td><p>character: One of <em>"full"</em>, <em>"left"</em>, <em>"master"</em>, <em>"right"</em>,
 <em>"using"</em>, <em>"inner"</em>. Default is <em>"full"</em>. Even though this is not the
-regular behavior of joins in R, the objective of <code>joyn</code> is to present
-a diagnosys of the join, so that it must use by default a full join. Yet,
-if <em>"left"</em> or <em>"master"</em>, it keeps the observations that matched in both
+regular behavior of joins in R, the objective of <code>joyn</code> is to present a
+diagnosys of the join, so that it must use by default a full join. Yet, if
+<em>"left"</em> or <em>"master"</em>, it keeps the observations that matched in both
 tables and the ones that did not match in x. The ones in y will be
 discarded. If <em>"right"</em> or <em>"using"</em>, it keeps the observations that
 matched in both tables and the ones that did not match in y. The ones in x
@@ -214,6 +209,10 @@ table, though a summary of the join will be display after concluding.</p></td>
 <em>"character"</em>. If <em>"numeric"</em>, the reporting variable will contain  numeric
 codes of the source and the contents of each observation in the joined
 table.</p></td>
+    </tr>
+    <tr>
+      <th>roll</th>
+      <td><p>double: <em>to be implemented</em></p></td>
     </tr>
     <tr>
       <th>keep_y_in_x</th>
@@ -254,6 +253,96 @@ observations within a group, then the last observation of the shorter group
 is used repeatedly to match with subsequent observations of the longer
 group.</p>
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># Simple merge</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://r-datatable.com'>data.table</a></span><span class='op'>)</span>
+<span class='va'>x1</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1L</span>, <span class='fl'>1L</span>, <span class='fl'>2L</span>, <span class='fl'>3L</span>, <span class='cn'>NA_integer_</span><span class='op'>)</span>,
+t  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1L</span>, <span class='fl'>2L</span>, <span class='fl'>1L</span>, <span class='fl'>2L</span>, <span class='cn'>NA_integer_</span><span class='op'>)</span>,
+x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span><span class='fl'>15</span><span class='op'>)</span>
+
+<span class='va'>y1</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fl'>1</span><span class='op'>:</span><span class='fl'>2</span>,
+                y  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='fl'>15L</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>x2</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>3</span>, <span class='cn'>NA</span><span class='op'>)</span>,
+                t  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1L</span>, <span class='fl'>2L</span>, <span class='fl'>1L</span>, <span class='fl'>2L</span>, <span class='cn'>NA_integer_</span><span class='op'>)</span>,
+                x  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>16</span>, <span class='fl'>12</span>, <span class='cn'>NA</span>, <span class='cn'>NA</span>, <span class='fl'>15</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>y2</span> <span class='op'>=</span> <span class='fu'><a href='https://Rdatatable.gitlab.io/data.table/reference/data.table.html'>data.table</a></span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>3</span><span class='op'>)</span>,
+              yd <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>2</span>, <span class='fl'>5</span>, <span class='fl'>6</span>, <span class='fl'>3</span><span class='op'>)</span>,
+              y  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='fl'>15L</span>, <span class='fl'>20L</span>, <span class='fl'>13L</span>, <span class='fl'>10L</span><span class='op'>)</span>,
+              x  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>16</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
+<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>y1</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>i</span><span> joining by </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
+#&gt;       x 2   40.0%
+#&gt;   x &amp; y 3   60.0%
+#&gt;   Total 5  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x  y report
+#&gt; 1:  1  1 11 11  x &amp; y
+#&gt; 2:  1  2 12 11  x &amp; y
+#&gt; 3:  2  1 13 15  x &amp; y
+#&gt; 4:  3  2 14 NA      x
+#&gt; 5: NA NA 15 NA      x</div><div class='input'>
+<span class='co'># Bad merge for not specifying by argument</span>
+<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> joining by </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> and </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
+#&gt;       x 4   44.4%
+#&gt;   x &amp; y 1   11.1%
+#&gt;       y 4   44.4%
+#&gt;   Total 9  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y report
+#&gt; 1:  1  1 16  1 11  x &amp; y
+#&gt; 2:  1  2 12 NA NA      x
+#&gt; 3:  2  1 NA NA NA      x
+#&gt; 4:  3  2 NA NA NA      x
+#&gt; 5: NA NA 15 NA NA      x
+#&gt; 6:  2 NA 17  2 15      y
+#&gt; 7:  5 NA 18  5 20      y
+#&gt; 8:  6 NA 19  6 13      y
+#&gt; 9:  3 NA 20  3 10      y</div><div class='input'>
+<span class='co'># good merge, ignoring variable x from y</span>
+<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> variable </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> in `y` is ignored in merge because `updateNA` and</span>
+#&gt; <span class='message'>  `update_values` are FALSE.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
+#&gt;       x 1   14.3%
+#&gt;   x &amp; y 4   57.1%
+#&gt;       y 2   28.6%
+#&gt;   Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y report
+#&gt; 1:  1  1 16  1 11  x &amp; y
+#&gt; 2:  1  2 12  1 11  x &amp; y
+#&gt; 3:  2  1 NA  2 15  x &amp; y
+#&gt; 4:  3  2 NA  3 10  x &amp; y
+#&gt; 5: NA NA 15 NA NA      x
+#&gt; 6:  5 NA NA  5 20      y
+#&gt; 7:  6 NA NA  6 13      y</div><div class='input'>
+<span class='co'># update NAs in x variable form x</span>
+<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, updateNA <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;      report n percent
+#&gt;  NA updated 2   28.6%
+#&gt;           x 1   14.3%
+#&gt;       x &amp; y 2   28.6%
+#&gt;           y 2   28.6%
+#&gt;       Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y     report
+#&gt; 1:  1  1 16  1 11      x &amp; y
+#&gt; 2:  1  2 12  1 11      x &amp; y
+#&gt; 3:  2  1 17  2 15 NA updated
+#&gt; 4:  3  2 20  3 10 NA updated
+#&gt; 5: NA NA 15 NA NA          x
+#&gt; 6:  5 NA 18  5 20          y
+#&gt; 7:  6 NA 19  6 13          y</div><div class='input'>
+<span class='co'># Update values in x with variables from y</span>
+<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_values <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;         report n percent
+#&gt;    not updated 1   14.3%
+#&gt;  value updated 1   14.3%
+#&gt;          x &amp; y 3   42.9%
+#&gt;              y 2   28.6%
+#&gt;          Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y        report
+#&gt; 1:  1  1 16  1 11         x &amp; y
+#&gt; 2:  1  2 16  1 11 value updated
+#&gt; 3:  2  1 NA  2 15         x &amp; y
+#&gt; 4:  3  2 NA  3 10         x &amp; y
+#&gt; 5: NA NA 15 NA NA   not updated
+#&gt; 6:  5 NA NA  5 20             y
+#&gt; 7:  6 NA NA  6 13             y</div><div class='input'>
+</div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">
@@ -265,11 +354,11 @@ group.</p>
 
       <footer>
       <div class="copyright">
-  <p><p>Developed by R.Andres Castaneda.</p></p>
+  <p>Developed by R.Andres Castaneda.</p>
 </div>
 
 <div class="pkgdown">
-  <p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 1.6.1.9001.</p></p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.6.1.</p>
 </div>
 
       </footer>
@@ -277,8 +366,6 @@ group.</p>
 
   
 
-
-  
 
   </body>
 </html>
