@@ -4,6 +4,7 @@
 #' @param var variable to be updated
 #'
 #' @return data.table
+#' @noRd
 update_NAs <- function(dt, var) {
 
   y.var <- paste0("y.", var)

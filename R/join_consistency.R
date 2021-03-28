@@ -5,6 +5,7 @@
 #' @param dtname name of dt for displaying purposes
 #'
 #' @return TRUE
+#' @noRd
 join_consistency <- function(dt,  by, dtname = NULL) {
   m <- dt[, .N,by = mget(by)
           ][,
