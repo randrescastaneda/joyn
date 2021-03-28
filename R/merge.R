@@ -295,15 +295,29 @@ merge <- function(x,
   i.yvars <- paste0("i.", yvars)
 
 
-  if (join_type %in% c("1:1", "m:1") &&
-      keep %in% c("left", "master")) {
+  if (join_type %in% c("1:1", "m:1")) {
+
     x[y,
       on = by,
       (yvars) := mget(i.yvars)]
 
+    # complement
+    if (keep %in% c("full", "both", "right", "using")) {
+      ty <- y[!x,
+              on   = by,
+              mult = "all"
+             ][, .SD,
+               .SDcols = c(by, yvars)
+              ]
+
+      x <- rbindlist(l         = list(x, ty),
+                     use.names = TRUE,
+                     fill      = TRUE)
+    }
+
   } else  {
 
-    data.table::merge.data.table(x = x,
+    x <- data.table::merge.data.table(x = x,
                                  y = y,
                                  by = by,
                                  all.x = TRUE,
@@ -311,23 +325,6 @@ merge <- function(x,
                                  sort  = TRUE,
                                  allow.cartesian = TRUE)
 
-  }
-
-  # complement
-  if (keep %in% c("full", "both", "right", "using")) {
-    ty <- y[!x,
-            on   = by,
-            mult = "all"
-            ]
-
-
-    ty <- ty[, .SD,
-               .SDcols = c(by, yvars)
-               ]
-
-    x <- rbindlist(l         = list(x, ty),
-                   use.names = TRUE,
-                   fill      = TRUE)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

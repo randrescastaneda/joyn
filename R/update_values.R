@@ -10,13 +10,16 @@ update_values <- function(dt, var) {
   y.var <- paste0(var, ".y")
 
   dt[
+    is.na(get(var)) & !(report %in% c(2, 4)),
+    report := 4
+  ][
     get(var) != get(y.var) & report != 5,
     report := 5
   ][
     is.na(get(y.var)) & report != 6,
     report := 6
   ][
-    get(var) != get(y.var),
+    (get(var) != get(y.var) | is.na(get(var))),
     (var) := get(y.var)
   ]
 
