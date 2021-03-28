@@ -29,6 +29,21 @@ test_that("m:m and 1:1 gives the same if data is correct", {
 
 
 
+test_that("left merge is correct", {
+  x <- merge(x1, y1,by = "id",
+             keep = "left")
+  expect_equal(nrow(x), nrow(x1))
+
+
+  w <- merge(x2, y2,by = "id", keep = "left", join_type = "1:1")
+  expect_equal(nrow(w), nrow(x2))
+
+
+})
+
+
+
+
 
 
 

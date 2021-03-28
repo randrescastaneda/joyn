@@ -171,7 +171,7 @@ merge <- function(x,
   }
 
   if (ty == "1") {
-    join_consistency(x, by, "y")
+    join_consistency(y, by, "y")
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
