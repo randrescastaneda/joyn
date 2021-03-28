@@ -255,7 +255,7 @@ merge <- function(x,
   if (length(upvars) != 0) {
 
     # rename vars in y so they are different to x's when joined
-      y.upvars <- paste0("i.", upvars)
+      y.upvars <- paste0(upvars, ".y")
       newyvars <- yvars
       newyvars[newyvars %in% upvars] <- y.upvars
 
@@ -294,6 +294,41 @@ merge <- function(x,
   # simple merge
   i.yvars <- paste0("i.", yvars)
 
+
+  if (join_type %in% c("1:1", "m:1") &&
+      keep %in% c("left", "master")) {
+    x[y,
+      on = by,
+      (yvars) := mget(i.yvars)]
+
+  } else  {
+
+    data.table::merge.data.table(x = x,
+                                 y = y,
+                                 by = by,
+                                 all.x = TRUE,
+                                 all.y = TRUE,
+                                 sort  = TRUE,
+                                 allow.cartesian = TRUE)
+
+  }
+
+  # complement
+  if (keep %in% c("full", "both", "right", "using")) {
+    ty <- y[!x,
+            on   = by,
+            mult = "all"
+            ]
+
+
+    ty <- ty[, .SD,
+               .SDcols = c(by, yvars)
+               ]
+
+    x <- rbindlist(l         = list(x, ty),
+                   use.names = TRUE,
+                   fill      = TRUE)
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------
