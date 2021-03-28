@@ -4,11 +4,11 @@ x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                t  = c(1L, 2L, 1L, 2L, NA_integer_),
                x  = 11:15)
 
-y1 = data.table(id = 1:2,
-               y  = c(11L, 15L))
+y1 = data.table(id = c(1,2, 4),
+               y  = c(11L, 15L, 16))
 
 
-x2 = data.table(id = c(1, 1, 2, 3, NA),
+x2 = data.table(id = c(1, 4, 2, 3, NA),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = c(16, 12, NA, NA, 15))
 
@@ -19,12 +19,12 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
                 x  = c(16:20))
 
 
-y3 <- data.table(x=rep(c("b","a","c"),each=3),
-                y=c(1,3,6), v=1:9)
+y3 <- data.table(id = c("c","b", "c", "a"),
+                 y  = c(11L, 15L, 18L, 20L))
 
-x3 <- data.table(x=c("c","b"),
-                v=8:7,
-                foo=c(4,2))
+x3 <- data.table(id=c("c","b", "d"),
+                v=8:9,
+                foo=c(4,2, 7))
 
 x4 = data.table(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),

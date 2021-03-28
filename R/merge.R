@@ -254,9 +254,8 @@ merge <- function(x,
 
   if (length(upvars) != 0) {
 
-    if (isTRUE(updateNA) || isTRUE(update_values)) {
-      # rename vars in y so they are different to x's when joined
-      y.upvars <- paste0("y.", upvars)
+    # rename vars in y so they are different to x's when joined
+      y.upvars <- paste0("i.", upvars)
       newyvars <- yvars
       newyvars[newyvars %in% upvars] <- y.upvars
 
@@ -265,7 +264,7 @@ merge <- function(x,
       yvars <- newyvars
 
 
-    } else {
+      if (isFALSE(updateNA) && isFALSE(update_values)) {
 
       if (verbose) {
         cli::cli_alert_info("variable{?s} {.code {upvars}} in `y` {?is/are}
@@ -274,8 +273,8 @@ merge <- function(x,
                             wrap = TRUE)
       }
 
-      yvars    <- yvars[!(yvars %in% upvars)]
-      y.upvars <- NULL
+      # yvars    <- yvars[!(yvars %in% upvars)]
+      # y.upvars <- NULL
 
     }
   } # end of update vars
@@ -295,20 +294,6 @@ merge <- function(x,
   # simple merge
   i.yvars <- paste0("i.", yvars)
 
-  x[y,
-    on = by,
-    (yvars) := mget(i.yvars)]
-
-  # complement
-  ty <- y[!x,
-          on = by
-          ][, .SD,
-            .SDcols = c(by, yvars)
-            ]
-
-  x <- rbindlist(l         = list(x, ty),
-                 use.names = TRUE,
-                 fill      = TRUE)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------

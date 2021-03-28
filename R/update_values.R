@@ -7,7 +7,7 @@
 #' @noRd
 update_values <- function(dt, var) {
 
-  y.var <- paste0("y.", var)
+  y.var <- paste0("i.", var)
 
   dt[
     get(var) != get(y.var) & report != 5,

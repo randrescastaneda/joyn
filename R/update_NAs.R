@@ -7,7 +7,7 @@
 #' @noRd
 update_NAs <- function(dt, var) {
 
-  y.var <- paste0("y.", var)
+  y.var <- paste0("i.", var)
 
   dt[
     is.na(get(var)) & !(report %in% c(2, 4)),
