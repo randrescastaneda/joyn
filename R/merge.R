@@ -54,6 +54,8 @@
 #'   y when both tables have common variable names. Thus, the prefix "y." will
 #'   be added to the original name to distinguish from the resulting variable in
 #'   the joined table.
+#' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
+#' TRUE.
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -126,6 +128,7 @@ merge <- function(x,
                   reporttype    = c("character", "numeric"),
                   roll          = NULL,
                   keep_y_in_x   = FALSE,
+                  sort          = TRUE,
                   verbose       = TRUE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -314,6 +317,10 @@ merge <- function(x,
                      use.names = TRUE,
                      fill      = TRUE)
     }
+    if (sort) {
+      setorderv(x, by)
+      setattr(x, 'sorted', by)
+    }
 
   } else  {
 
@@ -322,7 +329,7 @@ merge <- function(x,
                                  by = by,
                                  all.x = TRUE,
                                  all.y = TRUE,
-                                 sort  = TRUE,
+                                 sort  = sort,
                                  allow.cartesian = TRUE)
 
   }
