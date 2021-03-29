@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9004</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
       </span>
     </div>
 
@@ -137,7 +137,7 @@
   join_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m:m"</span>, <span class='st'>"m:1"</span>, <span class='st'>"1:m"</span>, <span class='st'>"1:1"</span><span class='op'>)</span>,
   keep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"full"</span>, <span class='st'>"left"</span>, <span class='st'>"master"</span>, <span class='st'>"right"</span>, <span class='st'>"using"</span>, <span class='st'>"inner"</span><span class='op'>)</span>,
   update_values <span class='op'>=</span> <span class='cn'>FALSE</span>,
-  updateNA <span class='op'>=</span> <span class='va'>update_values</span>,
+  update_NAs <span class='op'>=</span> <span class='va'>update_values</span>,
   reportvar <span class='op'>=</span> <span class='st'>"report"</span>,
   reporttype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"character"</span>, <span class='st'>"numeric"</span><span class='op'>)</span>,
   roll <span class='op'>=</span> <span class='cn'>NULL</span>,
@@ -204,7 +204,7 @@ in x with the actual of variables in y with the same name as the ones in x.
 <strong>NAs from y won't be used to update actual values in x</strong>.</p></td>
     </tr>
     <tr>
-      <th>updateNA</th>
+      <th>update_NAs</th>
       <td><p>logical: If TRUE, it will update NA values of all variables
 in x with actual values of variables in y that have the same name as the
 ones in x. If FALSE, NA values won't be updated.</p></td>
@@ -331,20 +331,8 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 #&gt; 6:  5 NA NA  5 20      y
 #&gt; 7:  6 NA NA  6 13      y</div><div class='input'>
 <span class='co'># update NAs in x variable form x</span>
-<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, updateNA <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;      report n percent
-#&gt;  NA updated 2   28.6%
-#&gt;           x 1   14.3%
-#&gt;       x &amp; y 2   28.6%
-#&gt;           y 2   28.6%
-#&gt;       Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y     report
-#&gt; 1: NA NA 15 NA NA          x
-#&gt; 2:  1  1 16  1 11      x &amp; y
-#&gt; 3:  1  2 12  1 11      x &amp; y
-#&gt; 4:  2  1 17  2 15 NA updated
-#&gt; 5:  3  2 20  3 10 NA updated
-#&gt; 6:  5 NA 18  5 20          y
-#&gt; 7:  6 NA 19  6 13          y</div><div class='input'>
+<span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_NAs <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='error'>Error in merge(x2, y2, by = "id", update_NAs = TRUE): unused argument (update_NAs = TRUE)</span></div><div class='input'>
 <span class='co'># Update values in x with variables from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_values <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;         report n percent
