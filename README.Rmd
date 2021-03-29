@@ -137,7 +137,7 @@ merge(x2, y2)[]
 merge(x2, y2, by = "id")[]
 
 # update NAs in x variable form x
-merge(x2, y2, by = "id", updateNA = TRUE)[]
+merge(x2, y2, by = "id", update_NAs = TRUE)[]
 
 # Update values in x with variables from y
 merge(x2, y2, by = "id", update_values = TRUE)[]
