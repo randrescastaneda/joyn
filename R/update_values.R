@@ -1,3 +1,9 @@
+# Add global variables to avoid NSE notes in R CMD check
+if (getRversion() >= '2.15.1')
+  utils::globalVariables(
+    c('report')
+  )
+
 #' update values in x with data from y
 #'
 #' @param dt joined table

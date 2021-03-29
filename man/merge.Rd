@@ -12,7 +12,7 @@ merge(
   join_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("full", "left", "master", "right", "using", "inner"),
   update_values = FALSE,
-  updateNA = update_values,
+  update_NAs = update_values,
   reportvar = "report",
   reporttype = c("character", "numeric"),
   roll = NULL,
@@ -62,7 +62,7 @@ matched both tables.}
 in x with the actual of variables in y with the same name as the ones in x.
 \strong{NAs from y won't be used to update actual values in x}.}
 
-\item{updateNA}{logical: If TRUE, it will update NA values of all variables
+\item{update_NAs}{logical: If TRUE, it will update NA values of all variables
 in x with actual values of variables in y that have the same name as the
 ones in x. If FALSE, NA values won't be updated.}
 
@@ -146,7 +146,7 @@ merge(x2, y2)
 merge(x2, y2, by = "id")
 
 # update NAs in x variable form x
-merge(x2, y2, by = "id", updateNA = TRUE)
+merge(x2, y2, by = "id", update_NAs = TRUE)
 
 # Update values in x with variables from y
 merge(x2, y2, by = "id", update_values = TRUE)

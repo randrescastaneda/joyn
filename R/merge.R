@@ -1,3 +1,9 @@
+# Add global variables to avoid NSE notes in R CMD check
+if (getRversion() >= '2.15.1')
+  utils::globalVariables(
+    c('x_report', 'y_report')
+  )
+
 #' Merge two tables
 #'
 #' This is the main and, basically, the only function in joyn.
@@ -42,7 +48,7 @@
 #'   *"character"*. If *"numeric"*, the reporting variable will contain  numeric
 #'   codes of the source and the contents of each observation in the joined
 #'   table.
-#' @param updateNA logical: If TRUE, it will update NA values of all variables
+#' @param update_NAs logical: If TRUE, it will update NA values of all variables
 #'   in x with actual values of variables in y that have the same name as the
 #'   ones in x. If FALSE, NA values won't be updated.
 #' @param update_values logical: If TRUE, it will update all values of variables
@@ -110,7 +116,7 @@
 #' merge(x2, y2, by = "id")
 #'
 #' # update NAs in x variable form x
-#' merge(x2, y2, by = "id", updateNA = TRUE)
+#' merge(x2, y2, by = "id", update_NAs = TRUE)
 #'
 #' # Update values in x with variables from y
 #' merge(x2, y2, by = "id", update_values = TRUE)
@@ -123,7 +129,7 @@ merge <- function(x,
                   keep          = c("full", "left", "master",
                                     "right", "using", "inner"),
                   update_values = FALSE,
-                  updateNA      = update_values,
+                  update_NAs    = update_values,
                   reportvar     = "report",
                   reporttype    = c("character", "numeric"),
                   roll          = NULL,
@@ -214,7 +220,7 @@ merge <- function(x,
 
   }  else if (isFALSE(yvars) || is.null(yvars)) {
 
-    temp_yvar <- paste0("temp_var", floor(runif(1)*1000))
+    temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
     yvars     <- temp_yvar
     y[, (temp_yvar) := 1]
 
@@ -267,12 +273,12 @@ merge <- function(x,
       yvars <- newyvars
 
 
-      if (isFALSE(updateNA) && isFALSE(update_values)) {
+      if (isFALSE(update_NAs) && isFALSE(update_values)) {
 
       if (verbose) {
         cli::cli_alert_info("variable{?s} {.code {upvars}} in `y` {?is/are}
                             ignored in merge
-                            because `updateNA` and `update_values` are FALSE.",
+                            because `update_NAs` and `update_values` are FALSE.",
                             wrap = TRUE)
       }
 
@@ -368,7 +374,7 @@ merge <- function(x,
 
     }
 
-    if (isTRUE(updateNA) && isFALSE(update_values)) {
+    if (isTRUE(update_NAs) && isFALSE(update_values)) {
 
       for (i in seq_along(upvars)) {
         update_NAs(x, upvars[i])
