@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9003</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9004</span>
       </span>
     </div>
 
@@ -80,6 +80,18 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../reference/index.html">Reference</a>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Articles
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/general-use.html">General use</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="../index.html">
@@ -130,6 +142,7 @@
   reporttype <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"character"</span>, <span class='st'>"numeric"</span><span class='op'>)</span>,
   roll <span class='op'>=</span> <span class='cn'>NULL</span>,
   keep_y_in_x <span class='op'>=</span> <span class='cn'>FALSE</span>,
+  sort <span class='op'>=</span> <span class='cn'>TRUE</span>,
   verbose <span class='op'>=</span> <span class='cn'>TRUE</span>
 <span class='op'>)</span></pre>
 
@@ -222,6 +235,11 @@ be added to the original name to distinguish from the resulting variable in
 the joined table.</p></td>
     </tr>
     <tr>
+      <th>sort</th>
+      <td><p>logical: If TRUE, sort by key variables in <code>by</code>. Default is
+TRUE.</p></td>
+    </tr>
+    <tr>
       <th>verbose</th>
       <td><p>logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.</p></td>
@@ -276,27 +294,27 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 #&gt;       x 2   40.0%
 #&gt;   x &amp; y 3   60.0%
 #&gt;   Total 5  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x  y report
-#&gt; 1:  1  1 11 11  x &amp; y
-#&gt; 2:  1  2 12 11  x &amp; y
-#&gt; 3:  2  1 13 15  x &amp; y
-#&gt; 4:  3  2 14 NA      x
-#&gt; 5: NA NA 15 NA      x</div><div class='input'>
+#&gt; 1: NA NA 15 NA      x
+#&gt; 2:  1  1 11 11  x &amp; y
+#&gt; 3:  1  2 12 11  x &amp; y
+#&gt; 4:  2  1 13 15  x &amp; y
+#&gt; 5:  3  2 14 NA      x</div><div class='input'>
 <span class='co'># Bad merge for not specifying by argument</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> joining by </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> and </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
 #&gt;       x 4   44.4%
 #&gt;   x &amp; y 1   11.1%
 #&gt;       y 4   44.4%
-#&gt;   Total 9  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y report
-#&gt; 1:  1  1 16  1 11  x &amp; y
-#&gt; 2:  1  2 12 NA NA      x
-#&gt; 3:  2  1 NA NA NA      x
-#&gt; 4:  3  2 NA NA NA      x
-#&gt; 5: NA NA 15 NA NA      x
-#&gt; 6:  2 NA 17  2 15      y
-#&gt; 7:  5 NA 18  5 20      y
-#&gt; 8:  6 NA 19  6 13      y
-#&gt; 9:  3 NA 20  3 10      y</div><div class='input'>
+#&gt;   Total 9  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  x  t yd  y report
+#&gt; 1: NA 15 NA NA NA      x
+#&gt; 2:  1 12  2 NA NA      x
+#&gt; 3:  1 16  1  1 11  x &amp; y
+#&gt; 4:  2 NA  1 NA NA      x
+#&gt; 5:  2 17 NA  2 15      y
+#&gt; 6:  3 NA  2 NA NA      x
+#&gt; 7:  3 20 NA  3 10      y
+#&gt; 8:  5 18 NA  5 20      y
+#&gt; 9:  6 19 NA  6 13      y</div><div class='input'>
 <span class='co'># good merge, ignoring variable x from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> variable </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> in `y` is ignored in merge because `updateNA` and</span>
@@ -305,11 +323,11 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 #&gt;   x &amp; y 4   57.1%
 #&gt;       y 2   28.6%
 #&gt;   Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y report
-#&gt; 1:  1  1 16  1 11  x &amp; y
-#&gt; 2:  1  2 12  1 11  x &amp; y
-#&gt; 3:  2  1 NA  2 15  x &amp; y
-#&gt; 4:  3  2 NA  3 10  x &amp; y
-#&gt; 5: NA NA 15 NA NA      x
+#&gt; 1: NA NA 15 NA NA      x
+#&gt; 2:  1  1 16  1 11  x &amp; y
+#&gt; 3:  1  2 12  1 11  x &amp; y
+#&gt; 4:  2  1 NA  2 15  x &amp; y
+#&gt; 5:  3  2 NA  3 10  x &amp; y
 #&gt; 6:  5 NA NA  5 20      y
 #&gt; 7:  6 NA NA  6 13      y</div><div class='input'>
 <span class='co'># update NAs in x variable form x</span>
@@ -320,28 +338,29 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 #&gt;       x &amp; y 2   28.6%
 #&gt;           y 2   28.6%
 #&gt;       Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y     report
-#&gt; 1:  1  1 16  1 11      x &amp; y
-#&gt; 2:  1  2 12  1 11      x &amp; y
-#&gt; 3:  2  1 17  2 15 NA updated
-#&gt; 4:  3  2 20  3 10 NA updated
-#&gt; 5: NA NA 15 NA NA          x
+#&gt; 1: NA NA 15 NA NA          x
+#&gt; 2:  1  1 16  1 11      x &amp; y
+#&gt; 3:  1  2 12  1 11      x &amp; y
+#&gt; 4:  2  1 17  2 15 NA updated
+#&gt; 5:  3  2 20  3 10 NA updated
 #&gt; 6:  5 NA 18  5 20          y
 #&gt; 7:  6 NA 19  6 13          y</div><div class='input'>
 <span class='co'># Update values in x with variables from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_values <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;         report n percent
+#&gt;     NA updated 2   28.6%
 #&gt;    not updated 1   14.3%
 #&gt;  value updated 1   14.3%
-#&gt;          x &amp; y 3   42.9%
+#&gt;          x &amp; y 1   14.3%
 #&gt;              y 2   28.6%
 #&gt;          Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y        report
-#&gt; 1:  1  1 16  1 11         x &amp; y
-#&gt; 2:  1  2 16  1 11 value updated
-#&gt; 3:  2  1 NA  2 15         x &amp; y
-#&gt; 4:  3  2 NA  3 10         x &amp; y
-#&gt; 5: NA NA 15 NA NA   not updated
-#&gt; 6:  5 NA NA  5 20             y
-#&gt; 7:  6 NA NA  6 13             y</div><div class='input'>
+#&gt; 1: NA NA 15 NA NA   not updated
+#&gt; 2:  1  1 16  1 11         x &amp; y
+#&gt; 3:  1  2 16  1 11 value updated
+#&gt; 4:  2  1 17  2 15    NA updated
+#&gt; 5:  3  2 20  3 10    NA updated
+#&gt; 6:  5 NA 18  5 20             y
+#&gt; 7:  6 NA 19  6 13             y</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
