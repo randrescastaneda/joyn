@@ -198,7 +198,7 @@ merge(x2, y2)[]
 
 # good merge, ignoring variable x from y
 merge(x2, y2, by = "id")[]
-#> i variable `x` in `y` is ignored in merge because `updateNA` and
+#> i variable `x` in `y` is ignored in merge because `update_NAs` and
 #>   `update_values` are FALSE.
 #> -- JOYn Report --
 #> 
@@ -218,7 +218,7 @@ merge(x2, y2, by = "id")[]
 #> 7:  6 NA NA  6 13      y
 
 # update NAs in x variable form x
-merge(x2, y2, by = "id", updateNA = TRUE)[]
+merge(x2, y2, by = "id", update_NAs = TRUE)[]
 #> 
 #> -- JOYn Report --
 #> 
