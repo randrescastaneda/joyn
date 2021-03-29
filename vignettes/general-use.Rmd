@@ -1,30 +1,22 @@
 ---
-output: github_document
+title: "General use"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{General use}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>",
-  fig.path = "man/figures/README-",
-  out.width = "100%"
+  comment  = "#>", 
+  error    = TRUE, 
+  purl     = FALSE
 )
 ```
 
-# joyn
-
-<!-- badges: start -->
-
-[![Codecov test coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master)
-<!-- badges: end -->
-
-
-The goal of `joyn` is to provide the user with a set of tools to analyze the quality
-of merging (i.e., joining) data frames, so that it is a **JOY** to join tables with
-`joyn`. This is inspired in the command `merge` ofthe statistical software `Stata`. 
-
-
-## Motivation
+# Motivation
 
 The objective `joyn` is to make your life easier when joining tables. As a
 former Stata user (I still work with Stata but not that much as I work with R
@@ -62,7 +54,7 @@ about the table's join. So the following features are the value added of `joyn`:
 
 4.  Return a reporting variable with the status of the join.
 
-## Regarding speed and flexibility
+# Regarding speed and flexibility
 
 Notice the `joyn` is not intended to be a super fast joining tool. By
 construction it does a lot of things that will make it slower that other tools
@@ -81,68 +73,7 @@ with this [blog
 post](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-sets).
 
 
-Thus, it is not intended to be extremely fast, 
-even though it uses the power of `data.table` indexing to perform the merges. The
-reason for `joyn` to be a little slower is than pure `data.table` is that it will 
-always perform a full join of data in the same way the `Stata` does it. Yet, the 
-user can select what data to keep (e.g., that left [master], right [using], 
-inner join, or full join). 
-
-`joyn` presents several important features. The most important is the additional
-variable, `report`, which summarizes the result of the join (you can change the 
-name if you want). In addition, it allows you to specify the kind of join you 
-want to perform (i.e, m:m, m:1, 1:m, or 1:1). This ensures that your join does 
-not produce unexpected outcome.
-
-## Installation
-
-<!-- You can install the released version of joyn from [CRAN](https://CRAN.R-project.org) with: -->
-
-<!-- ``` r -->
-<!-- install.packages("joyn") -->
-<!-- ``` -->
-
-The development version from [GitHub](https://github.com/) with:
-
-``` r
-# install.packages("devtools")
-devtools::install_github("randrescastaneda/joyn")
-```
-## Example
-
-```{r example}
+```{r setup}
 library(joyn)
-
-x1
-y1
-
-# using commong variable `id` as key.
-merge(x1, y1)[]
-
-# keep just those observations that match
-merge(x1, y1, keep = "inner")[]
-
-
-x2 
-
-y2
-
-
-# Bad merge for not specifying by argument
-merge(x2, y2)[]
-
-# good merge, ignoring variable x from y
-merge(x2, y2, by = "id")[]
-
-# update NAs in x variable form x
-merge(x2, y2, by = "id", updateNA = TRUE)[]
-
-# Update values in x with variables from y
-merge(x2, y2, by = "id", update_values = TRUE)[]
-
-
-# do not bring any variable from Y into x, just the report
-merge(x2, y2, by = "id", yvars = NULL)[]
-
+library(data.table)
 ```
-

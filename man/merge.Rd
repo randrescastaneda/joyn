@@ -17,6 +17,7 @@ merge(
   reporttype = c("character", "numeric"),
   roll = NULL,
   keep_y_in_x = FALSE,
+  sort = TRUE,
   verbose = TRUE
 )
 }
@@ -81,6 +82,9 @@ table.}
 y when both tables have common variable names. Thus, the prefix "y." will
 be added to the original name to distinguish from the resulting variable in
 the joined table.}
+
+\item{sort}{logical: If TRUE, sort by key variables in \code{by}. Default is
+TRUE.}
 
 \item{verbose}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
