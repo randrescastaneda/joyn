@@ -15,6 +15,7 @@ LazyData: true
 URL: https://github.com/randrescastaneda/joyn
 BugReports: https://github.com/randrescastaneda/joyn/issues
 Suggests: 
+    covr,
     janitor,
     knitr,
     rmarkdown,

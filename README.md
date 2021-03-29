@@ -2,6 +2,9 @@
 # joyn
 
 <!-- badges: start -->
+
+[![Codecov test
+coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master)
 <!-- badges: end -->
 
 The goal of `joyn` is to provide the user with a set of tools to analyze
