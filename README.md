@@ -1,10 +1,10 @@
 
 # joyn
 
+<!-- [![Codecov test coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master) -->
 <!-- badges: start -->
 
-[![Codecov test
-coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master)
+[![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg)](https://github.com/randrescastaneda/joyn/actions)
 <!-- badges: end -->
 
 The goal of `joyn` is to provide the user with a set of tools to analyze
