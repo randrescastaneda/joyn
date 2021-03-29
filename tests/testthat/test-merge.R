@@ -20,8 +20,8 @@ test_that("m:m and 1:1 gives the same if data is correct", {
   expect_equal(merge(x2, y2, by = "id", update_values = TRUE, join_type = "1:1"),
                merge(x2, y2, by = "id", update_values = TRUE))
 
-  expect_equal(merge(x2, y2, by = "id", updateNA = TRUE, join_type = "1:1"),
-               merge(x2, y2, by = "id", updateNA = TRUE))
+  expect_equal(merge(x2, y2, by = "id", update_NAs = TRUE, join_type = "1:1"),
+               merge(x2, y2, by = "id", update_NAs = TRUE))
 
   expect_equal(merge(x2, y2, by = "id", join_type = "1:1"),
                merge(x2, y2, by = "id", ))

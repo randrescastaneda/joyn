@@ -1,3 +1,9 @@
+# Add global variables to avoid NSE notes in R CMD check
+if (getRversion() >= '2.15.1')
+  utils::globalVariables(
+    c('N')
+  )
+
 #' Make sure the join type is correct
 #'
 #' @param dt either right of left table
