@@ -1,6 +1,22 @@
+template:
+  params:
+    bootswatch: flatly
+
+development:
+  mode: auto
+
+home:
+  title: An R package for joining tables
+  description: The joy of joining tables in R
+
+authors:
+  R.Andres Castaneda:
+    href: https://randrescastaneda.rbind.io/
+
 navbar:
   structure:
     left:
+    - home
     - start here
     - reference
     - articles
@@ -15,7 +31,13 @@ navbar:
       href: https://github.com/randrescastaneda/joyn/
 
 reference:
-- title: functions
+- title: Main function
   contents:
   - '`merge`'
 
+articles:
+- title: Usage
+  navbar: ~
+  contents:
+  - general-use
+  - advanced-use

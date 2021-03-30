@@ -12,8 +12,8 @@
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/flatly/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha256-bZLfwXAP04zRMK2BjiO8iu9pf4FbLqX6zitd+tIvLhE=" crossorigin="anonymous" />
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
 
@@ -72,13 +72,19 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
+        <span class="version label label-danger" data-toggle="tooltip" data-placement="bottom" title="Unreleased version">0.0.0.9008</span>
       </span>
     </div>
 
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li>
+  <a href="../index.html">
+    <span class="fas fa-home fa-lg"></span>
+     
+  </a>
+</li>
+<li>
   <a href="../reference/index.html">Reference</a>
 </li>
 <li class="dropdown">
@@ -89,18 +95,12 @@
   </a>
   <ul class="dropdown-menu" role="menu">
     <li>
-      <a href="../articles/advanced-use.html">Advanced use</a>
-    </li>
-    <li>
       <a href="../articles/general-use.html">General use</a>
     </li>
+    <li>
+      <a href="../articles/advanced-use.html">Advanced use</a>
+    </li>
   </ul>
-</li>
-<li>
-  <a href="../index.html">
-    <span class="fas fa-home fa-lg"></span>
-     
-  </a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -135,7 +135,7 @@
     <pre class="usage"><span class='fu'>merge</span><span class='op'>(</span>
   <span class='va'>x</span>,
   <span class='va'>y</span>,
-  by <span class='op'>=</span> <span class='cn'>NULL</span>,
+  by <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/sets.html'>intersect</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>y</span><span class='op'>)</span><span class='op'>)</span>,
   yvars <span class='op'>=</span> <span class='cn'>TRUE</span>,
   match_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m:m"</span>, <span class='st'>"m:1"</span>, <span class='st'>"1:m"</span>, <span class='st'>"1:1"</span><span class='op'>)</span>,
   keep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"full"</span>, <span class='st'>"left"</span>, <span class='st'>"master"</span>, <span class='st'>"right"</span>, <span class='st'>"using"</span>, <span class='st'>"inner"</span><span class='op'>)</span>,
@@ -184,7 +184,7 @@ report will be generated.</p></td>
       <td><p>character: one of <em>"m:m"</em>, <em>"m:1"</em>, <em>"1:m"</em>, <em>"1:1"</em>.
 Default is <em>"m:m"</em> since this is the default generally used in joins in R.
 However, following Stata's recommendation, it is better to be explicit and
-use any of the other three join types (See details in <em>Join types
+use any of the other three match types (See details in <em>match types
 sections</em>).</p></td>
     </tr>
     <tr>
@@ -252,7 +252,7 @@ option). Default is TRUE.</p></td>
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p>a data.table joining x and y.</p>
-    <h2 class="hasAnchor" id="join-types"><a class="anchor" href="#join-types"></a>Join types</h2>
+    <h2 class="hasAnchor" id="match-types"><a class="anchor" href="#match-types"></a>match types</h2>
 
     
 
@@ -293,77 +293,77 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
               y  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>11L</span>, <span class='fl'>15L</span>, <span class='fl'>20L</span>, <span class='fl'>13L</span>, <span class='fl'>10L</span><span class='op'>)</span>,
               x  <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>16</span><span class='op'>:</span><span class='fl'>20</span><span class='op'>)</span><span class='op'>)</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x1</span>, <span class='va'>y1</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BBBB;'>i</span><span> joining by </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
+</div><div class='output co'>#&gt; <span class='message'>&gt; removing key variables <span style='color: #262626;background-color: #DADADA;'>`id`</span><span> from </span><span style='color: #00BB00;'>yvars</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
 #&gt;       x 2   40.0%
 #&gt;   x &amp; y 3   60.0%
 #&gt;   Total 5  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x  y report
-#&gt; 1: NA NA 15 NA      x
-#&gt; 2:  1  1 11 11  x &amp; y
-#&gt; 3:  1  2 12 11  x &amp; y
-#&gt; 4:  2  1 13 15  x &amp; y
-#&gt; 5:  3  2 14 NA      x</div><div class='input'>
+#&gt; 1:  1  1 11 11  x &amp; y
+#&gt; 2:  1  2 12 11  x &amp; y
+#&gt; 3:  2  1 13 15  x &amp; y
+#&gt; 4:  3  2 14 NA      x
+#&gt; 5: NA NA 15 NA      x</div><div class='input'>
 <span class='co'># Bad merge for not specifying by argument</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> joining by </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> and </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
+</div><div class='output co'>#&gt; <span class='message'>&gt; removing key variables </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> and </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> from </span><span style='color: #00BB00;'>yvars</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
 #&gt;       x 4   44.4%
 #&gt;   x &amp; y 1   11.1%
 #&gt;       y 4   44.4%
 #&gt;   Total 9  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  x  t yd  y report
-#&gt; 1: NA 15 NA NA NA      x
-#&gt; 2:  1 12  2 NA NA      x
-#&gt; 3:  1 16  1  1 11  x &amp; y
+#&gt; 1:  1 12  2 NA NA      x
+#&gt; 2:  1 16  1  1 11  x &amp; y
+#&gt; 3:  2 17 NA  2 15      y
 #&gt; 4:  2 NA  1 NA NA      x
-#&gt; 5:  2 17 NA  2 15      y
+#&gt; 5:  3 20 NA  3 10      y
 #&gt; 6:  3 NA  2 NA NA      x
-#&gt; 7:  3 20 NA  3 10      y
-#&gt; 8:  5 18 NA  5 20      y
-#&gt; 9:  6 19 NA  6 13      y</div><div class='input'>
+#&gt; 7:  5 18 NA  5 20      y
+#&gt; 8:  6 19 NA  6 13      y
+#&gt; 9: NA 15 NA NA NA      x</div><div class='input'>
 <span class='co'># good merge, ignoring variable x from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> variable </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> in table y is ignored because arguments `update_NAs` and</span>
+</div><div class='output co'>#&gt; <span class='message'>&gt; removing key variables </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> from </span><span style='color: #00BB00;'>yvars</span><span></span></div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> variable </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> in table y is ignored because arguments `update_NAs` and</span>
 #&gt; <span class='message'>  `update_values` are FALSE.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
 #&gt;       x 1   14.3%
 #&gt;   x &amp; y 4   57.1%
 #&gt;       y 2   28.6%
 #&gt;   Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y report
-#&gt; 1: NA NA 15 NA NA      x
-#&gt; 2:  1  1 16  1 11  x &amp; y
-#&gt; 3:  1  2 12  1 11  x &amp; y
-#&gt; 4:  2  1 NA  2 15  x &amp; y
-#&gt; 5:  3  2 NA  3 10  x &amp; y
-#&gt; 6:  5 NA NA  5 20      y
-#&gt; 7:  6 NA NA  6 13      y</div><div class='input'>
+#&gt; 1:  1  1 16  1 11  x &amp; y
+#&gt; 2:  1  2 12  1 11  x &amp; y
+#&gt; 3:  2  1 NA  2 15  x &amp; y
+#&gt; 4:  3  2 NA  3 10  x &amp; y
+#&gt; 5:  5 NA NA  5 20      y
+#&gt; 6:  6 NA NA  6 13      y
+#&gt; 7: NA NA 15 NA NA      x</div><div class='input'>
 <span class='co'># update NAs in x variable form x</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_NAs <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;      report n percent
+</div><div class='output co'>#&gt; <span class='message'>&gt; removing key variables </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> from </span><span style='color: #00BB00;'>yvars</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;      report n percent
 #&gt;  NA updated 2   28.6%
 #&gt;           x 1   14.3%
 #&gt;       x &amp; y 2   28.6%
 #&gt;           y 2   28.6%
 #&gt;       Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y     report
-#&gt; 1: NA NA 15 NA NA          x
-#&gt; 2:  1  1 16  1 11      x &amp; y
-#&gt; 3:  1  2 12  1 11      x &amp; y
-#&gt; 4:  2  1 17  2 15 NA updated
-#&gt; 5:  3  2 20  3 10 NA updated
-#&gt; 6:  5 NA 18  5 20          y
-#&gt; 7:  6 NA 19  6 13          y</div><div class='input'>
+#&gt; 1:  1  1 16  1 11      x &amp; y
+#&gt; 2:  1  2 12  1 11      x &amp; y
+#&gt; 3:  2  1 17  2 15 NA updated
+#&gt; 4:  3  2 20  3 10 NA updated
+#&gt; 5:  5 NA 18  5 20          y
+#&gt; 6:  6 NA 19  6 13          y
+#&gt; 7: NA NA 15 NA NA          x</div><div class='input'>
 <span class='co'># Update values in x with variables from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_values <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;         report n percent
+</div><div class='output co'>#&gt; <span class='message'>&gt; removing key variables </span><span style='color: #262626;background-color: #DADADA;'>`id`</span><span> from </span><span style='color: #00BB00;'>yvars</span><span></span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;         report n percent
 #&gt;     NA updated 2   28.6%
 #&gt;    not updated 1   14.3%
 #&gt;  value updated 1   14.3%
 #&gt;          x &amp; y 1   14.3%
 #&gt;              y 2   28.6%
 #&gt;          Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y        report
-#&gt; 1: NA NA 15 NA NA   not updated
-#&gt; 2:  1  1 16  1 11         x &amp; y
-#&gt; 3:  1  2 16  1 11 value updated
-#&gt; 4:  2  1 17  2 15    NA updated
-#&gt; 5:  3  2 20  3 10    NA updated
-#&gt; 6:  5 NA 18  5 20             y
-#&gt; 7:  6 NA 19  6 13             y</div><div class='input'>
+#&gt; 1:  1  1 16  1 11         x &amp; y
+#&gt; 2:  1  2 16  1 11 value updated
+#&gt; 3:  2  1 17  2 15    NA updated
+#&gt; 4:  3  2 20  3 10    NA updated
+#&gt; 5:  5 NA 18  5 20             y
+#&gt; 6:  6 NA 19  6 13             y
+#&gt; 7: NA NA 15 NA NA   not updated</div><div class='input'>
 </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
@@ -376,7 +376,7 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 
       <footer>
       <div class="copyright">
-  <p>Developed by R.Andres Castaneda.</p>
+  <p>Developed by <a href='https://randrescastaneda.rbind.io/'>R.Andres Castaneda</a>.</p>
 </div>
 
 <div class="pkgdown">
