@@ -271,3 +271,15 @@ test_that("selection of reportvar", {
 
 
 
+test_that("Keep Y vars works", {
+
+  jn <- merge(x2, y2, by = "id", keep_y_in_x = TRUE)
+
+  inames <- intersect(names(x2), names(y2))
+  inames <- inames[!(inames %in% "id")]
+
+  inames <- paste0(inames, ".y")
+
+  expect_true(all(inames  %in% names(jn)))
+
+})
