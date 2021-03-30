@@ -19,8 +19,8 @@ join_consistency <- function(dt,  by, dtname = NULL) {
             ]
 
   if (m > 1) {
-    msg     <- glue::glue("databse {dtname} is not uniquely
-                          identified by {glue::glue_collapse(glue::backtick(by),
+    msg     <- glue::glue(
+      "databse {dtname} is not uniquely identified by {glue::glue_collapse(glue::backtick(by),
                           sep = ', ', last ='  and ')}")
     hint    <- "Check the join type, the key variables or the consistency of
     your data"
