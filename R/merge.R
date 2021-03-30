@@ -147,7 +147,8 @@ merge <- function(x,
   reporttype  <- match.arg(reporttype)
 
   ## report variable -------
-  if (reportvar != make.names(reportvar)) {
+  if (is.character(reportvar) &&
+      !identical(reportvar, make.names(reportvar))) {
     nreportnames <- make.names(reportvar)
 
     cli::cli_alert_info("reportvar {.code {reportvar}} is an invalid column
@@ -368,12 +369,14 @@ merge <- function(x,
 
   } else {
 
-    check_names <- c(names(x), reportvar)
+    xnames      <- names(x)
+    check_names <- c(xnames, reportvar)
 
     if (!identical(check_names,
                   make.names(check_names, unique = TRUE))) {
 
-      nrv <- make.names(reportvar)
+      check_names <- make.names(check_names, unique = TRUE)
+      nrv         <- setdiff(check_names, xnames)
 
       cli::cli_alert_info("reportvar {.code {reportvar}} is already part of the
                           resulting table. It will be changed to {.code {nrv}}")

@@ -247,7 +247,27 @@ test_that("y vars are extracted correctly", {
 
 test_that("selection of reportvar", {
 
-  merge(x2, y2, by = "id", reportvar = "feiwe")[]
-  merge(x2, y2, by = "id")[]
+  reportvar <- "wijf"
+  jn <- merge(x2, y2, by = "id", reportvar = reportvar)
+
+  expect_true(reportvar %in% names(jn))
+
+  jn <- merge(x2, y2, by = "id", reportvar = FALSE, verbose = FALSE)
+
+  expect_false("report" %in% names(jn))
+
+  expect_equal(unique(c(names(x2), names(y2))), names(jn))
+
+
+  jn <- merge(x2, y2, by = "id", reportvar = "t", verbose = FALSE)
+
+  allnames <- unique(c(names(x2), names(y2)))
+
+  newname <- setdiff(names(jn), allnames)
+
+  expect_true(length(newname) > 0)
 
 })
+
+
+
