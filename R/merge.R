@@ -19,10 +19,10 @@ if (getRversion() >= '2.15.1')
 #'   you want to join). To join by different variables on x and y use a vector
 #'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x, "b"
 #'   in y, and "z" in both tables.
-#' @param join_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
+#' @param match_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
 #'   Default is *"m:m"* since this is the default generally used in joins in R.
 #'   However, following Stata's recommendation, it is better to be explicit and
-#'   use any of the other three join types (See details in *Join types
+#'   use any of the other three match types (See details in *match types
 #'   sections*).
 #'
 #' @param keep character: One of *"full"*, *"left"*, *"master"*, *"right"*,
@@ -61,13 +61,13 @@ if (getRversion() >= '2.15.1')
 #'   be added to the original name to distinguish from the resulting variable in
 #'   the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
-#' TRUE.
+#'   TRUE.
 #'
 #' @return a data.table joining x and y.
 #' @export
 #' @import data.table
 #'
-#' @section Join types:
+#' @section match types:
 #'
 #'   Using the same wording of the [Stata
 #'   manual](https://www.stata.com/manuals/dmerge.pdf)
@@ -76,9 +76,9 @@ if (getRversion() >= '2.15.1')
 #'   `by`  uniquely identify single observations in both table.
 #'
 #'   **1:m and m:1**: specify _one-to-many_ and _many-to-one_ match merges,
-#'   respectively. This means that one of the tables only one observation that
-#'   uniquely identifies *many* (i.e, two or more) observations in the other
-#'   table.
+#'   respectively. This means that in of the tables the observations are
+#'   uniquely identify by the variables in `by`, while in the other table many
+#'   (two or more)  of the observations are identify by the variables in `by`
 #'
 #'   **m:m** refers to _many-to-many merge_. variables in `by` does not uniquely
 #'   identify the observations in either table. Matching is performed by
@@ -123,9 +123,9 @@ if (getRversion() >= '2.15.1')
 #'
 merge <- function(x,
                   y,
-                  by            = NULL,
+                  by            = intersect(names(x), names(y)),
                   yvars         = TRUE,
-                  join_type     = c("m:m", "m:1", "1:m", "1:1"),
+                  match_type    = c("m:m", "m:1", "1:m", "1:1"),
                   keep          = c("full", "left", "master",
                                     "right", "using", "inner"),
                   update_values = FALSE,
@@ -140,11 +140,28 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  join_type  <- match.arg(join_type)
-  keep       <- match.arg(keep)
-  reporttype <- match.arg(reporttype)
 
+  ## correct inputs --------
+  match_type  <- match.arg(match_type)
+  keep        <- match.arg(keep)
+  reporttype  <- match.arg(reporttype)
 
+  ## report variable -------
+  if (is.character(reportvar) &&
+      !identical(reportvar, make.names(reportvar))) {
+    nreportnames <- make.names(reportvar)
+
+    if (verbose) {
+
+      cli::cli_alert_info("reportvar {.code {reportvar}} is an invalid column
+                          name, so it will
+                          be changed to {.code {nreportnames}}", wrap = TRUE)
+    }
+
+    reportvar <- nreportnames
+  }
+
+  ## Make sure we work with data.tables ------
   if (!(is.data.table(x))) {
     x <- as.data.table(x)
   } else {
@@ -169,8 +186,8 @@ merge <- function(x,
   #           Consistency of join   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  tx <- gsub("([m1]):([m1])", "\\1", join_type)
-  ty <- gsub("([m1]):([m1])", "\\2", join_type)
+  tx <- gsub("([m1]):([m1])", "\\1", match_type)
+  ty <- gsub("([m1]):([m1])", "\\2", match_type)
 
   if (tx == "1") {
     join_consistency(x, by, "x")
@@ -185,7 +202,7 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (is.null(by)) {
-    by <- intersect(names(x), names(y))
+    # by <- intersect(names(x), names(y))
 
     if (length(by) == 0) {
       msg     <- "no common variable names in `x` and `y`"
@@ -213,15 +230,16 @@ merge <- function(x,
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  ## treatmetn of yvars ------
   if (isTRUE(yvars)) {
 
     yvars <- names(y)
-    yvars <- yvars[! yvars %in% by]
 
   }  else if (isFALSE(yvars) || is.null(yvars)) {
 
     temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
-    yvars     <- temp_yvar
+    yvars     <-  temp_yvar
+
     y[, (temp_yvar) := 1]
 
   } else {
@@ -251,7 +269,11 @@ merge <- function(x,
                    from {.field yvars}",
                    wrap =  TRUE)
   }
+
   yvars <- yvars[! yvars %in% by]
+
+  ## Select variables in y ------
+  y <- y[, .SD, .SDcols = c(by, yvars)]
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Check variables in X   ---------
@@ -276,9 +298,9 @@ merge <- function(x,
       if (isFALSE(update_NAs) && isFALSE(update_values)) {
 
       if (verbose) {
-        cli::cli_alert_info("variable{?s} {.code {upvars}} in `y` {?is/are}
-                            ignored in merge
-                            because `update_NAs` and `update_values` are FALSE.",
+        cli::cli_alert_info("variable{?s} {.code {upvars}} in table y {?is/are}
+                            ignored because arguments `update_NAs` and
+                            `update_values` are FALSE.",
                             wrap = TRUE)
       }
 
@@ -292,7 +314,7 @@ merge <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars <- c(yvars, "y_report")
+  yvars_w <- c(yvars, "y_report") # working yvars
   x[, x_report := 1]
   y[, y_report := 2]
 
@@ -301,14 +323,14 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # simple merge
-  i.yvars <- paste0("i.", yvars)
+  i.yvars <- paste0("i.", yvars_w)
 
 
-  if (join_type %in% c("1:1", "m:1")) {
+  if (match_type %in% c("1:1", "m:1")) {
 
     x[y,
       on = by,
-      (yvars) := mget(i.yvars)]
+      (yvars_w) := mget(i.yvars)]
 
     # complement
     if (keep %in% c("full", "both", "right", "using")) {
@@ -316,27 +338,23 @@ merge <- function(x,
               on   = by,
               mult = "all"
              ][, .SD,
-               .SDcols = c(by, yvars)
+               .SDcols = c(by, yvars_w)
               ]
 
       x <- rbindlist(l         = list(x, ty),
                      use.names = TRUE,
                      fill      = TRUE)
     }
-    if (sort) {
-      setorderv(x, by)
-      setattr(x, 'sorted', by)
-    }
 
   } else  {
 
-    x <- data.table::merge.data.table(x = x,
-                                 y = y,
-                                 by = by,
-                                 all.x = TRUE,
-                                 all.y = TRUE,
-                                 sort  = sort,
-                                 allow.cartesian = TRUE)
+    x <- data.table::merge.data.table(x               = x,
+                                      y               = y,
+                                      by              = by,
+                                      all.x           = TRUE,
+                                      all.y           = TRUE,
+                                      sort            = FALSE,
+                                      allow.cartesian = TRUE)
 
   }
 
@@ -354,6 +372,27 @@ merge <- function(x,
     dropreport <- TRUE
 
   } else {
+
+    xnames      <- names(x)
+    check_names <- c(xnames, reportvar)
+
+    if (!identical(check_names,
+                  make.names(check_names, unique = TRUE))) {
+
+      check_names <- make.names(check_names, unique = TRUE)
+      nrv         <- setdiff(check_names, xnames)
+
+      if (verbose) {
+        cli::cli_alert_info("reportvar {.code {reportvar}} is already part of the
+                          resulting table. It will be changed to {.code {nrv}}",
+                          wrap = TRUE)
+      }
+
+
+      reportvar <- nrv
+
+    }
+
     dropreport <- FALSE
   }
 
@@ -459,7 +498,7 @@ merge <- function(x,
     }
     cli::cli_rule(right = "End of JOYn report")
 
-    if (all(x$report %in% c("x", "y")) || all(x$report %in% c(1, 2))) {
+    if (all(x[[reportvar]] %in% c("x", "y")) || all(x[[reportvar]] %in% c(1, 2))) {
       cli::cli_alert_warning(
         cli::col_red("you have no matchig obs. Make sure argument
                              `by` is correct. Right now, `joyn` is joining by
@@ -471,6 +510,11 @@ merge <- function(x,
   # Report var
   if (dropreport) {
     x[, (reportvar) := NULL]
+  }
+
+  if (sort) {
+    setorderv(x, by, na.last = TRUE)
+    setattr(x, 'sorted', by)
   }
 
 

@@ -7,9 +7,9 @@
 merge(
   x,
   y,
-  by = NULL,
+  by = intersect(names(x), names(y)),
   yvars = TRUE,
-  join_type = c("m:m", "m:1", "1:m", "1:1"),
+  match_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("full", "left", "master", "right", "using", "inner"),
   update_values = FALSE,
   update_NAs = update_values,
@@ -41,10 +41,10 @@ merge. If TRUE (the default), it keeps all the brings all the variables in
 y into x. If FALSE or NULL, it does not bring any variable into x, but a
 report will be generated.}
 
-\item{join_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
+\item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
 Default is \emph{"m:m"} since this is the default generally used in joins in R.
 However, following Stata's recommendation, it is better to be explicit and
-use any of the other three join types (See details in \emph{Join types
+use any of the other three match types (See details in \emph{match types
 sections}).}
 
 \item{keep}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
@@ -95,7 +95,7 @@ a data.table joining x and y.
 \description{
 This is the main and, basically, the only function in joyn.
 }
-\section{Join types}{
+\section{match types}{
 
 
 Using the same wording of the \href{https://www.stata.com/manuals/dmerge.pdf}{Stata manual}
@@ -104,9 +104,9 @@ Using the same wording of the \href{https://www.stata.com/manuals/dmerge.pdf}{St
 \code{by}  uniquely identify single observations in both table.
 
 \strong{1:m and m:1}: specify \emph{one-to-many} and \emph{many-to-one} match merges,
-respectively. This means that one of the tables only one observation that
-uniquely identifies \emph{many} (i.e, two or more) observations in the other
-table.
+respectively. This means that in of the tables the observations are
+uniquely identify by the variables in \code{by}, while in the other table many
+(two or more)  of the observations are identify by the variables in \code{by}
 
 \strong{m:m} refers to \emph{many-to-many merge}. variables in \code{by} does not uniquely
 identify the observations in either table. Matching is performed by

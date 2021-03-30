@@ -1,0 +1,47 @@
+---
+title: "Advanced use"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced use}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment  = "#>", 
+  error    = TRUE, 
+  purl     = FALSE
+)
+```
+
+```{r setup}
+library(joyn)
+```
+
+## Update NAs in x
+
+blah
+
+## Update actual values in x
+
+blah blah
+
+## Keep matching-names variables from y into x (No update)
+
+blah blah
+
+## Bring specific variables from y into x
+
+blah blah
+
+
+## Rolling joins
+
+*Coming soon*
+
+## Misc.
+
+blah blah
+
