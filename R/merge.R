@@ -61,7 +61,7 @@ if (getRversion() >= '2.15.1')
 #'   be added to the original name to distinguish from the resulting variable in
 #'   the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
-#' TRUE.
+#'   TRUE.
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -76,9 +76,9 @@ if (getRversion() >= '2.15.1')
 #'   `by`  uniquely identify single observations in both table.
 #'
 #'   **1:m and m:1**: specify _one-to-many_ and _many-to-one_ match merges,
-#'   respectively. This means that one of the tables only one observation that
-#'   uniquely identifies *many* (i.e, two or more) observations in the other
-#'   table.
+#'   respectively. This means that in of the tables the observations are
+#'   uniquely identify by the variables in `by`, while in the other table many
+#'   (two or more)  of the observations are identify by the variables in `by`
 #'
 #'   **m:m** refers to _many-to-many merge_. variables in `by` does not uniquely
 #'   identify the observations in either table. Matching is performed by
