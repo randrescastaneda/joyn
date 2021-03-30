@@ -328,10 +328,6 @@ merge <- function(x,
                      use.names = TRUE,
                      fill      = TRUE)
     }
-    if (sort) {
-      setorderv(x, by)
-      setattr(x, 'sorted', by)
-    }
 
   } else  {
 
@@ -340,7 +336,7 @@ merge <- function(x,
                                       by              = by,
                                       all.x           = TRUE,
                                       all.y           = TRUE,
-                                      sort            = sort,
+                                      sort            = FALSE,
                                       allow.cartesian = TRUE)
 
   }
@@ -476,6 +472,11 @@ merge <- function(x,
   # Report var
   if (dropreport) {
     x[, (reportvar) := NULL]
+  }
+
+  if (sort) {
+    setorderv(x, by, na.last = TRUE)
+    setattr(x, 'sorted', by)
   }
 
 
