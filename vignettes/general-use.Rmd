@@ -85,7 +85,7 @@ merge(x4, y4, by = c("id1 = id", "id2"))
 
 ## Match type
 
-match type refers to the correspondence that exists between the observations of
+Match type refers to the correspondence that exists between the observations of
 the joining tables. Following Stata's convention, we could have four different
 match types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and
 many-to-many (m:m) joins. The default is m:m, following general R's practice,
@@ -127,6 +127,6 @@ merge(x3, y3, by = "id", match_type = "1:1")
 merge(x3, y3, by = "id")
 ```
 
-### Join kind
+## Join type
 
-We use join kind to refer
+Join type refers to observations that are
