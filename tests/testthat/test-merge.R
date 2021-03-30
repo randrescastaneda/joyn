@@ -17,13 +17,13 @@ test_that("Erro if no common variables", {
 
 test_that("m:m and 1:1 gives the same if data is correct", {
 
-  expect_equal(merge(x2, y2, by = "id", update_values = TRUE, join_type = "1:1"),
+  expect_equal(merge(x2, y2, by = "id", update_values = TRUE, match_type = "1:1"),
                merge(x2, y2, by = "id", update_values = TRUE))
 
-  expect_equal(merge(x2, y2, by = "id", update_NAs = TRUE, join_type = "1:1"),
+  expect_equal(merge(x2, y2, by = "id", update_NAs = TRUE, match_type = "1:1"),
                merge(x2, y2, by = "id", update_NAs = TRUE))
 
-  expect_equal(merge(x2, y2, by = "id", join_type = "1:1"),
+  expect_equal(merge(x2, y2, by = "id", match_type = "1:1"),
                merge(x2, y2, by = "id", ))
 
 })
@@ -35,7 +35,7 @@ test_that("left merge is correct", {
   expect_equal(nrow(x), nrow(x1))
 
 
-  w <- merge(x2, y2,by = "id", keep = "left", join_type = "1:1")
+  w <- merge(x2, y2,by = "id", keep = "left", match_type = "1:1")
   expect_equal(nrow(w), nrow(x2))
 
 
@@ -43,16 +43,16 @@ test_that("left merge is correct", {
 
 test_that("inverse merge workds", {
 
-  ll <- merge(y3, x3, by = "id", join_type = "m:1", reportvar = FALSE)
-  rr <- merge(x3, y3, by = "id", join_type = "1:m", reportvar = FALSE)
+  ll <- merge(y3, x3, by = "id", match_type = "m:1", reportvar = FALSE)
+  rr <- merge(x3, y3, by = "id", match_type = "1:m", reportvar = FALSE)
 
   lnames <- names(ll)
   setcolorder(rr, lnames)
 
   expect_equal(ll,rr)
 
-  lt <- merge(y3, x3, by = "id", join_type = "m:1", reportvar = FALSE, keep = "left")
-  rt <- merge(x3, y3, by = "id", join_type = "1:m", reportvar = FALSE, keep = "right")
+  lt <- merge(y3, x3, by = "id", match_type = "m:1", reportvar = FALSE, keep = "left")
+  rt <- merge(x3, y3, by = "id", match_type = "1:m", reportvar = FALSE, keep = "right")
 
   lnamest <- names(lt)
   setcolorder(rt, lnamest)

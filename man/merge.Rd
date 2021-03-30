@@ -104,9 +104,9 @@ Using the same wording of the \href{https://www.stata.com/manuals/dmerge.pdf}{St
 \code{by}  uniquely identify single observations in both table.
 
 \strong{1:m and m:1}: specify \emph{one-to-many} and \emph{many-to-one} match merges,
-respectively. This means that one of the tables only one observation that
-uniquely identifies \emph{many} (i.e, two or more) observations in the other
-table.
+respectively. This means that in of the tables the observations are
+uniquely identify by the variables in \code{by}, while in the other table many
+(two or more)  of the observations are identify by the variables in \code{by}
 
 \strong{m:m} refers to \emph{many-to-many merge}. variables in \code{by} does not uniquely
 identify the observations in either table. Matching is performed by

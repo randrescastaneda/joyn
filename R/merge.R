@@ -19,7 +19,7 @@ if (getRversion() >= '2.15.1')
 #'   you want to join). To join by different variables on x and y use a vector
 #'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x, "b"
 #'   in y, and "z" in both tables.
-#' @param join_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
+#' @param match_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
 #'   Default is *"m:m"* since this is the default generally used in joins in R.
 #'   However, following Stata's recommendation, it is better to be explicit and
 #'   use any of the other three join types (See details in *Join types
@@ -125,7 +125,7 @@ merge <- function(x,
                   y,
                   by            = NULL,
                   yvars         = TRUE,
-                  join_type     = c("m:m", "m:1", "1:m", "1:1"),
+                  match_type     = c("m:m", "m:1", "1:m", "1:1"),
                   keep          = c("full", "left", "master",
                                     "right", "using", "inner"),
                   update_values = FALSE,
@@ -140,7 +140,7 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  join_type  <- match.arg(join_type)
+  match_type  <- match.arg(match_type)
   keep       <- match.arg(keep)
   reporttype <- match.arg(reporttype)
 
@@ -169,8 +169,8 @@ merge <- function(x,
   #           Consistency of join   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  tx <- gsub("([m1]):([m1])", "\\1", join_type)
-  ty <- gsub("([m1]):([m1])", "\\2", join_type)
+  tx <- gsub("([m1]):([m1])", "\\1", match_type)
+  ty <- gsub("([m1]):([m1])", "\\2", match_type)
 
   if (tx == "1") {
     join_consistency(x, by, "x")
@@ -276,9 +276,9 @@ merge <- function(x,
       if (isFALSE(update_NAs) && isFALSE(update_values)) {
 
       if (verbose) {
-        cli::cli_alert_info("variable{?s} {.code {upvars}} in `y` {?is/are}
-                            ignored in merge
-                            because `update_NAs` and `update_values` are FALSE.",
+        cli::cli_alert_info("variable{?s} {.code {upvars}} in table y {?is/are}
+                            ignored because arguments `update_NAs` and
+                            `update_values` are FALSE.",
                             wrap = TRUE)
       }
 
@@ -304,7 +304,7 @@ merge <- function(x,
   i.yvars <- paste0("i.", yvars)
 
 
-  if (join_type %in% c("1:1", "m:1")) {
+  if (match_type %in% c("1:1", "m:1")) {
 
     x[y,
       on = by,

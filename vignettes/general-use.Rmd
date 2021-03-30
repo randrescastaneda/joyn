@@ -16,10 +16,117 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 ## The basics
+
+By attaching `joyn` you're also attaching `data.table`. Notice too that
+`joyn::merge` masks `base::merge`, which is ideal. Also, by loading `joyn` you
+have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1, y2, y3, y4.
 
 ```{r setup}
 library(joyn)
-library(data.table)
+x1[]
+x2[]
 ```
+
+### Summary table
+
+You can see in the examples below that by default `joyn` display a small summary
+table using the
+[`janitor::tabyl`](https://sfirke.github.io/janitor/articles/tabyls.html)
+function. If you don't have the `janitor` package install, `joyn` will use
+`base::table`, which is not pretty.
+
+```{r}
+# Natural join. i.e., using as key all the variables that appear in both tables.
+# without display the resulting table.
+merge(x1, y1)
+```
+
+You can use the argument `reporttype` to the output of the reporting variable to
+numeric, similar to Stata's output.
+
+```{r, echo=FALSE}
+knitr::kable(
+  tibble::tribble(
+~code, ~report, ~meaning,
+1, "x", "Only available in x table",
+2, "y", "Only available in y table",
+3, "x & y", "Matching obs available in both",
+4, "NA updated", "NAs in x updated with actual values in variables with same names in y",
+5, "value updated", "Actual values and NAs in x updated with actual values in variables with same names in y",
+6, "not updated", "Actual values and NAs in x are NOT updated actual values in y"
+), format = "simple", align = "lcl")
+```
+
+### Key variables
+
+Since the object returned is a `data.table`, we display the results in the
+console by concatenating a pair of squared brackets at the end of the call. That
+is `merge(x1, y1)[]` instead of `merge(x1, y1)`.
+
+```{r}
+# Natural join.  display the results.
+merge(x1, y1)[]
+
+# Making explicit the key variables (strongly suggested)
+merge(x1, y1, by = "id")[]
+```
+
+If the key variables have different names in both tables, you can create the
+equivalency as an element of `by` vector.
+
+```{r}
+# joining by id1 in x and id in y
+merge(x4, y4, by = c("id1 = id"))
+
+# joining by id1 in x and id in y, and id2  in both
+merge(x4, y4, by = c("id1 = id", "id2"))
+```
+
+## Match type
+
+Join type refers to the correspondence that exists between the observations of
+the joining tables. Following Stata's convention, we could have four different
+join types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and
+many-to-many (m:m) joins. The default is m:m, following general R's practice,
+but its use is **highly discouraged**. We recommend you always specify the join
+type when joining tables to ensure the output is correct. Indeed, if you don't
+care about join types or you don't think it is necessary to use them for your
+particular needs, you might be fine without `joyn`.
+
+Using the same wording of the [Stata
+manual](https://www.stata.com/manuals/dmerge.pdf)
+
+-   **1:1**: specifies a one-to-one match merge. The variables specified in `by`
+    *uniquely identify* single observations in both table.
+
+-   **1:m and m:1**: specify *one-to-many* and *many-to-one* match merges,
+    respectively. This means that in of the tables the observations are uniquely
+    identify by the variables in `by,` while in the other table many (two or
+    more) of the observations are identify by the variables in `by`.
+
+-   **m:m** refers to *many-to-many joins*. variables in `by` does not uniquely
+    identify the observations in either table. Matching is performed by
+    combining observations with equal values in `by`; within matching values,
+    the first observation in the master (i.e. left or x) table is matched with
+    the first matching observation in the using (i.e. right or y) table; the
+    second, with the second; and so on. If there is an unequal number of
+    observations within a group, then the last observation of the shorter group
+    is used repeatedly to match with subsequent observations of the longer
+    group.
+
+Suppose you think your data is uniquely identified by variable `id`, it is not .
+If you used `match_type = "1:1"` you will get and error warning your that
+something is not right.
+
+```{r join-type}
+# Merging correctly but getting error because something is not right in the data
+merge(x3, y3, by = "id", match_type = "1:1")
+
+# Merging wrongly but getting NO errors because  you did not use match_type
+merge(x3, y3, by = "id")
+```
+
+### Join kind
+
+We use join kind to refer
