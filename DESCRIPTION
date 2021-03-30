@@ -1,7 +1,7 @@
 Package: joyn
 Type: Package
 Title: Tool for diagnosys and useful features of joins of data frames 
-Version: 0.0.0.9007
+Version: 0.0.0.9008
 Author: Who wrote it
 Authors@R: person("R.Andres", "Castaneda", 
                   email = "acastanedaa@worldbank.org",
