@@ -123,9 +123,9 @@ if (getRversion() >= '2.15.1')
 #'
 merge <- function(x,
                   y,
-                  by            = NULL,
+                  by            = intersect(names(x), names(y)),
                   yvars         = TRUE,
-                  match_type     = c("m:m", "m:1", "1:m", "1:1"),
+                  match_type    = c("m:m", "m:1", "1:m", "1:1"),
                   keep          = c("full", "left", "master",
                                     "right", "using", "inner"),
                   update_values = FALSE,
@@ -185,7 +185,7 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (is.null(by)) {
-    by <- intersect(names(x), names(y))
+    # by <- intersect(names(x), names(y))
 
     if (length(by) == 0) {
       msg     <- "no common variable names in `x` and `y`"
@@ -213,15 +213,16 @@ merge <- function(x,
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  ## treatmetn of yvars ------
   if (isTRUE(yvars)) {
 
     yvars <- names(y)
-    yvars <- yvars[! yvars %in% by]
 
   }  else if (isFALSE(yvars) || is.null(yvars)) {
 
     temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
-    yvars     <- temp_yvar
+    yvars     <-  temp_yvar
+
     y[, (temp_yvar) := 1]
 
   } else {
@@ -251,7 +252,11 @@ merge <- function(x,
                    from {.field yvars}",
                    wrap =  TRUE)
   }
+
   yvars <- yvars[! yvars %in% by]
+
+  ## Select variables in y ------
+  y <- y[, .SD, .SDcols = c(by, yvars)]
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Check variables in X   ---------
@@ -292,7 +297,7 @@ merge <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars <- c(yvars, "y_report")
+  yvars_w <- c(yvars, "y_report") # working yvars
   x[, x_report := 1]
   y[, y_report := 2]
 
@@ -301,14 +306,14 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # simple merge
-  i.yvars <- paste0("i.", yvars)
+  i.yvars <- paste0("i.", yvars_w)
 
 
   if (match_type %in% c("1:1", "m:1")) {
 
     x[y,
       on = by,
-      (yvars) := mget(i.yvars)]
+      (yvars_w) := mget(i.yvars)]
 
     # complement
     if (keep %in% c("full", "both", "right", "using")) {
@@ -316,7 +321,7 @@ merge <- function(x,
               on   = by,
               mult = "all"
              ][, .SD,
-               .SDcols = c(by, yvars)
+               .SDcols = c(by, yvars_w)
               ]
 
       x <- rbindlist(l         = list(x, ty),
@@ -330,13 +335,13 @@ merge <- function(x,
 
   } else  {
 
-    x <- data.table::merge.data.table(x = x,
-                                 y = y,
-                                 by = by,
-                                 all.x = TRUE,
-                                 all.y = TRUE,
-                                 sort  = sort,
-                                 allow.cartesian = TRUE)
+    x <- data.table::merge.data.table(x               = x,
+                                      y               = y,
+                                      by              = by,
+                                      all.x           = TRUE,
+                                      all.y           = TRUE,
+                                      sort            = sort,
+                                      allow.cartesian = TRUE)
 
   }
 

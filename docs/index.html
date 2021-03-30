@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -50,6 +50,9 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
+      <a href="articles/advanced-use.html">Advanced use</a>
+    </li>
+    <li>
       <a href="articles/general-use.html">General use</a>
     </li>
   </ul>
@@ -224,7 +227,7 @@
 
 <span class="co"># good merge, ignoring variable x from y</span>
 <span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
-<span class="co">#&gt; i variable `x` in `y` is ignored in merge because `updateNA` and</span>
+<span class="co">#&gt; i variable `x` in `y` is ignored in merge because `update_NAs` and</span>
 <span class="co">#&gt;   `update_values` are FALSE.</span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
@@ -244,7 +247,7 @@
 <span class="co">#&gt; 7:  6 NA NA  6 13      y</span>
 
 <span class="co"># update NAs in x variable form x</span>
-<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, updateNA <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
+<span class="fu"><a href="reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, update_NAs <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>

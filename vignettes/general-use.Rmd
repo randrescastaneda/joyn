@@ -20,7 +20,7 @@ knitr::opts_chunk$set(
 
 By attaching `joyn` you're also attaching `data.table`. Notice too that
 `joyn::merge` masks `base::merge`, which is ideal. Also, by loading `joyn` you
-have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1, y2, y3, y4.
+have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1, y2, y3, and y4.
 
 ```{r setup}
 library(joyn)
@@ -51,10 +51,10 @@ knitr::kable(
 ~code, ~report, ~meaning,
 1, "x", "Only available in x table",
 2, "y", "Only available in y table",
-3, "x & y", "Matching obs available in both",
+3, "x & y", "Matching obs available in both tables",
 4, "NA updated", "NAs in x updated with actual values in variables with same names in y",
 5, "value updated", "Actual values and NAs in x updated with actual values in variables with same names in y",
-6, "not updated", "Actual values and NAs in x are NOT updated actual values in y"
+6, "not updated", "Actual values and NAs in x are NOT updated with actual values in y"
 ), format = "simple", align = "lcl")
 ```
 
@@ -129,4 +129,40 @@ merge(x3, y3, by = "id")
 
 ## Join type
 
-Join type refers to observations that are
+Join type refers to observations that are kept after the join. To avoid
+confusion with argument `match_type`, I decided not to name this argument
+`join_type` but `keep`. At the end, you want to specify which observations you
+want to keep. This argument plays the role of mimicking the behavior of
+`dplyr`'s functions `left_join`, `right_join`, `inner_join`, and `full_join`, de
+default.
+
+-   `keep = "full"`, the default, keeps all the observations in x and y,
+    regardless of whether they match or not.
+
+    ```{r}
+    # Full merge
+    merge(x1, y1)
+    ```
+
+-   `keep = "left"` or `keep = "master"` keeps all observations in x, regardless
+    of whether they match or not with y.
+
+    ```{r}
+    # keep obs in x
+    merge(x1, y1, keep = "left")
+    ```
+
+-   `keep = "right"` or `keep = "using"` keeps all observations in y, regardless
+    of whether they match or not with x.
+
+    ```{r}
+    # keep obs in y
+    merge(x1, y1, keep = "right")
+    ```
+
+-   `keep = "inner"` keeps only the observations that match in both tables.
+
+    ```{r}
+    # keep matching obs in both tables
+    merge(x1, y1, keep = "inner")
+    ```

@@ -1,5 +1,4 @@
 library(data.table)
-library(dplyr)
 
 test_that("slect by vars when no specified", {
   expect_equal(merge(x1, y1, verbose = FALSE),
@@ -63,91 +62,186 @@ test_that("inverse merge workds", {
 })
 
 
+test_that("FULL- Compare with base::merge", {
 
+  jn <- merge(x1, y1, by = "id", reportvar = FALSE)
+  br <- base::merge(x1, y1, by = "id", all = TRUE)
 
-test_that("Compare with dplyr - left", {
-
-  jn <- merge(x1, y1, by = "id", keep = "left", reportvar = FALSE, sort = FALSE)
-  setorder(jn, "id", na.last = TRUE)
-  dr <- left_join(x1, y1, by = "id") %>%
-    arrange(id)
-
-  expect_equal(jn, dr)
+  expect_equal(jn, br)
 
 
 
-  jn <- merge(x2, y2, by = "id", keep = "left", reportvar = FALSE, sort = FALSE)
-  setorder(jn, "id", na.last = TRUE)
+  jn <- merge(x2, y2, by = "id",  reportvar = FALSE)
+  br <- base::merge(x2, y2, by = "id", all = TRUE)
+  br[, x := x.x
+     ][,
+       c("x.x", "x.y") := NULL
+       ]
 
-  dr <- left_join(x2, y2, by = "id") %>%
-    mutate(x = x.x) %>%
-    select(-c(x.x, x.y)) %>%
-    arrange(id)
+  setcolorder(jn, names(br))
 
-  setcolorder(jn, names(dr))
-
-  expect_equal(jn, dr)
-
-
+  expect_equal(jn, br)
 
 })
 
+test_that("LEFT- Compare with base::merge", {
 
-test_that("Compare with dplyr - right", {
+  jn <- merge(x1, y1, by = "id", reportvar = FALSE, keep = "left")
+  br <- base::merge(x1, y1, by = "id", all.x = TRUE)
 
-  jn <- merge(x1, y1, by = "id", keep = "right", reportvar = FALSE, sort = FALSE)
-  setorder(jn, "id", na.last = TRUE)
-  dr <- right_join(x1, y1, by = "id") %>%
-    arrange(id)
-
-  expect_equal(jn, dr)
+  expect_equal(jn, br)
 
 
+  jn <- merge(x2, y2, by = "id",  reportvar = FALSE, keep = "left")
+  br <- base::merge(x2, y2, by = "id", all.x = TRUE)
+  br[, x := x.x
+  ][,
+    c("x.x", "x.y") := NULL
+  ]
 
-  jn <- merge(x2, y2, by = "id", keep = "right", reportvar = FALSE, sort = FALSE)
-  setorder(jn, "id", na.last = TRUE)
+  setcolorder(jn, names(br))
 
-  dr <- right_join(x2, y2, by = "id") %>%
-    mutate(x = x.x) %>%
-    select(-c(x.x, x.y)) %>%
-    arrange(id)
-
-  setcolorder(jn, names(dr))
-
-  expect_equal(jn, dr)
-
-
-})
-
-
-test_that("Compare with dplyr - full", {
-
-  jn <- merge(x1, y1, by = "id", reportvar = FALSE, sort = FALSE)
-  setorder(jn, "id", na.last = TRUE)
-  dr <- full_join(x1, y1, by = "id") %>%
-    arrange(id)
-
-  expect_equal(jn, dr)
-
-
-
-  jn <- merge(x2, y2, by = "id",  reportvar = FALSE, sort = FALSE)
-  setorder(jn, "id", na.last = TRUE)
-
-  dr <- full_join(x2, y2, by = "id") %>%
-    mutate(x = x.x) %>%
-    select(-c(x.x, x.y)) %>%
-    arrange(id)
-
-  setcolorder(jn, names(dr))
-
-  expect_equal(jn, dr)
+  expect_equal(jn, br)
 
 })
 
 
 
+test_that("RIGHT - Compare with base::merge", {
+
+  jn <- merge(x1, y1, by = "id", reportvar = FALSE, keep = "right")
+  br <- base::merge(x1, y1, by = "id", all.y = TRUE)
+
+  expect_equal(jn, br)
 
 
+  jn <- merge(x2, y2, by = "id",  reportvar = FALSE, keep = "right")
+  br <- base::merge(x2, y2, by = "id", all.y = TRUE)
+  br[, x := x.x
+  ][,
+    c("x.x", "x.y") := NULL
+  ]
 
+  setcolorder(jn, names(br))
+
+  expect_equal(jn, br)
+
+})
+
+
+test_that("INNER - Compare with base::merge", {
+
+  jn <- merge(x1, y1, by = "id", reportvar = FALSE, keep = "inner")
+  br <- base::merge(x1, y1, by = "id")
+
+  expect_equal(jn, br)
+
+
+  jn <- merge(x2, y2, by = "id",  reportvar = FALSE, keep = "inner")
+  br <- base::merge(x2, y2, by = "id")
+  br[, x := x.x
+  ][,
+    c("x.x", "x.y") := NULL
+  ]
+
+  setcolorder(jn, names(br))
+
+  expect_equal(jn, br)
+
+})
+
+
+test_that("match types work", {
+
+  expect_error(merge(x3, y3, by = "id", match_type = "1:1"))
+  expect_error(merge(x3, y3, by = "id", match_type = "m:1"))
+
+  x <-
+    structure(
+      list(
+        id = c(1, 1, 2, 3, 4, 7),
+        t = c(1L, 2L, 1L, 2L, NA, 2L),
+        x = c(16, 12, NA, NA, 15, 12)
+      ),
+      row.names = c(NA, -6L),
+      class = c("data.table", "data.frame")
+    )
+
+  y <-
+    structure(
+      list(
+        id  =  c(1, 1, 2, 3, 4, 6),
+        y = c(11L, 15L, 20L, 13L, 10L, 7L),
+        x = 16:21
+      ),
+      row.names = c(NA, -6L),
+      class = c("data.table", "data.frame")
+    )
+
+  by <- "id"
+  jn <- merge(x, y, by = by, match_type = "m:m")
+
+  njn <- nrow(jn)
+
+  ux <- x[, .N, by = by]
+
+  uy <- y[, .N, by = by]
+
+  dd <- merge.data.table(ux, uy, by = "id", all = TRUE)
+  setnafill(dd, fill = 1)
+  cN <- dd[,
+           N := N.x*N.y
+           ][, sum(N)
+             ]
+
+  expect_equal(njn, cN)
+
+})
+
+
+test_that("Update NAs", {
+
+  # update NAs in x variable form x
+  jn <- merge(x2, y2, by = "id", update_NAs = TRUE, verbose = FALSE)
+
+  idx <- x2[is.na(x), "id"]
+
+  expect_equal(jn[idx, on = "id"][, x], y2[idx, on = "id"][, x])
+
+
+})
+
+
+test_that("Update actual values", {
+  jn <- merge(x2, y2, by = "id", update_values = TRUE, verbose = FALSE)
+  bs <- base::merge(x2, y2, by = "id", all = TRUE)
+
+  bs[, x := fifelse(!is.na(x.x) & is.na(x.y),
+                    x.x, x.y)
+     ]
+
+  expect_equal(jn[, x], bs[, x])
+
+
+})
+
+
+test_that("y vars are extracted correctly", {
+
+  yvars <- "y"
+  jn <- merge(x2, y2, by = "id", yvars = yvars)[]
+
+  expect_equal(names(jn), c(names(x2), yvars, "report"))
+
+
+  jn <- merge(x2, y2, by = "id", yvars = yvars, reportvar = FALSE)[]
+
+  expect_equal(names(jn), c(names(x2), yvars))
+
+  jn <- merge(x2, y2, by = "id", yvars = FALSE)[]
+
+  expect_equal(names(jn), c(names(x2), "report"))
+
+
+})
 

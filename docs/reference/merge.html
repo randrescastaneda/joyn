@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9005</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.0.0.9007</span>
       </span>
     </div>
 
@@ -88,6 +88,9 @@
     <span class="caret"></span>
   </a>
   <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="../articles/advanced-use.html">Advanced use</a>
+    </li>
     <li>
       <a href="../articles/general-use.html">General use</a>
     </li>
@@ -134,7 +137,7 @@
   <span class='va'>y</span>,
   by <span class='op'>=</span> <span class='cn'>NULL</span>,
   yvars <span class='op'>=</span> <span class='cn'>TRUE</span>,
-  join_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m:m"</span>, <span class='st'>"m:1"</span>, <span class='st'>"1:m"</span>, <span class='st'>"1:1"</span><span class='op'>)</span>,
+  match_type <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"m:m"</span>, <span class='st'>"m:1"</span>, <span class='st'>"1:m"</span>, <span class='st'>"1:1"</span><span class='op'>)</span>,
   keep <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='st'>"full"</span>, <span class='st'>"left"</span>, <span class='st'>"master"</span>, <span class='st'>"right"</span>, <span class='st'>"using"</span>, <span class='st'>"inner"</span><span class='op'>)</span>,
   update_values <span class='op'>=</span> <span class='cn'>FALSE</span>,
   update_NAs <span class='op'>=</span> <span class='va'>update_values</span>,
@@ -177,7 +180,7 @@ y into x. If FALSE or NULL, it does not bring any variable into x, but a
 report will be generated.</p></td>
     </tr>
     <tr>
-      <th>join_type</th>
+      <th>match_type</th>
       <td><p>character: one of <em>"m:m"</em>, <em>"m:1"</em>, <em>"1:m"</em>, <em>"1:1"</em>.
 Default is <em>"m:m"</em> since this is the default generally used in joins in R.
 However, following Stata's recommendation, it is better to be explicit and
@@ -258,9 +261,9 @@ option). Default is TRUE.</p></td>
 <p><strong>1:1</strong>: specifies a one-to-one match merge. The variables specified in
 <code>by</code>  uniquely identify single observations in both table.</p>
 <p><strong>1:m and m:1</strong>: specify <em>one-to-many</em> and <em>many-to-one</em> match merges,
-respectively. This means that one of the tables only one observation that
-uniquely identifies <em>many</em> (i.e, two or more) observations in the other
-table.</p>
+respectively. This means that in of the tables the observations are
+uniquely identify by the variables in <code>by</code>, while in the other table many
+(two or more)  of the observations are identify by the variables in <code>by</code></p>
 <p><strong>m:m</strong> refers to <em>many-to-many merge</em>. variables in <code>by</code> does not uniquely
 identify the observations in either table. Matching is performed by
 combining observations with equal values in <code>by</code>; within matching values,
@@ -317,7 +320,7 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 #&gt; 9:  6 19 NA  6 13      y</div><div class='input'>
 <span class='co'># good merge, ignoring variable x from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> variable </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> in `y` is ignored in merge because `updateNA` and</span>
+</div><div class='output co'>#&gt; <span class='message'></span><span style='color: #00BBBB;'>i</span><span> variable </span><span style='color: #262626;background-color: #DADADA;'>`x`</span><span> in table y is ignored because arguments `update_NAs` and</span>
 #&gt; <span class='message'>  `update_values` are FALSE.</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;  report n percent
 #&gt;       x 1   14.3%
 #&gt;   x &amp; y 4   57.1%
@@ -332,7 +335,19 @@ x  <span class='op'>=</span> <span class='fl'>11</span><span class='op'>:</span>
 #&gt; 7:  6 NA NA  6 13      y</div><div class='input'>
 <span class='co'># update NAs in x variable form x</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_NAs <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
-</div><div class='output co'>#&gt; <span class='error'>Error in merge(x2, y2, by = "id", update_NAs = TRUE): unused argument (update_NAs = TRUE)</span></div><div class='input'>
+</div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;      report n percent
+#&gt;  NA updated 2   28.6%
+#&gt;           x 1   14.3%
+#&gt;       x &amp; y 2   28.6%
+#&gt;           y 2   28.6%
+#&gt;       Total 7  100.0%</div><div class='output co'>#&gt; <span class='message'>---------------------------------------------------------- End of JOYn report --</span></div><div class='output co'>#&gt;    id  t  x yd  y     report
+#&gt; 1: NA NA 15 NA NA          x
+#&gt; 2:  1  1 16  1 11      x &amp; y
+#&gt; 3:  1  2 12  1 11      x &amp; y
+#&gt; 4:  2  1 17  2 15 NA updated
+#&gt; 5:  3  2 20  3 10 NA updated
+#&gt; 6:  5 NA 18  5 20          y
+#&gt; 7:  6 NA 19  6 13          y</div><div class='input'>
 <span class='co'># Update values in x with variables from y</span>
 <span class='fu'>merge</span><span class='op'>(</span><span class='va'>x2</span>, <span class='va'>y2</span>, by <span class='op'>=</span> <span class='st'>"id"</span>, update_values <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
 </div><div class='output co'>#&gt; </div><div class='output co'>#&gt; <span class='message'>-- </span><span style='font-weight: bold;'>JOYn Report</span><span> --</span></div><div class='output co'>#&gt; </div><div class='output co'>#&gt;         report n percent

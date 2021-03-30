@@ -7,7 +7,7 @@
 merge(
   x,
   y,
-  by = NULL,
+  by = intersect(names(x), names(y)),
   yvars = TRUE,
   match_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("full", "left", "master", "right", "using", "inner"),
@@ -44,7 +44,7 @@ report will be generated.}
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
 Default is \emph{"m:m"} since this is the default generally used in joins in R.
 However, following Stata's recommendation, it is better to be explicit and
-use any of the other three join types (See details in \emph{Join types
+use any of the other three match types (See details in \emph{match types
 sections}).}
 
 \item{keep}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
@@ -95,7 +95,7 @@ a data.table joining x and y.
 \description{
 This is the main and, basically, the only function in joyn.
 }
-\section{Join types}{
+\section{match types}{
 
 
 Using the same wording of the \href{https://www.stata.com/manuals/dmerge.pdf}{Stata manual}
