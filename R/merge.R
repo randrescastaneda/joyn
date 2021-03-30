@@ -140,11 +140,23 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ## correct inputs --------
   match_type  <- match.arg(match_type)
-  keep       <- match.arg(keep)
-  reporttype <- match.arg(reporttype)
+  keep        <- match.arg(keep)
+  reporttype  <- match.arg(reporttype)
 
+  ## report variable -------
+  if (reportvar != make.names(reportvar)) {
+    nreportnames <- make.names(reportvar)
 
+    cli::cli_alert_info("reportvar {.code {reportvar}} is an invalid column
+                        name, so it will
+                        be changed to {.code {nreportnames}}", wrap = TRUE)
+    reportvar <- nreportnames
+  }
+
+  ## Make sure we work with data.tables ------
   if (!(is.data.table(x))) {
     x <- as.data.table(x)
   } else {
@@ -355,6 +367,19 @@ merge <- function(x,
     dropreport <- TRUE
 
   } else {
+
+    check_names <- c(names(x), reportvar)
+
+    if (check_names != make.names(check_names, unique = TRUE)) {
+      nrv <- make.names(reportvar)
+
+      cli::cli_alert_info("reportvar {.code {reportvar}} is already part of the
+                          resulting table. It will be changed to {.code {nrv}}")
+
+      reportvar <- nrv
+
+    }
+
     dropreport <- FALSE
   }
 
