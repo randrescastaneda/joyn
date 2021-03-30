@@ -370,7 +370,9 @@ merge <- function(x,
 
     check_names <- c(names(x), reportvar)
 
-    if (check_names != make.names(check_names, unique = TRUE)) {
+    if (!identical(check_names,
+                  make.names(check_names, unique = TRUE))) {
+
       nrv <- make.names(reportvar)
 
       cli::cli_alert_info("reportvar {.code {reportvar}} is already part of the
@@ -485,7 +487,7 @@ merge <- function(x,
     }
     cli::cli_rule(right = "End of JOYn report")
 
-    if (all(x$report %in% c("x", "y")) || all(x$report %in% c(1, 2))) {
+    if (all(x[[reportvar]] %in% c("x", "y")) || all(x[[reportvar]] %in% c(1, 2))) {
       cli::cli_alert_warning(
         cli::col_red("you have no matchig obs. Make sure argument
                              `by` is correct. Right now, `joyn` is joining by

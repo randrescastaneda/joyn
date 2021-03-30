@@ -245,3 +245,9 @@ test_that("y vars are extracted correctly", {
 
 })
 
+test_that("selection of reportvar", {
+
+  merge(x2, y2, by = "id", reportvar = "feiwe")[]
+  merge(x2, y2, by = "id")[]
+
+})
