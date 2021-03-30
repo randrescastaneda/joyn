@@ -22,7 +22,7 @@ if (getRversion() >= '2.15.1')
 #' @param match_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
 #'   Default is *"m:m"* since this is the default generally used in joins in R.
 #'   However, following Stata's recommendation, it is better to be explicit and
-#'   use any of the other three join types (See details in *Join types
+#'   use any of the other three match types (See details in *match types
 #'   sections*).
 #'
 #' @param keep character: One of *"full"*, *"left"*, *"master"*, *"right"*,
@@ -67,7 +67,7 @@ if (getRversion() >= '2.15.1')
 #' @export
 #' @import data.table
 #'
-#' @section Join types:
+#' @section match types:
 #'
 #'   Using the same wording of the [Stata
 #'   manual](https://www.stata.com/manuals/dmerge.pdf)

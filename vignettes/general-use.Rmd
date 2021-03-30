@@ -85,13 +85,13 @@ merge(x4, y4, by = c("id1 = id", "id2"))
 
 ## Match type
 
-Join type refers to the correspondence that exists between the observations of
+match type refers to the correspondence that exists between the observations of
 the joining tables. Following Stata's convention, we could have four different
-join types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and
+match types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and
 many-to-many (m:m) joins. The default is m:m, following general R's practice,
 but its use is **highly discouraged**. We recommend you always specify the join
 type when joining tables to ensure the output is correct. Indeed, if you don't
-care about join types or you don't think it is necessary to use them for your
+care about match types or you don't think it is necessary to use them for your
 particular needs, you might be fine without `joyn`.
 
 Using the same wording of the [Stata

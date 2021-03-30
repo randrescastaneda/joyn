@@ -4,7 +4,7 @@ if (getRversion() >= '2.15.1')
     c('N')
   )
 
-#' Make sure the join type is correct
+#' Make sure the match type is correct
 #'
 #' @param dt either right of left table
 #' @param by by argument in merge
@@ -22,7 +22,7 @@ join_consistency <- function(dt,  by, dtname = NULL) {
     msg     <- glue::glue(
       "databse {dtname} is not uniquely identified by {glue::glue_collapse(glue::backtick(by),
                           sep = ', ', last ='  and ')}")
-    hint    <- "Check the join type, the key variables or the consistency of
+    hint    <- "Check the match type, the key variables or the consistency of
     your data"
     rlang::abort(c(
       msg,
