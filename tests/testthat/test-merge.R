@@ -1,8 +1,9 @@
 library(data.table)
+options(joyn.verbose = FALSE)
 
 test_that("slect by vars when no specified", {
-  expect_equal(merge(x1, y1, verbose = FALSE),
-               merge(x1, y1, verbose = FALSE, by = "id"))
+  expect_equal(merge(x1, y1),
+               merge(x1, y1, by = "id"))
 
 })
 
@@ -10,7 +11,7 @@ test_that("slect by vars when no specified", {
 test_that("Erros if no common variables", {
   xf <- copy(x1)
   xf[, id := NULL]
-  expect_error(merge(xf, y1, verbose = FALSE))
+  expect_error(merge(xf, y1))
 })
 
 test_that("m:m and 1:1 gives the same if data is correct", {
@@ -20,7 +21,6 @@ test_that("m:m and 1:1 gives the same if data is correct", {
       y2,
       by = "id",
       update_values = TRUE,
-      verbose = FALSE,
       match_type = "1:1"
     ),
     merge(
@@ -38,30 +38,25 @@ test_that("m:m and 1:1 gives the same if data is correct", {
       y2,
       by = "id",
       update_NAs = TRUE,
-      verbose = FALSE,
       match_type = "1:1"
     ),
     merge(
       x2,
       y2,
       by = "id",
-      update_NAs = TRUE,
-      verbose = FALSE
+      update_NAs = TRUE
     )
   )
 
-  expect_equal(merge(x2, y2, by = "id", match_type = "1:1",
-                     verbose = FALSE),
-               merge(x2, y2, by = "id",
-                     verbose = FALSE))
+  expect_equal(merge(x2, y2, by = "id", match_type = "1:1"),
+               merge(x2, y2, by = "id"))
 
 })
 
 
 test_that("left merge is correct", {
   x <- merge(x1, y1, by = "id",
-             keep = "left",
-             verbose = FALSE)
+             keep = "left")
   expect_equal(nrow(x), nrow(x1))
 
 
@@ -69,8 +64,7 @@ test_that("left merge is correct", {
              y2,
              by = "id",
              keep = "left",
-             match_type = "1:1",
-             verbose = FALSE)
+             match_type = "1:1")
   expect_equal(nrow(w), nrow(x2))
 
 
@@ -83,8 +77,7 @@ test_that("inverse merge workds", {
       x3,
       by = "id",
       match_type = "m:1",
-      reportvar = FALSE,
-      verbose = FALSE
+      reportvar = FALSE
     )
   rr <-
     merge(
@@ -92,8 +85,7 @@ test_that("inverse merge workds", {
       y3,
       by = "id",
       match_type = "1:m",
-      reportvar = FALSE,
-      verbose = FALSE
+      reportvar = FALSE
     )
 
   lnames <- names(ll)
@@ -108,8 +100,7 @@ test_that("inverse merge workds", {
       by = "id",
       match_type = "m:1",
       reportvar = FALSE,
-      keep = "left",
-      verbose = FALSE
+      keep = "left"
     )
   rt <-
     merge(
@@ -118,8 +109,7 @@ test_that("inverse merge workds", {
       by = "id",
       match_type = "1:m",
       reportvar = FALSE,
-      keep = "right",
-      verbose = FALSE
+      keep = "right"
     )
 
   lnamest <- names(lt)
@@ -135,8 +125,7 @@ test_that("FULL- Compare with base::merge", {
   jn <- merge(x1,
               y1,
               by = "id",
-              reportvar = FALSE,
-              verbose = FALSE)
+              reportvar = FALSE)
 
   br <- base::merge(x1, y1, by = "id", all = TRUE)
 
@@ -151,8 +140,7 @@ test_that("FULL- Compare with base::merge", {
     merge(x2,
           y2,
           by = "id",
-          reportvar = FALSE,
-          verbose = FALSE)
+          reportvar = FALSE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
   br[, x := x.x][,
@@ -174,8 +162,7 @@ test_that("LEFT- Compare with base::merge", {
       y1,
       by = "id",
       reportvar = FALSE,
-      keep = "left",
-      verbose = FALSE
+      keep = "left"
     )
   br <- base::merge(x1, y1, by = "id", all.x = TRUE)
   setorderv(br, "id", na.last = TRUE)
@@ -191,8 +178,7 @@ test_that("LEFT- Compare with base::merge", {
       y2,
       by = "id",
       reportvar = FALSE,
-      keep = "left",
-      verbose = FALSE
+      keep = "left"
     )
   br <- base::merge(x2, y2, by = "id", all.x = TRUE)
   br[, x := x.x][,
@@ -216,8 +202,7 @@ test_that("RIGHT - Compare with base::merge", {
       y1,
       by = "id",
       reportvar = FALSE,
-      keep = "right",
-      verbose = FALSE
+      keep = "right"
     )
   br <- base::merge(x1, y1, by = "id", all.y = TRUE)
   setorderv(br, "id", na.last = TRUE)
@@ -233,8 +218,7 @@ test_that("RIGHT - Compare with base::merge", {
       y2,
       by = "id",
       reportvar = FALSE,
-      keep = "right",
-      verbose = FALSE
+      keep = "right"
     )
 
   br <- base::merge(x2, y2, by = "id", all.y = TRUE)
@@ -258,8 +242,7 @@ test_that("INNER - Compare with base::merge", {
       y1,
       by = "id",
       reportvar = FALSE,
-      keep = "inner",
-      verbose = FALSE
+      keep = "inner"
     )
   br <- base::merge(x1, y1, by = "id")
   setorderv(br, "id", na.last = TRUE)
@@ -275,8 +258,7 @@ test_that("INNER - Compare with base::merge", {
       y2,
       by        = "id",
       reportvar = FALSE,
-      keep      = "inner",
-      verbose   = FALSE
+      keep      = "inner"
     )
   br <- base::merge(x2, y2, by = "id")
 
@@ -299,15 +281,13 @@ test_that("match types work", {
     x3,
     y3,
     by = "id",
-    match_type = "1:1",
-    verbose = FALSE
+    match_type = "1:1"
   ))
   expect_error(merge(
     x3,
     y3,
     by = "id",
-    match_type = "m:1",
-    verbose = FALSE
+    match_type = "m:1"
   ))
 
   x <-
@@ -333,7 +313,7 @@ test_that("match types work", {
     )
 
   by <- "id"
-  jn <- merge(x, y, by = by, match_type = "m:m", verbose = FALSE)
+  jn <- merge(x, y, by = by, match_type = "m:m")
 
   njn <- nrow(jn)
 
@@ -356,8 +336,7 @@ test_that("Update NAs", {
   jn <- merge(x2,
               y2,
               by = "id",
-              update_NAs = TRUE,
-              verbose = FALSE)
+              update_NAs = TRUE)
 
   idx <- x2[is.na(x), "id"]
 
@@ -373,8 +352,7 @@ test_that("Update actual values", {
     merge(x2,
           y2,
           by = "id",
-          update_values = TRUE,
-          verbose = FALSE)
+          update_values = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
@@ -396,8 +374,7 @@ test_that("y vars are extracted correctly", {
   jn <- merge(x2,
               y2,
               by = "id",
-              yvars = yvars,
-              verbose = FALSE)
+              yvars = yvars)
 
   expect_equal(names(jn), c(names(x2), yvars, "report"))
 
@@ -408,8 +385,7 @@ test_that("y vars are extracted correctly", {
       y2,
       by = "id",
       yvars = yvars,
-      reportvar = FALSE,
-      verbose = FALSE
+      reportvar = FALSE
     )
 
   expect_equal(names(jn), c(names(x2), yvars))
@@ -417,8 +393,7 @@ test_that("y vars are extracted correctly", {
   jn <- merge(x2,
               y2,
               by = "id",
-              yvars = FALSE,
-              verbose = FALSE)
+              yvars = FALSE)
 
   expect_equal(names(jn), c(names(x2), "report"))
 
@@ -431,16 +406,14 @@ test_that("selection of reportvar", {
     merge(x2,
           y2,
           by = "id",
-          reportvar = reportvar,
-          verbose = FALSE)
+          reportvar = reportvar)
 
   expect_true(reportvar %in% names(jn))
 
   jn <- merge(x2,
               y2,
               by = "id",
-              reportvar = FALSE,
-              verbose = FALSE)
+              reportvar = FALSE)
 
   expect_false("report" %in% names(jn))
 
@@ -450,8 +423,7 @@ test_that("selection of reportvar", {
   jn <- merge(x2,
               y2,
               by = "id",
-              reportvar = "t",
-              verbose = FALSE)
+              reportvar = "t")
 
   allnames <- unique(c(names(x2), names(y2)))
 
@@ -467,8 +439,7 @@ test_that("Keep Y vars works", {
   jn <- merge(x2,
               y2,
               by = "id",
-              keep_y_in_x = TRUE,
-              verbose = FALSE)
+              keep_y_in_x = TRUE)
 
   inames <- intersect(names(x2), names(y2))
   inames <- inames[!(inames %in% "id")]

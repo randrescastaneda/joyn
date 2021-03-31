@@ -12,6 +12,21 @@ checking data for ASCII and uncompressed saves ... OK
    WARNING
   'qpdf' is needed for checks on size reduction of PDFs
 
+* When run check_rhub() locally, I got
+0 errors | 0 warning | 1 notes 
 
-* When run in Github Actions, I got no error, no warnings, no notes. 
+The note reads: 
+Maintainer: 'R.Andres Castaneda <acastanedaa@worldbank.org>'
+  
+  New submission
+  Possibly mis-spelled words in DESCRIPTION:
+  
+    Stata (11:29)
+    dplyr (10:39)
+
+Explanation: I need to mention both Stata and the R package dplyr to make it clear
+what my package does.
+
+* When run in Github Actions, I got, 
+0 errors | 0 warning | 0 notes 
   

@@ -1,6 +1,6 @@
 Package: joyn
 Type: Package
-Title: Tool for diagnosis and useful features of joins of data frames 
+Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
 Version: 0.0.1
 Authors@R: person("R.Andres", "Castaneda", 
                   email = "acastanedaa@worldbank.org",

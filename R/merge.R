@@ -135,7 +135,7 @@ merge <- function(x,
                   roll          = NULL,
                   keep_y_in_x   = FALSE,
                   sort          = TRUE,
-                  verbose       = TRUE) {
+                  verbose       = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
