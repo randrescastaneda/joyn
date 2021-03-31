@@ -9,3 +9,5 @@
 ^\.github$
 ^codecov\.yml$
 ^revdep$
+cran-comments.md
+
