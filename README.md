@@ -10,7 +10,7 @@
 The goal of `joyn` is to provide the user with a set of tools to analyze
 the quality of merging (i.e., joining) data frames, so that it is a
 **JOY** to join tables with `joyn`. This is inspired in the command
-`merge` ofthe statistical software `Stata`.
+`merge` of the statistical software `Stata`.
 
 ## Motivation
 
@@ -124,7 +124,7 @@ y1
 
 # using commong variable `id` as key.
 merge(x1, y1)[]
-#> i joining by `id`
+#> > removing key variables `id` from yvars
 #> 
 #> -- JOYn Report --
 #> 
@@ -135,16 +135,16 @@ merge(x1, y1)[]
 #>   Total 6  100.0%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x  y report
-#> 1: NA NA 15 NA      x
-#> 2:  1  1 11 11  x & y
-#> 3:  1  2 12 11  x & y
-#> 4:  2  1 13 15  x & y
-#> 5:  3  2 14 NA      x
-#> 6:  4 NA NA 16      y
+#> 1:  1  1 11 11  x & y
+#> 2:  1  2 12 11  x & y
+#> 3:  2  1 13 15  x & y
+#> 4:  3  2 14 NA      x
+#> 5:  4 NA NA 16      y
+#> 6: NA NA 15 NA      x
 
 # keep just those observations that match
 merge(x1, y1, keep = "inner")[]
-#> i joining by `id`
+#> > removing key variables `id` from yvars
 #> -- JOYn Report --
 #> 
 #>  report n percent
@@ -176,7 +176,7 @@ y2
 
 # Bad merge for not specifying by argument
 merge(x2, y2)[]
-#> i joining by `id` and `x`
+#> > removing key variables `id` and `x` from yvars
 #> -- JOYn Report --
 #> 
 #>  report n percent
@@ -186,20 +186,22 @@ merge(x2, y2)[]
 #>   Total 9  100.0%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  x  t yd  y report
-#> 1: NA 15 NA NA NA      x
-#> 2:  1 16  1  1 11  x & y
+#> 1:  1 16  1  1 11  x & y
+#> 2:  2 17 NA  2 15      y
 #> 3:  2 NA  1 NA NA      x
-#> 4:  2 17 NA  2 15      y
+#> 4:  3 20 NA  3 10      y
 #> 5:  3 NA  2 NA NA      x
-#> 6:  3 20 NA  3 10      y
-#> 7:  4 12  2 NA NA      x
-#> 8:  5 18 NA  5 20      y
-#> 9:  6 19 NA  6 13      y
+#> 6:  4 12  2 NA NA      x
+#> 7:  5 18 NA  5 20      y
+#> 8:  6 19 NA  6 13      y
+#> 9: NA 15 NA NA NA      x
 
 # good merge, ignoring variable x from y
 merge(x2, y2, by = "id")[]
-#> i variable `x` in `y` is ignored in merge because `update_NAs` and
+#> > removing key variables `id` from yvars
+#> i variable `x` in table y is ignored because arguments `update_NAs` and
 #>   `update_values` are FALSE.
+#> 
 #> -- JOYn Report --
 #> 
 #>  report n percent
@@ -209,17 +211,17 @@ merge(x2, y2, by = "id")[]
 #>   Total 7  100.0%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y report
-#> 1: NA NA 15 NA NA      x
-#> 2:  1  1 16  1 11  x & y
-#> 3:  2  1 NA  2 15  x & y
-#> 4:  3  2 NA  3 10  x & y
-#> 5:  4  2 12 NA NA      x
-#> 6:  5 NA NA  5 20      y
-#> 7:  6 NA NA  6 13      y
+#> 1:  1  1 16  1 11  x & y
+#> 2:  2  1 NA  2 15  x & y
+#> 3:  3  2 NA  3 10  x & y
+#> 4:  4  2 12 NA NA      x
+#> 5:  5 NA NA  5 20      y
+#> 6:  6 NA NA  6 13      y
+#> 7: NA NA 15 NA NA      x
 
 # update NAs in x variable form x
 merge(x2, y2, by = "id", update_NAs = TRUE)[]
-#> 
+#> > removing key variables `id` from yvars
 #> -- JOYn Report --
 #> 
 #>      report n percent
@@ -230,17 +232,17 @@ merge(x2, y2, by = "id", update_NAs = TRUE)[]
 #>       Total 7  100.0%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y     report
-#> 1: NA NA 15 NA NA          x
-#> 2:  1  1 16  1 11      x & y
-#> 3:  2  1 17  2 15 NA updated
-#> 4:  3  2 20  3 10 NA updated
-#> 5:  4  2 12 NA NA          x
-#> 6:  5 NA 18  5 20          y
-#> 7:  6 NA 19  6 13          y
+#> 1:  1  1 16  1 11      x & y
+#> 2:  2  1 17  2 15 NA updated
+#> 3:  3  2 20  3 10 NA updated
+#> 4:  4  2 12 NA NA          x
+#> 5:  5 NA 18  5 20          y
+#> 6:  6 NA 19  6 13          y
+#> 7: NA NA 15 NA NA          x
 
 # Update values in x with variables from y
 merge(x2, y2, by = "id", update_values = TRUE)[]
-#> 
+#> > removing key variables `id` from yvars
 #> -- JOYn Report --
 #> 
 #>       report n percent
@@ -251,13 +253,13 @@ merge(x2, y2, by = "id", update_values = TRUE)[]
 #>        Total 7  100.0%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y      report
-#> 1: NA NA 15 NA NA not updated
-#> 2:  1  1 16  1 11       x & y
-#> 3:  2  1 17  2 15  NA updated
-#> 4:  3  2 20  3 10  NA updated
-#> 5:  4  2 12 NA NA not updated
-#> 6:  5 NA 18  5 20           y
-#> 7:  6 NA 19  6 13           y
+#> 1:  1  1 16  1 11       x & y
+#> 2:  2  1 17  2 15  NA updated
+#> 3:  3  2 20  3 10  NA updated
+#> 4:  4  2 12 NA NA not updated
+#> 5:  5 NA 18  5 20           y
+#> 6:  6 NA 19  6 13           y
+#> 7: NA NA 15 NA NA not updated
 
 
 # do not bring any variable from Y into x, just the report
@@ -271,12 +273,12 @@ merge(x2, y2, by = "id", yvars = NULL)[]
 #>       y 2   28.6%
 #>   Total 7  100.0%
 #> ---------------------------------------------------------- End of JOYn report --
-#>    id  t x.x yd  y x.y report
-#> 1: NA NA  15 NA NA  NA      x
-#> 2:  1  1  16  1 11  16  x & y
-#> 3:  2  1  NA  2 15  17  x & y
-#> 4:  3  2  NA  3 10  20  x & y
-#> 5:  4  2  12 NA NA  NA      x
-#> 6:  5 NA  NA  5 20  18      y
-#> 7:  6 NA  NA  6 13  19      y
+#>    id  t  x report
+#> 1:  1  1 16  x & y
+#> 2:  2  1 NA  x & y
+#> 3:  3  2 NA  x & y
+#> 4:  4  2 12      x
+#> 5:  5 NA NA      y
+#> 6:  6 NA NA      y
+#> 7: NA NA 15      x
 ```

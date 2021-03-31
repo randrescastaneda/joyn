@@ -28,7 +28,7 @@ if (getRversion() >= '2.15.1')
 #' @param keep character: One of *"full"*, *"left"*, *"master"*, *"right"*,
 #'   *"using"*, *"inner"*. Default is *"full"*. Even though this is not the
 #'   regular behavior of joins in R, the objective of `joyn` is to present a
-#'   diagnosys of the join, so that it must use by default a full join. Yet, if
+#'   diagnosis of the join, so that it must use by default a full join. Yet, if
 #'   *"left"* or *"master"*, it keeps the observations that matched in both
 #'   tables and the ones that did not match in x. The ones in y will be
 #'   discarded. If *"right"* or *"using"*, it keeps the observations that

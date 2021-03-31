@@ -133,8 +133,8 @@ Join type refers to observations that are kept after the join. To avoid
 confusion with argument `match_type`, I decided not to name this argument
 `join_type` but `keep`. At the end, you want to specify which observations you
 want to keep. This argument plays the role of mimicking the behavior of
-`dplyr`'s functions `left_join`, `right_join`, `inner_join`, and `full_join`, de
-default.
+`dplyr`'s functions `left_join`, `right_join`, `inner_join`, and `full_join`,
+the default.
 
 -   `keep = "full"`, the default, keeps all the observations in x and y,
     regardless of whether they match or not.

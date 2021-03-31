@@ -58,7 +58,7 @@ in argument `by`.
 merge(x, y, by = "id")[]
 ```
 
-### 3. Update only NAs in table x 
+### 3. Update only NAs in table x
 
 Update only NAs values in variable *country* in table x (i.e., left or master)
 with the actual values of the matching observations in *country* from table y
