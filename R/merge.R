@@ -304,8 +304,7 @@ merge <- function(x,
                             wrap = TRUE)
       }
 
-      # yvars    <- yvars[!(yvars %in% upvars)]
-      # y.upvars <- NULL
+      # we remove y.upvars from x ahead in the code when keep_y_in_x is false.
 
     }
   } # end of update vars
@@ -454,7 +453,9 @@ merge <- function(x,
 
   if (!is.null(fixby$xby)) {
     setnames(x, fixby$tempkey, fixby$xby)
-    setnames(y, fixby$tempkey, fixby$yby)
+    by <- fixby$xby
+    # not necessary
+    # setnames(y, fixby$tempkey, fixby$yby)
   }
 
   ## Remove temporal yvars -----
