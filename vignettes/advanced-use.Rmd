@@ -18,30 +18,121 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(joyn)
+library(data.table)
+
+x <- data.table(
+  id      = c(1, 4, 2, 3, NA),
+  t       = c(1L, 2L, 1L, 2L, NA),
+  country = c(16, 12, 3, NA, 15)
+)
+  
+y <- data.table(
+  id      = c(1, 2, 5, 6, 3),
+  gdp     = c(11L, 15L, 20L, 13L, 10L),
+  country = 16:20
+)
+
 ```
 
-## Update NAs in x
+## Updating variables in master (i.e., left) table
 
-blah
+Imagine that variable *country* is available in the two tables that you're going
+to join. You could do one of five things:
 
-## Update actual values in x
+### 1. Use variable *country* as one of the key variables
 
-blah blah
+This is the default if you don't use the argument `by`
 
-## Keep matching-names variables from y into x (No update)
+```{r}
+# The variables with the same name, `id` and `x`, are used as key
+# variables.
+merge(x, y)[]
+```
 
-blah blah
+### 2. Ignore variable *country* and don't bring it into the resulting table
+
+This the default if you did not include *country* as part of the key variables
+in argument `by`.
+
+```{r}
+merge(x, y, by = "id")[]
+```
+
+### 3. Update only NAs in table x 
+
+Update only NAs values in variable *country* in table x (i.e., left or master)
+with the actual values of the matching observations in *country* from table y
+(i.e, right or using). In this case, actual values in *country* from table x
+will remain unchanged.
+
+```{r}
+merge(x, y, by = "id", update_NAs = TRUE)[]
+```
+
+### 4. Update actual values in table x
+
+Update all the values--NAs and actual--in variable *country* of table x (i.e.,
+left or master) with the actual values of the matching observations in *country*
+from table y (i.e, right or using). Also, notice the output of the table below:
+only the values that are different between *country* from x and *country* from y
+are updated. If, for the same matching observations, the values between the two
+*country* variables are the same, the reporting variable says "x & y" rather
+than "value updated", so you know. Finally, If there are NAs in *country* from
+**table y**, the actual values in x will be **unchanged**, and you get a "not
+updated" status in the reporting variable. Yet, there is a way to solve this,
+which explained below using argument `keep_y_in_x`.
+
+```{r}
+# notice that only the value that are 
+merge(x, y, by = "id", update_values = TRUE)[]
+```
+
+### 5. Keep matching-names variables from y into x (No update)
+
+Bring variable *country* from y into the resulting table with a different name
+(*country.y*).
+
+```{r}
+merge(x, y, by = "id", keep_y_in_x = TRUE)[]
+```
+
+If you need to update *country* in x, including the actual values with NAs from
+*country* in y, you could do the following, keeping in mind that the reporting
+variable is not that useful anymore.
+
+```{r}
+dd <- merge(x, y, by = "id", keep_y_in_x = TRUE, verbose = FALSE)
+dd[, country := country.y
+   ][, country.y := NULL]
+
+dd[]
+```
 
 ## Bring specific variables from y into x
 
-blah blah
+Most of the times, you don't need to join all the variable from table y into
+table x, but just a few of them. By default, `joyn` brings all the variables in
+y into x because the argument `yvars` is set to `TRUE`. Yet, if you set it to
+`FALSE` or `NULL` it will bring NO variable from y into x, only only the
+reporting variable, which many times is very nice trick. Finally, if you set the
+`yvars` argument to the specific name of variable in y, only that variable will
+be carried over in the join.
 
+```{r}
+# Bring all variables updating values
+merge(x, y, by = "id", update_values = TRUE)[]
+
+# Bring no variables from y
+merge(x, y, by = "id", yvars = FALSE)[]
+
+# Bring only variable gdp from table y. So variable country won't be updated either because table y is filtered before the coparison of variables is done. 
+merge(x, y, by = "id", yvars = "gdp")[]
+```
 
 ## Rolling joins
 
-*Coming soon*
+[*Coming soon*]{style="color:red"}
 
 ## Misc.
 
-blah blah
-
+[*Coming soon*]{style="color:red"}
