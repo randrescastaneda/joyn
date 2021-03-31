@@ -18,7 +18,7 @@ merge(
   roll = NULL,
   keep_y_in_x = FALSE,
   sort = TRUE,
-  verbose = TRUE
+  verbose = getOption("joyn.verbose")
 )
 }
 \arguments{
@@ -50,7 +50,7 @@ sections}).}
 \item{keep}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
 \emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
 regular behavior of joins in R, the objective of \code{joyn} is to present a
-diagnosys of the join, so that it must use by default a full join. Yet, if
+diagnosis of the join, so that it must use by default a full join. Yet, if
 \emph{"left"} or \emph{"master"}, it keeps the observations that matched in both
 tables and the ones that did not match in x. The ones in y will be
 discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations that

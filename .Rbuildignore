@@ -8,3 +8,9 @@
 ^pkgdown$
 ^\.github$
 ^codecov\.yml$
+^revdep$
+cran-comments.md
+
+^doc$
+^Meta$
+^CRAN-RELEASE$

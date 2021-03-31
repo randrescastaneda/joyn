@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 
 The goal of `joyn` is to provide the user with a set of tools to analyze the quality
 of merging (i.e., joining) data frames, so that it is a **JOY** to join tables with
-`joyn`. This is inspired in the command `merge` ofthe statistical software `Stata`. 
+`joyn`. This is inspired in the command `merge` of the statistical software `Stata`. 
 
 
 ## Motivation
