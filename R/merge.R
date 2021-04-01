@@ -189,13 +189,55 @@ merge <- function(x,
   tx <- gsub("([m1]):([m1])", "\\1", match_type)
   ty <- gsub("([m1]):([m1])", "\\2", match_type)
 
+  match_type_error <- FALSE
+
   if (tx == "1") {
-    join_consistency(x, by, "x")
+
+    isidx <- is_id(x, by = by, verbose = FALSE)
+
+    if(isFALSE(isidx)) {
+
+      match_type_error <- TRUE
+      if (verbose) {
+
+        cli::cli_alert("table {.field x} is not uniquely identified
+                            by {.code {by}}", wrap = TRUE)
+      }
+    }
+    # join_consistency(x, by, "x")
   }
 
   if (ty == "1") {
-    join_consistency(y, by, "y")
+
+    isidy <- is_id(y, by = by, verbose = FALSE)
+
+    if(isFALSE(isidy)) {
+
+      match_type_error <- TRUE
+
+      if (verbose) {
+
+      cli::cli_alert("table {.field y} is not uniquely identified
+                            by {.code {by}}", wrap = TRUE)
+      }
+    }
+    # join_consistency(y, by, "y")
   }
+
+  if(match_type_error) {
+
+      msg     <- "match type inconsistency"
+      hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
+      to see where the problem is"
+      rlang::abort(c(
+        msg,
+        i = hint
+      ),
+      class = "joyn_error"
+      )
+
+    }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Manage by when Null   ---------
