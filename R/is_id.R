@@ -24,6 +24,14 @@ is_id <- function(dt,
                   verbose = TRUE,
                   return_report  = FALSE) {
 
+  # make sure it is data.table
+  if (!(is.data.table(dt))) {
+    dt <- as.data.table(dt)
+  } else {
+    dt <- data.table::copy(dt)
+  }
+
+  # count
   m     <- dt[, .(copies =.N), by = mget(by)]
   is_id <- m[, mean(copies)] == 1
 
