@@ -526,20 +526,30 @@ merge <- function(x,
 
     cli::cli_h2("JOYn Report")
 
-    if (requireNamespace("janitor", quietly = TRUE)) {
+    d <- x[, .(n = .N), by = reportvar
+    ][, percent :=
+        {
+          total = sum(n)
+          d <- round((n/ total)*100, digits = 1)
+          d <- as.character(d)
+          d <- paste0(d, "%")
+        }
+    ]
 
-      disp <- janitor::tabyl(x, !!reportvar)
-      disp <- janitor::adorn_totals(disp, "row")
-      disp <- janitor::adorn_pct_formatting(disp, digits = 1)
+    setorderv(d, reportvar)
+    totd <- data.table::data.table(
+      tempname = "total",
+      n        = d[, sum(n)],
+      percent  = "100%"
+    )
 
-      print(disp)
+    setnames(totd, "tempname", reportvar)
+    d <- data.table::rbindlist(list(d, totd),
+                               use.names = TRUE)
 
-    } else {
+    print(d[])
 
-      table(x[[reportvar]])
-
-    }
-    cli::cli_rule(right = "End of JOYn report")
+    cli::cli_rule(right = "End of {.field JOYn} report")
 
     if (all(x[[reportvar]] %in% c("x", "y")) || all(x[[reportvar]] %in% c(1, 2))) {
       cli::cli_alert_warning(
