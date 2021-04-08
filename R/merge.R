@@ -526,26 +526,7 @@ merge <- function(x,
 
     cli::cli_h2("JOYn Report")
 
-    d <- x[, .(n = .N), by = reportvar
-    ][, percent :=
-        {
-          total = sum(n)
-          d <- round((n/ total)*100, digits = 1)
-          d <- as.character(d)
-          d <- paste0(d, "%")
-        }
-    ]
-
-    setorderv(d, reportvar)
-    totd <- data.table::data.table(
-      tempname = "total",
-      n        = d[, sum(n)],
-      percent  = "100%"
-    )
-
-    setnames(totd, "tempname", reportvar)
-    d <- data.table::rbindlist(list(d, totd),
-                               use.names = TRUE)
+    d <- freq_table(x, reportvar)
 
     print(d[])
 

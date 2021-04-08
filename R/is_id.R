@@ -39,35 +39,16 @@ is_id <- function(dt,
 
     cli::cli_h3("Duplicates in terms of {.code {by}}")
 
-    if (requireNamespace("janitor", quietly = TRUE)) {
+    d <- freq_table(m, "copies")
+    print(d[])
 
-      disp <- janitor::tabyl(m, copies)
-      disp <- janitor::adorn_totals(disp, "row")
-      disp <- janitor::adorn_pct_formatting(disp, digits = 1)
-
-      print(disp)
-
-    } else {
-      d <- m[, .(n = .N), by = copies
-      ][, percent :=
-          {
-            total = sum(n)
-            d <- round((n/ total)*100, digits = 1)
-            d <- as.character(d)
-            d <- paste0(d, "%")
-          }
-      ]
-      setorder(d, copies)
-      print(d[])
-
-    }
     cli::cli_rule(right = "End of {.field is_id()} report")
 
   }
 
   if (isFALSE(return_report)) {
 
-    return(invisible(is_id))
+    return(is_id)
 
   } else {
 
