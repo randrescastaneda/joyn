@@ -18,7 +18,7 @@ If FALSE, returns logical value depending on whether \code{dt} is uniquely ident
 by \code{by}}
 }
 \value{
-logical of data.frame depending on the value of argument \code{report}
+logical or data.frame, depending on the value of argument \code{return_report}
 }
 \description{
 Make sure the match type is correct

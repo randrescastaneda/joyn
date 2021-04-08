@@ -1,7 +1,7 @@
 # Add global variables to avoid NSE notes in R CMD check
 if (getRversion() >= '2.15.1')
   utils::globalVariables(
-    c('N')
+    c('N', '.', 'copies')
   )
 
 #' Make sure the match type is correct
@@ -13,7 +13,7 @@ if (getRversion() >= '2.15.1')
 #' If FALSE, returns logical value depending on whether `dt` is uniquely identified
 #' by `by`
 #'
-#' @return logical of data.frame depending on the value of argument `report`
+#' @return logical or data.frame, depending on the value of argument `return_report`
 #' @export
 #'
 #' @examples

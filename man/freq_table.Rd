@@ -4,7 +4,7 @@
 \alias{freq_table}
 \title{tabulate simple frequencies}
 \usage{
-freq_table(x, byvar, digits = 1)
+freq_table(x, byvar, digits = 1, na.rm = TRUE)
 }
 \arguments{
 \item{x}{data frame}
@@ -12,9 +12,11 @@ freq_table(x, byvar, digits = 1)
 \item{byvar}{character: name of variable to tabulate. Use STandard evaluation.}
 
 \item{digits}{numeric: number of decimal places to display. Default is 1.}
+
+\item{na.rm}{logical: if TRUE remove NAs from calculations. Default is TRUE}
 }
 \value{
-
+data.table with frequencies.
 }
 \description{
 tabulate one variable in data frame to substitute base::table and

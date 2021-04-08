@@ -424,9 +424,10 @@ merge <- function(x,
       nrv         <- setdiff(check_names, xnames)
 
       if (verbose) {
-        cli::cli_alert_info("reportvar {.code {reportvar}} is already part of the
-                          resulting table. It will be changed to {.code {nrv}}",
-                          wrap = TRUE)
+        cli::cli_alert_info("reportvar {.code {reportvar}} is already
+                            part of the resulting table. It will be changed
+                            to {.code {nrv}}",
+                            wrap = TRUE)
       }
 
 
@@ -532,11 +533,12 @@ merge <- function(x,
 
     cli::cli_rule(right = "End of {.field JOYn} report")
 
-    if (all(x[[reportvar]] %in% c("x", "y")) || all(x[[reportvar]] %in% c(1, 2))) {
+    if (all(x[[reportvar]] %in% c("x", "y")) ||
+        all(x[[reportvar]] %in% c(1, 2))) {
       cli::cli_alert_warning(
         cli::col_red("you have no matchig obs. Make sure argument
-                             `by` is correct. Right now, `joyn` is joining by
-                             {.code {by}}"),
+                     `by` is correct. Right now, `joyn` is joining by
+                     {.code {by}}"),
         wrap = TRUE)
     }
   } # end of reporting joyn
