@@ -189,13 +189,55 @@ merge <- function(x,
   tx <- gsub("([m1]):([m1])", "\\1", match_type)
   ty <- gsub("([m1]):([m1])", "\\2", match_type)
 
+  match_type_error <- FALSE
+
   if (tx == "1") {
-    join_consistency(x, by, "x")
+
+    isidx <- is_id(x, by = by, verbose = FALSE)
+
+    if(isFALSE(isidx)) {
+
+      match_type_error <- TRUE
+      if (verbose) {
+
+        cli::cli_alert("table {.field x} is not uniquely identified
+                            by {.code {by}}", wrap = TRUE)
+      }
+    }
+    # join_consistency(x, by, "x")
   }
 
   if (ty == "1") {
-    join_consistency(y, by, "y")
+
+    isidy <- is_id(y, by = by, verbose = FALSE)
+
+    if(isFALSE(isidy)) {
+
+      match_type_error <- TRUE
+
+      if (verbose) {
+
+      cli::cli_alert("table {.field y} is not uniquely identified
+                            by {.code {by}}", wrap = TRUE)
+      }
+    }
+    # join_consistency(y, by, "y")
   }
+
+  if(match_type_error) {
+
+      msg     <- "match type inconsistency"
+      hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
+      to see where the problem is"
+      rlang::abort(c(
+        msg,
+        i = hint
+      ),
+      class = "joyn_error"
+      )
+
+    }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Manage by when Null   ---------
@@ -382,9 +424,10 @@ merge <- function(x,
       nrv         <- setdiff(check_names, xnames)
 
       if (verbose) {
-        cli::cli_alert_info("reportvar {.code {reportvar}} is already part of the
-                          resulting table. It will be changed to {.code {nrv}}",
-                          wrap = TRUE)
+        cli::cli_alert_info("reportvar {.code {reportvar}} is already
+                            part of the resulting table. It will be changed
+                            to {.code {nrv}}",
+                            wrap = TRUE)
       }
 
 
@@ -484,26 +527,18 @@ merge <- function(x,
 
     cli::cli_h2("JOYn Report")
 
-    if (requireNamespace("janitor", quietly = TRUE)) {
+    d <- freq_table(x, reportvar)
 
-      disp <- janitor::tabyl(x, !!reportvar)
-      disp <- janitor::adorn_totals(disp, "row")
-      disp <- janitor::adorn_pct_formatting(disp, digits = 1)
+    print(d[])
 
-      print(disp)
+    cli::cli_rule(right = "End of {.field JOYn} report")
 
-    } else {
-
-      table(x[[reportvar]])
-
-    }
-    cli::cli_rule(right = "End of JOYn report")
-
-    if (all(x[[reportvar]] %in% c("x", "y")) || all(x[[reportvar]] %in% c(1, 2))) {
+    if (all(x[[reportvar]] %in% c("x", "y")) ||
+        all(x[[reportvar]] %in% c(1, 2))) {
       cli::cli_alert_warning(
         cli::col_red("you have no matchig obs. Make sure argument
-                             `by` is correct. Right now, `joyn` is joining by
-                             {.code {by}}"),
+                     `by` is correct. Right now, `joyn` is joining by
+                     {.code {by}}"),
         wrap = TRUE)
     }
   } # end of reporting joyn
