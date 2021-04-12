@@ -4,6 +4,9 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg)](https://github.com/randrescastaneda/joyn/actions)
+[![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
+[![](https://img.shields.io/badge/devel%20version-0.1.0.9003-blue.svg)](https://github.com/randrescastaneda/joyn)
+[![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://www.tidyverse.org/lifecycle/#maturing)
 [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H)](https://codecov.io/gh/randrescastaneda/joyn)
 <!-- badges: end -->
 

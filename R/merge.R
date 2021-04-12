@@ -182,6 +182,30 @@ merge <- function(x,
   fixby  <- fix_by_vars(by, x, y)
   by     <- fixby$by
 
+  if (length(by) == 0) {
+    # by <- intersect(names(x), names(y))
+
+    if (length(by) == 0) {
+      msg     <- "no common variable names in `x` and `y`"
+      hint    <- "Make sure all variables are spelled correctly.
+      Check for upper and lower cases"
+      problem <- "When `by = NULL`, joyn search for common variable
+      names to be used as keys"
+      rlang::abort(c(
+        msg,
+        i = hint,
+        x = problem
+      ),
+      class = "joyn_error"
+      )
+
+    }
+
+    if (verbose) {
+      cli::cli_alert_info("joining by {.code {by}}")
+    }
+
+  } # end of isnull by
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #           Consistency of join   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -237,36 +261,6 @@ merge <- function(x,
       )
 
     }
-
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Manage by when Null   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  if (is.null(by)) {
-    # by <- intersect(names(x), names(y))
-
-    if (length(by) == 0) {
-      msg     <- "no common variable names in `x` and `y`"
-      hint    <- "Make sure all variables are spelled correctly.
-      Check for upper and lower cases"
-      problem <- "When `by = NULL`, joyn search for common variable
-      names to be used as keys"
-      rlang::abort(c(
-                    msg,
-                    i = hint,
-                    x = problem
-                    ),
-                    class = "joyn_error"
-                    )
-
-    }
-
-    if (verbose) {
-      cli::cli_alert_info("joining by {.code {by}}")
-    }
-
-  } # end of isnull by
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Variables to keep in y   ---------
