@@ -88,7 +88,6 @@
 <div id="joyn" class="section level1">
 <div class="page-header"><h1 class="hasAnchor">
 <a href="#joyn" class="anchor"></a>joyn</h1></div>
-<!-- [![Codecov test coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master) -->
 <!-- badges: start -->
 
 <p>The goal of <code>joyn</code> is to provide the user with a set of tools to analyze the quality of merging (i.e., joining) data frames, so that it is a <strong>JOY</strong> to join tables with <code>joyn</code>. This is inspired in the command <code>merge</code> of the statistical software <code>Stata</code>.</p>
@@ -159,11 +158,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  report n percent</span>
-<span class="co">#&gt;       x 2   33.3%</span>
-<span class="co">#&gt;   x &amp; y 3   50.0%</span>
-<span class="co">#&gt;       y 1   16.7%</span>
-<span class="co">#&gt;   Total 6  100.0%</span>
+<span class="co">#&gt;    report n percent</span>
+<span class="co">#&gt; 1:      x 2   33.3%</span>
+<span class="co">#&gt; 2:  x &amp; y 3     50%</span>
+<span class="co">#&gt; 3:      y 1   16.7%</span>
+<span class="co">#&gt; 4:  total 6    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  t  x  y report</span>
 <span class="co">#&gt; 1:  1  1 11 11  x &amp; y</span>
@@ -178,9 +177,9 @@
 <span class="co">#&gt; &gt; removing key variables `id` from yvars</span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  report n percent</span>
-<span class="co">#&gt;   x &amp; y 3  100.0%</span>
-<span class="co">#&gt;   Total 3  100.0%</span>
+<span class="co">#&gt;    report n percent</span>
+<span class="co">#&gt; 1:  x &amp; y 3    100%</span>
+<span class="co">#&gt; 2:  total 3    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id t  x  y report</span>
 <span class="co">#&gt; 1:  1 1 11 11  x &amp; y</span>
@@ -210,11 +209,11 @@
 <span class="co">#&gt; &gt; removing key variables `id` and `x` from yvars</span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  report n percent</span>
-<span class="co">#&gt;       x 4   44.4%</span>
-<span class="co">#&gt;   x &amp; y 1   11.1%</span>
-<span class="co">#&gt;       y 4   44.4%</span>
-<span class="co">#&gt;   Total 9  100.0%</span>
+<span class="co">#&gt;    report n percent</span>
+<span class="co">#&gt; 1:      x 4   44.4%</span>
+<span class="co">#&gt; 2:  x &amp; y 1   11.1%</span>
+<span class="co">#&gt; 3:      y 4   44.4%</span>
+<span class="co">#&gt; 4:  total 9    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  x  t yd  y report</span>
 <span class="co">#&gt; 1:  1 16  1  1 11  x &amp; y</span>
@@ -235,11 +234,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  report n percent</span>
-<span class="co">#&gt;       x 2   28.6%</span>
-<span class="co">#&gt;   x &amp; y 3   42.9%</span>
-<span class="co">#&gt;       y 2   28.6%</span>
-<span class="co">#&gt;   Total 7  100.0%</span>
+<span class="co">#&gt;    report n percent</span>
+<span class="co">#&gt; 1:      x 2   28.6%</span>
+<span class="co">#&gt; 2:  x &amp; y 3   42.9%</span>
+<span class="co">#&gt; 3:      y 2   28.6%</span>
+<span class="co">#&gt; 4:  total 7    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  t  x yd  y report</span>
 <span class="co">#&gt; 1:  1  1 16  1 11  x &amp; y</span>
@@ -255,12 +254,12 @@
 <span class="co">#&gt; &gt; removing key variables `id` from yvars</span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;      report n percent</span>
-<span class="co">#&gt;  NA updated 2   28.6%</span>
-<span class="co">#&gt;           x 2   28.6%</span>
-<span class="co">#&gt;       x &amp; y 1   14.3%</span>
-<span class="co">#&gt;           y 2   28.6%</span>
-<span class="co">#&gt;       Total 7  100.0%</span>
+<span class="co">#&gt;        report n percent</span>
+<span class="co">#&gt; 1: NA updated 2   28.6%</span>
+<span class="co">#&gt; 2:          x 2   28.6%</span>
+<span class="co">#&gt; 3:      x &amp; y 1   14.3%</span>
+<span class="co">#&gt; 4:          y 2   28.6%</span>
+<span class="co">#&gt; 5:      total 7    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  t  x yd  y     report</span>
 <span class="co">#&gt; 1:  1  1 16  1 11      x &amp; y</span>
@@ -276,12 +275,12 @@
 <span class="co">#&gt; &gt; removing key variables `id` from yvars</span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;       report n percent</span>
-<span class="co">#&gt;   NA updated 2   28.6%</span>
-<span class="co">#&gt;  not updated 2   28.6%</span>
-<span class="co">#&gt;        x &amp; y 1   14.3%</span>
-<span class="co">#&gt;            y 2   28.6%</span>
-<span class="co">#&gt;        Total 7  100.0%</span>
+<span class="co">#&gt;         report n percent</span>
+<span class="co">#&gt; 1:  NA updated 2   28.6%</span>
+<span class="co">#&gt; 2: not updated 2   28.6%</span>
+<span class="co">#&gt; 3:       x &amp; y 1   14.3%</span>
+<span class="co">#&gt; 4:           y 2   28.6%</span>
+<span class="co">#&gt; 5:       total 7    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  t  x yd  y      report</span>
 <span class="co">#&gt; 1:  1  1 16  1 11       x &amp; y</span>
@@ -298,11 +297,11 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; -- JOYn Report --</span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt;  report n percent</span>
-<span class="co">#&gt;       x 2   28.6%</span>
-<span class="co">#&gt;   x &amp; y 3   42.9%</span>
-<span class="co">#&gt;       y 2   28.6%</span>
-<span class="co">#&gt;   Total 7  100.0%</span>
+<span class="co">#&gt;    report n percent</span>
+<span class="co">#&gt; 1:      x 2   28.6%</span>
+<span class="co">#&gt; 2:  x &amp; y 3   42.9%</span>
+<span class="co">#&gt; 3:      y 2   28.6%</span>
+<span class="co">#&gt; 4:  total 7    100%</span>
 <span class="co">#&gt; ---------------------------------------------------------- End of JOYn report --</span>
 <span class="co">#&gt;    id  t  x report</span>
 <span class="co">#&gt; 1:  1  1 16  x &amp; y</span>
@@ -347,6 +346,7 @@
 <h2>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/randrescastaneda/joyn/actions"><img src="https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://codecov.io/gh/randrescastaneda/joyn"><img src="https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H" alt="codecov"></a></li>
 </ul>
 </div>
 </div>
