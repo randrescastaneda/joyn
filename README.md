@@ -1,10 +1,12 @@
 
 # joyn
 
-<!-- [![Codecov test coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master) -->
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg)](https://github.com/randrescastaneda/joyn/actions)
+
+[![Codecov test
+coverage](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn?branch=master)
 <!-- badges: end -->
 
 The goal of `joyn` is to provide the user with a set of tools to analyze
@@ -128,11 +130,11 @@ merge(x1, y1)[]
 #> 
 #> -- JOYn Report --
 #> 
-#>  report n percent
-#>       x 2   33.3%
-#>   x & y 3   50.0%
-#>       y 1   16.7%
-#>   Total 6  100.0%
+#>    report n percent
+#> 1:      x 2   33.3%
+#> 2:  x & y 3     50%
+#> 3:      y 1   16.7%
+#> 4:  total 6    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x  y report
 #> 1:  1  1 11 11  x & y
@@ -147,9 +149,9 @@ merge(x1, y1, keep = "inner")[]
 #> > removing key variables `id` from yvars
 #> -- JOYn Report --
 #> 
-#>  report n percent
-#>   x & y 3  100.0%
-#>   Total 3  100.0%
+#>    report n percent
+#> 1:  x & y 3    100%
+#> 2:  total 3    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id t  x  y report
 #> 1:  1 1 11 11  x & y
@@ -179,11 +181,11 @@ merge(x2, y2)[]
 #> > removing key variables `id` and `x` from yvars
 #> -- JOYn Report --
 #> 
-#>  report n percent
-#>       x 4   44.4%
-#>   x & y 1   11.1%
-#>       y 4   44.4%
-#>   Total 9  100.0%
+#>    report n percent
+#> 1:      x 4   44.4%
+#> 2:  x & y 1   11.1%
+#> 3:      y 4   44.4%
+#> 4:  total 9    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  x  t yd  y report
 #> 1:  1 16  1  1 11  x & y
@@ -204,11 +206,11 @@ merge(x2, y2, by = "id")[]
 #> 
 #> -- JOYn Report --
 #> 
-#>  report n percent
-#>       x 2   28.6%
-#>   x & y 3   42.9%
-#>       y 2   28.6%
-#>   Total 7  100.0%
+#>    report n percent
+#> 1:      x 2   28.6%
+#> 2:  x & y 3   42.9%
+#> 3:      y 2   28.6%
+#> 4:  total 7    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y report
 #> 1:  1  1 16  1 11  x & y
@@ -224,12 +226,12 @@ merge(x2, y2, by = "id", update_NAs = TRUE)[]
 #> > removing key variables `id` from yvars
 #> -- JOYn Report --
 #> 
-#>      report n percent
-#>  NA updated 2   28.6%
-#>           x 2   28.6%
-#>       x & y 1   14.3%
-#>           y 2   28.6%
-#>       Total 7  100.0%
+#>        report n percent
+#> 1: NA updated 2   28.6%
+#> 2:          x 2   28.6%
+#> 3:      x & y 1   14.3%
+#> 4:          y 2   28.6%
+#> 5:      total 7    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y     report
 #> 1:  1  1 16  1 11      x & y
@@ -245,12 +247,12 @@ merge(x2, y2, by = "id", update_values = TRUE)[]
 #> > removing key variables `id` from yvars
 #> -- JOYn Report --
 #> 
-#>       report n percent
-#>   NA updated 2   28.6%
-#>  not updated 2   28.6%
-#>        x & y 1   14.3%
-#>            y 2   28.6%
-#>        Total 7  100.0%
+#>         report n percent
+#> 1:  NA updated 2   28.6%
+#> 2: not updated 2   28.6%
+#> 3:       x & y 1   14.3%
+#> 4:           y 2   28.6%
+#> 5:       total 7    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x yd  y      report
 #> 1:  1  1 16  1 11       x & y
@@ -267,11 +269,11 @@ merge(x2, y2, by = "id", yvars = NULL)[]
 #> 
 #> -- JOYn Report --
 #> 
-#>  report n percent
-#>       x 2   28.6%
-#>   x & y 3   42.9%
-#>       y 2   28.6%
-#>   Total 7  100.0%
+#>    report n percent
+#> 1:      x 2   28.6%
+#> 2:  x & y 3   42.9%
+#> 3:      y 2   28.6%
+#> 4:  total 7    100%
 #> ---------------------------------------------------------- End of JOYn report --
 #>    id  t  x report
 #> 1:  1  1 16  x & y
