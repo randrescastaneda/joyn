@@ -16,7 +16,6 @@ BugReports: https://github.com/randrescastaneda/joyn/issues
 Suggests: 
     badger,
     covr,
-    janitor,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0)
