@@ -1,4 +1,4 @@
-# joyn (development version)
+# joyn 0.1.1
 
 # joyn 0.1.0
 
