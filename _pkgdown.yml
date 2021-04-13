@@ -3,7 +3,7 @@ template:
     bootswatch: flatly
 
 development:
-  mode: auto
+  version_label: danger
 
 home:
   title: An R package for joining tables
