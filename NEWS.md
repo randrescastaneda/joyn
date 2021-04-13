@@ -1,3 +1,5 @@
+# joyn (development version)
+
 ## joyn 0.1.1
 
 * Add function `is_id()` to check whether the table is uniquely identified by 
