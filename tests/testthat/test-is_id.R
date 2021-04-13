@@ -43,3 +43,11 @@ test_that("returns correct report table", {
 })
 
 
+test_that("convert to data.table when dataframe", {
+
+  yy3 <- as.data.frame(y3)
+
+  expect_false(is_id(yy3, "id"))
+
+})
+
