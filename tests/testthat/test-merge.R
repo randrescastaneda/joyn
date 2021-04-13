@@ -284,6 +284,12 @@ test_that("match types work", {
     match_type = "1:1"
   ))
   expect_error(merge(
+    y3,
+    x3,
+    by = "id",
+    match_type = "1:1"
+  ))
+  expect_error(merge(
     x3,
     y3,
     by = "id",
@@ -454,8 +460,6 @@ test_that("Keep Y vars works", {
 })
 
 
-
-
 test_that("error when there is not natural join", {
   xx1 <- copy(x1)
   setnames(xx1, "id", "foo")
@@ -481,3 +485,33 @@ test_that("different names in key vars are working fine", {
   expect_equal(df, dd)
 
 })
+
+
+test_that("invalid names are changed", {
+
+  dd <- merge(x1, y1, reportvar = "_report")
+  expect_true("X_report"  %in% names(dd))
+
+})
+
+
+test_that("convert to data.table when dataframe", {
+
+  yy1 <- as.data.frame(y1)
+
+  expect_equal(merge(x1, yy1), merge(x1, y1))
+
+})
+
+
+test_that("no matching obs", {
+
+  xx2 <- x2[1, x := 23]
+
+  dd <- merge(xx2, y2)
+  dw <- dd[, unique(report)]
+  expect_equal(dw, c("y", "x"))
+
+})
+
+
