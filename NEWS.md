@@ -1,4 +1,7 @@
-# joyn 0.2.0
+# joyn 0.1.2
+
+* Add function `possible_ids()` to identify what variables are suitable for 
+uniquely identify de database.
 
 ## joyn 0.1.1
 
