@@ -7,6 +7,7 @@
 #' @export
 #'
 #' @examples
+#' possible_ids(x4)
 possible_ids <- function(dt,
                          verbose = TRUE) {
 
@@ -14,16 +15,36 @@ possible_ids <- function(dt,
   # Check if data is data frame   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  if (!is.data.table(dt)) {
-    dt <- data.table::as.data.table(dt)
-  } else {
-    dt <- data.table::copy(dt)
+  if (!is.data.frame(dt)) {
+    stop("data must be a data frame")
   }
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ## check all names are unieuq --------
+  vars    <- names(dt)
+  dup_var <- duplicated(vars)
+
+  if (any(dup_var)) {
+
+    dvars <- vars[dup_var]
+
+    msg     <- "column names must be unique"
+    hint    <- "try changing the names using `make.names()`"
+    problem <- glue::glue("{dvars} is/are duplicated")
+    rlang::abort(c(
+                  msg,
+                  i = hint,
+                  x = problem
+                  ),
+                  class = "error_class"
+                  )
+
+  }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Find duplicates   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  vars  <- names(dt)
 
   duplicates <- is_id(dt, by = vars, verbose = FALSE)
   if (duplicates) {
