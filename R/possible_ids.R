@@ -81,8 +81,18 @@ possible_ids <- function(dt,
     sv <- which(selected_vars)
 
     if (length(sv) > 0) {
-      ee <- as.data.frame(cm[, sv])
-      lv <- lapply(ee, unique)
+
+      if (length(sv) == 1) {
+
+        lv <- list(V1 = cm[, sv])
+
+      } else {
+
+        ee <- as.data.frame(cm[, sv])
+        lv <- lapply(ee, unique)
+
+      }
+
       found <- TRUE
 
     }
