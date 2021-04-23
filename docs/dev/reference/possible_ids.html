@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Testing data y3 — y3 • joyn</title>
+<title>Find possible unique identifies of data frame — possible_ids • joyn</title>
 
 
 <!-- jquery -->
@@ -39,8 +39,8 @@
 
 
 
-<meta property="og:title" content="Testing data y3 — y3" />
-<meta property="og:description" content="testing data" />
+<meta property="og:title" content="Find possible unique identifies of data frame — possible_ids" />
+<meta property="og:description" content="Find possible unique identifies of data frame" />
 
 
 <meta name="robots" content="noindex">
@@ -126,22 +126,53 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Testing data y3</h1>
-    <small class="dont-index">Source: <a href='https://github.com/randrescastaneda/joyn/blob/master/R/data.R'><code>R/data.R</code></a></small>
-    <div class="hidden name"><code>y3.Rd</code></div>
+    <h1>Find possible unique identifies of data frame</h1>
+    <small class="dont-index">Source: <a href='https://github.com/randrescastaneda/joyn/blob/master/R/possible_ids.R'><code>R/possible_ids.R</code></a></small>
+    <div class="hidden name"><code>possible_ids.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    <p>testing data</p>
+    <p>Find possible unique identifies of data frame</p>
     </div>
 
-    <pre class="usage"><span class='va'>y3</span></pre>
+    <pre class="usage"><span class='fu'>possible_ids</span><span class='op'>(</span><span class='va'>dt</span>, verbose <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span></pre>
+
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>dt</th>
+      <td><p>data frame</p></td>
+    </tr>
+    <tr>
+      <th>verbose</th>
+      <td><p>logical: fi FALSE no message will be displayed. Default is TRUE</p></td>
+    </tr>
+    </table>
+
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
+
+    
 
 
-    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>A data frame with 4 rows and 2 variables:</p>
-
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>possible_ids</span><span class='op'>(</span><span class='va'>x4</span><span class='op'>)</span>
+</div><div class='output co'>#&gt; <span class='message'><span style='color: #00BB00;'>v</span><span> There are no duplicates in data frame</span></div><div class='output co'>#&gt; <span class='message'>&gt; we found 5 possible ids</span></div><div class='output co'>#&gt; $V1
+#&gt; [1] "id1" "t"  
+#&gt; 
+#&gt; $V2
+#&gt; [1] "id1" "x"  
+#&gt; 
+#&gt; $V3
+#&gt; [1] "id2" "t"  
+#&gt; 
+#&gt; $V4
+#&gt; [1] "id2" "x"  
+#&gt; 
+#&gt; $V5
+#&gt; [1] "t" "x"
+#&gt; </div></span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
     <nav id="toc" data-toggle="toc" class="sticky-top">

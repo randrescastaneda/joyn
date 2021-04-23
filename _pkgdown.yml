@@ -41,6 +41,7 @@ reference:
   contents:
   - '`is_id`'
   - '`freq_table`'
+  - '`possible_ids`'
 
 articles:
 - title: Usage
