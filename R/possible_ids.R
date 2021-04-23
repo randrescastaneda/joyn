@@ -1,7 +1,13 @@
 #' Find possible unique identifies of data frame
 #'
 #' @param dt data frame
-#' @param verbose logical: fi FALSE no message will be displayed. Default is TRUE
+#' @param verbose logical: fi FALSE no message will be displayed. Default is
+#'   TRUE
+#' @param exclude character: Exclude variables to be selected as identifiers. It
+#'   could be either the name of the variables of one type of the variable
+#'   prefixed by "_". For instance, "_numeric" or "_character".
+#' @param include character: Name of variable to be included, that might belong
+#'   to the group excluded in the `exclude`
 #'
 #' @return
 #' @export
@@ -9,19 +15,84 @@
 #' @examples
 #' possible_ids(x4)
 possible_ids <- function(dt,
-                         verbose = TRUE) {
+                         verbose = TRUE,
+                         exclude = NULL,
+                         include = NULL) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Check if data is data frame   ---------
+  # Check inputs   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   if (!is.data.frame(dt)) {
     stop("data must be a data frame")
   }
 
+  if (is.data.table(dt)) {
+    dt <- as.data.frame(dt)
+  }
+
+
+  if (verbose) {
+    if (is.null(exclude) && !is.null(include)) {
+      cli::cli_alert_warning("Since {.code exclude} is NULL, {.code include}
+                             directive does not make sense. Ignored.",
+                             wrap = TRUE)
+    }
+  }
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ## exclude variables from check ------
+
+  vars    <- names(dt)
+
+  ### Exclude variable by name ---------
+  if (!is.null(exclude)) {
+
+    if (grepl("^_", exclude)) {
+
+      exclude <- match.arg(exclude, c("_character", "_numeric"))
+
+    } else {
+      vars <- vars[!(vars %in% exclude)]
+
+      if (verbose) {
+       if (identical(vars, names(dt))) {
+         cli::cli_alert_warning("Variable {.field {exclude}} is not available in data frame.
+                                Nothing is excluded.", wrap = TRUE)
+       }
+      }
+
+    }
+  }
+
+  ### Exclude variable according to their type ---------
+  # Find position of variable to include
+  if (!is.null(include)) {
+
+    ii <- which(names(dt) %in% include)
+
+  } else {
+
+    ii <- NULL
+
+  }
+
+  # find variable that meet criteria and exclude them, making sure to include
+  # the variables of the user.
+  if (grepl("^_", exclude)) {
+
+    ex <- gsub("^_", "", exclude)
+    FUN <- paste0("is.", ex)
+
+    n_cols <- unlist(lapply(dt, FUN))
+    n_cols[ii] <- FALSE
+
+    vars <- names(dt)[!n_cols]
+
+  }
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## check all names are unieuq --------
-  vars    <- names(dt)
   dup_var <- duplicated(vars)
 
   if (any(dup_var)) {
