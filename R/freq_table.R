@@ -24,6 +24,13 @@ freq_table <- function(x,
                        digits = 1,
                        na.rm  = TRUE) {
 
+  if (!(is.data.table(x))) {
+    x <- as.data.table(x)
+  } else {
+    x <- data.table::copy(x)
+  }
+
+
   # Frequencies and format
   d <- x[, .(n = .N), by = byvar
   ][, percent :=

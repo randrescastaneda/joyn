@@ -5,38 +5,40 @@
 
 [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg)](https://github.com/randrescastaneda/joyn/actions)
 [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
-[![](https://img.shields.io/badge/devel%20version-0.1.0.9003-blue.svg)](https://github.com/randrescastaneda/joyn)
-[![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://www.tidyverse.org/lifecycle/#maturing)
+[![](https://img.shields.io/badge/devel%20version-0.1.2.9004-blue.svg)](https://github.com/randrescastaneda/joyn)
+[![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H)](https://codecov.io/gh/randrescastaneda/joyn)
+
 <!-- badges: end -->
 
 The goal of `joyn` is to provide the user with a set of tools to analyze
 the quality of merging (i.e., joining) data frames, so that it is a
-**JOY** to join tables with `joyn`. This is inspired in the command
+**JOY** to join tables with `joyn`. This is inspired on the command
 `merge` of the statistical software `Stata`.
 
 ## Motivation
 
 The objective `joyn` is to make your life easier when joining tables. As
 a former Stata user (I still work with Stata but not that much as I work
-with R now), I have missed the ability to understand the results of
-joining tables. With one single command, `merge`, Stata allows the user
-to perform any kind of equi-join. The reason for this is that, by
-default, Stata merges fully both tables into one and then it is up to
-the user to keep the observation she needs. Most importantly, Stata
-forces the user to know how her tables relate to each other. Some tables
-have a one-to-one (1:1 ) relation, but it is common to find one-to-many
-(1:m), many-to-one (m:1), and many-to-many (m:m) relations. Finally,
-Stata’s `merge` command returns by default a variable with useful
-information about the table’s join. So the following features are the
-value added of `joyn`:
+with R now), I had missed, until now, the ability to assess the
+resulting data frame when joining tables in R. With one single command,
+`merge`, Stata allows the user to perform any kind of equi-join. The
+reason for this is that, by default, Stata merges fully both tables into
+one and then it is up to the user to keep the observation she needs.
+Most importantly, Stata forces the user to know how her joining tables
+relate to each other. Most tables have a one-to-one (1:1 ) relation, but
+it is common to find one-to-many (1:m), many-to-one (m:1), and
+many-to-many (m:m) relations. Finally, Stata’s `merge` command returns
+by default a variable with useful information about the table’s join. So
+the following features are the value added of `joyn`:
 
-1.  Perform a full join by default (i.e., final table has all the
-    observations of both original tables). Yet, the user can select
-    “left”, “right” or “inner” joins using the argument `keep`.
+1.  `joyn` performs a full join by default (i.e., resulting table has
+    all the observations from both original, joining tables). Yet, the
+    user can select “left”, “right” or “inner” joins using the argument
+    `keep`.
 
-2.  In the same vain, `joyn` merges all the columns in both tables. To
-    caveats are worth mentioning.
+2.  In the same vain, `joyn` keeps all the columns form both joining
+    tables. Two caveats are worth mentioning.
 
     1.  If both tables have variables with the same name, by default
         `joyn` does not bring those variables from the second (i.e,
@@ -50,24 +52,31 @@ value added of `joyn`:
     2.  You can use the argument `yvars` to select which variables you
         want to bring from the second table into the first one.
 
-3.  Allow the user to perform one-to-one (1:1) , one-to-many (1:m),
-    many-to-one (m:1), and many-to-many (m:m) joins. The default is m:m,
-    following general R’s practice, but its use is highly discouraged.
+3.  `joyn` allows the user to perform one-to-one (1:1) , one-to-many
+    (1:m), many-to-one (m:1), and many-to-many (m:m) joins. The default
+    is m:m, following general R’s practice, but its is highly
+    discouraged. Since you want to use `joyn`, I recommend you always
+    specify the right relationship between your joining tables.
 
-4.  Return a reporting variable with the status of the join.
+4.  `joyn` returns a reporting variable with the status of the join.
 
 ## Regarding speed and flexibility
 
 Notice the `joyn` is not intended to be a super fast joining tool. By
-construction it does a lot of things that will make it slower that other
-tools out there. However, `joyn` is basically a wrapper around
+construction, it does a lot of things that will make it slower than
+other tools out there. However, `joyn` is basically a wrapper around
 `data.table`’s indexed joining tools. So, the lost of speed of `joyn` is
-mainly due to asses some conditions, create the reporting variable, and
-(what really takes the most time) present a nice summary table when
-`joyn` concludes. Also, keep in mind that `joyn` is intended to be
-informative, so it displays messages here and there to inform you about
-your join (you can silence any message in `joyn`, including the
-reporting table, by using the argument `verbose = FALSE`).
+mainly due to evaluating several conditions, creating the reporting
+variable, and present a nice summary table at the end of the process.
+Also, keep in mind that `joyn` is intended to be informative, so it
+displays messages here and there to inform you about your join (you can
+silence any message in `joyn`, including the reporting table, by using
+the argument `verbose = FALSE`). This, of course, makes `joyn` a little
+slower than using regular `data.table` syntax. However, the loss of
+speed is not much and you’re gaining a lot of information. The main
+reason why `joyn` is a little slower is than pure `data.table` is that
+it will always perform a full join of data in the same way the `Stata`
+does it.
 
 As of now, the flexibility of `joyn` is limited to the basic joins, yet
 the most used and useful ones. If you want to learn more about different
@@ -75,25 +84,14 @@ kinds of joins available in `data.table` and how they relate to `dplyr`,
 I recommend you start with this [blog
 post](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-sets).
 
-Thus, it is not intended to be extremely fast, even though it uses the
-power of `data.table` indexing to perform the merges. The reason for
-`joyn` to be a little slower is than pure `data.table` is that it will
-always perform a full join of data in the same way the `Stata` does it.
-Yet, the user can select what data to keep (e.g., that left \[master\],
-right \[using\], inner join, or full join).
-
-`joyn` presents several important features. The most important is the
-additional variable, `report`, which summarizes the result of the join
-(you can change the name if you want). In addition, it allows you to
-specify the kind of join you want to perform (i.e, m:m, m:1, 1:m, or
-1:1). This ensures that your join does not produce unexpected outcome.
-
 ## Installation
 
-<!-- You can install the released version of joyn from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("joyn") -->
-<!-- ``` -->
+You can install the stable version of joyn from
+[CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("joyn")
+```
 
 The development version from [GitHub](https://github.com/) with:
 

@@ -23,7 +23,7 @@ y3 <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
 
 x3 <- data.table(id=c("c","b", "d"),
-                v=8:9,
+                v=8:10,
                 foo=c(4,2, 7))
 
 x4 = data.table(id1 = c(1, 1, 2, 3, 3),
@@ -38,5 +38,6 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 x   = c(16:20))
 
 usethis::use_data(x1, x2, x3, y1, y2, y3, x4, y4,
-                  overwrite = TRUE)
+                  overwrite = TRUE,
+                  internal = TRUE)
 

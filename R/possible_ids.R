@@ -9,7 +9,7 @@
 #' @param verbose logical: fi FALSE no message will be displayed. Default is
 #'   TRUE
 #'
-#' @return
+#' @return list with possible identifiers
 #' @export
 #'
 #' @examples
@@ -17,8 +17,7 @@
 possible_ids <- function(dt,
                          exclude = NULL,
                          include = NULL,
-                         verbose = TRUE
-                         ) {
+                         verbose = getOption("possible_ids.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Check inputs   ---------
@@ -33,12 +32,13 @@ possible_ids <- function(dt,
   }
 
 
-  if (verbose) {
-    if (is.null(exclude) && !is.null(include)) {
+  if (is.null(exclude) && !is.null(include)) {
+    if (verbose) {
       cli::cli_alert_warning("Since {.code exclude} is NULL, {.code include}
                              directive does not make sense. Ignored.",
                              wrap = TRUE)
     }
+    warning("inconsistent use of `include`")
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -46,47 +46,60 @@ possible_ids <- function(dt,
 
   vars    <- names(dt)
 
+  ### Exclude variable according to their type ---------
+  if (!is.null(include)) {
+
+    # Find position of variable to include
+    ii <- which(names(dt) %in% include)
+
+  } else {
+
+    ii <- NULL
+
+  }
+
+  ### Exclude variable by name ---------
   if (!is.null(exclude)) {
 
-      ### Exclude variable according to their type ---------
-    if (grepl("^_", exclude)) {
-      exclude <- match.arg(exclude, c("_character", "_numeric"))
+    if (any(grepl("^_", exclude))) {
 
-      # Find position of variable to include
-      if (!is.null(include)) {
+      type_ex <- exclude[grepl("^_", exclude)]
+      vars_ex <- exclude[!grepl("^_", exclude)]
 
-        ii <- which(names(dt) %in% include)
-
-      } else {
-
-        ii <- NULL
-
-      }
+      type_ex <- match.arg(type_ex, c("_character", "_numeric"))
 
       # find variable that meet criteria and exclude them, making sure to include
       # the variables of the user.
-      ex <- gsub("^_", "", exclude)
+      ex <- gsub("^_", "", type_ex)
       FUN <- paste0("is.", ex)
 
       n_cols <- unlist(lapply(dt, FUN))
       n_cols[ii] <- FALSE
 
+      # Exclude variables by name
+
+      if (length(vars_ex) > 0) {
+        ex         <-which(names(dt) %in% vars_ex)
+        n_cols[ex] <- TRUE
+      }
+
       vars <- names(dt)[!n_cols]
 
     } else {
-      ### Exclude variable by name ---------
       vars <- vars[!(vars %in% exclude)]
 
-      if (verbose) {
-        if (identical(vars, names(dt))) {
+      if (identical(vars, names(dt))) {
+        if (verbose) {
           cli::cli_alert_warning("Variable {.field {exclude}} is not available in data frame.
                                 Nothing is excluded.", wrap = TRUE)
         }
+
+        warning("inconsistenty use of `exclude`")
+
       }
 
     }
   }
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   ## check all names are unieuq --------
@@ -150,9 +163,14 @@ possible_ids <- function(dt,
 
     if (length(sv) > 0) {
 
-      if (length(sv) == 1) {
+      if (length(sv) == 1 && i > 1) {
 
         lv <- list(V1 = cm[, sv])
+
+      } else if (i == 1) {
+
+        ee <- as.data.frame(t(cm[, sv]))
+        lv <- lapply(ee, unique)
 
       } else {
 

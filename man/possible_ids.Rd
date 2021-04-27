@@ -4,7 +4,12 @@
 \alias{possible_ids}
 \title{Find possible unique identifies of data frame}
 \usage{
-possible_ids(dt, exclude = NULL, include = NULL, verbose = TRUE)
+possible_ids(
+  dt,
+  exclude = NULL,
+  include = NULL,
+  verbose = getOption("possible_ids.verbose")
+)
 }
 \arguments{
 \item{dt}{data frame}
@@ -20,7 +25,7 @@ to the group excluded in the \code{exclude}}
 TRUE}
 }
 \value{
-
+list with possible identifiers
 }
 \description{
 Find possible unique identifies of data frame
