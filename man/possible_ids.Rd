@@ -4,13 +4,10 @@
 \alias{possible_ids}
 \title{Find possible unique identifies of data frame}
 \usage{
-possible_ids(dt, verbose = TRUE, exclude = NULL, include = NULL)
+possible_ids(dt, exclude = NULL, include = NULL, verbose = TRUE)
 }
 \arguments{
 \item{dt}{data frame}
-
-\item{verbose}{logical: fi FALSE no message will be displayed. Default is
-TRUE}
 
 \item{exclude}{character: Exclude variables to be selected as identifiers. It
 could be either the name of the variables of one type of the variable
@@ -18,6 +15,9 @@ prefixed by "_". For instance, "_numeric" or "_character".}
 
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}
+
+\item{verbose}{logical: fi FALSE no message will be displayed. Default is
+TRUE}
 }
 \value{
 list with possible identifiers
