@@ -98,7 +98,7 @@
 <div id="the-basics" class="section level2">
 <h2 class="hasAnchor">
 <a href="#the-basics" class="anchor"></a>The basics</h2>
-<p>By attaching <code>joyn</code> you’re also attaching <code>data.table</code>. Notice too that <code><a href="../reference/merge.html">joyn::merge</a></code> masks <code><a href="https://rdrr.io/r/base/merge.html">base::merge</a></code>, which is ideal. Also, by loading <code>joyn</code> you have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1, y2, y3, and y4.</p>
+<p>Notice too that <code><a href="../reference/merge.html">joyn::merge</a></code> masks <code><a href="https://rdrr.io/r/base/merge.html">base::merge</a></code>, which is ideal. Also, by loading <code>joyn</code> you have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1, y2, y3, and y4.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn">joyn</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -106,6 +106,7 @@
 <span class="co">#&gt; The following object is masked from 'package:base':</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt;     merge</span>
+<span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com">data.table</a></span><span class="op">)</span>
 <span class="va">x1</span><span class="op">[</span><span class="op">]</span>
 <span class="co">#&gt;    id  t  x</span>
 <span class="co">#&gt; 1:  1  1 11</span>
@@ -123,7 +124,7 @@
 <div id="summary-table" class="section level3">
 <h3 class="hasAnchor">
 <a href="#summary-table" class="anchor"></a>Summary table</h3>
-<p>You can see in the examples below that by default <code>joyn</code> display a small summary table using the <a href="https://sfirke.github.io/janitor/articles/tabyls.html"><code>janitor::tabyl</code></a> function. If you don’t have the <code>janitor</code> package install, <code>joyn</code> will use <code><a href="https://rdrr.io/r/base/table.html">base::table</a></code>, which is not pretty.</p>
+<p>You can see in the examples below that by default <code>joyn</code> displays a small summary table.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Natural join. i.e., using as key all the variables that appear in both tables.</span>
 <span class="co"># without display the resulting table.</span>
@@ -145,7 +146,7 @@
 <span class="co">#&gt; 4:  3  2 14 NA      x</span>
 <span class="co">#&gt; 5:  4 NA NA 16      y</span>
 <span class="co">#&gt; 6: NA NA 15 NA      x</span></code></pre></div>
-<p>You can use the argument <code>reporttype</code> to the output of the reporting variable to numeric, similar to Stata’s output.</p>
+<p>You can use the reporting format of the <code>report</code> variables, by setting the argument <code>reporttype</code> to numeric, similar to Stata’s output.</p>
 <table class="table">
 <thead><tr class="header">
 <th align="left">code</th>
@@ -281,14 +282,14 @@
 <div id="match-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#match-type" class="anchor"></a>Match type</h2>
-<p>Match type refers to the correspondence that exists between the observations of the joining tables. Following Stata’s convention, we could have four different match types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) joins. The default is m:m, following general R’s practice, but its use is <strong>highly discouraged</strong>. We recommend you always specify the join type when joining tables to ensure the output is correct. Indeed, if you don’t care about match types or you don’t think it is necessary to use them for your particular needs, you might be fine without <code>joyn</code>.</p>
+<p>Match type refers to the correspondence that exists between the observations of the joining tables. Following Stata’s convention, we could have four different match types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) joins. The default is m:m, following general R’s practice, but its use is <strong>highly discouraged</strong>. We recommend you always specify the match type when joining tables to ensure the output is correct. Indeed, if you don’t care about match types or you don’t think it is necessary to use them for your particular needs, you might be fine without <code>joyn</code>.</p>
 <p>Using the same wording of the <a href="https://www.stata.com/manuals/dmerge.pdf">Stata manual</a></p>
 <ul>
 <li><p><strong>1:1</strong>: specifies a one-to-one match merge. The variables specified in <code>by</code> <em>uniquely identify</em> single observations in both table.</p></li>
 <li><p><strong>1:m and m:1</strong>: specify <em>one-to-many</em> and <em>many-to-one</em> match merges, respectively. This means that in of the tables the observations are uniquely identify by the variables in <code>by,</code> while in the other table many (two or more) of the observations are identify by the variables in <code>by</code>.</p></li>
 <li><p><strong>m:m</strong> refers to <em>many-to-many joins</em>. variables in <code>by</code> does not uniquely identify the observations in either table. Matching is performed by combining observations with equal values in <code>by</code>; within matching values, the first observation in the master (i.e. left or x) table is matched with the first matching observation in the using (i.e. right or y) table; the second, with the second; and so on. If there is an unequal number of observations within a group, then the last observation of the shorter group is used repeatedly to match with subsequent observations of the longer group.</p></li>
 </ul>
-<p>Suppose you think your data is uniquely identified by variable <code>id</code>, it is not . If you used <code>match_type = "1:1"</code> you will get and error warning your that something is not right.</p>
+<p>Suppose you think your data is uniquely identified by variable <code>id</code>, it is not . If you used <code>match_type = "1:1"</code> you will get and error, letting you know that something is not right.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># Merging correctly but getting error because something is not right in the data</span>
 <span class="fu"><a href="../reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x3</span>, <span class="va">y3</span>, by <span class="op">=</span> <span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span>
@@ -314,12 +315,12 @@
 <span class="co">#&gt; 2:  b  9   2 15  x &amp; y</span>
 <span class="co">#&gt; 3:  c  8   4 11  x &amp; y</span>
 <span class="co">#&gt; 4:  c  8   4 18  x &amp; y</span>
-<span class="co">#&gt; 5:  d  8   7 NA      x</span></code></pre></div>
+<span class="co">#&gt; 5:  d 10   7 NA      x</span></code></pre></div>
 </div>
 <div id="join-type" class="section level2">
 <h2 class="hasAnchor">
 <a href="#join-type" class="anchor"></a>Join type</h2>
-<p>Join type refers to observations that are kept after the join. To avoid confusion with argument <code>match_type</code>, I decided not to name this argument <code>join_type</code> but <code>keep</code>. At the end, you want to specify which observations you want to keep. This argument plays the role of mimicking the behavior of <code>dplyr</code>’s functions <code>left_join</code>, <code>right_join</code>, <code>inner_join</code>, and <code>full_join</code>, the default.</p>
+<p>Join type refers to observations that are kept after the join. To avoid confusion with argument <code>match_type</code>, I decided not to name this argument as <code>join_type</code> but as <code>keep</code>. At the end, you want to specify which observations you want to keep. This argument plays the role of mimicking the behavior of <code>dplyr</code>’s functions <code>left_join</code>, <code>right_join</code>, <code>inner_join</code>, and <code>full_join</code>, the default.</p>
 <ul>
 <li>
 <p><code>keep = "full"</code>, the default, keeps all the observations in x and y, regardless of whether they match or not.</p>
