@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.2</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -156,7 +156,7 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
 <span class="co">#&gt; → removing key variables `id` from yvars</span>
 <span class="co">#&gt; ℹ variable `country` in table y is ignored because arguments `update_NAs` and</span>
-<span class="co">#&gt;   `update_values` are FALSE.</span>
+<span class="co">#&gt; `update_values` are FALSE.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── JOYn Report ──</span>
 <span class="co">#&gt; </span>
@@ -204,7 +204,7 @@
 <div id="update-actual-values-in-table-x" class="section level3">
 <h3 class="hasAnchor">
 <a href="#update-actual-values-in-table-x" class="anchor"></a>4. Update actual values in table x</h3>
-<p>Update all the values–NAs and actual–in variable <em>country</em> of table x (i.e., left or master) with the actual values of the matching observations in <em>country</em> from table y (i.e, right or using). Also, notice the output of the table below: only the values that are different between <em>country</em> from x and <em>country</em> from y are updated. If, for the same matching observations, the values between the two <em>country</em> variables are the same, the reporting variable says “x &amp; y” rather than “value updated”, so you know. Finally, If there are NAs in <em>country</em> from <strong>table y</strong>, the actual values in x will be <strong>unchanged</strong>, and you get a “not updated” status in the reporting variable. Yet, there is a way to solve this, which explained below using argument <code>keep_y_in_x</code>.</p>
+<p>Update all the values–NAs and actual–in variable <em>country</em> of table x (i.e., left or master) with the actual values of the matching observations in <em>country</em> from table y (i.e, right or using). Also, notice the output of the table below: only the values that are different between <em>country</em> from x and <em>country</em> from y are updated. If, for the same matching observations, the values between the two <em>country</em> variables are the same, the reporting variable says “x &amp; y” rather than “value updated”, so you know that there is no update to make. Finally, If there are NAs in variable <em>country</em> from <strong>table y</strong>, the actual values in x will be <strong>unchanged</strong>, and you get a “not updated” status in the reporting variable. Yet, there is a way to solve this, which explained below using argument <code>keep_y_in_x</code>.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># notice that only the value that are </span>
 <span class="fu"><a href="../reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"id"</span>, update_values <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
@@ -237,7 +237,7 @@
 <code class="sourceCode R"><span class="fu"><a href="../reference/merge.html">merge</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">y</span>, by <span class="op">=</span> <span class="st">"id"</span>, keep_y_in_x <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="op">]</span>
 <span class="co">#&gt; → removing key variables `id` from yvars</span>
 <span class="co">#&gt; ℹ variable `country` in table y is ignored because arguments `update_NAs` and</span>
-<span class="co">#&gt;   `update_values` are FALSE.</span>
+<span class="co">#&gt; `update_values` are FALSE.</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; ── JOYn Report ──</span>
 <span class="co">#&gt; </span>
