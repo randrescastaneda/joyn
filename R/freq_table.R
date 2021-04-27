@@ -18,11 +18,19 @@ if (getRversion() >= '2.15.1')
 #' @export
 #'
 #' @examples
+#' data(x4)
 #' freq_table(x4, "id1")
 freq_table <- function(x,
                        byvar,
                        digits = 1,
                        na.rm  = TRUE) {
+
+  if (!(is.data.table(x))) {
+    x <- as.data.table(x)
+  } else {
+    x <- data.table::copy(x)
+  }
+
 
   # Frequencies and format
   d <- x[, .(n = .N), by = byvar
