@@ -220,7 +220,6 @@ merge <- function(x,
                             by {.code {by}}", wrap = TRUE)
       }
     }
-    # join_consistency(x, by, "x")
   }
 
   if (ty == "1") {
