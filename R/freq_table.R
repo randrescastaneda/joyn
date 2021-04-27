@@ -18,7 +18,6 @@ if (getRversion() >= '2.15.1')
 #' @export
 #'
 #' @examples
-#' data(x4)
 #' freq_table(x4, "id1")
 freq_table <- function(x,
                        byvar,

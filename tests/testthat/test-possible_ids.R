@@ -30,7 +30,7 @@ test_that("exclude and include", {
 })
 
 
-test_that("get when ducplicates", {
+test_that("get NULL when ducplicates", {
 
   expect_null(possible_ids(x1,
                            exclude = "_numeric",
