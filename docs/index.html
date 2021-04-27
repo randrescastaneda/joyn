@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">joyn</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.3</span>
       </span>
     </div>
 
@@ -89,48 +89,46 @@
 <a href="#joyn" class="anchor"></a>joyn</h1></div>
 <!-- badges: start -->
 
-<p>The goal of <code>joyn</code> is to provide the user with a set of tools to analyze the quality of merging (i.e., joining) data frames, so that it is a <strong>JOY</strong> to join tables with <code>joyn</code>. This is inspired in the command <code>merge</code> of the statistical software <code>Stata</code>.</p>
+<!-- badges: end -->
+<p>The goal of <code>joyn</code> is to provide the user with a set of tools to analyze the quality of merging (i.e., joining) data frames, so that it is a <strong>JOY</strong> to join tables with <code>joyn</code>. This is inspired on the command <code>merge</code> of the statistical software <code>Stata</code>.</p>
 <div id="motivation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#motivation" class="anchor"></a>Motivation</h2>
-<p>The objective <code>joyn</code> is to make your life easier when joining tables. As a former Stata user (I still work with Stata but not that much as I work with R now), I have missed the ability to understand the results of joining tables. With one single command, <code>merge</code>, Stata allows the user to perform any kind of equi-join. The reason for this is that, by default, Stata merges fully both tables into one and then it is up to the user to keep the observation she needs. Most importantly, Stata forces the user to know how her tables relate to each other. Some tables have a one-to-one (1:1 ) relation, but it is common to find one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) relations. Finally, Stata’s <code>merge</code> command returns by default a variable with useful information about the table’s join. So the following features are the value added of <code>joyn</code>:</p>
+<p>The objective <code>joyn</code> is to make your life easier when joining tables. As a former Stata user (I still work with Stata but not that much as I work with R now), I had missed, until now, the ability to assess the resulting data frame when joining tables in R. With one single command, <code>merge</code>, Stata allows the user to perform any kind of equi-join. The reason for this is that, by default, Stata merges fully both tables into one and then it is up to the user to keep the observation she needs. Most importantly, Stata forces the user to know how her joining tables relate to each other. Most tables have a one-to-one (1:1 ) relation, but it is common to find one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) relations. Finally, Stata’s <code>merge</code> command returns by default a variable with useful information about the table’s join. So the following features are the value added of <code>joyn</code>:</p>
 <ol>
-<li><p>Perform a full join by default (i.e., final table has all the observations of both original tables). Yet, the user can select “left”, “right” or “inner” joins using the argument <code>keep</code>.</p></li>
+<li><p><code>joyn</code> performs a full join by default (i.e., resulting table has all the observations from both original, joining tables). Yet, the user can select “left”, “right” or “inner” joins using the argument <code>keep</code>.</p></li>
 <li>
-<p>In the same vain, <code>joyn</code> merges all the columns in both tables. To caveats are worth mentioning.</p>
+<p>In the same vain, <code>joyn</code> keeps all the columns form both joining tables. Two caveats are worth mentioning.</p>
 <ol>
 <li><p>If both tables have variables with the same name, by default <code>joyn</code> does not bring those variables from the second (i.e, right, using) table into the first (i.e., left, master) table. Yet, you can do one of two things. First, you can use arguments <code>update_values</code> or <code>updateNA</code> to update the value of those variable in the first table with the ones in the second table. Or, you can use argument <code>keep_y_in_x = TRUE</code> to keep both variables with a different name.</p></li>
 <li><p>You can use the argument <code>yvars</code> to select which variables you want to bring from the second table into the first one.</p></li>
 </ol>
 </li>
-<li><p>Allow the user to perform one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) joins. The default is m:m, following general R’s practice, but its use is highly discouraged.</p></li>
-<li><p>Return a reporting variable with the status of the join.</p></li>
+<li><p><code>joyn</code> allows the user to perform one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) joins. The default is m:m, following general R’s practice, but its is highly discouraged. Since you want to use <code>joyn</code>, I recommend you always specify the right relationship between your joining tables.</p></li>
+<li><p><code>joyn</code> returns a reporting variable with the status of the join.</p></li>
 </ol>
 </div>
 <div id="regarding-speed-and-flexibility" class="section level2">
 <h2 class="hasAnchor">
 <a href="#regarding-speed-and-flexibility" class="anchor"></a>Regarding speed and flexibility</h2>
-<p>Notice the <code>joyn</code> is not intended to be a super fast joining tool. By construction it does a lot of things that will make it slower that other tools out there. However, <code>joyn</code> is basically a wrapper around <code>data.table</code>’s indexed joining tools. So, the lost of speed of <code>joyn</code> is mainly due to asses some conditions, create the reporting variable, and (what really takes the most time) present a nice summary table when <code>joyn</code> concludes. Also, keep in mind that <code>joyn</code> is intended to be informative, so it displays messages here and there to inform you about your join (you can silence any message in <code>joyn</code>, including the reporting table, by using the argument <code>verbose = FALSE</code>).</p>
+<p>Notice the <code>joyn</code> is not intended to be a super fast joining tool. By construction, it does a lot of things that will make it slower than other tools out there. However, <code>joyn</code> is basically a wrapper around <code>data.table</code>’s indexed joining tools. So, the lost of speed of <code>joyn</code> is mainly due to evaluating several conditions, creating the reporting variable, and present a nice summary table at the end of the process. Also, keep in mind that <code>joyn</code> is intended to be informative, so it displays messages here and there to inform you about your join (you can silence any message in <code>joyn</code>, including the reporting table, by using the argument <code>verbose = FALSE</code>). This, of course, makes <code>joyn</code> a little slower than using regular <code>data.table</code> syntax. However, the loss of speed is not much and you’re gaining a lot of information. The main reason why <code>joyn</code> is a little slower is than pure <code>data.table</code> is that it will always perform a full join of data in the same way the <code>Stata</code> does it.</p>
 <p>As of now, the flexibility of <code>joyn</code> is limited to the basic joins, yet the most used and useful ones. If you want to learn more about different kinds of joins available in <code>data.table</code> and how they relate to <code>dplyr</code>, I recommend you start with this <a href="https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-sets">blog post</a>.</p>
-<p>Thus, it is not intended to be extremely fast, even though it uses the power of <code>data.table</code> indexing to perform the merges. The reason for <code>joyn</code> to be a little slower is than pure <code>data.table</code> is that it will always perform a full join of data in the same way the <code>Stata</code> does it. Yet, the user can select what data to keep (e.g., that left <span class="math display"><em>m</em><em>a</em><em>s</em><em>t</em><em>e</em><em>r</em></span>, right <span class="math display"><em>u</em><em>s</em><em>i</em><em>n</em><em>g</em></span>, inner join, or full join).</p>
-<p><code>joyn</code> presents several important features. The most important is the additional variable, <code>report</code>, which summarizes the result of the join (you can change the name if you want). In addition, it allows you to specify the kind of join you want to perform (i.e, m:m, m:1, 1:m, or 1:1). This ensures that your join does not produce unexpected outcome.</p>
 </div>
 <div id="installation" class="section level2">
 <h2 class="hasAnchor">
 <a href="#installation" class="anchor"></a>Installation</h2>
-<!-- You can install the released version of joyn from [CRAN](https://CRAN.R-project.org) with: -->
-<!-- ``` r -->
-<!-- install.packages("joyn") -->
-<!-- ``` -->
-<p>The development version from <a href="https://github.com/">GitHub</a> with:</p>
+<p>You can install the stable version of joyn from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html">install.packages</a></span><span class="op">(</span><span class="st">"joyn"</span><span class="op">)</span></code></pre></div>
+<p>The development version from <a href="https://github.com/">GitHub</a> with:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org//reference/remote-reexports.html">install_github</a></span><span class="op">(</span><span class="st">"randrescastaneda/joyn"</span><span class="op">)</span></code></pre></div>
 </div>
 <div id="example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#example" class="anchor"></a>Example</h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn">joyn</a></span><span class="op">)</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Attaching package: 'joyn'</span>
@@ -346,8 +344,8 @@
 <ul class="list-unstyled">
 <li><a href="https://github.com/randrescastaneda/joyn/actions"><img src="https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://cran.r-project.org/package=joyn"><img src="https://www.r-pkg.org/badges/version/joyn?color=orange"></a></li>
-<li><a href="https://github.com/randrescastaneda/joyn"><img src="https://img.shields.io/badge/devel%20version-0.1.0.9003-blue.svg"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-green.svg"></a></li>
+<li><a href="https://github.com/randrescastaneda/joyn"><img src="https://img.shields.io/badge/devel%20version-0.1.2.9004-blue.svg"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing"><img src="https://img.shields.io/badge/lifecycle-maturing-green.svg"></a></li>
 <li><a href="https://codecov.io/gh/randrescastaneda/joyn"><img src="https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H" alt="codecov"></a></li>
 </ul>
 </div>

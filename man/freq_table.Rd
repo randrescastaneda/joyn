@@ -9,7 +9,7 @@ freq_table(x, byvar, digits = 1, na.rm = TRUE)
 \arguments{
 \item{x}{data frame}
 
-\item{byvar}{character: name of variable to tabulate. Use STandard evaluation.}
+\item{byvar}{character: name of variable to tabulate. Use Standard evaluation.}
 
 \item{digits}{numeric: number of decimal places to display. Default is 1.}
 
@@ -19,8 +19,7 @@ freq_table(x, byvar, digits = 1, na.rm = TRUE)
 data.table with frequencies.
 }
 \description{
-tabulate one variable in data frame to substitute base::table and
-janitor::tabyl using data.table
+tabulate one variable frequencies
 }
 \examples{
 freq_table(x4, "id1")

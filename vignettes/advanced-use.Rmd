@@ -11,7 +11,7 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment  = "#>", 
-  error    = TRUE, 
+  # error    = TRUE, 
   purl     = FALSE
 )
 ```
@@ -77,10 +77,11 @@ from table y (i.e, right or using). Also, notice the output of the table below:
 only the values that are different between *country* from x and *country* from y
 are updated. If, for the same matching observations, the values between the two
 *country* variables are the same, the reporting variable says "x & y" rather
-than "value updated", so you know. Finally, If there are NAs in *country* from
-**table y**, the actual values in x will be **unchanged**, and you get a "not
-updated" status in the reporting variable. Yet, there is a way to solve this,
-which explained below using argument `keep_y_in_x`.
+than "value updated", so you know that there is no update to make. Finally, If
+there are NAs in variable *country* from **table y**, the actual values in x
+will be **unchanged**, and you get a "not updated" status in the reporting
+variable. Yet, there is a way to solve this, which explained below using
+argument `keep_y_in_x`.
 
 ```{r}
 # notice that only the value that are 

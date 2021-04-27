@@ -11,30 +11,28 @@ vignette: >
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment  = "#>", 
-  error    = TRUE, 
+  # error    = TRUE, 
   purl     = FALSE
 )
 ```
 
 ## The basics
 
-By attaching `joyn` you're also attaching `data.table`. Notice too that
-`joyn::merge` masks `base::merge`, which is ideal. Also, by loading `joyn` you
-have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1, y2, y3, and y4.
+Notice too that `joyn::merge` masks `base::merge`, which is ideal. Also, by
+loading `joyn` you have a few tables lazy-loaded in memory, x1, x2, x3, x4, y1,
+y2, y3, and y4.
 
 ```{r setup}
 library(joyn)
+library(data.table)
 x1[]
 x2[]
 ```
 
 ### Summary table
 
-You can see in the examples below that by default `joyn` display a small summary
-table using the
-[`janitor::tabyl`](https://sfirke.github.io/janitor/articles/tabyls.html)
-function. If you don't have the `janitor` package install, `joyn` will use
-`base::table`, which is not pretty.
+You can see in the examples below that by default `joyn` displays a small
+summary table.
 
 ```{r}
 # Natural join. i.e., using as key all the variables that appear in both tables.
@@ -42,8 +40,8 @@ function. If you don't have the `janitor` package install, `joyn` will use
 merge(x1, y1)
 ```
 
-You can use the argument `reporttype` to the output of the reporting variable to
-numeric, similar to Stata's output.
+You can use the reporting format of the `report` variables, by setting the
+argument `reporttype` to numeric, similar to Stata's output.
 
 ```{r, echo=FALSE}
 knitr::kable(
@@ -89,7 +87,7 @@ Match type refers to the correspondence that exists between the observations of
 the joining tables. Following Stata's convention, we could have four different
 match types, one-to-one (1:1) , one-to-many (1:m), many-to-one (m:1), and
 many-to-many (m:m) joins. The default is m:m, following general R's practice,
-but its use is **highly discouraged**. We recommend you always specify the join
+but its use is **highly discouraged**. We recommend you always specify the match
 type when joining tables to ensure the output is correct. Indeed, if you don't
 care about match types or you don't think it is necessary to use them for your
 particular needs, you might be fine without `joyn`.
@@ -116,10 +114,10 @@ manual](https://www.stata.com/manuals/dmerge.pdf)
     group.
 
 Suppose you think your data is uniquely identified by variable `id`, it is not .
-If you used `match_type = "1:1"` you will get and error warning your that
+If you used `match_type = "1:1"` you will get and error, letting you know that
 something is not right.
 
-```{r join-type}
+```{r join-type, error=TRUE}
 # Merging correctly but getting error because something is not right in the data
 merge(x3, y3, by = "id", match_type = "1:1")
 
@@ -130,9 +128,9 @@ merge(x3, y3, by = "id")
 ## Join type
 
 Join type refers to observations that are kept after the join. To avoid
-confusion with argument `match_type`, I decided not to name this argument
-`join_type` but `keep`. At the end, you want to specify which observations you
-want to keep. This argument plays the role of mimicking the behavior of
+confusion with argument `match_type`, I decided not to name this argument as
+`join_type` but as `keep`. At the end, you want to specify which observations
+you want to keep. This argument plays the role of mimicking the behavior of
 `dplyr`'s functions `left_join`, `right_join`, `inner_join`, and `full_join`,
 the default.
 

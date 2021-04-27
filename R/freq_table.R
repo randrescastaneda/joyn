@@ -6,11 +6,10 @@ if (getRversion() >= '2.15.1')
 
 #' tabulate simple frequencies
 #'
-#' tabulate one variable in data frame to substitute base::table and
-#' janitor::tabyl using data.table
+#' tabulate one variable frequencies
 #'
 #' @param x  data frame
-#' @param byvar character: name of variable to tabulate. Use STandard evaluation.
+#' @param byvar character: name of variable to tabulate. Use Standard evaluation.
 #' @param digits numeric: number of decimal places to display. Default is 1.
 #' @param na.rm logical: if TRUE remove NAs from calculations. Default is TRUE
 #'

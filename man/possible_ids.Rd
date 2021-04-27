@@ -21,7 +21,7 @@ prefixed by "_". For instance, "_numeric" or "_character".}
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}
 
-\item{verbose}{logical: fi FALSE no message will be displayed. Default is
+\item{verbose}{logical: If FALSE no message will be displayed. Default is
 TRUE}
 }
 \value{
