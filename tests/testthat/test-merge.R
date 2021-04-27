@@ -1,5 +1,5 @@
 library(data.table)
-options(joyn.verbose = FALSE)
+# options(joyn.verbose = FALSE)
 
 test_that("slect by vars when no specified", {
   expect_equal(merge(x1, y1),
