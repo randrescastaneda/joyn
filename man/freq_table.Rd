@@ -23,5 +23,6 @@ tabulate one variable in data frame to substitute base::table and
 janitor::tabyl using data.table
 }
 \examples{
+data(x4)
 freq_table(x4, "id1")
 }
