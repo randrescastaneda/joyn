@@ -61,28 +61,41 @@ possible_ids <- function(dt,
   ### Exclude variable by name ---------
   if (!is.null(exclude)) {
 
-    if (grepl("^_", exclude)) {
+    if (any(grepl("^_", exclude))) {
 
-      exclude <- match.arg(exclude, c("_character", "_numeric"))
+      type_ex <- exclude[grepl("^_", exclude)]
+      vars_ex <- exclude[!grepl("^_", exclude)]
+
+      type_ex <- match.arg(type_ex, c("_character", "_numeric"))
 
       # find variable that meet criteria and exclude them, making sure to include
       # the variables of the user.
-      ex <- gsub("^_", "", exclude)
+      ex <- gsub("^_", "", type_ex)
       FUN <- paste0("is.", ex)
 
       n_cols <- unlist(lapply(dt, FUN))
       n_cols[ii] <- FALSE
+
+      # Exclude variables by name
+
+      if (length(vars_ex) > 0) {
+        ex         <-which(names(dt) %in% vars_ex)
+        n_cols[ex] <- TRUE
+      }
 
       vars <- names(dt)[!n_cols]
 
     } else {
       vars <- vars[!(vars %in% exclude)]
 
-      if (verbose) {
-       if (identical(vars, names(dt))) {
-         cli::cli_alert_warning("Variable {.field {exclude}} is not available in data frame.
+      if (identical(vars, names(dt))) {
+        if (verbose) {
+          cli::cli_alert_warning("Variable {.field {exclude}} is not available in data frame.
                                 Nothing is excluded.", wrap = TRUE)
-       }
+        }
+
+        warning("inconsistenty use of `exclude`")
+
       }
 
     }
