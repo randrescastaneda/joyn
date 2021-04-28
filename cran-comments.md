@@ -1,4 +1,18 @@
-## New version
+## Resubmission
+This is a resubmission. In this version I have:
+
+* removed 'LazyData' from DESCRIPTION
+
+* The note reads: 
+  Possibly mis-spelled words in DESCRIPTION:
+  
+    Stata (11:29)
+    dplyr (10:39)
+
+Explanation: I need to mention both Stata and the 
+R package dplyr to make clear what my package does.
+
+## version 0.1.3
 * changes and additions are available in NEWS.md
 
 
