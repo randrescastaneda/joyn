@@ -514,4 +514,9 @@ test_that("no matching obs", {
 
 })
 
+test_that("convert to data.table", {
+  xx1 <- as.data.frame(x1)
+  expect_equal(merge(xx1, y1), merge(x1, y1))
+})
+
 
