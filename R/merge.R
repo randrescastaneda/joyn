@@ -50,10 +50,13 @@ if (getRversion() >= '2.15.1')
 #'   table.
 #' @param update_NAs logical: If TRUE, it will update NA values of all variables
 #'   in x with actual values of variables in y that have the same name as the
-#'   ones in x. If FALSE, NA values won't be updated.
+#'   ones in x. If FALSE, NA values won't be updated, even if `update_values` is
+#'   `TRUE`
 #' @param update_values logical: If TRUE, it will update all values of variables
 #'   in x with the actual of variables in y with the same name as the ones in x.
-#'   **NAs from y won't be used to update actual values in x**.
+#'   **NAs from y won't be used to update actual values in x**. Yet, by default,
+#'   NAs in x will be updated with values in y. To avoid this, make sure to set
+#'   `update_NAs = FALSE`
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
 #' @param keep_y_in_x logical: If TRUE, it will keep the original variable from
@@ -62,6 +65,9 @@ if (getRversion() >= '2.15.1')
 #'   the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
 #'   TRUE.
+#' @param allow.cartesian logical: Check documentation in official [web
+#'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html).
+#'   Default is `FALSE`
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -123,19 +129,20 @@ if (getRversion() >= '2.15.1')
 #'
 merge <- function(x,
                   y,
-                  by            = intersect(names(x), names(y)),
-                  yvars         = TRUE,
-                  match_type    = c("m:m", "m:1", "1:m", "1:1"),
-                  keep          = c("full", "left", "master",
+                  by              = intersect(names(x), names(y)),
+                  yvars           = TRUE,
+                  match_type      = c("m:m", "m:1", "1:m", "1:1"),
+                  keep            = c("full", "left", "master",
                                     "right", "using", "inner"),
-                  update_values = FALSE,
-                  update_NAs    = update_values,
-                  reportvar     = "report",
-                  reporttype    = c("character", "numeric"),
-                  roll          = NULL,
-                  keep_y_in_x   = FALSE,
-                  sort          = TRUE,
-                  verbose       = getOption("joyn.verbose")) {
+                  update_values   = FALSE,
+                  update_NAs      = update_values,
+                  reportvar       = "report",
+                  reporttype      = c("character", "numeric"),
+                  roll            = NULL,
+                  keep_y_in_x     = FALSE,
+                  sort            = TRUE,
+                  verbose         = getOption("joyn.verbose"),
+                  allow.cartesian = FALSE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
@@ -380,7 +387,7 @@ merge <- function(x,
                                       all.x           = TRUE,
                                       all.y           = TRUE,
                                       sort            = FALSE,
-                                      allow.cartesian = TRUE)
+                                      allow.cartesian = allow.cartesian)
 
   }
 
@@ -427,6 +434,21 @@ merge <- function(x,
   # report variable
   x[, (reportvar) :=  x_report + y_report]
 
+  ## rows to keep -----
+  if (keep  %in% c("master", "left") ) {
+
+    x <- x[get(reportvar)  != 2]
+
+  } else if (keep  %in% c("using", "right") ) {
+
+    x <- x[get(reportvar)  != 1]
+
+  } else if (keep  == "inner") {
+    x <- x[get(reportvar)  >= 3]
+  }
+
+
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -440,7 +462,7 @@ merge <- function(x,
 
     }
 
-    if (isTRUE(update_NAs) && isFALSE(update_values)) {
+    if (isTRUE(update_NAs)) {
 
       for (i in seq_along(upvars)) {
         update_NAs(x, upvars[i])
@@ -462,19 +484,6 @@ merge <- function(x,
   x[,
     c("x_report", "y_report") := NULL
   ]
-
-  ## rows to keep -----
-  if (keep  %in% c("master", "left") ) {
-
-    x <- x[get(reportvar)  != 2]
-
-  } else if (keep  %in% c("using", "right") ) {
-
-    x <- x[get(reportvar)  != 1]
-
-  } else if (keep  == "inner") {
-    x <- x[get(reportvar)  >= 3]
-  }
 
 
   ## Rename by variables -----
