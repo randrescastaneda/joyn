@@ -62,6 +62,9 @@ if (getRversion() >= '2.15.1')
 #'   the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
 #'   TRUE.
+#' @param allow.cartesian logical: Check documentation in official [web
+#'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html).
+#'   Default is `FALSE`
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -123,19 +126,20 @@ if (getRversion() >= '2.15.1')
 #'
 merge <- function(x,
                   y,
-                  by            = intersect(names(x), names(y)),
-                  yvars         = TRUE,
-                  match_type    = c("m:m", "m:1", "1:m", "1:1"),
-                  keep          = c("full", "left", "master",
+                  by              = intersect(names(x), names(y)),
+                  yvars           = TRUE,
+                  match_type      = c("m:m", "m:1", "1:m", "1:1"),
+                  keep            = c("full", "left", "master",
                                     "right", "using", "inner"),
-                  update_values = FALSE,
-                  update_NAs    = update_values,
-                  reportvar     = "report",
-                  reporttype    = c("character", "numeric"),
-                  roll          = NULL,
-                  keep_y_in_x   = FALSE,
-                  sort          = TRUE,
-                  verbose       = getOption("joyn.verbose")) {
+                  update_values   = FALSE,
+                  update_NAs      = update_values,
+                  reportvar       = "report",
+                  reporttype      = c("character", "numeric"),
+                  roll            = NULL,
+                  keep_y_in_x     = FALSE,
+                  sort            = TRUE,
+                  verbose         = getOption("joyn.verbose"),
+                  allow.cartesian = FALSE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
@@ -380,7 +384,7 @@ merge <- function(x,
                                       all.x           = TRUE,
                                       all.y           = TRUE,
                                       sort            = FALSE,
-                                      allow.cartesian = TRUE)
+                                      allow.cartesian = allow.cartesian)
 
   }
 
@@ -440,7 +444,7 @@ merge <- function(x,
 
     }
 
-    if (isTRUE(update_NAs) && isFALSE(update_values)) {
+    if (isTRUE(update_NAs)) {
 
       for (i in seq_along(upvars)) {
         update_NAs(x, upvars[i])

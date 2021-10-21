@@ -25,7 +25,7 @@ update_values <- function(dt, var) {
     is.na(get(y.var)) & report != 6,
     report := 6
   ][
-    (get(var) != get(y.var) | is.na(get(var))),
+    (get(var) != get(y.var)),
     (var) := get(y.var)
   ]
 
