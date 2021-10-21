@@ -50,10 +50,13 @@ if (getRversion() >= '2.15.1')
 #'   table.
 #' @param update_NAs logical: If TRUE, it will update NA values of all variables
 #'   in x with actual values of variables in y that have the same name as the
-#'   ones in x. If FALSE, NA values won't be updated.
+#'   ones in x. If FALSE, NA values won't be updated, even if `update_values` is
+#'   `TRUE`
 #' @param update_values logical: If TRUE, it will update all values of variables
 #'   in x with the actual of variables in y with the same name as the ones in x.
-#'   **NAs from y won't be used to update actual values in x**.
+#'   **NAs from y won't be used to update actual values in x**. Yet, by default,
+#'   NAs in x will be updated with values in y. To avoid this, make sure to set
+#'   `update_NAs = FALSE`
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
 #' @param keep_y_in_x logical: If TRUE, it will keep the original variable from

@@ -1,4 +1,8 @@
 # joyn (development version)
+* update_NAs now could be FALSE even if update_values is TRUE
+
+* Select rows-to-keep before transformation of updated values and NAs to avoid keeping rows from y that did not match in x but whose values got updated because `update_values = TRUE`
+
 
 # joyn 0.1.3
 * Convert external data to external data.

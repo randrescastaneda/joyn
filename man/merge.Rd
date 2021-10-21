@@ -18,7 +18,8 @@ merge(
   roll = NULL,
   keep_y_in_x = FALSE,
   sort = TRUE,
-  verbose = getOption("joyn.verbose")
+  verbose = getOption("joyn.verbose"),
+  allow.cartesian = FALSE
 )
 }
 \arguments{
@@ -60,11 +61,14 @@ matched both tables.}
 
 \item{update_values}{logical: If TRUE, it will update all values of variables
 in x with the actual of variables in y with the same name as the ones in x.
-\strong{NAs from y won't be used to update actual values in x}.}
+\strong{NAs from y won't be used to update actual values in x}. Yet, by default,
+NAs in x will be updated with values in y. To avoid this, make sure to set
+\code{update_NAs = FALSE}}
 
 \item{update_NAs}{logical: If TRUE, it will update NA values of all variables
 in x with actual values of variables in y that have the same name as the
-ones in x. If FALSE, NA values won't be updated.}
+ones in x. If FALSE, NA values won't be updated, even if \code{update_values} is
+\code{TRUE}}
 
 \item{reportvar}{character: Name of reporting variable. Default if "report".
 This is the same as variable "_merge" in Stata after performing a merge. If
@@ -88,6 +92,9 @@ TRUE.}
 
 \item{verbose}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
+
+\item{allow.cartesian}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html}{web site}.
+Default is \code{FALSE}}
 }
 \value{
 a data.table joining x and y.
