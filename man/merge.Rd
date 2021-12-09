@@ -19,7 +19,7 @@ merge(
   keep_y_in_x = FALSE,
   sort = TRUE,
   verbose = getOption("joyn.verbose"),
-  allow.cartesian = FALSE
+  allow.cartesian = NULL
 )
 }
 \arguments{
@@ -94,7 +94,9 @@ TRUE.}
 option). Default is TRUE.}
 
 \item{allow.cartesian}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html}{web site}.
-Default is \code{FALSE}}
+Default is \code{NULL}, which implies that if the join is "1:1" it will be
+\code{FALSE}, but if the join has any "m" on it, it will be converted to \code{TRUE}.
+By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
 }
 \value{
 a data.table joining x and y.

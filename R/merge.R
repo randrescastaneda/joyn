@@ -67,7 +67,9 @@ if (getRversion() >= '2.15.1')
 #'   TRUE.
 #' @param allow.cartesian logical: Check documentation in official [web
 #'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html).
-#'   Default is `FALSE`
+#'   Default is `NULL`, which implies that if the join is "1:1" it will be
+#'   `FALSE`, but if the join has any "m" on it, it will be converted to `TRUE`.
+#'   By specifying `TRUE` of `FALSE` you force the behavior of the join.
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -142,7 +144,7 @@ merge <- function(x,
                   keep_y_in_x     = FALSE,
                   sort            = TRUE,
                   verbose         = getOption("joyn.verbose"),
-                  allow.cartesian = FALSE) {
+                  allow.cartesian = NULL) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
@@ -223,7 +225,7 @@ merge <- function(x,
       match_type_error <- TRUE
       if (verbose) {
 
-        cli::cli_alert("table {.field x} is not uniquely identified
+        cli::cli_alert_danger("table {.field x} is not uniquely identified
                             by {.code {by}}", wrap = TRUE)
       }
     }
@@ -239,7 +241,7 @@ merge <- function(x,
 
       if (verbose) {
 
-      cli::cli_alert("table {.field y} is not uniquely identified
+      cli::cli_alert_danger("table {.field y} is not uniquely identified
                             by {.code {by}}", wrap = TRUE)
       }
     }
@@ -248,15 +250,15 @@ merge <- function(x,
 
   if(match_type_error) {
 
-      msg     <- "match type inconsistency"
-      hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
-      to see where the problem is"
-      rlang::abort(c(
-        msg,
-        i = hint
+    msg     <- "match type inconsistency"
+    hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
+    to see where the problem is"
+    rlang::abort(c(
+      msg,
+      i = hint
       ),
-      class = "joyn_error"
-      )
+     class = "joyn_error"
+     )
 
     }
 
@@ -359,33 +361,52 @@ merge <- function(x,
   i.yvars <- paste0("i.", yvars_w)
 
 
-  if (match_type %in% c("1:1", "m:1")) {
-
-    x[y,
-      on = by,
-      (yvars_w) := mget(i.yvars)]
-
-    # complement
-    if (keep %in% c("full", "both", "right", "using")) {
-      ty <- y[!x,
-              on   = by,
-              mult = "all"
-             ][, .SD,
-               .SDcols = c(by, yvars_w)
-              ]
-
-      x <- rbindlist(l         = list(x, ty),
-                     use.names = TRUE,
-                     fill      = TRUE)
+  # cartesian merge
+  if (is.null(allow.cartesian)) {
+    if (tx == "m" || ty == "m") {
+      allow.cartesian <- TRUE
+    } else {
+      allow.cartesian <- FALSE
     }
+  }
+
+  # keep relevant variables in y
+
+  y <- y[,
+         mget(c(by, yvars_w))]
+
+
+  if (keep == "inner") {
+
+    x <- data.table::merge.data.table(x               = x,
+                                      y               = y,
+                                      by              = by,
+                                      sort            = FALSE,
+                                      allow.cartesian = allow.cartesian)
+
+  } else if (keep %in% c("right", "using")) {
+
+    x <- data.table::merge.data.table(x               = x,
+                                      y               = y,
+                                      by              = by,
+                                      all.y           = TRUE,
+                                      sort            = FALSE,
+                                      allow.cartesian = allow.cartesian)
+
+  } else if (keep %in% c("left", "master")) {
+    x <- data.table::merge.data.table(x               = x,
+                                      y               = y,
+                                      by              = by,
+                                      all.x           = TRUE,
+                                      sort            = FALSE,
+                                      allow.cartesian = allow.cartesian)
 
   } else  {
 
     x <- data.table::merge.data.table(x               = x,
                                       y               = y,
                                       by              = by,
-                                      all.x           = TRUE,
-                                      all.y           = TRUE,
+                                      all             = TRUE,
                                       sort            = FALSE,
                                       allow.cartesian = allow.cartesian)
 
