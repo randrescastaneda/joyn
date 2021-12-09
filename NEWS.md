@@ -1,7 +1,11 @@
-# joyn (development version)
+# joyn 0.1.4
 * update_NAs now could be FALSE even if update_values is TRUE
 
 * Select rows-to-keep before transformation of updated values and NAs to avoid keeping rows from y that did not match in x but whose values got updated because `update_values = TRUE`
+
+* Solve issues #1 and #19
+
+* Change to data.table::merge.data.table syntax in all joins. It makes it easier to work with and consistent accross different join types. 
 
 
 # joyn 0.1.3
