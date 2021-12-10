@@ -1,23 +1,9 @@
-## Resubmission
-This is a resubmission. In this version I have:
-
-* removed 'LazyData' from DESCRIPTION
-
-* The note reads: 
-  Possibly mis-spelled words in DESCRIPTION:
-  
-    Stata (11:29)
-    dplyr (10:39)
-
-Explanation: I need to mention both Stata and the 
-R package dplyr to make clear what my package does.
-
-## version 0.1.3
+# version 0.1.4
 * changes and additions are available in NEWS.md
 
 
 ## Test environments
-* Local Windows 10, R 4.0.5
+* Local Windows 10, R 4.1.1
 * Github Actions checked for windows-latest (release), macOS-latest (release), ubuntu-20.04 (release), ubuntu-20.04 (devel)
 0 errors | 0 warning | 0 notes 
 
@@ -35,14 +21,16 @@ checking data for ASCII and uncompressed saves ... OK
 0 errors √ | 0 warnings √ | 1 note x
 
 The note reads: 
-* 'LazyData' is specified without a 'data' directory
+Found the following (possibly) invalid URLs:
+    URL: https://rdatatable.gitlab.io/data.table/reference/merge.html
+      From: man/merge.Rd
+      Status: Error
+      Message: libcurl error code 35:
+        	schannel: next InitializeSecurityContext failed: SEC_E_ILLEGAL_MESSAGE (0x80090326) - This error usually occurs when a fatal SSL/TLS alert is received (e.g. handshake failed).
 
-Explanation: I modified the status of data in previous version from external to internal.
-However, I created rd files for the data in order to make it available for the 
-examples and the vignettes. 
+Explanation: I am referring to the original documentation of data.table. I read
+online that it could be ignored. Right?
 
 * When run in Github Actions, I got, 
 0 errors | 0 warning | 0 notes 
 
-* Also, I got the following note. Error: Bioconductor version '3.13' requires R version '4.1'; R version is too new; see https://bioconductor.org/install
-  Should I downgrade my version of R?

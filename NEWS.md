@@ -5,7 +5,9 @@
 
 * Solve issues #1 and #19
 
-* Change to data.table::merge.data.table syntax in all joins. It makes it easier to work with and consistent accross different join types. 
+* Change to data.table::merge.data.table syntax in all joins. It makes it easier to work with and consistent across different join types. 
+
+* Remove previous lazy-loaded data.
 
 
 # joyn 0.1.3

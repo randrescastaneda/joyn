@@ -41,3 +41,4 @@ usethis::use_data(x1, x2, x3, y1, y2, y3, x4, y4,
                   overwrite = TRUE,
                   internal = TRUE)
 
+

@@ -31,13 +31,13 @@ navbar:
       href: https://github.com/randrescastaneda/joyn/
 
 reference:
-- title: Main
+- title: "Main function"
   desc: >
     Since the objective of joyn is to join tables with joy, there is only one
     main function in this package
   contents:
   - '`merge`'
-- title: Auxiliary
+- title: "Auxiliary functions"
   contents:
   - '`is_id`'
   - '`freq_table`'
