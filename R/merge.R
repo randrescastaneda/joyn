@@ -66,7 +66,7 @@ if (getRversion() >= '2.15.1')
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
 #'   TRUE.
 #' @param allow.cartesian logical: Check documentation in official [web
-#'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html).
+#'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html/).
 #'   Default is `NULL`, which implies that if the join is "1:1" it will be
 #'   `FALSE`, but if the join has any "m" on it, it will be converted to `TRUE`.
 #'   By specifying `TRUE` of `FALSE` you force the behavior of the join.

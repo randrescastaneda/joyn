@@ -93,7 +93,7 @@ TRUE.}
 \item{verbose}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
 
-\item{allow.cartesian}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html}{web site}.
+\item{allow.cartesian}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html/}{web site}.
 Default is \code{NULL}, which implies that if the join is "1:1" it will be
 \code{FALSE}, but if the join has any "m" on it, it will be converted to \code{TRUE}.
 By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
