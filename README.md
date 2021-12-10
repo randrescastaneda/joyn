@@ -3,11 +3,14 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg)](https://github.com/randrescastaneda/joyn/actions)
-[![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
+[![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg/)](https://github.com/randrescastaneda/joyn/actions/)
+[![](https://www.r-pkg.org/badges/version/joyn?color=orange/)](https://cran.r-project.org/package=joyn/)
 [![](https://img.shields.io/badge/devel%20version-0.1.4-blue.svg)](https://github.com/randrescastaneda/joyn)
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
-[![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H)](https://codecov.io/gh/randrescastaneda/joyn)
+[![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H/)](https://codecov.io/gh/randrescastaneda/joyn/)
+<!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
+<!-- [![](https://img.shields.io/badge/devel%20version-0.1.4-blue.svg)](https://github.com/randrescastaneda/joyn) -->
+<!-- [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing) -->
 
 <!-- badges: end -->
 
@@ -85,7 +88,7 @@ As of now, the flexibility of `joyn` is limited to the basic joins, yet
 the most used and useful ones. If you want to learn more about different
 kinds of joins available in `data.table` and how they relate to `dplyr`,
 I recommend you start with this [blog
-post](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-sets).
+post](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-sets/).
 
 ## Installation
 
