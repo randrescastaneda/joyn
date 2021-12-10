@@ -112,19 +112,24 @@ library(joyn)
 #> The following object is masked from 'package:base':
 #> 
 #>     merge
+library(data.table)
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15)
 
-x1
-#>    id  t  x
-#> 1:  1  1 11
-#> 2:  1  2 12
-#> 3:  2  1 13
-#> 4:  3  2 14
-#> 5: NA NA 15
-y1
-#>    id  y
-#> 1:  1 11
-#> 2:  2 15
-#> 3:  4 16
+y1 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16))
+
+
+x2 = data.table(id = c(1, 4, 2, 3, NA),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = c(16, 12, NA, NA, 15))
+
+
+y2 = data.table(id = c(1, 2, 5, 6, 3),
+                yd = c(1, 2, 5, 6, 3),
+                y  = c(11L, 15L, 20L, 13L, 10L),
+                x  = c(16:20))
 
 # using commong variable `id` as key.
 merge(x1, y1)[]
@@ -159,24 +164,6 @@ merge(x1, y1, keep = "inner")[]
 #> 1:  1 1 11 11  x & y
 #> 2:  1 2 12 11  x & y
 #> 3:  2 1 13 15  x & y
-
-
-x2 
-#>    id  t  x
-#> 1:  1  1 16
-#> 2:  4  2 12
-#> 3:  2  1 NA
-#> 4:  3  2 NA
-#> 5: NA NA 15
-
-y2
-#>    id yd  y  x
-#> 1:  1  1 11 16
-#> 2:  2  2 15 17
-#> 3:  5  5 20 18
-#> 4:  6  6 13 19
-#> 5:  3  3 10 20
-
 
 # Bad merge for not specifying by argument
 merge(x2, y2)[]
