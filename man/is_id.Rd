@@ -24,6 +24,9 @@ logical or data.frame, depending on the value of argument \code{return_report}
 Make sure the match type is correct
 }
 \examples{
+library(data.table)
+y3 <- data.table(id = c("c","b", "c", "a"),
+                 y  = c(11L, 15L, 18L, 20L))
 is_id(y3, by = "id")
 is_id(y3, by = "id", return_report = TRUE)
 }

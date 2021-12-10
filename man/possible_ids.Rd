@@ -31,5 +31,10 @@ list with possible identifiers
 Find possible unique identifies of data frame
 }
 \examples{
+library(data.table)
+x4 = data.table(id1 = c(1, 1, 2, 3, 3),
+                id2 = c(1, 1, 2, 3, 4),
+                t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                x   = c(16, 12, NA, NA, 15))
 possible_ids(x4)
 }

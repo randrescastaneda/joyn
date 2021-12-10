@@ -17,6 +17,9 @@ if (getRversion() >= '2.15.1')
 #' @export
 #'
 #' @examples
+#' library(data.table)
+#' y3 <- data.table(id = c("c","b", "c", "a"),
+#'                  y  = c(11L, 15L, 18L, 20L))
 #' is_id(y3, by = "id")
 #' is_id(y3, by = "id", return_report = TRUE)
 is_id <- function(dt,
