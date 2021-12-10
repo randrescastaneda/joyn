@@ -5,23 +5,23 @@
 
 [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg)](https://github.com/randrescastaneda/joyn/actions)
 [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
-[![](https://img.shields.io/badge/devel%20version-0.1.2.9004-blue.svg)](https://github.com/randrescastaneda/joyn)
+[![](https://img.shields.io/badge/devel%20version-0.1.4-blue.svg)](https://github.com/randrescastaneda/joyn)
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg?token=VTRGFG5H0H)](https://codecov.io/gh/randrescastaneda/joyn)
 
 <!-- badges: end -->
 
-The goal of `joyn` is to provide the user with a set of tools to analyze
-the quality of merging (i.e., joining) data frames, so that it is a
-**JOY** to join tables with `joyn`. This is inspired on the command
-`merge` of the statistical software `Stata`.
+`joyn` provides the user with a set of tools to analyze the quality of
+merging (i.e., joining) data frames, so that it is a **JOY** to join
+tables with `joyn`. This is inspired on the command `merge` of the
+statistical software `Stata`.
 
 ## Motivation
 
 The objective `joyn` is to make your life easier when joining tables. As
 a former Stata user (I still work with Stata but not that much as I work
-with R now), I had missed, until now, the ability to assess the
-resulting data frame when joining tables in R. With one single command,
+with R now), I had missed, until now, the ability to assess the accuracy
+of my join after mergin two tables in R. With one single command,
 `merge`, Stata allows the user to perform any kind of equi-join. The
 reason for this is that, by default, Stata merges fully both tables into
 one and then it is up to the user to keep the observation she needs.
@@ -29,8 +29,8 @@ Most importantly, Stata forces the user to know how her joining tables
 relate to each other. Most tables have a one-to-one (1:1 ) relation, but
 it is common to find one-to-many (1:m), many-to-one (m:1), and
 many-to-many (m:m) relations. Finally, Stata’s `merge` command returns
-by default a variable with useful information about the table’s join. So
-the following features are the value added of `joyn`:
+by default a variable with useful information about the table’s join.
+So, the following features are the value added of `joyn`:
 
 1.  `joyn` performs a full join by default (i.e., resulting table has
     all the observations from both original, joining tables). Yet, the
@@ -65,18 +65,21 @@ the following features are the value added of `joyn`:
 Notice the `joyn` is not intended to be a super fast joining tool. By
 construction, it does a lot of things that will make it slower than
 other tools out there. However, `joyn` is basically a wrapper around
-`data.table`’s indexed joining tools. So, the lost of speed of `joyn` is
-mainly due to evaluating several conditions, creating the reporting
-variable, and present a nice summary table at the end of the process.
-Also, keep in mind that `joyn` is intended to be informative, so it
-displays messages here and there to inform you about your join (you can
-silence any message in `joyn`, including the reporting table, by using
-the argument `verbose = FALSE`). This, of course, makes `joyn` a little
-slower than using regular `data.table` syntax. However, the loss of
-speed is not much and you’re gaining a lot of information. The main
-reason why `joyn` is a little slower is than pure `data.table` is that
-it will always perform a full join of data in the same way the `Stata`
-does it.
+`data.table`’s `merge.data.table()` function. So, the lost of speed of
+`joyn` is mainly due to evaluating several conditions, creating the
+reporting variable, and present a nice summary table at the end of the
+process. Also, keep in mind that `joyn` is intended to be informative,
+so it displays messages here and there to inform you about your join
+(you can silence any message in `joyn`, including the reporting table,
+by using the argument `verbose = FALSE`). This, of course, makes `joyn`
+a little slower than using regular `data.table` syntax. However, the
+loss of speed is not much and you’re gaining a lot of information. The
+main reason why `joyn` is a little slower is than pure `data.table` is
+that it will always perform a full join of data in the same way `Stata`
+does. Again, `joyn` is intended for information and verification of
+joins of tables. If you are working on a project that executes many
+(say, 1000) joins or you are constantly merging super big data sets, it
+is recommended that you use `data.table`’s syntaz x directly.
 
 As of now, the flexibility of `joyn` is limited to the basic joins, yet
 the most used and useful ones. If you want to learn more about different
@@ -201,7 +204,7 @@ merge(x2, y2)[]
 merge(x2, y2, by = "id")[]
 #> > removing key variables `id` from yvars
 #> i variable `x` in table y is ignored because arguments `update_NAs` and
-#>   `update_values` are FALSE.
+#> `update_values` are FALSE.
 #> 
 #> -- JOYn Report --
 #> 

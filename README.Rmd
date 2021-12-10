@@ -23,24 +23,23 @@ knitr::opts_chunk$set(
 
 <!-- badges: end -->
 
-The goal of `joyn` is to provide the user with a set of tools to analyze the
-quality of merging (i.e., joining) data frames, so that it is a **JOY** to join
-tables with `joyn`. This is inspired on the command `merge` of the statistical
-software `Stata`.
+`joyn` provides the user with a set of tools to analyze the quality of merging
+(i.e., joining) data frames, so that it is a **JOY** to join tables with `joyn`.
+This is inspired on the command `merge` of the statistical software `Stata`.
 
 ## Motivation
 
 The objective `joyn` is to make your life easier when joining tables. As a
 former Stata user (I still work with Stata but not that much as I work with R
-now), I had missed, until now, the ability to assess the resulting data frame
-when joining tables in R. With one single command, `merge`, Stata allows the
+now), I had missed, until now, the ability to assess the accuracy of my join
+after mergin two tables in R. With one single command, `merge`, Stata allows the
 user to perform any kind of equi-join. The reason for this is that, by default,
 Stata merges fully both tables into one and then it is up to the user to keep
 the observation she needs. Most importantly, Stata forces the user to know how
 her joining tables relate to each other. Most tables have a one-to-one (1:1 )
 relation, but it is common to find one-to-many (1:m), many-to-one (m:1), and
 many-to-many (m:m) relations. Finally, Stata's `merge` command returns by
-default a variable with useful information about the table's join. So the
+default a variable with useful information about the table's join. So, the
 following features are the value added of `joyn`:
 
 1.  `joyn` performs a full join by default (i.e., resulting table has all the
@@ -73,17 +72,20 @@ following features are the value added of `joyn`:
 
 Notice the `joyn` is not intended to be a super fast joining tool. By
 construction, it does a lot of things that will make it slower than other tools
-out there. However, `joyn` is basically a wrapper around `data.table`'s indexed
-joining tools. So, the lost of speed of `joyn` is mainly due to evaluating
-several conditions, creating the reporting variable, and present a nice summary
-table at the end of the process. Also, keep in mind that `joyn` is intended to
-be informative, so it displays messages here and there to inform you about your
-join (you can silence any message in `joyn`, including the reporting table, by
-using the argument `verbose = FALSE`). This, of course, makes `joyn` a little
-slower than using regular `data.table` syntax. However, the loss of speed is not
-much and you're gaining a lot of information. The main reason why `joyn` is a
-little slower is than pure `data.table` is that it will always perform a full
-join of data in the same way the `Stata` does it.
+out there. However, `joyn` is basically a wrapper around `data.table`'s
+`merge.data.table()` function. So, the lost of speed of `joyn` is mainly due to
+evaluating several conditions, creating the reporting variable, and present a
+nice summary table at the end of the process. Also, keep in mind that `joyn` is
+intended to be informative, so it displays messages here and there to inform you
+about your join (you can silence any message in `joyn`, including the reporting
+table, by using the argument `verbose = FALSE`). This, of course, makes `joyn` a
+little slower than using regular `data.table` syntax. However, the loss of speed
+is not much and you're gaining a lot of information. The main reason why `joyn`
+is a little slower is than pure `data.table` is that it will always perform a
+full join of data in the same way `Stata` does. Again, `joyn` is intended for
+information and verification of joins of tables. If you are working on a project
+that executes many (say, 1000) joins or you are constantly merging super big
+data sets, it is recommended that you use `data.table`'s syntaz x directly.
 
 As of now, the flexibility of `joyn` is limited to the basic joins, yet the most
 used and useful ones. If you want to learn more about different kinds of joins
@@ -93,11 +95,11 @@ post](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-s
 
 ## Installation
 
-You can install the stable version of joyn from [CRAN](https://CRAN.R-project.org) with:
+You can install the stable version of joyn from
+[CRAN](https://CRAN.R-project.org) with:
 
 ``` r
 install.packages("joyn")
-
 ```
 
 The development version from [GitHub](https://github.com/) with:
