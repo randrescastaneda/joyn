@@ -1,20 +1,12 @@
 ## Resubmission
 This is a resubmission. In this version I have:
 
-* Added trailing slashes to the URLs that I think are failing. The CRAN email
-refers to a url that is not available in my pkg, so I think it is generated 
-somewhere else.  I ran all the checks and they all passed. 
-The email reads as follows
-
-> Found the following (possibly) invalid URLs:
-> URL: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fcodecov.io%2Fgh%2Frandrescastaneda%2Fjoyn&amp;data=04%7C01%7Cacastanedaa%40worldbank.org%7Ccd44d020f3c34ff3075208d9bbfc344f%7C31a2fec0266b4c67b56e2796d8f59c36%7C0%7C0%7C637747514149872957%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=cH0egYEgJMnZubuwAFal7mhm2HNoR9BZvfcDj6xXYv0%3D&amp;reserved=0 (moved to https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fapp.codecov.io%2Fgh%2Frandrescastaneda%2Fjoyn&amp;data=04%7C01%7Cacastanedaa%40worldbank.org%7Ccd44d020f3c34ff3075208d9bbfc344f%7C31a2fec0266b4c67b56e2796d8f59c36%7C0%7C0%7C637747514149872957%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000&amp;sdata=ZerXT%2F%2B8RMcjlnIWHNUI1eF1LwDkd8d9Lei3dGq4kHo%3D&amp;reserved=0)
-> From: README.md
-> Status: 301
-> Message: Moved Permanently
-
-> Please change http --> https, add trailing slashes, or follow moved
-> content as appropriate.
-
+* Added trailing slashes to the URLs that I think are failing. I apologize, but 
+I don't understand the problem with the URL. According to the CRAN email, there 
+is a problem with the codecov url in one of the badges of the readme file. I 
+am using the very same url structure of very-well known packages like dplyr or
+tidyr. In case it fails again, could you please expand on the details of 
+the problem? Thanks. 
 
 
 # version 0.1.4
