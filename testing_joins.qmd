@@ -1,0 +1,1332 @@
+---
+title: "Testing Joins"
+format: html
+editor: source
+---
+
+## Purpose
+
+The purpose is to test the efficiency of `collapse::join()` and compare it to `data.table::merge.data.table()`.
+
+The steps below are followed:
+
+1. Create two large data tables
+2. Benchmark efficiency with one unique ID
+3. Benchmark efficiency with multiple non-unique IDs
+
+
+```{r load-packages}
+pacman::p_load(
+  collapse, 
+  data.table, 
+  highcharter, 
+  microbenchmark
+)
+```
+
+ The `collapse` join is inspired by [polars](https://pola-rs.github.io/polars/py-polars/html/reference/dataframe/api/polars.DataFrame.join.html), which is, in some [benchmarks found online](https://h2oai.github.io/db-benchmark/), faster than `data.table`.
+
+## Create data 
+
+
+```{r create-data-tables}
+# Set ----
+set.seed(1)
+n <- 1e5
+
+# Create data.table ----
+## dt1
+dt1 <- data.table(
+  key1 = sample(1:(n*10),  n, replace = FALSE),    # unique
+  key2 = sample(LETTERS,   n, replace = TRUE),     # not unique
+  key3 = sample(1:100,     n, replace = TRUE),     # not unique
+  key4 = sample(1:10,      n, replace = TRUE),     # not unique
+  key5 = sample(2000:2020, n, replace = TRUE),     # not unique
+  data1 = rnorm(n),
+  data2 = runif(n),
+  data3 = rnorm(n, mean = 50, sd = 10)
+)
+
+## dt2
+dt2 <- data.table(
+  key1 = sample(1:(n*10),  n, replace = FALSE),    # unique
+  key2 = sample(LETTERS,   n, replace = TRUE),     # not unique
+  key3 = sample(1:100,     n, replace = TRUE),     # not unique
+  key4 = sample(1:10,      n, replace = TRUE),     # not unique
+  key5 = sample(2000:2020, n, replace = TRUE),     # not unique
+  data4 = rnorm(n),
+  data5 = runif(n),
+  data6 = rnorm(n, mean = 100, sd = 20)
+)
+
+# Create additional data tables w set keys ----
+dt1_setkey <- copy(
+  dt1
+)
+setkey(
+  dt1_setkey, 
+  key1, 
+  key2, 
+  key3, 
+  key4, 
+  key5
+)
+dt2_setkey <- copy(
+  dt2
+)
+setkey(
+  dt2_setkey, 
+  key1, 
+  key2, 
+  key3, 
+  key4, 
+  key5
+)
+
+```
+
+
+`key1` uniquely identifies both data tables. The other keys do not. A combination of `key2`, `key3`, `key4`, and `key5` also does not uniquely identify the data.tables. Therefore, the latter combination will be used for many-to-many joins and to benchmark the efficiency when using multiple keys. 
+
+
+<!-- ```{r, echo = FALSE, results='hide', comment=FALSE} -->
+<!-- # joyn::is_id(dt1, by = "key1") -->
+<!-- # joyn::is_id(dt2, by = "key1") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key2") -->
+<!-- # joyn::is_id(dt2, by = "key2") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key3") -->
+<!-- # joyn::is_id(dt2, by = "key3") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key4") -->
+<!-- # joyn::is_id(dt2, by = "key4") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key5") -->
+<!-- # joyn::is_id(dt2, by = "key5") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = c("key1", "key2")) -->
+<!-- # joyn::is_id(dt2, by = c("key1", "key2")) -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = c("key2", "key3", "key4")) -->
+<!-- # joyn::is_id(dt1, by = c("key2", "key3", "key4", "key5")) -->
+<!-- # joyn::is_id(dt2, by = c("key2", "key3", "key4", "key5")) -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = c("key2", "key3", "key4", "key5")) -->
+<!-- # joyn::is_id(dt2, by = c("key2", "key3", "key4", "key5")) -->
+
+<!-- ``` -->
+
+
+
+### One-to-one Joins
+
+
+
+Here, I look at one-to-one joins on `key1`. First I plot the different joins using `data.table` before investigating the `collapse` joins. 
+
+#### One-to-one data.table
+
+Start with one-to-one joins using `data.table`. I rely mainly on the left join, but will also compare full and right joins to the left join.
+
+
+
+```{r create-ref-object-test1}
+# For reference join
+t1_dt_ref        <- copy(dt1)
+t1_dt_ref_b      <- copy(dt1)
+t1_dt_ref_sort   <- copy(dt1)
+setorder(
+  t1_dt_ref_sort, 
+  key1
+)
+
+# timed-setkey
+dt1_timed_setkey <- copy(dt1)
+dt2_timed_setkey <- copy(dt2)
+
+# for pre-sort join
+dt1_sort <- copy(dt1)
+setorder(
+  dt1_sort, 
+  key1
+)
+dt2_sort <- copy(dt2)
+setorder(
+  dt2_sort, 
+  key1
+)
+
+# for timed pre-sort
+dt1_sort2 <- copy(dt1)
+dt2_sort2 <- copy(dt2)
+```
+
+
+
+```{r test1-dt}
+bench_dt1 <- microbenchmark::microbenchmark(
+  times = 50,
+  # Test 1 - data.table
+  `DT 1:1 - one key, all.x` = {
+    t1_dt_xall <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c("key1"), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT 1:1 - one key, all` = {
+    t1_dt_all <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c("key1"), 
+      all   = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT 1:1 - one key, all.y` = {
+    t1_dt_yall <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c("key1"), 
+      all.y = TRUE
+    )
+  }, 
+  # Test 1 - data.table setkey
+  `DT 1:1 - one set key` = {
+    t1_dts <- data.table::merge.data.table(
+      x     = dt1_setkey, 
+      y     = dt2_setkey, 
+      by    = c("key1"), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table setkey
+  `DT 1:1 - one timed set key` = {
+    setkey(dt1_timed_setkey, key1)
+    setkey(dt2_timed_setkey, key1)
+    t1_dt_timed_setkey <- data.table::merge.data.table(
+      x     = dt1_timed_setkey, 
+      y     = dt2_timed_setkey, 
+      by    = c("key1"), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT 1:1 - one key, all.x, pre-sort` = {
+    t1_dt_presort_xall <- data.table::merge.data.table(
+      x     = dt1_sort, 
+      y     = dt2_sort, 
+      by    = c("key1"), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT 1:1 - one key, all.x, not sort` = {
+    t1_dt_notsort_xall <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c("key1"), 
+      all.x = TRUE, 
+      sort  = FALSE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT 1:1 - one key, all.x, not sort, pre-sort` = {
+    t1_dts_presort_notsort_xall <- data.table::merge.data.table(
+      x     = dt1_sort, 
+      y     = dt2_sort, 
+      by    = c("key1"), 
+      all.x = TRUE, 
+      sort  = FALSE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT 1:1 - one key, all.x, not sort, timed pre-sort` = {
+    dt1_sort2 <- setorder(dt1_sort2, key1)
+    dt2_sort2 <- setorder(dt2_sort2, key1)
+    t1_dt_timedsort_nosort_xall <- data.table::merge.data.table(
+      x     = dt1_sort2, 
+      y     = dt2_sort2, 
+      by    = c("key1"), 
+      all.x = TRUE, 
+      sort  = FALSE
+    )
+  }, 
+  # Test 1 - data.table by reference
+  `DT 1:1 - one key by ref` = {
+    t1_dt_ref[
+      dt2,                  # y
+      on = "key1",          # join by
+      c(                    # which y variables to include
+        paste0(
+          names(dt2)[2:5], 
+          ".y"
+        ),
+        names(dt2)[6:8]
+      )  := mget(
+        paste0(
+          "i.", 
+          names(dt2)[2:8]
+        )
+      )
+    ]
+  }, 
+  # Test 1 - data.table by reference
+  `DT 1:1 - one key by ref, no name change` = {
+    t1_dt_ref_b[
+      dt2,                  # y
+      on = "key1"           # join by
+]
+  }
+)
+
+```
+
+
+Now check that their output is the same
+
+Notes
+
+* the join by reference does not sort, which could be slowing it down.
+* all joins have `n` rows, except when `all=TRUE`, where the number of rows equals the number of unique key1 values in the union of dt1 and dt2 - i.e. it is a full join.
+
+```{r, rm-objects-test1, echo=FALSE, results = 'hide'}
+# timed-setkey
+dt1_timed_setkey |> rm()
+dt2_timed_setkey |> rm()
+```
+
+
+```{r test1-DT-checks, echo=FALSE, results = 'hide'}
+# 1) Dimensions --------------------------
+## all.x = TRUE
+t1_dt_xall |> dim()
+## all   = TRUE
+t1_dt_all |> dim()
+#t1_dt_all |> head()
+## all.y = TRUE
+t1_dt_yall |> dim()
+## pre setkey
+t1_dts |> dim()
+## timed setkey
+t1_dt_timed_setkey |> dim()
+## pre-sort
+t1_dt_presort_xall |> dim()
+## sort = FALSE
+t1_dt_notsort_xall |> dim()
+## pre-sort, sort = FALSE
+t1_dts_presort_notsort_xall |> dim()
+## timed sort, sort = FALSE 
+t1_dt_timedsort_nosort_xall |> dim()
+## reference join, name change
+t1_dt_ref |> dim()
+## reference join, no name change
+t1_dt_ref_b |> dim()
+# 2) Head --------------------------
+## all.x = TRUE
+t1_dt_xall |> head()
+## all   = TRUE
+t1_dt_all |> head()
+## all.y = TRUE 
+t1_dt_yall |> head()
+## pre setkey
+t1_dts |> head()
+## timed setkey
+t1_dt_timed_setkey |> head()
+## pre-sort
+t1_dt_presort_xall |> head()
+## sort = FALSE
+t1_dt_notsort_xall |> head()
+## pre-sort, sort = FALSE
+t1_dts_presort_notsort_xall |> head()
+## timed sort, sort = FALSE
+t1_dt_timedsort_nosort_xall |> head()
+## reference join, name change
+t1_dt_ref |> head()
+## reference join, no name change
+t1_dt_ref_b |> head()
+# 3) Check rows --------------------------
+## all.x = TRUE
+# t1_dt_xall[is.na(data6)]
+# ## all   = TRUE
+# t1_dt_all[is.na(data6)]
+# ## all.y = TRUE 
+# t1_dt_yall[is.na(data6)]
+# ## pre setkey
+# t1_dts[is.na(data6)]
+# ## timed setkey
+# t1_dt_timed_setkey[is.na(data6)]
+# ## pre-sort
+# t1_dt_presort_xall[is.na(data6)]
+# ## sort = FALSE
+# t1_dt_notsort_xall[is.na(data6)]
+# ## pre-sort, sort = FALSE
+# t1_dts_presort_notsort_xall[is.na(data6)]
+# ## timed sort, sort = FALSE
+# t1_dt_timedsort_nosort_xall[is.na(data6)]
+# ## reference join, name change
+# t1_dt_ref[is.na(data6)]
+## reference join, no name change
+```
+
+
+
+
+
+<!-- ```{r test1-checks, echo = F} -->
+<!-- # setnames( -->
+<!-- #   t1_dt_ref,  -->
+<!-- #   old = c(paste0("key", 2:5)),  -->
+<!-- #   new = c(paste0("key", 2:5, ".x")) -->
+<!-- # ) -->
+<!-- # # dimensions ------------------ -->
+<!-- # t1_c      |> dim() -->
+<!-- # t1_dt     |> dim() -->
+<!-- # t1_dts    |> dim() -->
+<!-- # t1_dt_ref |> dim() -->
+<!-- # # first six rows -------------- -->
+<!-- # setorder( -->
+<!-- #   t1_c,  -->
+<!-- #   key1, key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # setorder( -->
+<!-- #   t1_dt,  -->
+<!-- #   key1,key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # setorder( -->
+<!-- #   t1_dts,  -->
+<!-- #   key1, key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # setorder( -->
+<!-- #   t1_dt_ref,  -->
+<!-- #   key1, key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # # Change column names --------- -->
+<!-- # c(t1_c |> colnames() == t1_dt     |> colnames()) |> all() -->
+<!-- # c(t1_c |> colnames() == t1_dts    |> colnames()) |> all() -->
+<!-- # c(t1_c |> colnames() == t1_dt_ref |> colnames()) |> all() -->
+<!-- # # Check whether identical ----- -->
+<!-- # identical(t1_dt, t1_dts) -->
+<!-- # identical(t1_dt, t1_dt_ref) -->
+<!-- # identical(t1_c[,1], t1_dts[,1]) -->
+<!-- # identical(t1_dt_ref, t1_c) -->
+<!-- # c(t1_c[,1]==t1_dts[,1]) |> all() # meaning all elements are the same -->
+<!-- # t1_dt[,1]      |> str() # has a sorted attribute -->
+<!-- # t1_c[,1]       |> str()  -->
+<!-- # t1_dt_ref[, 1] |> str() -->
+<!-- # t1_dt      |> str() # has a sorted attribute -->
+<!-- # t1_c       |> str()  -->
+<!-- # t1_dt_ref |> str() -->
+<!-- # c(t1_c==t1_dts)    |> all() # meaning all elements are the same -->
+<!-- # c(t1_c==t1_dt_ref) |> all() # meaning all elements are the same -->
+<!-- ``` -->
+
+
+
+```{r test1-dt-boxplot}
+if (requireNamespace("highcharter")) {
+  hc_dt <- highcharter::data_to_boxplot(bench_dt1,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "data.table 1:1, Time in milliseconds"
+                                        )
+  #print(hc_dt)
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_dt)
+  
+} else {
+  boxplot(bench_dt1, outline = FALSE)
+}
+```
+
+
+The `data.table` joins have some important arguments.
+
+* `all   = FALSE` is an inner join, including only rows in both `x` and `y`
+* `all.x = TRUE`  is a left outer join, including all rows in `x` but only matching rows from `y`
+* `all.y = TRUE`  is a right outer join, including all rows in `y` but only matching rows from `x`
+* `all   = TRUE`  is an outer join, including all rows regardless of whether or not they match. 
+* `sort  = TRUE`  (default), sorts the data.table by the key and then joins. Sorting speeds join. 
+
+I use all these variations below, but the standard comparison is for the left join where `all.y = FALSE` and `all.x = TRUE`. As expected, the full outer join, where `all = TRUE`, is the slowest. Interestingly, the right join is slower than the left join. The median time for the standard left join is `r hc_dt$data[[1]][[1]]$median`ms. 
+
+Setting a key makes a substantial difference, and the left join with the set key has `r hc_dt$data[[1]][[4]]$median`ms as the median. The amount of time taken to set the key appears to be negligible. 
+`sort = TRUE` is the default, but it slows the join down. When the data is pre-sorted and the `sort=FALSE`, it appears to be the fastest join. When acccounting for the sorting of the data in the time, it is still faster to pre-sort rather than to specify `sort = TRUE`. 
+
+The join by reference syntax allowed for by `data.table` does not appear faster because the modification takes long (e.g. changing column names, etc.). It only makes sense to do a join by reference if it is a very basic join, such as a right join where you only want to add a single column, for example.
+
+
+
+#### One-to-one Collapse
+
+Now look at one-to-one joins using `collapse`. Again, I look mainly at left joins, but also compare the basic left join to right, full, inner, anti, and semi joins. 
+
+
+```{r test1-collapse-dt, message=FALSE, results='hide', comment = FALSE}
+bench_dt1_collapse_join_types <- microbenchmark::microbenchmark(
+  times = 50,
+  # Test 1 - collapse
+  `Collapse, left, val 1:1` = {
+    t1_coll_left <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    }, 
+  # Test 1 - collapse
+  `Collapse, right, val 1:1` = {
+    t1_coll_right <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "right", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    }, 
+  # Test 1 - collapse
+  `Collapse, full, val 1:1` = {
+    t1_coll_full <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "full", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    }, 
+  # Test 1 - collapse
+  `Collapse, inner, val 1:1` = {
+    t1_coll_inner <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "inner", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    },  
+  # Test 1 - collapse
+  `Collapse, anti, val 1:1` = {
+    t1_coll_anti <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "anti", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    },  
+  # Test 1 - collapse
+  `Collapse, semi, val 1:1` = {
+    t1_coll_semi <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "semi", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    }, 
+  `Collapse, left, val 1:1, sort` = {
+    t1_coll_left_sort <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y"), 
+      sort     = TRUE
+    )
+    }, 
+  `Collapse 1:1 - not verbose` = {
+    t1_coll_left_notverb <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "1:1",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y"), 
+      verbose  = 0
+    )
+    }, 
+  `Collapse 1:1 - no suffix` = {
+    t1_coll_left_nosuff <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "1:1",
+      on       = c("key1")
+    )
+  },
+  `Collapse 1:1 - setkey` = {
+    t1_coll_left_setkey <- collapse::join(
+      x        = dt1_setkey, 
+      y        = dt2_setkey, 
+      how      = "left", 
+      validate = "1:1",
+      on       = c("key1")
+    )
+  },
+  `Collapse 1:1 - pre-sort` = {
+    t1_coll_left_presort <- collapse::join(
+      x        = dt1_sort, 
+      y        = dt2_sort, 
+      how      = "left", 
+      validate = "1:1",
+      on       = c("key1")
+    )
+  },
+    `Collapse m:m` = {
+    t1_coll_left_mm <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "m:m",
+      on       = c("key1"), 
+      suffix   = c(".x", ".y")
+    )
+    },
+    `Collapse m:m, no verbose, no suffix` = {
+    t1_coll_left_mm_noverb_nosuff <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "m:m",
+      on       = c("key1"), 
+      verbose  = 0
+    )
+    },
+    `Collapse m:m all, remove duplicate cols` = {
+    t1_coll_left_noverb_nosuff_nodup <- collapse::join(
+      x        = dt1, 
+      y        = dt2, 
+      how      = "left", 
+      validate = "m:m",
+      on       = c("key1"), 
+      verbose  = 0, 
+      drop.dup.cols = T
+    )
+    }
+  
+)
+
+```
+
+
+
+```{r test1-col-boxplot}
+if (requireNamespace("highcharter")) {
+  hc_bench_dt1_collapse_join_types <- highcharter::data_to_boxplot(bench_dt1_collapse_join_types,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "Time in milliseconds")
+  #print(hc_bench_dt1_collapse_join_types)
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_bench_dt1_collapse_join_types)
+  
+} else {
+  boxplot(bench_dt1_collapse_join_types, outline = FALSE)
+}
+```
+
+There are some important arguments to discuss. The **how** argument can be 
+
+* `left`  - joins matching rows in y to all rows in x
+* `inner` - returns rows that match in both tables
+* `full`  - returns all rows from both joined tables, whether they have a matching row or not
+* `right` - joins matching rows in x to all rows in y
+* `semi`  - returns rows in x that have matching values in y
+* `anti`  - returns rows in x that have no matching values in y
+
+Here, the right and left joins appear to have similar speed and the full is predictably longer. The inner, anti, and semi joins are faster, with the latter appearing to have be the fastest. 
+
+Two important arguments determining the speed of `collapse::join()` are `validate` and `verbose`. The former takes one of "1:1", "1:m", "m:1", or "m:m". If `validate = "m:m"` then it does no checks, which makes it faster. The latter, i.e. setting `verbose = FALSE`, makes a very large difference in computation time. The standard left join time is `r hc_bench_dt1_collapse_join_types$data[[1]][[1]]$median`ms, while the join where `verbose = FALSE` has a median time of `r hc_bench_dt1_collapse_join_types$data[[1]][[8]]$median`ms. 
+
+There are a few modifications that don't have an effect. Not adding a suffix, using a set key in the data.table, and pre-sorting all have a negligible impact on the computation time. 
+
+An example of the message: 
+`left join: dt1_setkey[key1] 10047/100000 (10%) <1:1> dt2_setkey[key1] 10047/100000 (10%) duplicate columns: key2, key3, key4, key5 => renamed using suffix '_dt2_setkey' for y`
+
+note, that for `collapse::join()`, specifying argument `validate = "m:m"` does the following: "The default "m:m" does not perform any checks, first matches in x and y are taken." That means a) it should be more efficient, b) it will not perform a Cartesian join. It only keeps the first matches, not all matches. Point (b) is what is leading to discrepancies with `merge.data.table()` (discussed below), because the latter does not only match the first matches, but all possible matches in the many-to-many mapping. This is shown in the toy example below.
+
+
+### Multiple IDs, one-to-one left outer join
+
+The data.table and `collapse` approaches don't always return the same output when keys are not identical. 
+
+#### Toy Example
+
+First look at a toy example to show how the output differs. 
+
+```{r create-toy-example}
+set.seed(1)
+dt_toy_1 <- data.table(
+  a = sample(1:5, 10, replace = T), 
+  b = sample(1:5, 10, replace = T), 
+  c = 1:10
+)
+dt_toy_2 <- data.table(
+  a = sample(1:5, 10, replace = T), 
+  b = sample(1:5, 10, replace = T), 
+  d = 1:10
+)
+```
+
+```{r toy-mm-example}
+d <- merge.data.table(
+  x = dt_toy_1, 
+  y = dt_toy_2, 
+  by = c("a"), 
+  all = T, 
+  sort = T
+)
+toy_result_datatable <- merge.data.table(
+  x = dt_toy_1, 
+  y = dt_toy_2, 
+  by = c("a"), 
+  all = T, 
+  cart = F, 
+  sort = T
+)
+toy_result_collapse <- collapse::join(
+  x = dt_toy_1, 
+  y = dt_toy_2, 
+  how = "full", 
+  sort = T, 
+  on = "a"
+)
+toy_result_tidy <- dplyr::full_join(
+  x = dt_toy_1, 
+  y = dt_toy_2, 
+  by = "a"
+) |> dplyr::arrange(
+  a, 
+  desc = F
+)
+```
+
+
+```{r show-toy-datasets}
+dt_toy_1
+
+dt_toy_2 
+
+toy_result_datatable 
+
+toy_result_collapse 
+
+```
+
+
+
+
+The `merge.data.table` function does something more similar to the cartesian join, even if that is not specified. It gives `nrow(d)` rows while the `collapse` full join gives only `nrow(toy_result_collapse)`. For `collapse`, a full join: 1) takes all rows in x and matches to y as when doing a left join, 2) if the `by` argument is non-unique in y, it joins only the first matched key in y to the row in x, and appends the remaining rows in y with the same `by` while giving it an NA for the columns coming from x. This is contrasted to the data.table join, which joins on all matching keys in a many-to-many mapping. 
+
+To understand, consider the case where column $X$ is the key in data.table $x$ and there are $n^i_x$ number of rows where $X = i$, and similarly there are $n^i_y$ number of rows where column named $X$ in data.table $y$ is equal to $i$. Then in the `collapse` full join, there will be: a) $n^i_x$ rows in the output table where each of the repeated values in $x$ are joined with the first match in $y$; b) $n^i_y -1$ rows in the output table where each of the remaining unmatched rows where $X=i$ in $y$ are appended to the output table with NAs in the columns coming from $x$. This gives a total of $n^i_x + n^i_y -1$ rows where $X = i$. 
+
+Below is an example:
+
+```{r show-toy-filters}
+dt_toy_1[a==1]
+dt_toy_2[a==1]
+toy_result_datatable[a==1]
+toy_result_collapse |> fsubset(a==1)
+```
+
+
+The `dplyr` joins have more convenient, customizable arguments. The argument `multiple` allows you to specify what to do with multiple matches that would occur in **many-to-one** or **many-to-many** joins. If "all", then returns every match (similar to `merge.data.table(all = TRUE)`). If "first", returns the first match (similar to what `collapse::join(how = "full")`, except `collapse` then returns the additional rows as NAs). If "last", returns the last match. If "any", then returns any match, which can be faster than "first" or "last". The `dplyr` joins also have an argument `relationship` which checks whether one-to-one, many-to-one, etc. and returns error if not. 
+
+```{r prep-data-test-2}
+
+
+joyn::is_id(
+  dt1, 
+  by = c(paste0("key", 2:5))
+)
+joyn::is_id(
+  dt2, 
+  by = c(paste0("key", 2:5))
+)
+
+dt1_unique <- dt1 |> funique(
+  cols = c(paste0("key", 2:5))
+)
+dt2_unique <- dt2 |> funique(
+  cols = c(paste0("key", 2:5))
+)
+dt1_unique_setkey <- copy(dt1_unique)
+setkey(
+  dt1_unique_setkey, 
+  key2, 
+  key3, 
+  key4, 
+  key5
+)
+dt2_unique_setkey <- copy(dt2_unique)
+setkey(
+  dt2_unique_setkey, 
+  key2, 
+  key3, 
+  key4, 
+  key5
+)
+t2_dt_ref <- copy(dt1_unique)
+```
+```{r}
+t2_dt_ref <- copy(dt1)
+t2_dt_ref_b <- copy(dt1)
+```
+
+#### data.table many-to-many
+
+```{r test2-DT}
+bench_dt1_test2 <- microbenchmark::microbenchmark(
+  times = 50, 
+    # Test 1 - data.table
+  `DT m:m - four key, all.x` = {
+    t2_dt_allx <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c(paste0("key", 2:5)), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT m:m - four key, all` = {
+    t2_dt_all <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c(paste0("key", 2:5)), 
+      all   = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT m:m - four key, all.y` = {
+    t2_dt_yall <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c(paste0("key", 2:5)), 
+      all.y = TRUE
+    )
+  }, 
+  # Test 1 - data.table setkey
+  `DT m:m - four set keys` = {
+    t2_dts <- data.table::merge.data.table(
+      x     = dt1_setkey, 
+      y     = dt2_setkey, 
+      by    = c(paste0("key", 2:5)), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT m:m - four key, all.x, pre-sort` = {
+    t2_dt_presort_xall <- data.table::merge.data.table(
+      x     = dt1_sort, 
+      y     = dt2_sort, 
+      by    = c(paste0("key", 2:5)), 
+      all.x = TRUE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT m:m - four key, all.x, not sort` = {
+    t2_dt_notsort_xall <- data.table::merge.data.table(
+      x     = dt1, 
+      y     = dt2, 
+      by    = c(paste0("key", 2:5)), 
+      all.x = TRUE, 
+      sort  = FALSE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT m:m - four key, all.x, not sort, pre-sort` = {
+    t2_dts_presort_notsort_xall <- data.table::merge.data.table(
+      x     = dt1_sort, 
+      y     = dt2_sort, 
+      by    = c(paste0("key", 2:5)), 
+      all.x = TRUE, 
+      sort  = FALSE
+    )
+  }, 
+  # Test 1 - data.table
+  `DT m:m - four key, all.x, not sort, timed pre-sort` = {
+    dt1_sort2 <- setorder(dt1_sort2, key2, key3, key4, key5)
+    dt2_sort2 <- setorder(dt2_sort2, key2, key3, key4, key5)
+    t2_dt_timedsort_nosort_xall <- data.table::merge.data.table(
+      x     = dt1_sort2, 
+      y     = dt2_sort2, 
+      by    = c(paste0("key", 2:5)), 
+      all.x = TRUE, 
+      sort  = FALSE
+    )
+  }, 
+  # Test 1 - data.table by reference
+  `DT m:m - four key by ref` = {
+    t2_dt_ref[
+      dt2,                  # y
+      on = c(paste0("key", 2:5)),          # join by
+      c(                    # which y variables to include
+        paste0(
+          names(dt2)[1], 
+          ".y"
+        ),
+        names(dt2)[6:8]
+      )  := mget(
+        paste0(
+          "i.", 
+          names(dt2)[c(1, 6:8)]
+        )
+      )
+    ]
+  }, 
+  # Test 1 - data.table by reference
+  `DT m:m - four key by ref, no name change` = {
+    t2_dt_ref_b[
+      dt2,                  # y
+      on = c(paste0("key", 2:5))          # join by
+]
+  }
+)
+ 
+```
+
+
+```{r test2-dt-boxplot}
+if (requireNamespace("highcharter")) {
+  hc_bench2_DT_join_types <- highcharter::data_to_boxplot(bench_dt1_test2,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "Time in milliseconds")
+
+  #print(hc_bench2_DT_join_types)
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_bench2_DT_join_types)
+  
+} else {
+  boxplot(bench_dt1_test2, outline = FALSE)
+}
+```
+
+For the left m:m join, the first one in the benchmark above, we can see there are the combinations of key2, key3, key4, and key5 that are present in both dt1 and dt2 multiple times:
+
+```{r}
+# key1 is unique, so finding multiple shows duplicates elements from dt x
+# find key1.x that occur multiple times in `t2_dt_allx`
+t2_dt_allx |> 
+  fsubset(
+    key1.x %in% t2_dt_allx[
+      , 
+      .SD[.N>1], 
+      by = c("key1.x")
+    ]$key1.x
+  )
+# find matched 
+dt1 |> 
+  fsubset(
+    key1 %in% t2_dt_allx[
+      , 
+      .SD[.N>1], 
+      by = c("key1.x")
+    ]$key1.x
+  )
+dt2 |> 
+  fsubset(
+    key1 %in% t2_dt_allx[
+      , 
+      .SD[.N>1], 
+      by = c("key1.x")
+    ]$key1.y
+  )
+```
+
+The join by reference doesn't give m:m. 
+```{r test2-dt-checks, echo = FALSE, results='hide'}
+# 1) Dimensions --------------------------
+## all.x = TRUE
+t2_dt_allx |> dim()
+## all   = TRUE
+t2_dt_all |> dim()
+## all.y = TRUE
+t2_dt_yall |> dim()
+## pre setkey
+t2_dts |> dim()
+## pre-sort
+t2_dt_presort_xall |> dim()
+## sort = FALSE
+t2_dt_notsort_xall |> dim()
+## pre-sort, sort = FALSE
+t2_dts_presort_notsort_xall |> dim()
+## timed sort, sort = FALSE 
+t2_dt_timedsort_nosort_xall |> dim()
+## reference join, name change
+t2_dt_ref |> dim()
+## reference join, no name change
+t2_dt_ref_b |> dim()
+
+# 2) Head --------------------------
+## all.x = TRUE
+t2_dt_allx |> head()
+## all   = TRUE
+t2_dt_all |> head()
+## all.y = TRUE 
+t2_dt_yall |> head()
+## pre setkey
+t2_dts |> head()
+## pre-sort
+t2_dt_presort_xall |> head()
+## sort = FALSE
+t2_dt_notsort_xall |> head()
+## pre-sort, sort = FALSE
+t2_dts_presort_notsort_xall |> head()
+## timed sort, sort = FALSE
+t2_dt_timedsort_nosort_xall |> head()
+## reference join, name change
+t2_dt_ref |> head()
+## reference join, no name change
+t2_dt_ref_b |> head()
+
+# 3) Check rows --------------------------
+## all.x = TRUE
+# t2_dt_allx[is.na(data6)]
+# ## all   = TRUE
+# t2_dt_all[is.na(data6)]
+# ## all.y = TRUE 
+# t2_dt_yall[is.na(data6)]
+# ## pre setkey
+# t2_dts[is.na(data6)]
+# ## pre-sort
+# t2_dt_presort_xall[is.na(data6)]
+# ## sort = FALSE
+# t2_dt_notsort_xall[is.na(data6)]
+# ## pre-sort, sort = FALSE
+# t2_dts_presort_notsort_xall[is.na(data6)]
+# ## timed sort, sort = FALSE
+# t2_dt_timedsort_nosort_xall[is.na(data6)]
+# ## reference join, name change
+# t2_dt_ref[is.na(data6)]
+## reference join, no name change
+#t1_dt_ref_b[is.na(data6)]
+```
+
+
+```{r test2-collapse-dt, message=FALSE, results='hide', comment = FALSE}
+bench_dt2_collapse_join_types <- microbenchmark::microbenchmark(
+  
+  times = 50,
+  
+  # Test 1 - collapse
+  `Collapse, left, val m:m` = {
+    
+    t2_coll_left <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+      )
+    
+    }, 
+  
+  # Test 1 - collapse
+  `Collapse, right, val 1:1` = {
+    
+    t2_coll_right <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "right", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+      )
+    },
+  
+  # Test 1 - collapse
+  
+  `Collapse, full, val 1:1` = {
+  
+      t2_coll_full <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "full", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+      )
+    }, 
+  
+  # Test 1 - collapse
+  
+  `Collapse, inner, val 1:1` = {
+  
+      t2_coll_inner <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "inner", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+      )
+    },  
+  
+  # Test 1 - collapse
+  
+  `Collapse, anti, val 1:1` = {
+  
+      t2_coll_anti <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "anti", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+      )
+    },  
+  
+  # Test 1 - collapse
+  
+  `Collapse, semi, val 1:1` = {
+  
+      t2_coll_semi <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "semi", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+      )
+    }, 
+  
+  `Collapse, left, val 1:1, sort` = {
+  
+      t2_coll_left_sort <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y"), 
+        sort     = TRUE
+    )
+    }, 
+  
+  `Collapse 1:1 - not verbose` = {
+  
+      t2_coll_left_notverb <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y"), 
+        verbose  = 0
+    )
+    }, 
+  
+  `Collapse 1:1 - no suffix` = {
+  
+      t2_coll_left_nosuff <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5")
+    )
+  },
+  
+  `Collapse 1:1 - setkey` = {
+  
+      t2_coll_left_setkey <- collapse::join(
+        x        = dt1_setkey, 
+        y        = dt2_setkey, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5")
+    )
+  },
+  
+  `Collapse 1:1 - pre-sort` = {
+  
+      t2_coll_left_presort <- collapse::join(
+        x        = dt1_sort, 
+        y        = dt2_sort, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5")
+    )
+  },
+  
+  `Collapse m:m` = {
+  
+      t2_coll_left_mm <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        suffix   = c(".x", ".y")
+    )
+    },
+    
+  `Collapse m:m, no verbose, no suffix` = {
+  
+      t2_coll_left_mm_noverb_nosuff <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        verbose  = 0
+    )
+    },
+    
+  `Collapse m:m all, remove duplicate cols` = {
+  
+      t2_coll_left_noverb_nosuff_nodup <- collapse::join(
+        x        = dt1, 
+        y        = dt2, 
+        how      = "left", 
+        validate = "m:m",
+        on       = c("key2", "key3", "key4", "key5"), 
+        verbose  = 0, 
+        drop.dup.cols = T
+    )
+    }
+  
+)
+
+```
+
+
+
+
+
+```{r test2-col-boxplot}
+if (requireNamespace("highcharter")) {
+  hc_bench_dt2_collapse_join_types <- highcharter::data_to_boxplot(bench_dt2_collapse_join_types,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "Time in milliseconds")
+  
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_bench_dt2_collapse_join_types)
+  
+} else {
+  boxplot(bench_dt2_collapse_join_types, outline = FALSE)
+}
+```
+
+
+
+# All boxplots again
+
+
+
+
+```{r boxplot-DT-1, echo=FALSE}
+if (requireNamespace("highcharter")) {
+  hc_dt <- highcharter::data_to_boxplot(bench_dt1,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "data.table 1:1, Time in milliseconds"
+                                        )
+  
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_dt)
+  
+} else {
+  boxplot(bench_dt1, outline = FALSE)
+}
+```
+
+
+
+
+```{r boxplot-COL-1, echo=FALSE}
+if (requireNamespace("highcharter")) {
+  hc_bench_dt1_collapse_join_types <- highcharter::data_to_boxplot(bench_dt1_collapse_join_types,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "Collapse 1:1, Time in milliseconds")
+  
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_bench_dt1_collapse_join_types)
+  
+} else {
+  boxplot(bench_dt1_collapse_join_types, outline = FALSE)
+}
+```
+
+
+
+
+
+```{r boxplot-DT-2, echo=FALSE}
+if (requireNamespace("highcharter")) {
+  hc_bench2_DT_join_types <- highcharter::data_to_boxplot(bench_dt1_test2,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "data.table m:m, Time in milliseconds")
+
+  
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_bench2_DT_join_types)
+  
+} else {
+  boxplot(bench_dt1_test2, outline = FALSE)
+}
+```
+
+
+```{r boxplot-COL-2, echo=FALSE}
+if (requireNamespace("highcharter")) {
+  hc_bench_dt2_collapse_join_types <- highcharter::data_to_boxplot(bench_dt2_collapse_join_types,
+                                        time,
+                                        expr,
+                                        add_outliers = FALSE,
+                                        name = "Collapse m:m, Time in milliseconds")
+  
+  highcharter::highchart() |>
+  highcharter::hc_xAxis(type = "category") |>
+  highcharter::hc_chart(inverted=TRUE) |>
+  highcharter::hc_add_series_list(hc_bench_dt2_collapse_join_types)
+  
+} else {
+  boxplot(bench_dt2_collapse_join_types, outline = FALSE)
+}
+```
+
+
+
+
