@@ -2,7 +2,8 @@
   op <- options()
   op.joyn <- list(
     joyn.verbose         = TRUE,
-    possible_ids.verbose = TRUE
+    possible_ids.verbose = TRUE,
+    joyn.reportvar       = "report"
   )
   toset <- !(names(op.joyn) %in% names(op))
   if(any(toset)) options(op.joyn[toset])

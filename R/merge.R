@@ -1,9 +1,3 @@
-# Add global variables to avoid NSE notes in R CMD check
-if (getRversion() >= '2.15.1')
-  utils::globalVariables(
-    c('x_report', 'y_report')
-  )
-
 #' Merge two tables
 #'
 #' This is the main and, basically, the only function in joyn.
@@ -138,7 +132,7 @@ merge <- function(x,
                                     "right", "using", "inner"),
                   update_values   = FALSE,
                   update_NAs      = update_values,
-                  reportvar       = "report",
+                  reportvar       = getOption("joyn.reportvar"),
                   reporttype      = c("character", "numeric"),
                   roll            = NULL,
                   keep_y_in_x     = FALSE,
