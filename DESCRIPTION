@@ -2,9 +2,15 @@ Package: joyn
 Type: Package
 Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
 Version: 0.1.4
-Authors@R: person("R.Andres", "Castaneda", 
-                  email = "acastanedaa@worldbank.org",
-                  role = c("aut", "cre"))
+Authors@R: c(person(given = "R.Andres", 
+                    family = "Castaneda", 
+                    email = "acastanedaa@worldbank.org",
+                    role = c("aut", "cre")),
+             person(given = "Zander",
+                    family = "Prinsloo",
+                    role = "aut",
+                    email = "zprinsloo@worldbank.org")
+                    )
 Description: Tool for diagnosing table joins. It combines the speed
     `data.table`, the flexibility of `dplyr`, and the diagnosis and features of
     the `merge` command in `Stata`.
