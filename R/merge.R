@@ -67,7 +67,6 @@
 #'
 #' @return a data.table joining x and y.
 #' @export
-#' @import data.table
 #'
 #' @section match types:
 #'
@@ -150,55 +149,24 @@ merge <- function(x,
   reporttype  <- match.arg(reporttype)
 
   ## report variable -------
-  if (is.character(reportvar) &&
-      !identical(reportvar, make.names(reportvar))) {
-    nreportnames <- make.names(reportvar)
+  reportvar <- check_reportvar(reportvar)
 
-    if (verbose) {
+  ## check data frame class  ------
 
-      cli::cli_alert_info("reportvar {.code {reportvar}} is an invalid column
-                          name, so it will
-                          be changed to {.code {nreportnames}}", wrap = TRUE)
-    }
-
-    reportvar <- nreportnames
-  }
-
-  ## Make sure we work with data.tables ------
-  if (!(is.data.table(x))) {
+  # the reuslting table should have the same class as the x table.
+  class_x <- class(x)
+  # If match type id m:m we need to convert to data.table
+  if (match_type == "m:m") {
     x <- as.data.table(x)
-  } else {
-    x <- data.table::copy(x)
-  }
-
-
-  if (!(is.data.table(y))) {
     y <- as.data.table(y)
-  } else {
-    y <- data.table::copy(y)
   }
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #           Modify BY when is expression   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  fixby  <- fix_by_vars(by, x, y)
+
+  ## Modify BY when is expression   ---------
+
+  fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
-
-  if (length(by) == 0) {
-    msg     <- "no common variable names in `x` and `y`"
-    hint    <- "Make sure all variables are spelled correctly.
-      Check for upper and lower cases"
-    problem <- "When `by = NULL`, joyn search for common variable
-      names to be used as keys"
-    rlang::abort(c(
-      msg,
-      i = hint,
-      x = problem
-    ),
-    class = "joyn_error"
-    )
-  }
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,7 +182,7 @@ merge <- function(x,
 
     isidx <- is_id(x, by = by, verbose = FALSE)
 
-    if(isFALSE(isidx)) {
+    if (isFALSE(isidx)) {
 
       match_type_error <- TRUE
       if (verbose) {

@@ -13,7 +13,7 @@ merge(
   keep = c("full", "left", "master", "right", "using", "inner"),
   update_values = FALSE,
   update_NAs = update_values,
-  reportvar = "report",
+  reportvar = getOption("joyn.reportvar"),
   reporttype = c("character", "numeric"),
   roll = NULL,
   keep_y_in_x = FALSE,
