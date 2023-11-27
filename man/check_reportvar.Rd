@@ -21,3 +21,4 @@ if character, it returns valid name. If NULL or FALSE, returns NULL.
 \description{
 check reportvar input
 }
+\keyword{internal}

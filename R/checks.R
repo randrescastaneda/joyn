@@ -58,3 +58,75 @@ check_by_vars <- function(by, x, y) {
   return(fixby)
 
 }
+
+
+#' check match type consistency
+#'
+#' @inheritParams merge
+#'
+#' @return character vector from [split_match_type]
+#' @keywords internal
+check_match_type <- function(x, y, by, match_type, verbose) {
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # computations   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  mts <- split_match_type(match_type)
+  tx  <- mts[1]
+  ty  <- mts[2]
+
+  match_type_error <- FALSE
+
+  if (tx == "1") {
+    match_type_error <- is_match_type_error(x, "x", by, verbose, match_type_error)
+  }
+
+  if (ty == "1") {
+    match_type_error <- is_match_type_error(y, "y", by, verbose, match_type_error)
+  }
+
+  if (match_type_error) {
+
+    msg     <- "match type inconsistency"
+    hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
+    to see where the problem is"
+    cli::cli_abort(c(
+      msg,
+      i = hint
+    ),
+    class = "joyn_error"
+    )
+
+  }
+
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Return   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  return(mts)
+
+}
+
+#' confirm if match_type_error
+#'
+#' @inheritParams merge
+#' @param name name of variable
+#' @param match_type_error  logical: from existing code
+#'
+#' @return logical
+#' @keywords internal
+is_match_type_error <- function(x, name, by, verbose, match_type_error) {
+
+  isidx <- is_id(x, by = by, verbose = FALSE)
+
+  if (isFALSE(isidx)) {
+
+    match_type_error <- TRUE
+    if (verbose) {
+
+      cli::cli_alert_danger("table {.field name} is not uniquely identified
+                              by {.code {by}}", wrap = TRUE)
+    }
+  }
+  match_type_error
+}

@@ -144,14 +144,17 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## correct inputs --------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   match_type  <- match.arg(match_type)
   keep        <- match.arg(keep)
   reporttype  <- match.arg(reporttype)
 
   ## report variable -------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   reportvar <- check_reportvar(reportvar)
 
   ## check data frame class  ------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # the reuslting table should have the same class as the x table.
   class_x <- class(x)
@@ -162,9 +165,8 @@ merge <- function(x,
   }
 
 
-
   ## Modify BY when is expression   ---------
-
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
@@ -172,63 +174,16 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #           Consistency of join   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  mts <- check_match_type(x, y, by, match_type, verbose)
+  tx  <- mts[1]
+  ty  <- mts[2]
 
-  tx <- gsub("([m1]):([m1])", "\\1", match_type)
-  ty <- gsub("([m1]):([m1])", "\\2", match_type)
-
-  match_type_error <- FALSE
-
-  if (tx == "1") {
-
-    isidx <- is_id(x, by = by, verbose = FALSE)
-
-    if (isFALSE(isidx)) {
-
-      match_type_error <- TRUE
-      if (verbose) {
-
-        cli::cli_alert_danger("table {.field x} is not uniquely identified
-                            by {.code {by}}", wrap = TRUE)
-      }
-    }
-  }
-
-  if (ty == "1") {
-
-    isidy <- is_id(y, by = by, verbose = FALSE)
-
-    if(isFALSE(isidy)) {
-
-      match_type_error <- TRUE
-
-      if (verbose) {
-
-      cli::cli_alert_danger("table {.field y} is not uniquely identified
-                            by {.code {by}}", wrap = TRUE)
-      }
-    }
-    # join_consistency(y, by, "y")
-  }
-
-  if(match_type_error) {
-
-    msg     <- "match type inconsistency"
-    hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
-    to see where the problem is"
-    rlang::abort(c(
-      msg,
-      i = hint
-      ),
-     class = "joyn_error"
-     )
-
-    }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ## treatmetn of yvars ------
+  ## treatment of yvars ------
   if (isTRUE(yvars)) {
 
     yvars <- names(y)
