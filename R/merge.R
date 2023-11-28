@@ -156,9 +156,10 @@ merge <- function(x,
   ## check data frame class  ------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  # the reuslting table should have the same class as the x table.
+  # the resulting table should have the same class as the x table.
   class_x <- class(x)
-  # If match type id m:m we need to convert to data.table
+
+  # If match type is m:m we need to convert to data.table
   if (match_type == "m:m") {
     x <- as.data.table(x)
     y <- as.data.table(y)
