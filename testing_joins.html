@@ -1,0 +1,1633 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.3.450">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Testing Joins</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="testing_joins_files/libs/clipboard/clipboard.min.js"></script>
+<script src="testing_joins_files/libs/quarto-html/quarto.js"></script>
+<script src="testing_joins_files/libs/quarto-html/popper.min.js"></script>
+<script src="testing_joins_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="testing_joins_files/libs/quarto-html/anchor.min.js"></script>
+<link href="testing_joins_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="testing_joins_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="testing_joins_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="testing_joins_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="testing_joins_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="testing_joins_files/libs/htmlwidgets-1.6.2/htmlwidgets.js"></script>
+<script src="testing_joins_files/libs/jquery-3.5.1/jquery.min.js"></script>
+<script src="testing_joins_files/libs/proj4js-2.3.15/proj4.js"></script>
+<link href="testing_joins_files/libs/highcharts-9.3.1/css/motion.css" rel="stylesheet">
+<script src="testing_joins_files/libs/highcharts-9.3.1/highcharts.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/highcharts-3d.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/highcharts-more.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/stock.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/map.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/data.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/exporting.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/offline-exporting.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/drilldown.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/item-series.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/overlapping-datalabels.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/annotations.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/export-data.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/funnel.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/heatmap.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/treemap.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/sankey.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/dependency-wheel.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/organization.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/solid-gauge.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/streamgraph.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/sunburst.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/vector.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/wordcloud.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/xrange.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/tilemap.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/venn.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/gantt.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/timeline.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/parallel-coordinates.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/bullet.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/coloraxis.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/dumbbell.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/lollipop.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/series-label.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/plugins/motion.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/custom/reset.js"></script>
+<script src="testing_joins_files/libs/highcharts-9.3.1/modules/boost.js"></script>
+<script src="testing_joins_files/libs/highchart-binding-0.9.4/highchart.js"></script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="fullcontent">
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">Testing Joins</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<section id="purpose" class="level2">
+<h2 class="anchored" data-anchor-id="purpose">Purpose</h2>
+<p>The purpose is to test the efficiency of <code>collapse::join()</code> and compare it to <code>data.table::merge.data.table()</code>.</p>
+<p>The steps below are followed:</p>
+<ol type="1">
+<li>Create two large data tables</li>
+<li>Benchmark efficiency with one unique ID</li>
+<li>Benchmark efficiency with multiple non-unique IDs</li>
+</ol>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>pacman<span class="sc">::</span><span class="fu">p_load</span>(</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  collapse, </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  data.table, </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  highcharter, </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  microbenchmark</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The <code>collapse</code> join is inspired by <a href="https://pola-rs.github.io/polars/py-polars/html/reference/dataframe/api/polars.DataFrame.join.html">polars</a>, which is, in some <a href="https://h2oai.github.io/db-benchmark/">benchmarks found online</a>, faster than <code>data.table</code>.</p>
+</section>
+<section id="create-data" class="level2">
+<h2 class="anchored" data-anchor-id="create-data">Create data</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set ----</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fl">1e5</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create data.table ----</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="do">## dt1</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>dt1 <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">key1 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">*</span><span class="dv">10</span>),  n, <span class="at">replace =</span> <span class="cn">FALSE</span>),    <span class="co"># unique</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">key2 =</span> <span class="fu">sample</span>(LETTERS,   n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">key3 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,     n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">key4 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,      n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">key5 =</span> <span class="fu">sample</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2020</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">data1 =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">data2 =</span> <span class="fu">runif</span>(n),</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  <span class="at">data3 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">50</span>, <span class="at">sd =</span> <span class="dv">10</span>)</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a><span class="do">## dt2</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>dt2 <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">key1 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span>(n<span class="sc">*</span><span class="dv">10</span>),  n, <span class="at">replace =</span> <span class="cn">FALSE</span>),    <span class="co"># unique</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">key2 =</span> <span class="fu">sample</span>(LETTERS,   n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">key3 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,     n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  <span class="at">key4 =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,      n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">key5 =</span> <span class="fu">sample</span>(<span class="dv">2000</span><span class="sc">:</span><span class="dv">2020</span>, n, <span class="at">replace =</span> <span class="cn">TRUE</span>),     <span class="co"># not unique</span></span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">data4 =</span> <span class="fu">rnorm</span>(n),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  <span class="at">data5 =</span> <span class="fu">runif</span>(n),</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  <span class="at">data6 =</span> <span class="fu">rnorm</span>(n, <span class="at">mean =</span> <span class="dv">100</span>, <span class="at">sd =</span> <span class="dv">20</span>)</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="co"># Create additional data tables w set keys ----</span></span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>dt1_setkey <span class="ot">&lt;-</span> <span class="fu">copy</span>(</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  dt1</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  dt1_setkey, </span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  key1, </span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  key2, </span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  key3, </span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>  key4, </span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  key5</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>dt2_setkey <span class="ot">&lt;-</span> <span class="fu">copy</span>(</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  dt2</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  dt2_setkey, </span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>  key1, </span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a>  key2, </span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a>  key3, </span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  key4, </span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  key5</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><code>key1</code> uniquely identifies both data tables. The other keys do not. A combination of <code>key2</code>, <code>key3</code>, <code>key4</code>, and <code>key5</code> also does not uniquely identify the data.tables. Therefore, the latter combination will be used for many-to-many joins and to benchmark the efficiency when using multiple keys.</p>
+<!-- ```{r, echo = FALSE, results='hide', comment=FALSE} -->
+<!-- # joyn::is_id(dt1, by = "key1") -->
+<!-- # joyn::is_id(dt2, by = "key1") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key2") -->
+<!-- # joyn::is_id(dt2, by = "key2") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key3") -->
+<!-- # joyn::is_id(dt2, by = "key3") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key4") -->
+<!-- # joyn::is_id(dt2, by = "key4") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = "key5") -->
+<!-- # joyn::is_id(dt2, by = "key5") -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = c("key1", "key2")) -->
+<!-- # joyn::is_id(dt2, by = c("key1", "key2")) -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = c("key2", "key3", "key4")) -->
+<!-- # joyn::is_id(dt1, by = c("key2", "key3", "key4", "key5")) -->
+<!-- # joyn::is_id(dt2, by = c("key2", "key3", "key4", "key5")) -->
+<!-- # -->
+<!-- # joyn::is_id(dt1, by = c("key2", "key3", "key4", "key5")) -->
+<!-- # joyn::is_id(dt2, by = c("key2", "key3", "key4", "key5")) -->
+<!-- ``` -->
+<section id="one-to-one-joins" class="level3">
+<h3 class="anchored" data-anchor-id="one-to-one-joins">One-to-one Joins</h3>
+<p>Here, I look at one-to-one joins on <code>key1</code>. First I plot the different joins using <code>data.table</code> before investigating the <code>collapse</code> joins.</p>
+<section id="one-to-one-data.table" class="level4">
+<h4 class="anchored" data-anchor-id="one-to-one-data.table">One-to-one data.table</h4>
+<p>Start with one-to-one joins using <code>data.table</code>. I rely mainly on the left join, but will also compare full and right joins to the left join.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># For reference join</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>t1_dt_ref        <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>t1_dt_ref_b      <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>t1_dt_ref_sort   <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">setorder</span>(</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  t1_dt_ref_sort, </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  key1</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># timed-setkey</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>dt1_timed_setkey <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>dt2_timed_setkey <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt2)</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># for pre-sort join</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>dt1_sort <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="fu">setorder</span>(</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  dt1_sort, </span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  key1</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>dt2_sort <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt2)</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="fu">setorder</span>(</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  dt2_sort, </span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  key1</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="co"># for timed pre-sort</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>dt1_sort2 <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>dt2_sort2 <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>bench_dt1 <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">50</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all.x</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    t1_dt_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    t1_dt_all <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">all   =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all.y</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>    t1_dt_yall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.y =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table setkey</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one set key</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>    t1_dts <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_setkey, </span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_setkey, </span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table setkey</span></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one timed set key</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setkey</span>(dt1_timed_setkey, key1)</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>    <span class="fu">setkey</span>(dt2_timed_setkey, key1)</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>    t1_dt_timed_setkey <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_timed_setkey, </span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_timed_setkey, </span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all.x, pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    t1_dt_presort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_sort, </span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_sort, </span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all.x, not sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    t1_dt_notsort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort  =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all.x, not sort, pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>    t1_dts_presort_notsort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_sort, </span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_sort, </span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort  =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key, all.x, not sort, timed pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>    dt1_sort2 <span class="ot">&lt;-</span> <span class="fu">setorder</span>(dt1_sort2, key1)</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>    dt2_sort2 <span class="ot">&lt;-</span> <span class="fu">setorder</span>(dt2_sort2, key1)</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>    t1_dt_timedsort_nosort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_sort2, </span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_sort2, </span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort  =</span> <span class="cn">FALSE</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table by reference</span></span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key by ref</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>    t1_dt_ref[</span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>      dt2,                  <span class="co"># y</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>      on <span class="ot">=</span> <span class="st">"key1"</span>,          <span class="co"># join by</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(                    <span class="co"># which y variables to include</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>          <span class="fu">names</span>(dt2)[<span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>], </span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>          <span class="st">".y"</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>(dt2)[<span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>]</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>      )  <span class="sc">:</span><span class="er">=</span> <span class="fu">mget</span>(</span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a>          <span class="st">"i."</span>, </span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>          <span class="fu">names</span>(dt2)[<span class="dv">2</span><span class="sc">:</span><span class="dv">8</span>]</span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table by reference</span></span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT 1:1 - one key by ref, no name change</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a>    t1_dt_ref_b[</span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>      dt2,                  <span class="co"># y</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>      on <span class="ot">=</span> <span class="st">"key1"</span>           <span class="co"># join by</span></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now check that their output is the same</p>
+<p>Notes</p>
+<ul>
+<li>the join by reference does not sort, which could be slowing it down.</li>
+<li>all joins have <code>n</code> rows, except when <code>all=TRUE</code>, where the number of rows equals the number of unique key1 values in the union of dt1 and dt2 - i.e.&nbsp;it is a full join.</li>
+</ul>
+<!-- ```{r test1-checks, echo = F} -->
+<!-- # setnames( -->
+<!-- #   t1_dt_ref,  -->
+<!-- #   old = c(paste0("key", 2:5)),  -->
+<!-- #   new = c(paste0("key", 2:5, ".x")) -->
+<!-- # ) -->
+<!-- # # dimensions ------------------ -->
+<!-- # t1_c      |> dim() -->
+<!-- # t1_dt     |> dim() -->
+<!-- # t1_dts    |> dim() -->
+<!-- # t1_dt_ref |> dim() -->
+<!-- # # first six rows -------------- -->
+<!-- # setorder( -->
+<!-- #   t1_c,  -->
+<!-- #   key1, key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # setorder( -->
+<!-- #   t1_dt,  -->
+<!-- #   key1,key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # setorder( -->
+<!-- #   t1_dts,  -->
+<!-- #   key1, key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # setorder( -->
+<!-- #   t1_dt_ref,  -->
+<!-- #   key1, key2.x, key3.x, key4.x, key5.x -->
+<!-- # ) |>  -->
+<!-- #   head() -->
+<!-- # # Change column names --------- -->
+<!-- # c(t1_c |> colnames() == t1_dt     |> colnames()) |> all() -->
+<!-- # c(t1_c |> colnames() == t1_dts    |> colnames()) |> all() -->
+<!-- # c(t1_c |> colnames() == t1_dt_ref |> colnames()) |> all() -->
+<!-- # # Check whether identical ----- -->
+<!-- # identical(t1_dt, t1_dts) -->
+<!-- # identical(t1_dt, t1_dt_ref) -->
+<!-- # identical(t1_c[,1], t1_dts[,1]) -->
+<!-- # identical(t1_dt_ref, t1_c) -->
+<!-- # c(t1_c[,1]==t1_dts[,1]) |> all() # meaning all elements are the same -->
+<!-- # t1_dt[,1]      |> str() # has a sorted attribute -->
+<!-- # t1_c[,1]       |> str()  -->
+<!-- # t1_dt_ref[, 1] |> str() -->
+<!-- # t1_dt      |> str() # has a sorted attribute -->
+<!-- # t1_c       |> str()  -->
+<!-- # t1_dt_ref |> str() -->
+<!-- # c(t1_c==t1_dts)    |> all() # meaning all elements are the same -->
+<!-- # c(t1_c==t1_dt_ref) |> all() # meaning all elements are the same -->
+<!-- ``` -->
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"highcharter"</span>)) {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  hc_dt <span class="ot">&lt;-</span> highcharter<span class="sc">::</span><span class="fu">data_to_boxplot</span>(bench_dt1,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                                        time,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                                        expr,</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">add_outliers =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">name =</span> <span class="st">"data.table 1:1, Time in milliseconds"</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                                        )</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#print(hc_dt)</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">highchart</span>() <span class="sc">|&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_xAxis</span>(<span class="at">type =</span> <span class="st">"category"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_chart</span>(<span class="at">inverted=</span><span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_add_series_list</span>(hc_dt)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boxplot</span>(bench_dt1, <span class="at">outline =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-e45733553b6abc06c4eb" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-e45733553b6abc06c4eb">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"data.table 1:1, Time in milliseconds","data":[{"name":"DT 1:1 - one key, all.x","low":17875700,"q1":19844400,"median":21682150,"q3":23975400,"high":29853900},{"name":"DT 1:1 - one key, all","low":38402000,"q1":46292400,"median":52144550,"q3":62766300,"high":66729600},{"name":"DT 1:1 - one key, all.y","low":27907800,"q1":35923500,"median":39121900,"q3":43634800,"high":51578600},{"name":"DT 1:1 - one set key","low":9458200,"q1":10657700,"median":11587250,"q3":15638200,"high":19807800},{"name":"DT 1:1 - one timed set key","low":9428300,"q1":10876000,"median":11773650,"q3":12816900,"high":15680100},{"name":"DT 1:1 - one key, all.x, pre-sort","low":12811700,"q1":14407000,"median":15440750,"q3":17323400,"high":20131300},{"name":"DT 1:1 - one key, all.x, not sort","low":14111700,"q1":15414300,"median":16466350,"q3":18009700,"high":21360800},{"name":"DT 1:1 - one key, all.x, not sort, pre-sort","low":11328400,"q1":12818300,"median":14265350,"q3":15708600,"high":18859200},{"name":"DT 1:1 - one key, all.x, not sort, timed pre-sort","low":14285700,"q1":15275100,"median":17633000,"q3":20109500,"high":25473200},{"name":"DT 1:1 - one key by ref","low":25700400,"q1":28821700,"median":31944600,"q3":35101100,"high":41777500},{"name":"DT 1:1 - one key by ref, no name change","low":12931200,"q1":14719500,"median":15498450,"q3":17268600,"high":20941400}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>The <code>data.table</code> joins have some important arguments.</p>
+<ul>
+<li><code>all   = FALSE</code> is an inner join, including only rows in both <code>x</code> and <code>y</code></li>
+<li><code>all.x = TRUE</code> is a left outer join, including all rows in <code>x</code> but only matching rows from <code>y</code></li>
+<li><code>all.y = TRUE</code> is a right outer join, including all rows in <code>y</code> but only matching rows from <code>x</code></li>
+<li><code>all   = TRUE</code> is an outer join, including all rows regardless of whether or not they match.</li>
+<li><code>sort  = TRUE</code> (default), sorts the data.table by the key and then joins. Sorting speeds join.</li>
+</ul>
+<p>I use all these variations below, but the standard comparison is for the left join where <code>all.y = FALSE</code> and <code>all.x = TRUE</code>. As expected, the full outer join, where <code>all = TRUE</code>, is the slowest. Interestingly, the right join is slower than the left join. The median time for the standard left join is 2.168215^{7}ms.</p>
+<p>Setting a key makes a substantial difference, and the left join with the set key has 1.158725^{7}ms as the median. The amount of time taken to set the key appears to be negligible. <code>sort = TRUE</code> is the default, but it slows the join down. When the data is pre-sorted and the <code>sort=FALSE</code>, it appears to be the fastest join. When acccounting for the sorting of the data in the time, it is still faster to pre-sort rather than to specify <code>sort = TRUE</code>.</p>
+<p>The join by reference syntax allowed for by <code>data.table</code> does not appear faster because the modification takes long (e.g.&nbsp;changing column names, etc.). It only makes sense to do a join by reference if it is a very basic join, such as a right join where you only want to add a single column, for example.</p>
+</section>
+<section id="one-to-one-collapse" class="level4">
+<h4 class="anchored" data-anchor-id="one-to-one-collapse">One-to-one Collapse</h4>
+<p>Now look at one-to-one joins using <code>collapse</code>. Again, I look mainly at left joins, but also compare the basic left join to right, full, inner, anti, and semi joins.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>bench_dt1_collapse_join_types <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">50</span>,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, left, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    t1_coll_left <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, right, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    t1_coll_right <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"right"</span>, </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, full, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    t1_coll_full <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"full"</span>, </span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, inner, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    t1_coll_inner <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"inner"</span>, </span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    },  </span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, anti, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    t1_coll_anti <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"anti"</span>, </span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>    },  </span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, semi, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>    t1_coll_semi <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"semi"</span>, </span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, left, val 1:1, sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_sort <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>), </span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort     =</span> <span class="cn">TRUE</span></span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - not verbose</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_notverb <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>), </span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>      <span class="at">verbose  =</span> <span class="dv">0</span></span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - no suffix</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_nosuff <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>)</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - setkey</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_setkey <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1_setkey, </span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2_setkey, </span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>)</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_presort <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1_sort, </span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2_sort, </span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"1:1"</span>,</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>)</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Collapse m:m</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_mm <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>      <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Collapse m:m, no verbose, no suffix</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_mm_noverb_nosuff <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>      <span class="at">verbose  =</span> <span class="dv">0</span></span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Collapse m:m all, remove duplicate cols</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>    t1_coll_left_noverb_nosuff_nodup <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>      <span class="at">x        =</span> dt1, </span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>      <span class="at">y        =</span> dt2, </span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>      <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>      <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a>      <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key1"</span>), </span>
+<span id="cb6-145"><a href="#cb6-145" aria-hidden="true" tabindex="-1"></a>      <span class="at">verbose  =</span> <span class="dv">0</span>, </span>
+<span id="cb6-146"><a href="#cb6-146" aria-hidden="true" tabindex="-1"></a>      <span class="at">drop.dup.cols =</span> T</span>
+<span id="cb6-147"><a href="#cb6-147" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-148"><a href="#cb6-148" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb6-149"><a href="#cb6-149" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-150"><a href="#cb6-150" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"highcharter"</span>)) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  hc_bench_dt1_collapse_join_types <span class="ot">&lt;-</span> highcharter<span class="sc">::</span><span class="fu">data_to_boxplot</span>(bench_dt1_collapse_join_types,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>                                        time,</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>                                        expr,</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">add_outliers =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">name =</span> <span class="st">"Time in milliseconds"</span>)</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">#print(hc_bench_dt1_collapse_join_types)</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">highchart</span>() <span class="sc">|&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_xAxis</span>(<span class="at">type =</span> <span class="st">"category"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_chart</span>(<span class="at">inverted=</span><span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_add_series_list</span>(hc_bench_dt1_collapse_join_types)</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boxplot</span>(bench_dt1_collapse_join_types, <span class="at">outline =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-b55002abaa14f0a8cf52" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-b55002abaa14f0a8cf52">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"Time in milliseconds","data":[{"name":"Collapse, left, val 1:1","low":4621900,"q1":5122000,"median":5615750,"q3":6247300,"high":7851800},{"name":"Collapse, right, val 1:1","low":4381800,"q1":5202600,"median":5461400,"q3":5931700,"high":6541300},{"name":"Collapse, full, val 1:1","low":8385800,"q1":9285000,"median":9807100,"q3":11784300,"high":14939800},{"name":"Collapse, inner, val 1:1","low":3719500,"q1":4072900,"median":4207950,"q3":4555300,"high":5068200},{"name":"Collapse, anti, val 1:1","low":3706000,"q1":4041400,"median":4390350,"q3":4736200,"high":5611300},{"name":"Collapse, semi, val 1:1","low":3379300,"q1":3593100,"median":3805900,"q3":4132800,"high":4874100},{"name":"Collapse, left, val 1:1, sort","low":10315700,"q1":11263900,"median":12548300,"q3":14209000,"high":17314200},{"name":"Collapse 1:1 - not verbose","low":4436500,"q1":4829900,"median":5368050,"q3":5748400,"high":7084900},{"name":"Collapse 1:1 - no suffix","low":4525500,"q1":5103600,"median":5458500,"q3":6102300,"high":7532000},{"name":"Collapse 1:1 - setkey","low":3940000,"q1":4445600,"median":4858500,"q3":5223000,"high":6327000},{"name":"Collapse 1:1 - pre-sort","low":3981800,"q1":4376300,"median":4846200,"q3":5473600,"high":6395300},{"name":"Collapse m:m","low":3540600,"q1":3946700,"median":4474850,"q3":5037200,"high":6113800},{"name":"Collapse m:m, no verbose, no suffix","low":3326000,"q1":4062300,"median":4366200,"q3":4804200,"high":5640200},{"name":"Collapse m:m all, remove duplicate cols","low":2498000,"q1":2916100,"median":3064800,"q3":3277500,"high":3727300}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>There are some important arguments to discuss. The <strong>how</strong> argument can be</p>
+<ul>
+<li><code>left</code> - joins matching rows in y to all rows in x</li>
+<li><code>inner</code> - returns rows that match in both tables</li>
+<li><code>full</code> - returns all rows from both joined tables, whether they have a matching row or not</li>
+<li><code>right</code> - joins matching rows in x to all rows in y</li>
+<li><code>semi</code> - returns rows in x that have matching values in y</li>
+<li><code>anti</code> - returns rows in x that have no matching values in y</li>
+</ul>
+<p>Here, the right and left joins appear to have similar speed and the full is predictably longer. The inner, anti, and semi joins are faster, with the latter appearing to have be the fastest.</p>
+<p>Two important arguments determining the speed of <code>collapse::join()</code> are <code>validate</code> and <code>verbose</code>. The former takes one of “1:1”, “1:m”, “m:1”, or “m:m”. If <code>validate = "m:m"</code> then it does no checks, which makes it faster. The latter, i.e.&nbsp;setting <code>verbose = FALSE</code>, makes a very large difference in computation time. The standard left join time is 5.61575^{6}ms, while the join where <code>verbose = FALSE</code> has a median time of 5.36805^{6}ms.</p>
+<p>There are a few modifications that don’t have an effect. Not adding a suffix, using a set key in the data.table, and pre-sorting all have a negligible impact on the computation time.</p>
+<p>An example of the message: <code>left join: dt1_setkey[key1] 10047/100000 (10%) &lt;1:1&gt; dt2_setkey[key1] 10047/100000 (10%) duplicate columns: key2, key3, key4, key5 =&gt; renamed using suffix '_dt2_setkey' for y</code></p>
+<p>note, that for <code>collapse::join()</code>, specifying argument <code>validate = "m:m"</code> does the following: “The default”m:m” does not perform any checks, first matches in x and y are taken.” That means a) it should be more efficient, b) it will not perform a Cartesian join. It only keeps the first matches, not all matches. Point (b) is what is leading to discrepancies with <code>merge.data.table()</code> (discussed below), because the latter does not only match the first matches, but all possible matches in the many-to-many mapping. This is shown in the toy example below.</p>
+</section>
+</section>
+<section id="multiple-ids-one-to-one-left-outer-join" class="level3">
+<h3 class="anchored" data-anchor-id="multiple-ids-one-to-one-left-outer-join">Multiple IDs, one-to-one left outer join</h3>
+<p>The data.table and <code>collapse</code> approaches don’t always return the same output when keys are not identical.</p>
+<section id="toy-example" class="level4">
+<h4 class="anchored" data-anchor-id="toy-example">Toy Example</h4>
+<p>First look at a toy example to show how the output differs.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dt_toy_1 <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">a =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">10</span>, <span class="at">replace =</span> T), </span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">b =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">10</span>, <span class="at">replace =</span> T), </span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">c =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>dt_toy_2 <span class="ot">&lt;-</span> <span class="fu">data.table</span>(</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">a =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">10</span>, <span class="at">replace =</span> T), </span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">b =</span> <span class="fu">sample</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">5</span>, <span class="dv">10</span>, <span class="at">replace =</span> T), </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">d =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">&lt;-</span> <span class="fu">merge.data.table</span>(</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> dt_toy_1, </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> dt_toy_2, </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"a"</span>), </span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">all =</span> T, </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> T</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>toy_result_datatable <span class="ot">&lt;-</span> <span class="fu">merge.data.table</span>(</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> dt_toy_1, </span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> dt_toy_2, </span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"a"</span>), </span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">all =</span> T, </span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  <span class="at">cart =</span> F, </span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> T</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>toy_result_collapse <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> dt_toy_1, </span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> dt_toy_2, </span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">how =</span> <span class="st">"full"</span>, </span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> T, </span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">on =</span> <span class="st">"a"</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>full join: dt_toy_1[a] 10/10 (100%) &lt;m:m&gt; dt_toy_2[a] 5/10 (50%)
+duplicate columns: b =&gt; renamed using suffix '_dt_toy_2' for y</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>toy_result_tidy <span class="ot">&lt;-</span> dplyr<span class="sc">::</span><span class="fu">full_join</span>(</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">x =</span> dt_toy_1, </span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">y =</span> dt_toy_2, </span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"a"</span></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>) <span class="sc">|&gt;</span> dplyr<span class="sc">::</span><span class="fu">arrange</span>(</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>  a, </span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">desc =</span> F</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in dplyr::full_join(x = dt_toy_1, y = dt_toy_2, by = "a"): Detected an unexpected many-to-many relationship between `x` and `y`.
+ℹ Row 1 of `x` matches multiple rows in `y`.
+ℹ Row 4 of `y` matches multiple rows in `x`.
+ℹ If a many-to-many relationship is expected, set `relationship =
+  "many-to-many"` to silence this warning.</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dt_toy_1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    a b  c
+ 1: 1 5  1
+ 2: 4 5  2
+ 3: 1 2  3
+ 4: 2 2  4
+ 5: 5 1  5
+ 6: 3 5  6
+ 7: 2 5  7
+ 8: 3 1  8
+ 9: 3 1  9
+10: 1 5 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dt_toy_2 </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    a b  d
+ 1: 5 4  1
+ 2: 2 4  2
+ 3: 2 4  3
+ 4: 1 2  4
+ 5: 4 4  5
+ 6: 1 1  6
+ 7: 4 1  7
+ 8: 3 4  8
+ 9: 2 1  9
+10: 2 2 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>toy_result_datatable </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    a b.x  c b.y  d
+ 1: 1   5  1   2  4
+ 2: 1   5  1   1  6
+ 3: 1   2  3   2  4
+ 4: 1   2  3   1  6
+ 5: 1   5 10   2  4
+ 6: 1   5 10   1  6
+ 7: 2   2  4   4  2
+ 8: 2   2  4   4  3
+ 9: 2   2  4   1  9
+10: 2   2  4   2 10
+11: 2   5  7   4  2
+12: 2   5  7   4  3
+13: 2   5  7   1  9
+14: 2   5  7   2 10
+15: 3   5  6   4  8
+16: 3   1  8   4  8
+17: 3   1  9   4  8
+18: 4   5  2   4  5
+19: 4   5  2   1  7
+20: 5   1  5   4  1</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>toy_result_collapse </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    a  b  c b_dt_toy_2  d
+ 1: 1  5  1          2  4
+ 2: 1  2  3          2  4
+ 3: 1  5 10          2  4
+ 4: 1 NA NA          1  6
+ 5: 2  2  4          4  2
+ 6: 2  5  7          4  2
+ 7: 2 NA NA          4  3
+ 8: 2 NA NA          1  9
+ 9: 2 NA NA          2 10
+10: 3  5  6          4  8
+11: 3  1  8          4  8
+12: 3  1  9          4  8
+13: 4  5  2          4  5
+14: 4 NA NA          1  7
+15: 5  1  5          4  1</code></pre>
+</div>
+</div>
+<p>The <code>merge.data.table</code> function does something more similar to the cartesian join, even if that is not specified. It gives <code>nrow(d)</code> rows while the <code>collapse</code> full join gives only <code>nrow(toy_result_collapse)</code>. For <code>collapse</code>, a full join: 1) takes all rows in x and matches to y as when doing a left join, 2) if the <code>by</code> argument is non-unique in y, it joins only the first matched key in y to the row in x, and appends the remaining rows in y with the same <code>by</code> while giving it an NA for the columns coming from x. This is contrasted to the data.table join, which joins on all matching keys in a many-to-many mapping.</p>
+<p>To understand, consider the case where column <span class="math inline">\(X\)</span> is the key in data.table <span class="math inline">\(x\)</span> and there are <span class="math inline">\(n^i_x\)</span> number of rows where <span class="math inline">\(X = i\)</span>, and similarly there are <span class="math inline">\(n^i_y\)</span> number of rows where column named <span class="math inline">\(X\)</span> in data.table <span class="math inline">\(y\)</span> is equal to <span class="math inline">\(i\)</span>. Then in the <code>collapse</code> full join, there will be: a) <span class="math inline">\(n^i_x\)</span> rows in the output table where each of the repeated values in <span class="math inline">\(x\)</span> are joined with the first match in <span class="math inline">\(y\)</span>; b) <span class="math inline">\(n^i_y -1\)</span> rows in the output table where each of the remaining unmatched rows where <span class="math inline">\(X=i\)</span> in <span class="math inline">\(y\)</span> are appended to the output table with NAs in the columns coming from <span class="math inline">\(x\)</span>. This gives a total of <span class="math inline">\(n^i_x + n^i_y -1\)</span> rows where <span class="math inline">\(X = i\)</span>.</p>
+<p>Below is an example:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>dt_toy_1[a<span class="sc">==</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   a b  c
+1: 1 5  1
+2: 1 2  3
+3: 1 5 10</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>dt_toy_2[a<span class="sc">==</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   a b d
+1: 1 2 4
+2: 1 1 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>toy_result_datatable[a<span class="sc">==</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   a b.x  c b.y d
+1: 1   5  1   2 4
+2: 1   5  1   1 6
+3: 1   2  3   2 4
+4: 1   2  3   1 6
+5: 1   5 10   2 4
+6: 1   5 10   1 6</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>toy_result_collapse <span class="sc">|&gt;</span> <span class="fu">fsubset</span>(a<span class="sc">==</span><span class="dv">1</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   a  b  c b_dt_toy_2 d
+1: 1  5  1          2 4
+2: 1  2  3          2 4
+3: 1  5 10          2 4
+4: 1 NA NA          1 6</code></pre>
+</div>
+</div>
+<p>The <code>dplyr</code> joins have more convenient, customizable arguments. The argument <code>multiple</code> allows you to specify what to do with multiple matches that would occur in <strong>many-to-one</strong> or <strong>many-to-many</strong> joins. If “all”, then returns every match (similar to <code>merge.data.table(all = TRUE)</code>). If “first”, returns the first match (similar to what <code>collapse::join(how = "full")</code>, except <code>collapse</code> then returns the additional rows as NAs). If “last”, returns the last match. If “any”, then returns any match, which can be faster than “first” or “last”. The <code>dplyr</code> joins also have an argument <code>relationship</code> which checks whether one-to-one, many-to-one, etc. and returns error if not.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>joyn<span class="sc">::</span><span class="fu">is_id</span>(</span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>  dt1, </span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code></code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Duplicates in terms of `key2`, `key3`, `key4`, and `key5` </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   copies     n percent
+1:      1 83119     91%
+2:      2  7760    8.5%
+3:      3   431    0.5%
+4:      4    17      0%
+5:  total 91327    100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>─────────────────────────────────────────────────────── End of is_id() report ──</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>joyn<span class="sc">::</span><span class="fu">is_id</span>(</span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  dt2, </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>
+── Duplicates in terms of `key2`, `key3`, `key4`, and `key5` </code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   copies     n percent
+1:      1 83347   91.2%
+2:      2  7579    8.3%
+3:      3   466    0.5%
+4:      4    23      0%
+5:      5     1      0%
+6:  total 91416    100%</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>─────────────────────────────────────────────────────── End of is_id() report ──</code></pre>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] FALSE</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>dt1_unique <span class="ot">&lt;-</span> dt1 <span class="sc">|&gt;</span> <span class="fu">funique</span>(</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">cols =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>dt2_unique <span class="ot">&lt;-</span> dt2 <span class="sc">|&gt;</span> <span class="fu">funique</span>(</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">cols =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>))</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>dt1_unique_setkey <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1_unique)</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>  dt1_unique_setkey, </span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>  key2, </span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a>  key3, </span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>  key4, </span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>  key5</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>dt2_unique_setkey <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt2_unique)</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="fu">setkey</span>(</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>  dt2_unique_setkey, </span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>  key2, </span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>  key3, </span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>  key4, </span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>  key5</span>
+<span id="cb40-22"><a href="#cb40-22" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb40-23"><a href="#cb40-23" aria-hidden="true" tabindex="-1"></a>t2_dt_ref <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1_unique)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>t2_dt_ref <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>t2_dt_ref_b <span class="ot">&lt;-</span> <span class="fu">copy</span>(dt1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="data.table-many-to-many" class="level4">
+<h4 class="anchored" data-anchor-id="data.table-many-to-many">data.table many-to-many</h4>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>bench_dt1_test2 <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">50</span>, </span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all.x</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>    t2_dt_allx <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-6"><a href="#cb42-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb42-7"><a href="#cb42-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb42-8"><a href="#cb42-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-9"><a href="#cb42-9" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-10"><a href="#cb42-10" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-11"><a href="#cb42-11" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-12"><a href="#cb42-12" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-13"><a href="#cb42-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-14"><a href="#cb42-14" aria-hidden="true" tabindex="-1"></a>    t2_dt_all <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-15"><a href="#cb42-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb42-16"><a href="#cb42-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb42-17"><a href="#cb42-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-18"><a href="#cb42-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">all   =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-19"><a href="#cb42-19" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-20"><a href="#cb42-20" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-21"><a href="#cb42-21" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-22"><a href="#cb42-22" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all.y</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-23"><a href="#cb42-23" aria-hidden="true" tabindex="-1"></a>    t2_dt_yall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-24"><a href="#cb42-24" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb42-25"><a href="#cb42-25" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb42-26"><a href="#cb42-26" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-27"><a href="#cb42-27" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.y =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-28"><a href="#cb42-28" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-29"><a href="#cb42-29" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-30"><a href="#cb42-30" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table setkey</span></span>
+<span id="cb42-31"><a href="#cb42-31" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four set keys</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-32"><a href="#cb42-32" aria-hidden="true" tabindex="-1"></a>    t2_dts <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-33"><a href="#cb42-33" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_setkey, </span>
+<span id="cb42-34"><a href="#cb42-34" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_setkey, </span>
+<span id="cb42-35"><a href="#cb42-35" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-36"><a href="#cb42-36" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-37"><a href="#cb42-37" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-38"><a href="#cb42-38" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-39"><a href="#cb42-39" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-40"><a href="#cb42-40" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all.x, pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-41"><a href="#cb42-41" aria-hidden="true" tabindex="-1"></a>    t2_dt_presort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-42"><a href="#cb42-42" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_sort, </span>
+<span id="cb42-43"><a href="#cb42-43" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_sort, </span>
+<span id="cb42-44"><a href="#cb42-44" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-45"><a href="#cb42-45" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span></span>
+<span id="cb42-46"><a href="#cb42-46" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-47"><a href="#cb42-47" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-48"><a href="#cb42-48" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-49"><a href="#cb42-49" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all.x, not sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-50"><a href="#cb42-50" aria-hidden="true" tabindex="-1"></a>    t2_dt_notsort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-51"><a href="#cb42-51" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1, </span>
+<span id="cb42-52"><a href="#cb42-52" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2, </span>
+<span id="cb42-53"><a href="#cb42-53" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-54"><a href="#cb42-54" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb42-55"><a href="#cb42-55" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort  =</span> <span class="cn">FALSE</span></span>
+<span id="cb42-56"><a href="#cb42-56" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-57"><a href="#cb42-57" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-58"><a href="#cb42-58" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-59"><a href="#cb42-59" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all.x, not sort, pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-60"><a href="#cb42-60" aria-hidden="true" tabindex="-1"></a>    t2_dts_presort_notsort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-61"><a href="#cb42-61" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_sort, </span>
+<span id="cb42-62"><a href="#cb42-62" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_sort, </span>
+<span id="cb42-63"><a href="#cb42-63" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-64"><a href="#cb42-64" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb42-65"><a href="#cb42-65" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort  =</span> <span class="cn">FALSE</span></span>
+<span id="cb42-66"><a href="#cb42-66" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-67"><a href="#cb42-67" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-68"><a href="#cb42-68" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table</span></span>
+<span id="cb42-69"><a href="#cb42-69" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key, all.x, not sort, timed pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-70"><a href="#cb42-70" aria-hidden="true" tabindex="-1"></a>    dt1_sort2 <span class="ot">&lt;-</span> <span class="fu">setorder</span>(dt1_sort2, key2, key3, key4, key5)</span>
+<span id="cb42-71"><a href="#cb42-71" aria-hidden="true" tabindex="-1"></a>    dt2_sort2 <span class="ot">&lt;-</span> <span class="fu">setorder</span>(dt2_sort2, key2, key3, key4, key5)</span>
+<span id="cb42-72"><a href="#cb42-72" aria-hidden="true" tabindex="-1"></a>    t2_dt_timedsort_nosort_xall <span class="ot">&lt;-</span> data.table<span class="sc">::</span><span class="fu">merge.data.table</span>(</span>
+<span id="cb42-73"><a href="#cb42-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">x     =</span> dt1_sort2, </span>
+<span id="cb42-74"><a href="#cb42-74" aria-hidden="true" tabindex="-1"></a>      <span class="at">y     =</span> dt2_sort2, </span>
+<span id="cb42-75"><a href="#cb42-75" aria-hidden="true" tabindex="-1"></a>      <span class="at">by    =</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)), </span>
+<span id="cb42-76"><a href="#cb42-76" aria-hidden="true" tabindex="-1"></a>      <span class="at">all.x =</span> <span class="cn">TRUE</span>, </span>
+<span id="cb42-77"><a href="#cb42-77" aria-hidden="true" tabindex="-1"></a>      <span class="at">sort  =</span> <span class="cn">FALSE</span></span>
+<span id="cb42-78"><a href="#cb42-78" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb42-79"><a href="#cb42-79" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-80"><a href="#cb42-80" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table by reference</span></span>
+<span id="cb42-81"><a href="#cb42-81" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key by ref</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-82"><a href="#cb42-82" aria-hidden="true" tabindex="-1"></a>    t2_dt_ref[</span>
+<span id="cb42-83"><a href="#cb42-83" aria-hidden="true" tabindex="-1"></a>      dt2,                  <span class="co"># y</span></span>
+<span id="cb42-84"><a href="#cb42-84" aria-hidden="true" tabindex="-1"></a>      on <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>)),          <span class="co"># join by</span></span>
+<span id="cb42-85"><a href="#cb42-85" aria-hidden="true" tabindex="-1"></a>      <span class="fu">c</span>(                    <span class="co"># which y variables to include</span></span>
+<span id="cb42-86"><a href="#cb42-86" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb42-87"><a href="#cb42-87" aria-hidden="true" tabindex="-1"></a>          <span class="fu">names</span>(dt2)[<span class="dv">1</span>], </span>
+<span id="cb42-88"><a href="#cb42-88" aria-hidden="true" tabindex="-1"></a>          <span class="st">".y"</span></span>
+<span id="cb42-89"><a href="#cb42-89" aria-hidden="true" tabindex="-1"></a>        ),</span>
+<span id="cb42-90"><a href="#cb42-90" aria-hidden="true" tabindex="-1"></a>        <span class="fu">names</span>(dt2)[<span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>]</span>
+<span id="cb42-91"><a href="#cb42-91" aria-hidden="true" tabindex="-1"></a>      )  <span class="sc">:</span><span class="er">=</span> <span class="fu">mget</span>(</span>
+<span id="cb42-92"><a href="#cb42-92" aria-hidden="true" tabindex="-1"></a>        <span class="fu">paste0</span>(</span>
+<span id="cb42-93"><a href="#cb42-93" aria-hidden="true" tabindex="-1"></a>          <span class="st">"i."</span>, </span>
+<span id="cb42-94"><a href="#cb42-94" aria-hidden="true" tabindex="-1"></a>          <span class="fu">names</span>(dt2)[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">6</span><span class="sc">:</span><span class="dv">8</span>)]</span>
+<span id="cb42-95"><a href="#cb42-95" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb42-96"><a href="#cb42-96" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb42-97"><a href="#cb42-97" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb42-98"><a href="#cb42-98" aria-hidden="true" tabindex="-1"></a>  }, </span>
+<span id="cb42-99"><a href="#cb42-99" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - data.table by reference</span></span>
+<span id="cb42-100"><a href="#cb42-100" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">DT m:m - four key by ref, no name change</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb42-101"><a href="#cb42-101" aria-hidden="true" tabindex="-1"></a>    t2_dt_ref_b[</span>
+<span id="cb42-102"><a href="#cb42-102" aria-hidden="true" tabindex="-1"></a>      dt2,                  <span class="co"># y</span></span>
+<span id="cb42-103"><a href="#cb42-103" aria-hidden="true" tabindex="-1"></a>      on <span class="ot">=</span> <span class="fu">c</span>(<span class="fu">paste0</span>(<span class="st">"key"</span>, <span class="dv">2</span><span class="sc">:</span><span class="dv">5</span>))          <span class="co"># join by</span></span>
+<span id="cb42-104"><a href="#cb42-104" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb42-105"><a href="#cb42-105" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb42-106"><a href="#cb42-106" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"highcharter"</span>)) {</span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>  hc_bench2_DT_join_types <span class="ot">&lt;-</span> highcharter<span class="sc">::</span><span class="fu">data_to_boxplot</span>(bench_dt1_test2,</span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a>                                        time,</span>
+<span id="cb43-4"><a href="#cb43-4" aria-hidden="true" tabindex="-1"></a>                                        expr,</span>
+<span id="cb43-5"><a href="#cb43-5" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">add_outliers =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb43-6"><a href="#cb43-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">name =</span> <span class="st">"Time in milliseconds"</span>)</span>
+<span id="cb43-7"><a href="#cb43-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="#cb43-8" aria-hidden="true" tabindex="-1"></a>  <span class="co">#print(hc_bench2_DT_join_types)</span></span>
+<span id="cb43-9"><a href="#cb43-9" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">highchart</span>() <span class="sc">|&gt;</span></span>
+<span id="cb43-10"><a href="#cb43-10" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_xAxis</span>(<span class="at">type =</span> <span class="st">"category"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-11"><a href="#cb43-11" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_chart</span>(<span class="at">inverted=</span><span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-12"><a href="#cb43-12" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_add_series_list</span>(hc_bench2_DT_join_types)</span>
+<span id="cb43-13"><a href="#cb43-13" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb43-14"><a href="#cb43-14" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb43-15"><a href="#cb43-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boxplot</span>(bench_dt1_test2, <span class="at">outline =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb43-16"><a href="#cb43-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-2a569d20e5766c9584c5" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-2a569d20e5766c9584c5">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"Time in milliseconds","data":[{"name":"DT m:m - four key, all.x","low":23392400,"q1":25293600,"median":27744150,"q3":31626600,"high":40339700},{"name":"DT m:m - four key, all","low":48745800,"q1":57916300,"median":64332700,"q3":71484500,"high":91336800},{"name":"DT m:m - four key, all.y","low":38369400,"q1":46451100,"median":48350850,"q3":55449700,"high":66736600},{"name":"DT m:m - four set keys","low":23111500,"q1":25302600,"median":27913400,"q3":31011000,"high":39096800},{"name":"DT m:m - four key, all.x, pre-sort","low":24775300,"q1":26550300,"median":28614300,"q3":31506600,"high":38398500},{"name":"DT m:m - four key, all.x, not sort","low":17830800,"q1":21061900,"median":23160700,"q3":27384700,"high":34495100},{"name":"DT m:m - four key, all.x, not sort, pre-sort","low":19188800,"q1":21173400,"median":22331950,"q3":25064900,"high":29500900},{"name":"DT m:m - four key, all.x, not sort, timed pre-sort","low":18305100,"q1":20204300,"median":22264300,"q3":27715900,"high":38215500},{"name":"DT m:m - four key by ref","low":28730500,"q1":31770900,"median":34816700,"q3":39541100,"high":47079400},{"name":"DT m:m - four key by ref, no name change","low":17666400,"q1":20686900,"median":22619750,"q3":26183700,"high":33223400}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<p>For the left m:m join, the first one in the benchmark above, we can see there are the combinations of key2, key3, key4, and key5 that are present in both dt1 and dt2 multiple times:</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="co"># key1 is unique, so finding multiple shows duplicates elements from dt x</span></span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># find key1.x that occur multiple times in `t2_dt_allx`</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>t2_dt_allx <span class="sc">|&gt;</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fsubset</span>(</span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    key1.x <span class="sc">%in%</span> t2_dt_allx[</span>
+<span id="cb44-6"><a href="#cb44-6" aria-hidden="true" tabindex="-1"></a>      , </span>
+<span id="cb44-7"><a href="#cb44-7" aria-hidden="true" tabindex="-1"></a>      .SD[.N<span class="sc">&gt;</span><span class="dv">1</span>], </span>
+<span id="cb44-8"><a href="#cb44-8" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"key1.x"</span>)</span>
+<span id="cb44-9"><a href="#cb44-9" aria-hidden="true" tabindex="-1"></a>    ]<span class="sc">$</span>key1.x</span>
+<span id="cb44-10"><a href="#cb44-10" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      key2 key3 key4 key5 key1.x      data1     data2    data3 key1.y
+   1:    A    1    4 2010 242154  0.4162003 0.1067932 53.72428 817478
+   2:    A    1    4 2010 242154  0.4162003 0.1067932 53.72428 844511
+   3:    A    3    4 2009 154444 -1.8246407 0.0212811 38.02235 233904
+   4:    A    3    4 2009 154444 -1.8246407 0.0212811 38.02235 844572
+   5:    A    3    9 2004  24638  0.6390105 0.3331607 33.54477 420191
+  ---                                                                
+3119:    Z   97   10 2010  38515 -0.9600094 0.4750863 54.90136 408180
+3120:    Z   98    4 2007 435772 -0.1561927 0.6915040 60.60665 236773
+3121:    Z   98    4 2007 435772 -0.1561927 0.6915040 60.60665 579435
+3122:    Z   99    2 2010 774660 -0.9331600 0.6586700 55.02571 666417
+3123:    Z   99    2 2010 774660 -0.9331600 0.6586700 55.02571 525072
+            data4       data5     data6
+   1: -0.82832352 0.323322928 106.54685
+   2:  2.13637591 0.012683101 146.14523
+   3: -1.52682839 0.906090426 101.58156
+   4:  0.45524454 0.986452187 118.73900
+   5:  1.63996626 0.486536772 105.06503
+  ---                                  
+3119: -0.11048055 0.001782632  99.64046
+3120:  0.28021750 0.780659881 148.15593
+3121: -0.22840618 0.119172920 103.24634
+3122:  2.24606988 0.453830332 108.49407
+3123: -0.09918359 0.214682208 101.89380</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a><span class="co"># find matched </span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>dt1 <span class="sc">|&gt;</span> </span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fsubset</span>(</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a>    key1 <span class="sc">%in%</span> t2_dt_allx[</span>
+<span id="cb46-5"><a href="#cb46-5" aria-hidden="true" tabindex="-1"></a>      , </span>
+<span id="cb46-6"><a href="#cb46-6" aria-hidden="true" tabindex="-1"></a>      .SD[.N<span class="sc">&gt;</span><span class="dv">1</span>], </span>
+<span id="cb46-7"><a href="#cb46-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"key1.x"</span>)</span>
+<span id="cb46-8"><a href="#cb46-8" aria-hidden="true" tabindex="-1"></a>    ]<span class="sc">$</span>key1.x</span>
+<span id="cb46-9"><a href="#cb46-9" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        key1 key2 key3 key4 key5        data1     data2    data3
+   1: 953748    B   74   10 2010  1.108474915 0.3180984 52.26965
+   2: 892826    O   10    2 2011 -0.348504795 0.7163787 42.63925
+   3: 862809    W   54    9 2006 -1.775710061 0.5989570 38.61265
+   4:   2079    A   97    3 2020  0.008153654 0.6182174 40.88506
+   5: 114237    Z   15    7 2013 -0.895487147 0.4610252 69.52901
+  ---                                                           
+1512: 712437    R    8    8 2019  0.651403164 0.4864016 52.12891
+1513: 939205    S   60    5 2006 -1.374441830 0.5475508 42.91215
+1514: 644643    K   63    7 2013 -2.412196288 0.8355930 42.71827
+1515: 450654    E   75    8 2015 -0.804884338 0.9354307 55.92753
+1516: 323903    P   49    4 2009  0.885090784 0.8130594 54.19595</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>dt2 <span class="sc">|&gt;</span> </span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">fsubset</span>(</span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>    key1 <span class="sc">%in%</span> t2_dt_allx[</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a>      , </span>
+<span id="cb48-5"><a href="#cb48-5" aria-hidden="true" tabindex="-1"></a>      .SD[.N<span class="sc">&gt;</span><span class="dv">1</span>], </span>
+<span id="cb48-6"><a href="#cb48-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"key1.x"</span>)</span>
+<span id="cb48-7"><a href="#cb48-7" aria-hidden="true" tabindex="-1"></a>    ]<span class="sc">$</span>key1.y</span>
+<span id="cb48-8"><a href="#cb48-8" aria-hidden="true" tabindex="-1"></a>  )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        key1 key2 key3 key4 key5      data4      data5     data6
+   1: 633156    J   22    5 2003 -0.3360862 0.56141190  92.12062
+   2:  99456    V   11    9 2017 -0.4286415 0.42044120  90.25340
+   3: 394762    T   51    7 2008  0.6820169 0.27515728 109.70739
+   4: 671567    T   27    6 2006  0.2656296 0.86958100 111.91546
+   5: 478064    O   17   10 2010 -0.7419945 0.04225082  86.77386
+  ---                                                           
+2891: 928517    W   93    2 2017  1.0258925 0.26247115 116.51694
+2892: 373258    C    9    8 2007 -0.1667179 0.71559741  99.99160
+2893: 629553    W   59    3 2014 -1.6990642 0.90672282 105.73743
+2894: 675496    D   11    3 2018 -0.1958411 0.87240472 123.63009
+2895: 352480    M   45    1 2001  1.0347790 0.36518983 126.64556</code></pre>
+</div>
+</div>
+<p>The join by reference doesn’t give m:m.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>bench_dt2_collapse_join_types <span class="ot">&lt;-</span> microbenchmark<span class="sc">::</span><span class="fu">microbenchmark</span>(</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">times =</span> <span class="dv">50</span>,</span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb50-6"><a href="#cb50-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, left, val m:m</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-7"><a href="#cb50-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-8"><a href="#cb50-8" aria-hidden="true" tabindex="-1"></a>    t2_coll_left <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-9"><a href="#cb50-9" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-10"><a href="#cb50-10" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-11"><a href="#cb50-11" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-12"><a href="#cb50-12" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-13"><a href="#cb50-13" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-14"><a href="#cb50-14" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-15"><a href="#cb50-15" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb50-16"><a href="#cb50-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-17"><a href="#cb50-17" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb50-18"><a href="#cb50-18" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-19"><a href="#cb50-19" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb50-20"><a href="#cb50-20" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, right, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-21"><a href="#cb50-21" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-22"><a href="#cb50-22" aria-hidden="true" tabindex="-1"></a>    t2_coll_right <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-23"><a href="#cb50-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-24"><a href="#cb50-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-25"><a href="#cb50-25" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"right"</span>, </span>
+<span id="cb50-26"><a href="#cb50-26" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-27"><a href="#cb50-27" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-28"><a href="#cb50-28" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-29"><a href="#cb50-29" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb50-30"><a href="#cb50-30" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb50-31"><a href="#cb50-31" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-32"><a href="#cb50-32" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb50-33"><a href="#cb50-33" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-34"><a href="#cb50-34" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, full, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-35"><a href="#cb50-35" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-36"><a href="#cb50-36" aria-hidden="true" tabindex="-1"></a>      t2_coll_full <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-37"><a href="#cb50-37" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-38"><a href="#cb50-38" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-39"><a href="#cb50-39" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"full"</span>, </span>
+<span id="cb50-40"><a href="#cb50-40" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-41"><a href="#cb50-41" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-42"><a href="#cb50-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-43"><a href="#cb50-43" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb50-44"><a href="#cb50-44" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb50-45"><a href="#cb50-45" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-46"><a href="#cb50-46" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb50-47"><a href="#cb50-47" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-48"><a href="#cb50-48" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, inner, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-49"><a href="#cb50-49" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-50"><a href="#cb50-50" aria-hidden="true" tabindex="-1"></a>      t2_coll_inner <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-51"><a href="#cb50-51" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-52"><a href="#cb50-52" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-53"><a href="#cb50-53" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"inner"</span>, </span>
+<span id="cb50-54"><a href="#cb50-54" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-55"><a href="#cb50-55" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-56"><a href="#cb50-56" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-57"><a href="#cb50-57" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb50-58"><a href="#cb50-58" aria-hidden="true" tabindex="-1"></a>    },  </span>
+<span id="cb50-59"><a href="#cb50-59" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-60"><a href="#cb50-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb50-61"><a href="#cb50-61" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-62"><a href="#cb50-62" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, anti, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-63"><a href="#cb50-63" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-64"><a href="#cb50-64" aria-hidden="true" tabindex="-1"></a>      t2_coll_anti <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-65"><a href="#cb50-65" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-66"><a href="#cb50-66" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-67"><a href="#cb50-67" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"anti"</span>, </span>
+<span id="cb50-68"><a href="#cb50-68" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-69"><a href="#cb50-69" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-70"><a href="#cb50-70" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-71"><a href="#cb50-71" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb50-72"><a href="#cb50-72" aria-hidden="true" tabindex="-1"></a>    },  </span>
+<span id="cb50-73"><a href="#cb50-73" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-74"><a href="#cb50-74" aria-hidden="true" tabindex="-1"></a>  <span class="co"># Test 1 - collapse</span></span>
+<span id="cb50-75"><a href="#cb50-75" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-76"><a href="#cb50-76" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, semi, val 1:1</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-77"><a href="#cb50-77" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-78"><a href="#cb50-78" aria-hidden="true" tabindex="-1"></a>      t2_coll_semi <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-79"><a href="#cb50-79" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-80"><a href="#cb50-80" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-81"><a href="#cb50-81" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"semi"</span>, </span>
+<span id="cb50-82"><a href="#cb50-82" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-83"><a href="#cb50-83" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-84"><a href="#cb50-84" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-85"><a href="#cb50-85" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb50-86"><a href="#cb50-86" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb50-87"><a href="#cb50-87" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-88"><a href="#cb50-88" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse, left, val 1:1, sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-89"><a href="#cb50-89" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-90"><a href="#cb50-90" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_sort <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-91"><a href="#cb50-91" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-92"><a href="#cb50-92" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-93"><a href="#cb50-93" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-94"><a href="#cb50-94" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-95"><a href="#cb50-95" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-96"><a href="#cb50-96" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>), </span>
+<span id="cb50-97"><a href="#cb50-97" aria-hidden="true" tabindex="-1"></a>        <span class="at">sort     =</span> <span class="cn">TRUE</span></span>
+<span id="cb50-98"><a href="#cb50-98" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-99"><a href="#cb50-99" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb50-100"><a href="#cb50-100" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-101"><a href="#cb50-101" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - not verbose</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-102"><a href="#cb50-102" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-103"><a href="#cb50-103" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_notverb <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-104"><a href="#cb50-104" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-105"><a href="#cb50-105" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-106"><a href="#cb50-106" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-107"><a href="#cb50-107" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-108"><a href="#cb50-108" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-109"><a href="#cb50-109" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>), </span>
+<span id="cb50-110"><a href="#cb50-110" aria-hidden="true" tabindex="-1"></a>        <span class="at">verbose  =</span> <span class="dv">0</span></span>
+<span id="cb50-111"><a href="#cb50-111" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-112"><a href="#cb50-112" aria-hidden="true" tabindex="-1"></a>    }, </span>
+<span id="cb50-113"><a href="#cb50-113" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-114"><a href="#cb50-114" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - no suffix</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-115"><a href="#cb50-115" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-116"><a href="#cb50-116" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_nosuff <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-117"><a href="#cb50-117" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-118"><a href="#cb50-118" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-119"><a href="#cb50-119" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-120"><a href="#cb50-120" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-121"><a href="#cb50-121" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>)</span>
+<span id="cb50-122"><a href="#cb50-122" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-123"><a href="#cb50-123" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb50-124"><a href="#cb50-124" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-125"><a href="#cb50-125" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - setkey</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-126"><a href="#cb50-126" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-127"><a href="#cb50-127" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_setkey <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-128"><a href="#cb50-128" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1_setkey, </span>
+<span id="cb50-129"><a href="#cb50-129" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2_setkey, </span>
+<span id="cb50-130"><a href="#cb50-130" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-131"><a href="#cb50-131" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-132"><a href="#cb50-132" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>)</span>
+<span id="cb50-133"><a href="#cb50-133" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-134"><a href="#cb50-134" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb50-135"><a href="#cb50-135" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-136"><a href="#cb50-136" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse 1:1 - pre-sort</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-137"><a href="#cb50-137" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-138"><a href="#cb50-138" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_presort <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-139"><a href="#cb50-139" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1_sort, </span>
+<span id="cb50-140"><a href="#cb50-140" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2_sort, </span>
+<span id="cb50-141"><a href="#cb50-141" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-142"><a href="#cb50-142" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-143"><a href="#cb50-143" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>)</span>
+<span id="cb50-144"><a href="#cb50-144" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-145"><a href="#cb50-145" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb50-146"><a href="#cb50-146" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-147"><a href="#cb50-147" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse m:m</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-148"><a href="#cb50-148" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-149"><a href="#cb50-149" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_mm <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-150"><a href="#cb50-150" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-151"><a href="#cb50-151" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-152"><a href="#cb50-152" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-153"><a href="#cb50-153" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-154"><a href="#cb50-154" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-155"><a href="#cb50-155" aria-hidden="true" tabindex="-1"></a>        <span class="at">suffix   =</span> <span class="fu">c</span>(<span class="st">".x"</span>, <span class="st">".y"</span>)</span>
+<span id="cb50-156"><a href="#cb50-156" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-157"><a href="#cb50-157" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb50-158"><a href="#cb50-158" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-159"><a href="#cb50-159" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse m:m, no verbose, no suffix</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-160"><a href="#cb50-160" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-161"><a href="#cb50-161" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_mm_noverb_nosuff <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-162"><a href="#cb50-162" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-163"><a href="#cb50-163" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-164"><a href="#cb50-164" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-165"><a href="#cb50-165" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-166"><a href="#cb50-166" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-167"><a href="#cb50-167" aria-hidden="true" tabindex="-1"></a>        <span class="at">verbose  =</span> <span class="dv">0</span></span>
+<span id="cb50-168"><a href="#cb50-168" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-169"><a href="#cb50-169" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb50-170"><a href="#cb50-170" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb50-171"><a href="#cb50-171" aria-hidden="true" tabindex="-1"></a>  <span class="st">`</span><span class="at">Collapse m:m all, remove duplicate cols</span><span class="st">`</span> <span class="ot">=</span> {</span>
+<span id="cb50-172"><a href="#cb50-172" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-173"><a href="#cb50-173" aria-hidden="true" tabindex="-1"></a>      t2_coll_left_noverb_nosuff_nodup <span class="ot">&lt;-</span> collapse<span class="sc">::</span><span class="fu">join</span>(</span>
+<span id="cb50-174"><a href="#cb50-174" aria-hidden="true" tabindex="-1"></a>        <span class="at">x        =</span> dt1, </span>
+<span id="cb50-175"><a href="#cb50-175" aria-hidden="true" tabindex="-1"></a>        <span class="at">y        =</span> dt2, </span>
+<span id="cb50-176"><a href="#cb50-176" aria-hidden="true" tabindex="-1"></a>        <span class="at">how      =</span> <span class="st">"left"</span>, </span>
+<span id="cb50-177"><a href="#cb50-177" aria-hidden="true" tabindex="-1"></a>        <span class="at">validate =</span> <span class="st">"m:m"</span>,</span>
+<span id="cb50-178"><a href="#cb50-178" aria-hidden="true" tabindex="-1"></a>        <span class="at">on       =</span> <span class="fu">c</span>(<span class="st">"key2"</span>, <span class="st">"key3"</span>, <span class="st">"key4"</span>, <span class="st">"key5"</span>), </span>
+<span id="cb50-179"><a href="#cb50-179" aria-hidden="true" tabindex="-1"></a>        <span class="at">verbose  =</span> <span class="dv">0</span>, </span>
+<span id="cb50-180"><a href="#cb50-180" aria-hidden="true" tabindex="-1"></a>        <span class="at">drop.dup.cols =</span> T</span>
+<span id="cb50-181"><a href="#cb50-181" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb50-182"><a href="#cb50-182" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb50-183"><a href="#cb50-183" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb50-184"><a href="#cb50-184" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="fu">requireNamespace</span>(<span class="st">"highcharter"</span>)) {</span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  hc_bench_dt2_collapse_join_types <span class="ot">&lt;-</span> highcharter<span class="sc">::</span><span class="fu">data_to_boxplot</span>(bench_dt2_collapse_join_types,</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>                                        time,</span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>                                        expr,</span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">add_outliers =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>                                        <span class="at">name =</span> <span class="st">"Time in milliseconds"</span>)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb51-8"><a href="#cb51-8" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">highchart</span>() <span class="sc">|&gt;</span></span>
+<span id="cb51-9"><a href="#cb51-9" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_xAxis</span>(<span class="at">type =</span> <span class="st">"category"</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-10"><a href="#cb51-10" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_chart</span>(<span class="at">inverted=</span><span class="cn">TRUE</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-11"><a href="#cb51-11" aria-hidden="true" tabindex="-1"></a>  highcharter<span class="sc">::</span><span class="fu">hc_add_series_list</span>(hc_bench_dt2_collapse_join_types)</span>
+<span id="cb51-12"><a href="#cb51-12" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb51-13"><a href="#cb51-13" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb51-14"><a href="#cb51-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">boxplot</span>(bench_dt2_collapse_join_types, <span class="at">outline =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb51-15"><a href="#cb51-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-53ebde202870e9ac76b3" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-53ebde202870e9ac76b3">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"Time in milliseconds","data":[{"name":"Collapse, left, val m:m","low":6300900,"q1":8182100,"median":10301900,"q3":13270400,"high":20318600},{"name":"Collapse, right, val 1:1","low":5436300,"q1":8555600,"median":10164900,"q3":12386800,"high":16376000},{"name":"Collapse, full, val 1:1","low":9768300,"q1":15566700,"median":19102200,"q3":24420200,"high":37222500},{"name":"Collapse, inner, val 1:1","low":5152600,"q1":8371900,"median":9353150,"q3":10997800,"high":14672700},{"name":"Collapse, anti, val 1:1","low":4958600,"q1":7602000,"median":8967650,"q3":10890700,"high":14988600},{"name":"Collapse, semi, val 1:1","low":5321100,"q1":6299600,"median":8391000,"q3":9875300,"high":14567600},{"name":"Collapse, left, val 1:1, sort","low":13847500,"q1":19719200,"median":23435300,"q3":26542100,"high":35427400},{"name":"Collapse 1:1 - not verbose","low":5678700,"q1":7692000,"median":9710350,"q3":12588300,"high":19048000},{"name":"Collapse 1:1 - no suffix","low":5952700,"q1":7625600,"median":9914400,"q3":12679900,"high":18469500},{"name":"Collapse 1:1 - setkey","low":6269200,"q1":8124800,"median":9443250,"q3":11943400,"high":17126100},{"name":"Collapse 1:1 - pre-sort","low":5502700,"q1":7709600,"median":8968050,"q3":12181900,"high":16805400},{"name":"Collapse m:m","low":6226700,"q1":8294200,"median":9750250,"q3":12252700,"high":15368000},{"name":"Collapse m:m, no verbose, no suffix","low":6080200,"q1":8551700,"median":9909650,"q3":12000700,"high":16048100},{"name":"Collapse m:m all, remove duplicate cols","low":4806000,"q1":7647500,"median":8761700,"q3":10218500,"high":13495700}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="all-boxplots-again" class="level1">
+<h1>All boxplots again</h1>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-4fe9b7e1a5132ee8ddc3" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-4fe9b7e1a5132ee8ddc3">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"data.table 1:1, Time in milliseconds","data":[{"name":"DT 1:1 - one key, all.x","low":17875700,"q1":19844400,"median":21682150,"q3":23975400,"high":29853900},{"name":"DT 1:1 - one key, all","low":38402000,"q1":46292400,"median":52144550,"q3":62766300,"high":66729600},{"name":"DT 1:1 - one key, all.y","low":27907800,"q1":35923500,"median":39121900,"q3":43634800,"high":51578600},{"name":"DT 1:1 - one set key","low":9458200,"q1":10657700,"median":11587250,"q3":15638200,"high":19807800},{"name":"DT 1:1 - one timed set key","low":9428300,"q1":10876000,"median":11773650,"q3":12816900,"high":15680100},{"name":"DT 1:1 - one key, all.x, pre-sort","low":12811700,"q1":14407000,"median":15440750,"q3":17323400,"high":20131300},{"name":"DT 1:1 - one key, all.x, not sort","low":14111700,"q1":15414300,"median":16466350,"q3":18009700,"high":21360800},{"name":"DT 1:1 - one key, all.x, not sort, pre-sort","low":11328400,"q1":12818300,"median":14265350,"q3":15708600,"high":18859200},{"name":"DT 1:1 - one key, all.x, not sort, timed pre-sort","low":14285700,"q1":15275100,"median":17633000,"q3":20109500,"high":25473200},{"name":"DT 1:1 - one key by ref","low":25700400,"q1":28821700,"median":31944600,"q3":35101100,"high":41777500},{"name":"DT 1:1 - one key by ref, no name change","low":12931200,"q1":14719500,"median":15498450,"q3":17268600,"high":20941400}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-a40c1afce031997d3392" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-a40c1afce031997d3392">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"Collapse 1:1, Time in milliseconds","data":[{"name":"Collapse, left, val 1:1","low":4621900,"q1":5122000,"median":5615750,"q3":6247300,"high":7851800},{"name":"Collapse, right, val 1:1","low":4381800,"q1":5202600,"median":5461400,"q3":5931700,"high":6541300},{"name":"Collapse, full, val 1:1","low":8385800,"q1":9285000,"median":9807100,"q3":11784300,"high":14939800},{"name":"Collapse, inner, val 1:1","low":3719500,"q1":4072900,"median":4207950,"q3":4555300,"high":5068200},{"name":"Collapse, anti, val 1:1","low":3706000,"q1":4041400,"median":4390350,"q3":4736200,"high":5611300},{"name":"Collapse, semi, val 1:1","low":3379300,"q1":3593100,"median":3805900,"q3":4132800,"high":4874100},{"name":"Collapse, left, val 1:1, sort","low":10315700,"q1":11263900,"median":12548300,"q3":14209000,"high":17314200},{"name":"Collapse 1:1 - not verbose","low":4436500,"q1":4829900,"median":5368050,"q3":5748400,"high":7084900},{"name":"Collapse 1:1 - no suffix","low":4525500,"q1":5103600,"median":5458500,"q3":6102300,"high":7532000},{"name":"Collapse 1:1 - setkey","low":3940000,"q1":4445600,"median":4858500,"q3":5223000,"high":6327000},{"name":"Collapse 1:1 - pre-sort","low":3981800,"q1":4376300,"median":4846200,"q3":5473600,"high":6395300},{"name":"Collapse m:m","low":3540600,"q1":3946700,"median":4474850,"q3":5037200,"high":6113800},{"name":"Collapse m:m, no verbose, no suffix","low":3326000,"q1":4062300,"median":4366200,"q3":4804200,"high":5640200},{"name":"Collapse m:m all, remove duplicate cols","low":2498000,"q1":2916100,"median":3064800,"q3":3277500,"high":3727300}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-114b28ccd99b74900892" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-114b28ccd99b74900892">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"data.table m:m, Time in milliseconds","data":[{"name":"DT m:m - four key, all.x","low":23392400,"q1":25293600,"median":27744150,"q3":31626600,"high":40339700},{"name":"DT m:m - four key, all","low":48745800,"q1":57916300,"median":64332700,"q3":71484500,"high":91336800},{"name":"DT m:m - four key, all.y","low":38369400,"q1":46451100,"median":48350850,"q3":55449700,"high":66736600},{"name":"DT m:m - four set keys","low":23111500,"q1":25302600,"median":27913400,"q3":31011000,"high":39096800},{"name":"DT m:m - four key, all.x, pre-sort","low":24775300,"q1":26550300,"median":28614300,"q3":31506600,"high":38398500},{"name":"DT m:m - four key, all.x, not sort","low":17830800,"q1":21061900,"median":23160700,"q3":27384700,"high":34495100},{"name":"DT m:m - four key, all.x, not sort, pre-sort","low":19188800,"q1":21173400,"median":22331950,"q3":25064900,"high":29500900},{"name":"DT m:m - four key, all.x, not sort, timed pre-sort","low":18305100,"q1":20204300,"median":22264300,"q3":27715900,"high":38215500},{"name":"DT m:m - four key by ref","low":28730500,"q1":31770900,"median":34816700,"q3":39541100,"high":47079400},{"name":"DT m:m - four key by ref, no name change","low":17666400,"q1":20686900,"median":22619750,"q3":26183700,"high":33223400}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div class="cell">
+<div class="cell-output-display">
+
+<div class="highchart html-widget html-fill-item-overflow-hidden html-fill-item" id="htmlwidget-38bd507a17759dcc4c4a" style="width:100%;height:464px;"></div>
+<script type="application/json" data-for="htmlwidget-38bd507a17759dcc4c4a">{"x":{"hc_opts":{"chart":{"reflow":true,"inverted":true},"title":{"text":null},"yAxis":{"title":{"text":null}},"credits":{"enabled":false},"exporting":{"enabled":false},"boost":{"enabled":false},"plotOptions":{"series":{"label":{"enabled":false},"turboThreshold":0},"treemap":{"layoutAlgorithm":"squarified"}},"xAxis":{"type":"category"},"series":[{"name":"Collapse m:m, Time in milliseconds","data":[{"name":"Collapse, left, val m:m","low":6300900,"q1":8182100,"median":10301900,"q3":13270400,"high":20318600},{"name":"Collapse, right, val 1:1","low":5436300,"q1":8555600,"median":10164900,"q3":12386800,"high":16376000},{"name":"Collapse, full, val 1:1","low":9768300,"q1":15566700,"median":19102200,"q3":24420200,"high":37222500},{"name":"Collapse, inner, val 1:1","low":5152600,"q1":8371900,"median":9353150,"q3":10997800,"high":14672700},{"name":"Collapse, anti, val 1:1","low":4958600,"q1":7602000,"median":8967650,"q3":10890700,"high":14988600},{"name":"Collapse, semi, val 1:1","low":5321100,"q1":6299600,"median":8391000,"q3":9875300,"high":14567600},{"name":"Collapse, left, val 1:1, sort","low":13847500,"q1":19719200,"median":23435300,"q3":26542100,"high":35427400},{"name":"Collapse 1:1 - not verbose","low":5678700,"q1":7692000,"median":9710350,"q3":12588300,"high":19048000},{"name":"Collapse 1:1 - no suffix","low":5952700,"q1":7625600,"median":9914400,"q3":12679900,"high":18469500},{"name":"Collapse 1:1 - setkey","low":6269200,"q1":8124800,"median":9443250,"q3":11943400,"high":17126100},{"name":"Collapse 1:1 - pre-sort","low":5502700,"q1":7709600,"median":8968050,"q3":12181900,"high":16805400},{"name":"Collapse m:m","low":6226700,"q1":8294200,"median":9750250,"q3":12252700,"high":15368000},{"name":"Collapse m:m, no verbose, no suffix","low":6080200,"q1":8551700,"median":9909650,"q3":12000700,"high":16048100},{"name":"Collapse m:m all, remove duplicate cols","low":4806000,"q1":7647500,"median":8761700,"q3":10218500,"high":13495700}],"id":null,"type":"boxplot"}]},"theme":{"chart":{"backgroundColor":"transparent"},"colors":["#7cb5ec","#434348","#90ed7d","#f7a35c","#8085e9","#f15c80","#e4d354","#2b908f","#f45b5b","#91e8e1"]},"conf_opts":{"global":{"Date":null,"VMLRadialGradientURL":"http =//code.highcharts.com/list(version)/gfx/vml-radial-gradient.png","canvasToolsURL":"http =//code.highcharts.com/list(version)/modules/canvas-tools.js","getTimezoneOffset":null,"timezoneOffset":0,"useUTC":true},"lang":{"contextButtonTitle":"Chart context menu","decimalPoint":".","downloadCSV":"Download CSV","downloadJPEG":"Download JPEG image","downloadPDF":"Download PDF document","downloadPNG":"Download PNG image","downloadSVG":"Download SVG vector image","downloadXLS":"Download XLS","drillUpText":"◁ Back to {series.name}","exitFullscreen":"Exit from full screen","exportData":{"annotationHeader":"Annotations","categoryDatetimeHeader":"DateTime","categoryHeader":"Category"},"hideData":"Hide data table","invalidDate":null,"loading":"Loading...","months":["January","February","March","April","May","June","July","August","September","October","November","December"],"noData":"No data to display","numericSymbolMagnitude":1000,"numericSymbols":["k","M","G","T","P","E"],"printChart":"Print chart","resetZoom":"Reset zoom","resetZoomTitle":"Reset zoom level 1:1","shortMonths":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"shortWeekdays":["Sat","Sun","Mon","Tue","Wed","Thu","Fri"],"thousandsSep":" ","viewData":"View data table","viewFullscreen":"View in full screen","weekdays":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"]}},"type":"chart","fonts":[],"debug":false},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
