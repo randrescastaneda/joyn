@@ -30,7 +30,7 @@
 #'   will be discarded. If *"inner"*, it only keeps the observations that
 #'   matched both tables.
 #' @param roll double: *to be implemented*
-#' @param yvars character: Vector of variable names that will be kept after the
+#' @param y_vars_to_keep character: Vector of variable names that will be kept after the
 #'   merge. If TRUE (the default), it keeps all the brings all the variables in
 #'   y into x. If FALSE or NULL, it does not bring any variable into x, but a
 #'   report will be generated.
@@ -53,7 +53,7 @@
 #'   `update_NAs = FALSE`
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
-#' @param keep_y_in_x logical: If TRUE, it will keep the original variable from
+#' @param keep_common_vars logical: If TRUE, it will keep the original variable from
 #'   y when both tables have common variable names. Thus, the prefix "y." will
 #'   be added to the original name to distinguish from the resulting variable in
 #'   the joined table.
@@ -125,7 +125,7 @@
 merge <- function(x,
                   y,
                   by              = intersect(names(x), names(y)),
-                  yvars           = TRUE,
+                  y_vars_to_keep  = TRUE,
                   match_type      = c("m:m", "m:1", "1:m", "1:1"),
                   keep            = c("full", "left", "master",
                                     "right", "using", "inner"),
@@ -134,7 +134,7 @@ merge <- function(x,
                   reportvar       = getOption("joyn.reportvar"),
                   reporttype      = c("character", "numeric"),
                   roll            = NULL,
-                  keep_y_in_x     = FALSE,
+                  keep_common_vars = FALSE,
                   sort            = TRUE,
                   verbose         = getOption("joyn.verbose"),
                   allow.cartesian = NULL) {
@@ -184,21 +184,21 @@ merge <- function(x,
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  ## treatment of yvars ------
-  if (isTRUE(yvars)) {
+  ## treatment of y_vars_to_keep ------
+  if (isTRUE(y_vars_to_keep)) {
 
-    yvars <- names(y)
+    y_vars_to_keep <- names(y)
 
-  }  else if (isFALSE(yvars) || is.null(yvars)) {
+  }  else if (isFALSE(y_vars_to_keep) || is.null(y_vars_to_keep)) {
 
     temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
-    yvars     <-  temp_yvar
+    y_vars_to_keep     <-  temp_yvar
 
     y[, (temp_yvar) := 1]
 
   } else {
 
-    not_in_y <- setdiff(yvars, names(y))
+    not_in_y <- setdiff(y_vars_to_keep, names(y))
 
     if (length(not_in_y) != 0) {
       msg     <- "variables to keep from `y` are not present in `y`"
@@ -218,16 +218,16 @@ merge <- function(x,
 
   # remove id variables
 
-  if (any(yvars %in% by) && verbose) {
-    cli::cli_alert("removing key variables {.code {yvars[yvars %in% by]}}
-                   from {.field yvars}",
+  if (any(y_vars_to_keep %in% by) && verbose) {
+    cli::cli_alert("removing key variables {.code {y_vars_to_keep[y_vars_to_keep %in% by]}}
+                   from {.field y_vars_to_keep}",
                    wrap =  TRUE)
   }
 
-  yvars <- yvars[! yvars %in% by]
+  y_vars_to_keep <- y_vars_to_keep[!y_vars_to_keep %in% by]
 
   ## Select variables in y ------
-  y <- y[, .SD, .SDcols = c(by, yvars)]
+  y <- y[, .SD, .SDcols = c(by, y_vars_to_keep)]
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Check variables in X   ---------
@@ -235,18 +235,18 @@ merge <- function(x,
   xvars <- names(x)
   xvars <- xvars[!(xvars %in% by)]
 
-  upvars <- intersect(xvars, yvars)
+  upvars <- intersect(xvars, y_vars_to_keep)
 
   if (length(upvars) != 0) {
 
     # rename vars in y so they are different to x's when joined
       y.upvars <- paste0(upvars, ".y")
-      newyvars <- yvars
+      newyvars <- y_vars_to_keep
       newyvars[newyvars %in% upvars] <- y.upvars
 
-      setnames(y, old = yvars, new = newyvars)
+      setnames(y, old = y_vars_to_keep, new = newyvars)
 
-      yvars <- newyvars
+      y_vars_to_keep <- newyvars
 
 
       if (isFALSE(update_NAs) && isFALSE(update_values)) {
@@ -258,7 +258,7 @@ merge <- function(x,
                             wrap = TRUE)
       }
 
-      # we remove y.upvars from x ahead in the code when keep_y_in_x is false.
+      # we remove y.upvars from x ahead in the code when keep_common_vars is false.
 
     }
   } # end of update vars
@@ -267,7 +267,7 @@ merge <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(yvars, "y_report") # working yvars
+  yvars_w <- c(y_vars_to_keep, "y_report") # working yvars
   x[, x_report := 1]
   y[, y_report := 2]
 
@@ -409,7 +409,7 @@ merge <- function(x,
 
     }
 
-    if (isFALSE(keep_y_in_x) && !is.null(y.upvars)) {
+    if (isFALSE(keep_common_vars) && !is.null(y.upvars)) {
       x[, (y.upvars) := NULL]
     }
 

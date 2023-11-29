@@ -8,7 +8,7 @@ merge(
   x,
   y,
   by = intersect(names(x), names(y)),
-  yvars = TRUE,
+  y_vars_to_keep = TRUE,
   match_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("full", "left", "master", "right", "using", "inner"),
   update_values = FALSE,
@@ -16,7 +16,7 @@ merge(
   reportvar = getOption("joyn.reportvar"),
   reporttype = c("character", "numeric"),
   roll = NULL,
-  keep_y_in_x = FALSE,
+  keep_common_vars = FALSE,
   sort = TRUE,
   verbose = getOption("joyn.verbose"),
   allow.cartesian = NULL
@@ -37,7 +37,7 @@ you want to join). To join by different variables on x and y use a vector
 of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
 in y, and "z" in both tables.}
 
-\item{yvars}{character: Vector of variable names that will be kept after the
+\item{y_vars_to_keep}{character: Vector of variable names that will be kept after the
 merge. If TRUE (the default), it keeps all the brings all the variables in
 y into x. If FALSE or NULL, it does not bring any variable into x, but a
 report will be generated.}
@@ -82,7 +82,7 @@ table.}
 
 \item{roll}{double: \emph{to be implemented}}
 
-\item{keep_y_in_x}{logical: If TRUE, it will keep the original variable from
+\item{keep_common_vars}{logical: If TRUE, it will keep the original variable from
 y when both tables have common variable names. Thus, the prefix "y." will
 be added to the original name to distinguish from the resulting variable in
 the joined table.}
