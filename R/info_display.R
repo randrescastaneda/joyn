@@ -45,7 +45,7 @@ joyn_msg <- function(type = c("all", "info", "note", "warn")) {
 store_msg <- function(type, ...) {
 
   # check input ----------
-  type <- match.arg(type, choices = c("info", "note", "warn"))
+  type <- match.arg(type, choices = c("info", "note", "warn", "timing"))
   check_style(...)
 
   # style type in dt form -----------
@@ -138,3 +138,10 @@ joyn_msgs_exist <- \() {
   }
   invisible(TRUE)
 }
+
+
+clear_joynenv <- \(){
+  rlang::env_unbind(.joynenv, "joyn_msgs")
+  invisible(TRUE)
+}
+
