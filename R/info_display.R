@@ -1,3 +1,31 @@
+#' add joyn message to .joynenv environment
+#'
+#' @param type character: type of message
+#' @param ... combination of type and text in the form `type1 = text1, type2 =
+#'   text2`, etc.
+#'
+#' @return invisible TRUE
+#' @keywords internal
+joyn_msg <- function(type, ...) {
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # computations   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Return   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    return(TRUE)
+
+}
+
+
+style_type_dt <- \(type, ...) {
+  c(type = type, style = style(...)) |>  # named vector
+    as.list() |>  # convert to list to pass as data.frame
+    data.frame() # convert
+}
 
 
 #' style of text displayed
