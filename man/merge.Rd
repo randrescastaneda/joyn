@@ -19,7 +19,9 @@ merge(
   keep_common_vars = FALSE,
   sort = TRUE,
   verbose = getOption("joyn.verbose"),
-  allow.cartesian = NULL
+  allow.cartesian = NULL,
+  yvars = deprecated(),
+  keep_y_in_x = deprecated()
 )
 }
 \arguments{

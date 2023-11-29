@@ -137,7 +137,25 @@ merge <- function(x,
                   keep_common_vars = FALSE,
                   sort            = TRUE,
                   verbose         = getOption("joyn.verbose"),
-                  allow.cartesian = NULL) {
+                  allow.cartesian = NULL,
+                  yvars           = deprecated(),
+                  keep_y_in_x     = deprecated()) {
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Life cycle   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  if (lifecycle::is_present(yvars)) {
+    lifecycle::deprecate_warn("0.1.5",
+                              "merge(yvars)",
+                              "merge(y_vars_to_keep)")
+    y_vars_to_keep <- yvars
+  }
+  if (lifecycle::is_present(keep_y_in_x)) {
+    lifecycle::deprecate_warn("0.1.5",
+                              "merge(keep_common_vars)",
+                              "merge(y_vars_to_keep)")
+    y_vars_to_keep <- keep_common_vars
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
