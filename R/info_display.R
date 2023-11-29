@@ -37,7 +37,7 @@ joyn_msg <- function(type = c("all", "info", "note", "warn")) {
 #' Store joyn message to .joynenv environment
 #'
 #' @param type character: type of message
-#' @param ... combination of type and text in the form `type1 = text1, type2 =
+#' @param ... combination of type and text in the form `style1 = text1, style2 =
 #'   text2`, etc.
 #'
 #' @return current message data frame invisibly

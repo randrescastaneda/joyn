@@ -9,7 +9,7 @@ store_msg(type, ...)
 \arguments{
 \item{type}{character: type of message}
 
-\item{...}{combination of type and text in the form \verb{type1 = text1, type2 = text2}, etc.}
+\item{...}{combination of type and text in the form \verb{style1 = text1, style2 = text2}, etc.}
 }
 \value{
 current message data frame invisibly
