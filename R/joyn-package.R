@@ -3,6 +3,7 @@
 
 ## usethis namespace: start
 #' @import data.table
+#' @import collapse
 ## usethis namespace: end
 # .datatable.aware = TRUE
 
