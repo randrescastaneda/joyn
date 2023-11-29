@@ -105,7 +105,10 @@ style <- function(..., sep = "") {
   styles <- list(
     "ok"     = cli::col_green,
     "note"   = cli::make_ansi_style("orange"),
-    "warn"   = \(x) cli::style_bold(cli::make_ansi_style("orange")(x)),
+    "warn"   = \(x) {
+      cli::make_ansi_style("#cc6677")(x) |>
+      cli::style_bold()
+      },
     "err"    = cli::col_red,
     "pale"   = cli::make_ansi_style("darkgrey"),
     "timing" = cli::make_ansi_style("cyan")
