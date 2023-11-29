@@ -9,7 +9,7 @@
 #' joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
 #' joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
 #' joyn_msg("all")
-joyn_msg <- function(type = c("all", "info", "note", "warn")) {
+joyn_msg <- function(type = c("all", "info", "note", "warn", "timing")) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
