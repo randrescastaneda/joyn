@@ -8,6 +8,10 @@ check_reportvar <- function(reportvar, verbose = getOption("joyn.verbose")) {
 
     reportvar <- rename_to_valid(reportvar, verbose)
     if (verbose) {
+      store_msg("info",
+                timing = cli::symbol$star, "   ",
+                normal = "Joyn's report available in variable {.var {reportvar}}")
+
       cli::cli_alert_info("Joyn's report available in variable {.var {reportvar}}", wrap = TRUE)
     }
     return(reportvar)

@@ -24,8 +24,10 @@ joyn_msg <- function(type = c("all", "info", "note", "warn")) {
   }
 
   # display results --------
-  cat(dt[["msg"]], "\n", sep = "\n")
-
+  # cat(dt[["msg"]], "\n", sep = "\n")
+  l <- lapply(dt[["msg"]], \(.) {
+    cli::cli_text(.)
+  })
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
