@@ -2,6 +2,7 @@
 
 export(freq_table)
 export(is_id)
+export(joyn_msg)
 export(merge)
 export(possible_ids)
 import(collapse)

@@ -2,19 +2,21 @@
 % Please edit documentation in R/info_display.R
 \name{joyn_msg}
 \alias{joyn_msg}
-\title{add joyn message to .joynenv environment}
+\title{display type of joyn message}
 \usage{
-joyn_msg(type, ...)
+joyn_msg(type = c("all", "info", "note", "warn"))
 }
 \arguments{
-\item{type}{character: type of message}
-
-\item{...}{combination of type and text in the form \verb{type1 = text1, type2 = text2}, etc.}
+\item{type}{character: one or more of \code{c("all", "info", "note", "warn")}}
 }
 \value{
-invisible TRUE
+returns data frame with message invisibly. print message in console
 }
 \description{
-add joyn message to .joynenv environment
+display type of joyn message
 }
-\keyword{internal}
+\examples{
+joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
+joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
+joyn_msg("all")
+}

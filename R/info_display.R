@@ -1,29 +1,89 @@
-#' add joyn message to .joynenv environment
+#' display type of joyn message
 #'
-#' @param type character: type of message
-#' @param ... combination of type and text in the form `type1 = text1, type2 =
-#'   text2`, etc.
+#' @param type character: one or more of `c("all", "info", "note", "warn")`
 #'
-#' @return invisible TRUE
-#' @keywords internal
-joyn_msg <- function(type, ...) {
+#' @return returns data frame with message invisibly. print message in console
+#' @export
+#'
+#' @examples
+#' joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
+#' joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
+#' joyn_msg("all")
+joyn_msg <- function(type = c("all", "info", "note", "warn")) {
 
+  # Check ---------
+  type_to_use <- match.arg(type, several.ok = TRUE)
+  joyn_msgs_exist()
 
-  # environment   ---------
-  # if ()
+  # get msgs ---------
+  dt <- rlang::env_get(.joynenv, "joyn_msgs")
 
+  if ("all" %!in% type_to_use) {
+    dt <- dt |>
+      fsubset(type %in% type_to_use)
+  }
+
+  # display results --------
+  cat(dt[["msg"]], "\n", sep = "\n")
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    return(TRUE)
-
+  return(invisible(dt))
 }
 
 
-style_type_dt <- \(type, ...) {
-  c(type = type, style = style(...)) |>  # named vector
+#' Store joyn message to .joynenv environment
+#'
+#' @param type character: type of message
+#' @param ... combination of type and text in the form `type1 = text1, type2 =
+#'   text2`, etc.
+#'
+#' @return current message data frame invisibly
+#' @keywords internal
+store_msg <- function(type, ...) {
+
+  # check input ----------
+  type <- match.arg(type, choices = c("info", "note", "warn"))
+  check_style(...)
+
+  # style type in dt form -----------
+  dt_msg <-  msg_type_dt(type, ...)
+
+  # create new messages   ---------
+  if (rlang::env_has(.joynenv, "joyn_msgs")) {
+    dt_old_msgs <- rlang::env_get(.joynenv, "joyn_msgs")
+    dt_new_msgs <- rowbind(dt_old_msgs, dt_msg)
+  } else {
+    dt_new_msgs <- dt_msg
+  }
+
+  # store in env ------
+  rlang::env_poke(.joynenv, "joyn_msgs", dt_new_msgs)
+
+
+  # Return   ---------
+  return(invisible(dt_new_msgs))
+
+}
+
+check_style <- \(...) {
+  if (length(list(...)) == 0) {
+    cli::cli_abort(c("no style provided",
+                     "i" = "check list of styles in {.fun style}"))
+  }
+  invisible(TRUE)
+}
+
+#' convert style to data frame
+#'
+#' @inheritParams joyn_msg
+#'
+#' @return data frame
+#' @keywords internal
+msg_type_dt <- \(type, ...) {
+  c(type = type, msg = style(...)) |>  # named vector
     as.list() |>  # convert to list to pass as data.frame
     data.frame() # convert
 }
@@ -67,3 +127,11 @@ style <- function(..., sep = "") {
   paste(unlist(x), collapse = sep)
 }
 
+
+joyn_msgs_exist <- \() {
+  if (!rlang::env_has(.joynenv, "joyn_msgs")) {
+    cli::cli_abort(c("no messages stored in .joynenv",
+                     "i" = "make sure that joyn has been executed at least once"))
+  }
+  invisible(TRUE)
+}
