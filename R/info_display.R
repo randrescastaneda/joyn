@@ -59,7 +59,7 @@ store_msg <- function(type, ...) {
   # style type in dt form -----------
   style_args <- list(...) |>
     lapply(\(x){
-      cli::format_inline(x, .envir = parent.frame())
+      cli::format_inline(x, .envir = parent.frame(3))
     })
 
   type_dt_args <- append(list(type = type), style_args)
@@ -73,6 +73,8 @@ store_msg <- function(type, ...) {
   } else {
     dt_new_msgs <- dt_msg
   }
+
+  dt_new_msgs <- funique(dt_new_msgs)
 
   # store in env ------
   rlang::env_poke(.joynenv, "joyn_msgs", dt_new_msgs)
@@ -111,7 +113,7 @@ msg_type_dt <- \(type, ...) {
 
 #' style of text displayed
 #'
-#' This is from
+#' This is an adaptation from
 #' https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
 #' @param ... combination of type and text in the form
 #' `type1 = text1, type2 = text2`
@@ -121,7 +123,9 @@ msg_type_dt <- \(type, ...) {
 #' @keywords internal
 style <- function(..., sep = "") {
   args <- list(...)
-  # st <- names(args)
+  if (is.null(names(args))) {
+    names(args) <- rep("", length(args))
+  }
 
   styles <- list(
     "ok"     = cli::col_green,

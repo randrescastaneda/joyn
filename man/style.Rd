@@ -16,7 +16,7 @@ style(..., sep = "")
 formated text
 }
 \description{
-This is from
+This is an adaptation from
 https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
 }
 \keyword{internal}

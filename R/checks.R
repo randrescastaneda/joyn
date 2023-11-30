@@ -249,15 +249,33 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
 }
 
-foo <- \(){
-  parent.frame(2)
-}
 
-foo2 <- \(){
-  foo()
-}
+#' rename vars in y so they are different to x's when joined
+#'
+#' @param x master table
+#' @param by character: by vars
+#' @param y_vars_to_keep  character vector of variables to keep
+#'
+#' @return vector with new variable names for y
+#' @keywords internal
+check_new_y_vars <- \(x, by, y_vars_to_keep) {
+  xvars <- names(x)
+  xvars <- xvars[!(xvars %in% by)]
 
-foo2()
+  upvars <- intersect(xvars, y_vars_to_keep)
+
+  if (length(upvars) != 0) {
+    y.upvars <- paste0(upvars, ".y")
+    y_vars_to_keep[y_vars_to_keep %in% upvars] <- y.upvars
+
+    if (isFALSE(update_NAs) && isFALSE(update_values)) {
+      store_msg(
+        "note",
+        note = cli::symbol$square_small_filled,
+        "variable{?s} {.code {upvars}} in table {.field y} {?is/are}
+                            ignored because arguments {.arg update_NAs} and
+                            {.arg update_values} are FALSE.")
+    }
 
 
 
@@ -290,3 +308,6 @@ is_valid_m_key <- function(dt, by){
 
 }
 
+  } # end of update vars
+  return(y_vars_to_keep)
+}

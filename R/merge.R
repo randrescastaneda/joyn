@@ -205,52 +205,28 @@ merge <- function(x,
   ## treatment of y_vars_to_keep ------
   y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
 
-
-
   ## Select variables in y ------
-  y <- y[, .SD, .SDcols = c(by, y_vars_to_keep)]
+  filter_y_vars <-  c(by, y_vars_to_keep)
+  y <- y |>
+    fselect(filter_y_vars)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Check variables in X   ---------
+  # new names in Y for same-name variables in X   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  xvars <- names(x)
-  xvars <- xvars[!(xvars %in% by)]
+  newyvars <- check_new_y_vars(x, by, y_vars_to_keep)
 
-  upvars <- intersect(xvars, y_vars_to_keep)
-
-  if (length(upvars) != 0) {
-
-    # rename vars in y so they are different to x's when joined
-      y.upvars <- paste0(upvars, ".y")
-      newyvars <- y_vars_to_keep
-      newyvars[newyvars %in% upvars] <- y.upvars
-
-      setnames(y, old = y_vars_to_keep, new = newyvars)
-
-      y_vars_to_keep <- newyvars
-
-
-      if (isFALSE(update_NAs) && isFALSE(update_values)) {
-
-      if (verbose) {
-        cli::cli_alert_info("variable{?s} {.code {upvars}} in table y {?is/are}
-                            ignored because arguments `update_NAs` and
-                            `update_values` are FALSE.",
-                            wrap = TRUE)
-      }
-
-      # we remove y.upvars from x ahead in the code when keep_common_vars is false.
-
-    }
-  } # end of update vars
+  # rename variables in Y
+  setnames(y, old = y_vars_to_keep, new = newyvars)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(y_vars_to_keep, "y_report") # working yvars
-  x[, x_report := 1]
-  y[, y_report := 2]
+  yvars_w <- c(newyvars, ".yreport") # working yvars
+  x <- x |>
+    ftransform(.xreport = 1)
+  y <- y |>
+    ftransform(.yreport = 2)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Actual merge   ---------
@@ -316,7 +292,7 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # replace NAs in report vars
-  setnafill(x, fill = 0, cols = c("x_report", "y_report"))
+  setnafill(x, fill = 0, cols = c(".xreport", ".yreport"))
 
   # report variable
   if (isFALSE(reportvar) || is.null(reportvar)) {
@@ -352,7 +328,7 @@ merge <- function(x,
 
 
   # report variable
-  x[, (reportvar) :=  x_report + y_report]
+  x[, (reportvar) :=  .xreport + .yreport]
 
   ## rows to keep -----
   if (keep  %in% c("master", "left") ) {
@@ -402,7 +378,7 @@ merge <- function(x,
 
   ## cleaning temporary report variables ----
   x[,
-    c("x_report", "y_report") := NULL
+    c(".xreport", ".yreport") := NULL
   ]
 
 
