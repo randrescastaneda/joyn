@@ -11,7 +11,7 @@
 <!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
 <!-- [![](https://img.shields.io/badge/devel%20version-0.1.4-blue.svg)](https://github.com/randrescastaneda/joyn) -->
 <!-- [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing) -->
-
+[![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 `joyn` provides the user with a set of tools to analyze the quality of
@@ -116,6 +116,7 @@ library(joyn)
 #> 
 #>     merge
 library(data.table)
+#> Warning: package 'data.table' was built under R version 4.3.2
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
@@ -136,16 +137,16 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
 
 # using commong variable `id` as key.
 merge(x1, y1)[]
-#> > removing key variables `id` from yvars
+#> → removing key variables `id` from yvars
 #> 
-#> -- JOYn Report --
+#> ── JOYn Report ──
 #> 
 #>    report n percent
 #> 1:      x 2   33.3%
 #> 2:  x & y 3     50%
 #> 3:      y 1   16.7%
 #> 4:  total 6    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id  t  x  y report
 #> 1:  1  1 11 11  x & y
 #> 2:  1  2 12 11  x & y
@@ -156,13 +157,13 @@ merge(x1, y1)[]
 
 # keep just those observations that match
 merge(x1, y1, keep = "inner")[]
-#> > removing key variables `id` from yvars
-#> -- JOYn Report --
+#> → removing key variables `id` from yvars
+#> ── JOYn Report ──
 #> 
 #>    report n percent
 #> 1:  x & y 3    100%
 #> 2:  total 3    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id t  x  y report
 #> 1:  1 1 11 11  x & y
 #> 2:  1 2 12 11  x & y
@@ -170,15 +171,15 @@ merge(x1, y1, keep = "inner")[]
 
 # Bad merge for not specifying by argument
 merge(x2, y2)[]
-#> > removing key variables `id` and `x` from yvars
-#> -- JOYn Report --
+#> → removing key variables `id` and `x` from yvars
+#> ── JOYn Report ──
 #> 
 #>    report n percent
 #> 1:      x 4   44.4%
 #> 2:  x & y 1   11.1%
 #> 3:      y 4   44.4%
 #> 4:  total 9    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id  x  t yd  y report
 #> 1:  1 16  1  1 11  x & y
 #> 2:  2 17 NA  2 15      y
@@ -192,18 +193,18 @@ merge(x2, y2)[]
 
 # good merge, ignoring variable x from y
 merge(x2, y2, by = "id")[]
-#> > removing key variables `id` from yvars
-#> i variable `x` in table y is ignored because arguments `update_NAs` and
+#> → removing key variables `id` from yvars
+#> ℹ variable `x` in table y is ignored because arguments `update_NAs` and
 #> `update_values` are FALSE.
 #> 
-#> -- JOYn Report --
+#> ── JOYn Report ──
 #> 
 #>    report n percent
 #> 1:      x 2   28.6%
 #> 2:  x & y 3   42.9%
 #> 3:      y 2   28.6%
 #> 4:  total 7    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id  t  x yd  y report
 #> 1:  1  1 16  1 11  x & y
 #> 2:  2  1 NA  2 15  x & y
@@ -215,8 +216,8 @@ merge(x2, y2, by = "id")[]
 
 # update NAs in x variable form x
 merge(x2, y2, by = "id", update_NAs = TRUE)[]
-#> > removing key variables `id` from yvars
-#> -- JOYn Report --
+#> → removing key variables `id` from yvars
+#> ── JOYn Report ──
 #> 
 #>        report n percent
 #> 1: NA updated 2   28.6%
@@ -224,7 +225,7 @@ merge(x2, y2, by = "id", update_NAs = TRUE)[]
 #> 3:      x & y 1   14.3%
 #> 4:          y 2   28.6%
 #> 5:      total 7    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id  t  x yd  y     report
 #> 1:  1  1 16  1 11      x & y
 #> 2:  2  1 17  2 15 NA updated
@@ -236,8 +237,8 @@ merge(x2, y2, by = "id", update_NAs = TRUE)[]
 
 # Update values in x with variables from y
 merge(x2, y2, by = "id", update_values = TRUE)[]
-#> > removing key variables `id` from yvars
-#> -- JOYn Report --
+#> → removing key variables `id` from yvars
+#> ── JOYn Report ──
 #> 
 #>         report n percent
 #> 1:  NA updated 2   28.6%
@@ -245,7 +246,7 @@ merge(x2, y2, by = "id", update_values = TRUE)[]
 #> 3:       x & y 1   14.3%
 #> 4:           y 2   28.6%
 #> 5:       total 7    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id  t  x yd  y      report
 #> 1:  1  1 16  1 11       x & y
 #> 2:  2  1 17  2 15  NA updated
@@ -259,14 +260,14 @@ merge(x2, y2, by = "id", update_values = TRUE)[]
 # do not bring any variable from Y into x, just the report
 merge(x2, y2, by = "id", yvars = NULL)[]
 #> 
-#> -- JOYn Report --
+#> ── JOYn Report ──
 #> 
 #>    report n percent
 #> 1:      x 2   28.6%
 #> 2:  x & y 3   42.9%
 #> 3:      y 2   28.6%
 #> 4:  total 7    100%
-#> ---------------------------------------------------------- End of JOYn report --
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
 #>    id  t  x report
 #> 1:  1  1 16  x & y
 #> 2:  2  1 NA  x & y
