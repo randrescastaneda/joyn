@@ -123,7 +123,8 @@ style <- function(..., sep = "") {
 
   if (any(!nms2 %in% nmstyles)) {
     no_names <- which(!nms2 %in% nmstyles)
-    cli::cli_abort("{.val {nms2[no_names]}} {?is/are} not valid styles")
+    cli::cli_abort(c("{.val {nms2[no_names]}} {?is/are} not valid style{?s}.",
+                     "i" = "Available styles are {.field {nmstyles}}"))
   }
 
   x <- lapply(seq_along(args), \(i) {

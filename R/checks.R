@@ -3,28 +3,29 @@
 #' @inheritParams merge
 #' @keywords internal
 #' @return if character, it returns valid name. If NULL or FALSE, returns NULL.
-check_reportvar <- function(reportvar, verbose = getOption("joyn.verbose")) {
-  if (is.character(reportvar)) {
-
-    reportvar <- rename_to_valid(reportvar, verbose)
-    if (verbose) {
+check_reportvar <-
+  function(reportvar, verbose = getOption("joyn.verbose")) {
+    if (is.character(reportvar)) {
+      reportvar <- rename_to_valid(reportvar, verbose)
       store_msg("info",
-                timing = cli::symbol$star, "   ",
-                normal = "Joyn's report available in variable {.var {reportvar}}")
+                timing = cli::symbol$star,
+                "   ",
+                pale = "Joyn's report available in variable {.var {reportvar}}")
 
-      cli::cli_alert_info("Joyn's report available in variable {.var {reportvar}}", wrap = TRUE)
-    }
-    return(reportvar)
+      return(reportvar)
 
-  } else if (is.null(reportvar) || isFALSE(reportvar)) {
-    if (verbose) {
-      cli::cli_alert_info("No reporting variable will be available", wrap = TRUE)
+    } else if (is.null(reportvar) || isFALSE(reportvar)) {
+
+      store_msg("info",
+                timing = cli::symbol$star,
+                "   ",
+                "Reporting variable is not returned")
+
+      return(NULL)
+    } else  {
+      cli::cli_abort("reportvar should be character, NULL or FALSE")
     }
-    return(NULL)
-  } else  {
-    cli::cli_abort("reportvar should be character, NULL or FALSE")
   }
-}
 
 
 
@@ -126,11 +127,10 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
   if (isFALSE(isidx)) {
 
     match_type_error <- TRUE
-    if (verbose) {
-
-      cli::cli_alert_danger("table {.field name} is not uniquely identified
-                              by {.code {by}}", wrap = TRUE)
-    }
+    store_msg("warn",
+              err = cli::symbol$cross,
+              "   ",
+              warn = "table {.field name} is not uniquely identified by {.code {by}}")
   }
   match_type_error
 }
