@@ -4,10 +4,10 @@
 \alias{joyn_msg}
 \title{display type of joyn message}
 \usage{
-joyn_msg(type = c("all", "info", "note", "warn"))
+joyn_msg(type = c("all", "info", "note", "warn", "timing"))
 }
 \arguments{
-\item{type}{character: one or more of \code{c("all", "info", "note", "warn")}}
+\item{type}{character: one or more of \code{c("all", "info", "note", "warn", "timing")}}
 }
 \value{
 returns data frame with message invisibly. print message in console
