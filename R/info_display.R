@@ -57,7 +57,14 @@ store_msg <- function(type, ...) {
   check_style(...)
 
   # style type in dt form -----------
-  dt_msg <-  msg_type_dt(type, ...)
+  style_args <- list(...) |>
+    lapply(\(x){
+      cli::format_inline(x, .envir = parent.frame())
+    })
+
+  type_dt_args <- append(list(type = type), style_args)
+  dt_msg <-  do.call(msg_type_dt, type_dt_args)
+
 
   # create new messages   ---------
   if (rlang::env_has(.joynenv, "joyn_msgs")) {
@@ -152,7 +159,6 @@ style <- function(..., sep = "") {
 
   paste(unlist(x), collapse = sep)
 }
-
 
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {

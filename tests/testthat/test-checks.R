@@ -26,17 +26,35 @@ test_that("y_vars_to_keep checks work", {
   #
   ## var no available ---------
   y_vars_to_keep <- "f"
-  check_y_vars_to_keep(y_vars_to_keep, y1) |>
+  by             <- "id"
+  check_y_vars_to_keep(y_vars_to_keep, y1, by) |>
     expect_error()
 
   y_vars_to_keep <- c("F", "r")
-  check_y_vars_to_keep(y_vars_to_keep, y1) |>
+  check_y_vars_to_keep(y_vars_to_keep, y1, by) |>
     expect_error()
 
   ## more than one value when no string --------
   y_vars_to_keep <- c(TRUE, TRUE)
-  check_y_vars_to_keep(y_vars_to_keep, y1) |>
+  check_y_vars_to_keep(y_vars_to_keep, y1, by) |>
     expect_error()
 
+  ## something besides character, false, or NULL ---------
+  check_y_vars_to_keep(NA, y1, by) |>
+    expect_error()
+
+  # Output -------------
+  check_y_vars_to_keep(NULL, y1, by) |>
+    expect_null()
+
+  check_y_vars_to_keep(FALSE, y1, by) |>
+    expect_null()
+
+
+  check_y_vars_to_keep("y", y1, by) |>
+    expect_equal("y")
+
+  check_y_vars_to_keep(c("id", "y"), y1, by) |>
+    expect_equal("y")
 
 })

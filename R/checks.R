@@ -83,27 +83,26 @@ check_match_type <- function(x, y, by, match_type, verbose) {
   match_type_error <- FALSE
 
   if (tx == "1") {
-    match_type_error <- is_match_type_error(x, "x", by, verbose, match_type_error)
+    match_type_error <-
+      is_match_type_error(x, "x", by, verbose, match_type_error)
   }
 
   if (ty == "1") {
-    match_type_error <- is_match_type_error(y, "y", by, verbose, match_type_error)
+    match_type_error <-
+      is_match_type_error(y, "y", by, verbose, match_type_error)
   }
 
   if (match_type_error) {
-
     msg     <- "match type inconsistency"
-    hint    <- "you could use `return_report = TRUE` in `joyn::is_id()`
+    hint    <-
+      "you could use `return_report = TRUE` in `joyn::is_id()`
     to see where the problem is"
-    cli::cli_abort(c(
-      msg,
-      i = hint
-    ),
-    class = "joyn_error"
-    )
+    joyn_msg("err")
+    cli::cli_abort(c(msg,
+                     i = hint),
+                   class = "joyn_error")
 
   }
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
@@ -127,14 +126,15 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
   if (isFALSE(isidx)) {
 
     match_type_error <- TRUE
-    store_msg("warn",
-              err = cli::symbol$cross,
-              "   ",
-              warn = "table {.field name} is not uniquely identified by {.code {by}}")
+    by2 <- by
+    store_msg("err",
+              err = paste(cli::symbol$cross, "Error:"),
+              "   table {.field {name}} is not uniquely identified
+              by {.val {by2}}")
+
   }
   match_type_error
 }
-
 
 
 
@@ -158,10 +158,6 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
   if (isFALSE(y_vars_to_keep) || is.null(y_vars_to_keep)) {
 
     y_vars_to_keep <- NULL
-    # temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
-    # y_vars_to_keep     <-  temp_yvar
-    #
-    # y[, (temp_yvar) := 1]
 
   } else if (is.character(y_vars_to_keep)) {
 
@@ -201,3 +197,13 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
   return(y_vars_to_keep)
 
 }
+
+foo <- \(){
+  parent.frame(2)
+}
+
+foo2 <- \(){
+  foo()
+}
+
+foo2()
