@@ -7,7 +7,7 @@
 store_msg(type, ...)
 }
 \arguments{
-\item{type}{character: type of message}
+\item{type}{character: one or more of \code{c("all", "info", "note", "warn", "timing")}}
 
 \item{...}{combination of type and text in the form \verb{style1 = text1, style2 = text2}, etc.}
 }

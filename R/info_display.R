@@ -1,6 +1,6 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of `c("all", "info", "note", "warn")`
+#' @param type character: one or more of `c("all", "info", "note", "warn", "timing")`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
@@ -9,7 +9,7 @@
 #' joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
 #' joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
 #' joyn_msg("all")
-joyn_msg <- function(type = c("all", "info", "note", "warn")) {
+joyn_msg <- function(type = c("all", "info", "note", "warn", "timing")) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
@@ -29,6 +29,7 @@ joyn_msg <- function(type = c("all", "info", "note", "warn")) {
     cli::cli_text(.)
   })
 
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -38,7 +39,7 @@ joyn_msg <- function(type = c("all", "info", "note", "warn")) {
 
 #' Store joyn message to .joynenv environment
 #'
-#' @param type character: type of message
+#' @inheritParams joyn_msg
 #' @param ... combination of type and text in the form `style1 = text1, style2 =
 #'   text2`, etc.
 #'
