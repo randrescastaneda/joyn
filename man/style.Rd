@@ -7,7 +7,8 @@
 style(..., sep = "")
 }
 \arguments{
-\item{...}{combination of type and text in the form \verb{type1 = text1, type2 = text2}}
+\item{...}{combination of type and text in the form
+\verb{type1 = text1, type2 = text2}}
 
 \item{sep}{a character string to separate the terms to \link{paste}}
 }

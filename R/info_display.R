@@ -1,15 +1,20 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of `c("all", "info", "note", "warn", "timing")`
+#' @param type character: one or more of the following:
+#' `r cli::format_inline("{.or {.val {type_choices()}}}")`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
 #' @examples
-#' joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
-#' joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
+#' joyn:::store_msg("info",
+#'   ok = cli::symbol$tick, "  ",
+#'   pale = "This is an info message")
+#' joyn:::store_msg("warn",
+#'   err = cli::symbol$cross, "  ",
+#'   note = "This is a warning message")
 #' joyn_msg("all")
-joyn_msg <- function(type = c("all", "info", "note", "warn", "timing")) {
+joyn_msg <- function(type = type_choices()) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
@@ -48,7 +53,7 @@ joyn_msg <- function(type = c("all", "info", "note", "warn", "timing")) {
 store_msg <- function(type, ...) {
 
   # check input ----------
-  type <- match.arg(type, choices = c("info", "note", "warn", "timing"))
+  type <- match.arg(type, choices = type_choices())
   check_style(...)
 
   # style type in dt form -----------
@@ -79,6 +84,11 @@ check_style <- \(...) {
   invisible(TRUE)
 }
 
+type_choices <- \(){
+  rlang::env_get(.joynenv, "msg_type_choices")
+}
+
+
 #' convert style to data frame
 #'
 #' @inheritParams joyn_msg
@@ -96,7 +106,8 @@ msg_type_dt <- \(type, ...) {
 #'
 #' This is from
 #' https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
-#' @param ... combination of type and text in the form `type1 = text1, type2 = text2`
+#' @param ... combination of type and text in the form
+#' `type1 = text1, type2 = text2`
 #' @param sep a character string to separate the terms to [paste]
 #'
 #' @return formated text
