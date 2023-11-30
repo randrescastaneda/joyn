@@ -134,3 +134,70 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
   }
   match_type_error
 }
+
+
+
+
+#' check variables in Y that will be kept in returning table
+#'
+#' @inheritParams merge
+#'
+#' @return charactere vector with variable names from Y table
+#' @keywords internal
+check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
+
+  if (length(y_vars_to_keep) > 1 && !is.character(y_vars_to_keep)) {
+    cli::cli_abort("argumet {.arg y_vars_to_keep} must be of length 1
+                   when it is not class character")
+  }
+
+  if (isTRUE(y_vars_to_keep)) {
+    y_vars_to_keep <- names(y)
+  }
+
+  if (isFALSE(y_vars_to_keep) || is.null(y_vars_to_keep)) {
+
+    y_vars_to_keep <- NULL
+    # temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
+    # y_vars_to_keep     <-  temp_yvar
+    #
+    # y[, (temp_yvar) := 1]
+
+  } else if (is.character(y_vars_to_keep)) {
+
+    yvars    <- names(y)
+    is_avail <- !(y_vars_to_keep %in% yvars)
+
+    if (any(is_avail)) {
+      no_avail <- y_vars_to_keep[is_avail]
+      cli::cli_abort(
+        c(
+          "{.val {no_avail}} {?is/are} not {?a/} variable name{?s} available
+                       in table {.field y}",
+          "i" = "name{?s} available {?is/are} {.val {yvars}}"
+        )
+      )
+    }
+
+    # remove id variables
+    y_in_by <- y_vars_to_keep %in% by
+
+    if (any(y_in_by)) {
+      store_msg("info",
+                note = cli::symbol$circle_filled, "  ",
+                pale = "removing key variables {.val {y_vars_to_keep[y_in_by]}}
+                   from {.arg y_vars_to_keep}")
+    }
+
+    y_vars_to_keep <- y_vars_to_keep[!y_in_by]
+
+  } else {
+    valid <- c("character", "FALSE", "NULL")
+    cli::cli_abort(c("{.val {y_vars_to_keep}} is not valid for argument
+                   {.arg y_vars_to_keep}",
+                   "i" = "Only {.or {.field {valid}}}"))
+  }
+
+  return(y_vars_to_keep)
+
+}

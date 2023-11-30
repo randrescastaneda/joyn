@@ -203,46 +203,9 @@ merge <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## treatment of y_vars_to_keep ------
-  if (isTRUE(y_vars_to_keep)) {
+  y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
 
-    y_vars_to_keep <- names(y)
 
-  }  else if (isFALSE(y_vars_to_keep) || is.null(y_vars_to_keep)) {
-
-    temp_yvar <- paste0("temp_var", floor(stats::runif(1)*1000))
-    y_vars_to_keep     <-  temp_yvar
-
-    y[, (temp_yvar) := 1]
-
-  } else {
-
-    not_in_y <- setdiff(y_vars_to_keep, names(y))
-
-    if (length(not_in_y) != 0) {
-      msg     <- "variables to keep from `y` are not present in `y`"
-      problem <- glue::glue("{glue::glue_collapse(glue::backtick(not_in_y),
-                            sep = ', ', last ='  and ')} \\
-                            not present in variable `y`")
-      rlang::abort(c(
-                    msg,
-                    x = problem
-                    ),
-                    class = "joyn_error"
-                    )
-
-    }
-
-  } # end of else
-
-  # remove id variables
-
-  if (any(y_vars_to_keep %in% by) && verbose) {
-    cli::cli_alert("removing key variables {.code {y_vars_to_keep[y_vars_to_keep %in% by]}}
-                   from {.field y_vars_to_keep}",
-                   wrap =  TRUE)
-  }
-
-  y_vars_to_keep <- y_vars_to_keep[!y_vars_to_keep %in% by]
 
   ## Select variables in y ------
   y <- y[, .SD, .SDcols = c(by, y_vars_to_keep)]
