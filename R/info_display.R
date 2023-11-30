@@ -59,7 +59,7 @@ store_msg <- function(type, ...) {
   # style type in dt form -----------
   style_args <- list(...) |>
     lapply(\(x){
-      cli::format_inline(x, .envir = parent.frame())
+      cli::format_inline(x, .envir = parent.frame(3))
     })
 
   type_dt_args <- append(list(type = type), style_args)
@@ -73,6 +73,8 @@ store_msg <- function(type, ...) {
   } else {
     dt_new_msgs <- dt_msg
   }
+
+  dt_new_msgs <- funique(dt_new_msgs)
 
   # store in env ------
   rlang::env_poke(.joynenv, "joyn_msgs", dt_new_msgs)
