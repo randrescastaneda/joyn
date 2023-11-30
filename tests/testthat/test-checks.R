@@ -20,6 +20,20 @@ y2 = data.frame(
   x  = c(16:20)
 )
 
+df1 <- data.frame(
+  id1 = c(1, 1, 2, 3),
+  id2 = c("a", "b", "b", "c"),
+  name = c("John", "Jane", "Bob", "Carl"),
+  age = c(35, 28, 42, 50)
+)
+df2 <- data.frame(
+  id1 = c(1, 2, 3, 3),
+  id2 = c("a", "b", "c", "e"),
+  salary = c(60000, 55000, 70000, 80000),
+  dept = c("IT", "Marketing", "Sales", "IT")
+)
+
+
 
 test_that("y_vars_to_keep checks work", {
   # errors ---------
@@ -57,4 +71,21 @@ test_that("y_vars_to_keep checks work", {
   check_y_vars_to_keep(c("id", "y"), y1, by) |>
     expect_equal("y")
 
+})
+
+
+test_that("check_new_y_vars checks work", {
+  # errors -----------
+
+  # output --------------
+
+  ## no common names, return the same ---------
+  check_new_y_vars(x = df1, by = "id1",
+                   y_vars_to_keep = "salary") |>
+    expect_equal("salary")
+
+  ## add suffix -----------
+  check_new_y_vars(x = df1, by = "id1",
+                   y_vars_to_keep = c("id2", "salary")) |>
+    expect_equal(c("id2.y", "salary"))
 })
