@@ -117,7 +117,15 @@ style <- function(..., sep = "") {
     "timing" = cli::make_ansi_style("cyan")
   )
 
-  nms <- names(args)
+  nms      <- names(args)
+  nms2     <- nms[!nms %in% ""]
+  nmstyles <- names(styles)
+
+  if (any(!nms2 %in% nmstyles)) {
+    no_names <- which(!nms2 %in% nmstyles)
+    cli::cli_abort("{.val {nms2[no_names]}} {?is/are} not valid styles")
+  }
+
   x <- lapply(seq_along(args), \(i) {
     if (nzchar(nms[i])) {
 
