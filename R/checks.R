@@ -80,18 +80,26 @@ check_match_type <- function(x, y, by, match_type, verbose) {
   tx  <- mts[1]
   ty  <- mts[2]
 
+  # Check which messages to return
   match_type_error <- FALSE
+  x_m              <- TRUE
+  y_m              <- TRUE
 
   if (tx == "1") {
     match_type_error <-
       is_match_type_error(x, "x", by, verbose, match_type_error)
+  } else {
+    x_m <- is_valid_m_key(x, by)
   }
 
   if (ty == "1") {
     match_type_error <-
       is_match_type_error(y, "y", by, verbose, match_type_error)
-  }
+  } else {
+      y_m <- is_valid_m_key(y, by)
+    }
 
+  # Error if user chosen "1" but actually "m" ----
   if (match_type_error) {
     msg     <- "match type inconsistency"
     hint    <-
@@ -103,6 +111,49 @@ check_match_type <- function(x, y, by, match_type, verbose) {
                    class = "joyn_error")
 
   }
+
+  # Warning if user chosen "m" but actually "1" ----
+  m_m <- data.table::fcase(
+    isTRUE(x_m)  & isTRUE(y_m),  "none",
+    isTRUE(x_m)  & isFALSE(y_m), "warn_y",
+    isFALSE(x_m) & isTRUE(y_m),  "warn_x",
+    isFALSE(x_m) & isFALSE(y_m), "warn_both"
+  )
+
+  if (!m_m == "none") {
+
+    switch(
+      m_m,
+      "warn_y" = {
+        store_msg(
+          type   = "warn",
+          warn   = 'The keys supplied uniquely identify y therefore a `{tx}:1` join is executed.'
+        )
+      },
+      "warn_x" = {
+        store_msg(
+          type   = "warn",
+          style  = "warn",
+          glue(
+            'The keys supplied uniquely identify x',
+            'therefore a `1:{ty}` join is executed.'
+          )
+        )
+      },
+      "warn_both" = {
+        store_msg(
+          type   = "warn",
+          style  = "warn",
+          glue(
+            'The keys supplied uniquely identifies both x and y',
+            'therefore a `1:1` join executed.'
+          )
+        )
+      }
+    )
+
+  }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
@@ -207,3 +258,35 @@ foo2 <- \(){
 }
 
 foo2()
+
+
+
+
+
+#' Check whether specified "many" relationship is valid
+#'
+#' @param dt data object
+#' @param by character vector: specified keys, already fixed
+#'
+#' @return logical: `TRUE` if valid, `FALSE` if uniquely identified
+#' @export
+#'
+#' @examples
+is_valid_m_key <- function(dt, by){
+
+  # Argument checks
+  if (
+    !is.character(by)
+  ) stop(
+    "`by` argument must be character"
+  )
+    if (
+      dt |>
+      gv(by) |>
+      any_duplicated()
+    ) {
+      TRUE
+    } else {FALSE}
+
+}
+
