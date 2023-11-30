@@ -1,11 +1,19 @@
 test_that("storing messages works as expected", {
 
   # errors -------
+  ## wront type ------------
   expect_error(store_msg("blah",
                          ok = cli::symbol$tick, "  ",
                          pale = "another try"))
 
+  ## no message provided ------------
   expect_error(store_msg("info"))
+
+  ## wrong style  ----------
+  store_msg("info",
+            timing = cli::symbol$star, "   ",
+            blah = "Joyn's report available in variable {.val {x}}") |>
+    expect_error()
 
   # output --------
   rlang::env_unbind(.joynenv, "joyn_msgs")
@@ -47,6 +55,7 @@ test_that("display messages works", {
 
   joyn_msg("all") |>
     expect_error()
+
 
   # output ----------
   rlang::env_unbind(.joynenv, "joyn_msgs")
