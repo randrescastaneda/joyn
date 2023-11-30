@@ -113,7 +113,7 @@ msg_type_dt <- \(type, ...) {
 
 #' style of text displayed
 #'
-#' This is from
+#' This is an adaptation from
 #' https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
 #' @param ... combination of type and text in the form
 #' `type1 = text1, type2 = text2`
@@ -123,7 +123,9 @@ msg_type_dt <- \(type, ...) {
 #' @keywords internal
 style <- function(..., sep = "") {
   args <- list(...)
-  # st <- names(args)
+  if (is.null(names(args))) {
+    names(args) <- rep("", length(args))
+  }
 
   styles <- list(
     "ok"     = cli::col_green,

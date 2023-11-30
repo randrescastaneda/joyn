@@ -16,7 +16,7 @@ test_that("storing messages works as expected", {
     expect_error()
 
   # output --------
-  rlang::env_unbind(.joynenv, "joyn_msgs")
+  clear_joynenv()
   expect_false(rlang::env_has(.joynenv, "joyn_msgs"))
   dt <- store_msg("info",
                   ok = cli::symbol$tick, "  ",
@@ -32,12 +32,25 @@ test_that("storing messages works as expected", {
   expect_equal(nrow(dt), 2)
 
   # if env is emptied
-  rlang::env_unbind(.joynenv, "joyn_msgs")
+  clear_joynenv()
   dt <- store_msg("info",
                   ok = cli::symbol$tick, "  ",
                   pale = "first try")
 
   expect_equal(nrow(dt), 1)
+
+
+  ## duplicated obs deleted -----------
+  clear_joynenv()
+  store_msg("info", "simple message")
+  store_msg("info", "simple message")
+  dt <- store_msg("info", "simple message")
+
+  nrow(dt) |>
+    expect_equal(1)
+
+
+
 
 })
 
@@ -50,7 +63,7 @@ test_that("display messages works", {
   joyn_msg("blah") |>
     expect_error()
 
-  rlang::env_unbind(.joynenv, "joyn_msgs")
+  clear_joynenv()
   expect_false(rlang::env_has(.joynenv, "joyn_msgs"))
 
   joyn_msg("all") |>
@@ -58,7 +71,7 @@ test_that("display messages works", {
 
 
   # output ----------
-  rlang::env_unbind(.joynenv, "joyn_msgs")
+  clear_joynenv()
   expect_false(rlang::env_has(.joynenv, "joyn_msgs"))
   store_msg("info",
             ok = cli::symbol$tick, "  ",
@@ -67,7 +80,7 @@ test_that("display messages works", {
   expect_equal(nrow(dt), 1)
   expect_equal(names(dt), c("type", "msg"))
 
-  rlang::env_unbind(.joynenv, "joyn_msgs")
+  clear_joynenv()
   expect_false(rlang::env_has(.joynenv, "joyn_msgs"))
 
   store_msg("info",
