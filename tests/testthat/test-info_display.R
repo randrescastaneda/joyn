@@ -1,3 +1,26 @@
+df1 <- data.frame(
+  id1 = c(1, 1, 2, 3),
+  id2 = c("a", "b", "b", "c"),
+  name = c("John", "Jane", "Bob", "Carl"),
+  age = c(35, 28, 42, 50)
+)
+df2 <- data.frame(
+  id1 = c(1, 2, 3, 3),
+  id2 = c("a", "b", "c", "e"),
+  salary = c(60000, 55000, 70000, 80000),
+  dept = c("IT", "Marketing", "Sales", "IT")
+)
+
+df3 <- df2[, c("id1", "id2")]
+
+collapse::join(df1,df3, on = c("id1", "id2"), how = "inner")
+
+
+x <- c("id1", "id2")
+
+df1 |>
+  fselect(x)
+
 test_that("storing messages works as expected", {
 
   # errors -------
