@@ -161,6 +161,9 @@ joyn <- function(x,
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  ## X and Y -----------
+  check_xy(x,y)
+
   ## correct inputs --------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   match_type  <- match.arg(match_type)

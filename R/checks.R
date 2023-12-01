@@ -1,3 +1,66 @@
+#' check tables X and Y
+#'
+#' This checks are inspired on merge.data.table
+#'
+#' @inheritParams joyn
+#'
+#' @return invisible TRUE
+#' @keywords internal
+check_xy  <- function(x,y) {
+
+  error_exists <- FALSE
+
+  # check no columns --------------
+  x0 = length(x) == 0L
+  y0 = length(y) == 0L
+  if (x0 || y0) {
+    error_exists <- TRUE
+    if (x0 && y0) {
+      xy <- c("x", "y")
+      store_msg("err",
+                err = paste(cli::symbol$cross, "Error:"),
+                "   Neither {.or {.field {xy}}} table has columns.")
+    } else if (x0) {
+      store_msg("err",
+                err = paste(cli::symbol$cross, "Error:"),
+                "   Input table {.field x} has no columns.")
+    } else {
+      store_msg("err",
+                err = paste(cli::symbol$cross, "Error:"),
+                "   Input table {.field y} has no columns.")
+    }
+
+  }
+
+
+  # check names -----------
+
+  error_exists <- check_duplicate_names(x, "x")
+  error_exists <- check_duplicate_names(y, "y")
+
+  if (error_exists) {
+    joyn_msg("err")
+    cli::cli_abort("wrong input specification")
+  }
+  return(invisible(TRUE))
+}
+
+check_duplicate_names <- \(dt, name) {
+  nm_x = names(dt)
+  if (anyDuplicated(nm_x)) {
+    dups <- nm_x[duplicated(nm_x)] |>
+      unique()
+    store_msg("err",
+              err = paste(cli::symbol$cross, "Error:"),
+              "  table {.field {name}} has the folowing
+              {cli::qty(length(dups))} column{?s} duplicated:
+              {.var {dups}}.
+              Please remove or rename {?it/them} and try again.")
+    return(TRUE)
+  }
+  return(FALSE)
+}
+
 #' check reportvar input
 #'
 #' @inheritParams merge
