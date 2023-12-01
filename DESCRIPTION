@@ -11,9 +11,9 @@ Authors@R: c(person(given = "R.Andres",
                     role = "aut",
                     email = "zprinsloo@worldbank.org")
                     )
-Description: Tool for diagnosing table joins. It combines the speed
-    `data.table`, the flexibility of `dplyr`, and the diagnosis and features of
-    the `merge` command in `Stata`.
+Description: Tool for diagnosing table joins. It combines the speed of `collapse`
+     and `data.table`, the flexibility of `dplyr`, and the diagnosis and features 
+     of the `merge` command in `Stata`.
 License: MIT + file LICENSE
 Encoding: UTF-8
 URL: https://github.com/randrescastaneda/joyn
