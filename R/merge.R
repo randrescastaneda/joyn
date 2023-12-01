@@ -50,6 +50,7 @@ merge <- function(x,
              match_type = match_type,
              keep = keep,
              sort = sort,
+             allow.cartesian = allow.cartesian,
              ...)
 
   # return -------
