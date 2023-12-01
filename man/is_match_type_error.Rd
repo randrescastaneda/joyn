@@ -7,21 +7,11 @@
 is_match_type_error(x, name, by, verbose, match_type_error)
 }
 \arguments{
-\item{x}{data frame: referred to \emph{left} in R terminology, or \emph{master} in
-Stata terminology.}
-
 \item{name}{name of variable}
 
-\item{by}{a character vector of variables to join by. If NULL, the default,
-joyn will do a natural join, using all variables with common names across
-the two tables. A message lists the variables so that you can check they're
-right (to suppress the message, simply explicitly list the variables that
-you want to join). To join by different variables on x and y use a vector
-of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
-in y, and "z" in both tables.}
-
-\item{verbose}{logical: if FALSE, it won't display any message (programmer's
-option). Default is TRUE.}
+\item{by}{A vector of shared column names in \code{x} and \code{y} to merge on.
+This defaults to the shared key columns between the two tables.
+If \code{y} has no key columns, this defaults to the key of \code{x}.}
 
 \item{match_type_error}{logical: from existing code}
 }

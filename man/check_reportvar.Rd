@@ -6,15 +6,6 @@
 \usage{
 check_reportvar(reportvar, verbose = getOption("joyn.verbose"))
 }
-\arguments{
-\item{reportvar}{character: Name of reporting variable. Default if "report".
-This is the same as variable "_merge" in Stata after performing a merge. If
-FALSE or NULL, the reporting variable will be excluded from the final
-table, though a summary of the join will be display after concluding.}
-
-\item{verbose}{logical: if FALSE, it won't display any message (programmer's
-option). Default is TRUE.}
-}
 \value{
 if character, it returns valid name. If NULL or FALSE, returns NULL.
 }

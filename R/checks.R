@@ -287,9 +287,7 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #' @param by character vector: specified keys, already fixed
 #'
 #' @return logical: `TRUE` if valid, `FALSE` if uniquely identified
-#' @export
-#'
-#' @examples
+#' @keywords internal
 is_valid_m_key <- function(dt, by){
 
   # Argument checks

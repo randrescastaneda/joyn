@@ -7,28 +7,12 @@
 check_match_type(x, y, by, match_type, verbose)
 }
 \arguments{
-\item{x}{data frame: referred to \emph{left} in R terminology, or \emph{master} in
-Stata terminology.}
+\item{x, y}{\code{data table}s. \code{y} is coerced to a \code{data.table} if
+it isn't one already.}
 
-\item{y}{data frame: referred to \emph{right} in R terminology, or \emph{using} in
-Stata terminology.}
-
-\item{by}{a character vector of variables to join by. If NULL, the default,
-joyn will do a natural join, using all variables with common names across
-the two tables. A message lists the variables so that you can check they're
-right (to suppress the message, simply explicitly list the variables that
-you want to join). To join by different variables on x and y use a vector
-of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
-in y, and "z" in both tables.}
-
-\item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
-Default is \emph{"m:m"} since this is the default generally used in joins in R.
-However, following Stata's recommendation, it is better to be explicit and
-use any of the other three match types (See details in \emph{match types
-sections}).}
-
-\item{verbose}{logical: if FALSE, it won't display any message (programmer's
-option). Default is TRUE.}
+\item{by}{A vector of shared column names in \code{x} and \code{y} to merge on.
+This defaults to the shared key columns between the two tables.
+If \code{y} has no key columns, this defaults to the key of \code{x}.}
 }
 \value{
 character vector from \link{split_match_type}

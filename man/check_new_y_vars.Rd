@@ -9,14 +9,25 @@ check_new_y_vars(x, by, y_vars_to_keep)
 \arguments{
 \item{x}{master table}
 
-\item{by}{character: by vars}
+\item{by}{character vector: specified keys, already fixed}
 
 \item{y_vars_to_keep}{character vector of variables to keep}
+
+\item{dt}{data object}
 }
 \value{
 vector with new variable names for y
+
+logical: \code{TRUE} if valid, \code{FALSE} if uniquely identified
 }
 \description{
 rename vars in y so they are different to x's when joined
 }
+\keyword{"many"}
+\keyword{Check}
 \keyword{internal}
+\keyword{is}
+\keyword{relationship}
+\keyword{specified}
+\keyword{valid}
+\keyword{whether}

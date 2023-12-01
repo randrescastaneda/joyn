@@ -6,7 +6,7 @@
 \alias{joyn-package}
 \title{joyn: Tool for Diagnosis of Tables Joins and Complementary Join Features}
 \description{
-Tool for diagnosing table joins. It combines the speed `data.table`, the flexibility of `dplyr`, and the diagnosis and features of the `merge` command in `Stata`.
+Tool for diagnosing table joins. It combines the speed of `collapse` and `data.table`, the flexibility of `dplyr`, and the diagnosis and features of the `merge` command in `Stata`.
 }
 \seealso{
 Useful links:
