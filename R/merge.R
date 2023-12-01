@@ -43,6 +43,8 @@ merge <- function(x,
     keep <- "right"
   }
 
+  # NOTE: we should think of anti-joins...
+
   # implement joyn --------
   dt <- joyn(x = x,
              y = y,
@@ -51,7 +53,10 @@ merge <- function(x,
              keep = keep,
              sort = sort,
              allow.cartesian = allow.cartesian,
+             suffixes = suffixes,
              ...)
+
+  # wrangling -------
 
   # return -------
   dt
