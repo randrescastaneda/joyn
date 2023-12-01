@@ -14,19 +14,20 @@
 #'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x, "b"
 #'   in y, and "z" in both tables.
 #' @param match_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
-#'   Default is *"m:m"* since this is the default generally used in joins in R.
+#'   Default is *"1:1"* since this the most restrictive.
 #'   However, following Stata's recommendation, it is better to be explicit and
 #'   use any of the other three match types (See details in *match types
 #'   sections*).
 #'
-#' @param keep character: One of *"full"*, *"left"*, *"master"*, *"right"*,
+#' @param keep  atomic character vector of length 1:
+#'   One of *"full"*, *"left"*, *"master"*, *"right"*,
 #'   *"using"*, *"inner"*. Default is *"full"*. Even though this is not the
 #'   regular behavior of joins in R, the objective of `joyn` is to present a
-#'   diagnosis of the join, so that it must use by default a full join. Yet, if
-#'   *"left"* or *"master"*, it keeps the observations that matched in both
-#'   tables and the ones that did not match in x. The ones in y will be
-#'   discarded. If *"right"* or *"using"*, it keeps the observations that
-#'   matched in both tables and the ones that did not match in y. The ones in x
+#'   diagnosis of the join which requires a full join. That is why the default
+#'   is a a full join. Yet, if *"left"* or *"master"*, it keeps the observations
+#'   that matched in both tables and the ones that did not match in x. The ones
+#'   in y will be discarded. If *"right"* or *"using"*, it keeps the observations
+#'   that matched in both tables and the ones that did not match in y. The ones in x
 #'   will be discarded. If *"inner"*, it only keeps the observations that
 #'   matched both tables.
 #' @param y_vars_to_keep character: Vector of variable names that will be kept
@@ -130,7 +131,7 @@
 joyn <- function(x,
                   y,
                   by              = intersect(names(x), names(y)),
-                  match_type      = c("m:m", "m:1", "1:m", "1:1"),
+                  match_type      = getOption("joyn.match_type"),
                   keep            = c("full", "left", "master",
                                       "right", "using", "inner"),
                   y_vars_to_keep  = TRUE,
@@ -143,7 +144,7 @@ joyn <- function(x,
                   sort            = TRUE,
                   verbose         = getOption("joyn.verbose"),
                   suffixes        = getOption("joyn.suffixes"),
-                  allow.cartesian = NULL,
+                  allow.cartesian = deprecated(),
                   yvars           = deprecated(),
                   keep_y_in_x     = deprecated()) {
 
@@ -160,6 +161,13 @@ joyn <- function(x,
     lifecycle::deprecate_warn("0.1.5",
                               "merge(keep_y_in_x)",
                               "merge(keep_common_vars)")
+    keep_common_vars <- keep_y_in_x
+  }
+  if (lifecycle::is_present(allow.cartesian)) {
+    lifecycle::deprecate_warn(when = "0.1.5",
+                              what = "merge(allow.cartesian)",
+                              details = "Now always uses `allow.cartesian = TRUE`
+                              if and only if `match_type == 'm:m'`")
     keep_common_vars <- keep_y_in_x
   }
 
@@ -260,41 +268,17 @@ joyn <- function(x,
          mget(c(by, yvars_w))]
 
 
-  if (keep == "inner") {
+  # Perform workhorse join
+  x <- joyn_workhorse(
+    x          = x,
+    y          = y,
+    by         = by,
+    match_type = match_type,
+    suffix     = suffixes,
+    keep       = keep
+  )
 
-    x <- data.table::merge.data.table(x               = x,
-                                      y               = y,
-                                      by              = by,
-                                      sort            = FALSE,
-                                      allow.cartesian = allow.cartesian)
 
-  } else if (keep %in% c("right", "using")) {
-
-    x <- data.table::merge.data.table(x               = x,
-                                      y               = y,
-                                      by              = by,
-                                      all.y           = TRUE,
-                                      sort            = FALSE,
-                                      allow.cartesian = allow.cartesian)
-
-  } else if (keep %in% c("left", "master")) {
-    x <- data.table::merge.data.table(x               = x,
-                                      y               = y,
-                                      by              = by,
-                                      all.x           = TRUE,
-                                      sort            = FALSE,
-                                      allow.cartesian = allow.cartesian)
-
-  } else  {
-
-    x <- data.table::merge.data.table(x               = x,
-                                      y               = y,
-                                      by              = by,
-                                      all             = TRUE,
-                                      sort            = FALSE,
-                                      allow.cartesian = allow.cartesian)
-
-  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------

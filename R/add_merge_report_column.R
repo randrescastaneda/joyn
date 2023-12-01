@@ -9,10 +9,16 @@
 #'
 #' @return data object of same class as `output_table` that has additional `_merge` columns -
 #' `_merge` has value 1 if only in `x`, 2 if only in `y`, and 3 if in both
-#' @export
+#'
 #'
 #' @examples
-add_merge_report_column <- function(output_table, x, y, by){
+add_merge_report_column <- function(
+    output_table,
+    x,
+    y,
+    by,
+    reportvar = getOption("joyn.reportvar")
+  ){
 
   # Combine keys to check
   output_table <- dt_merge_output |>
@@ -42,11 +48,10 @@ add_merge_report_column <- function(output_table, x, y, by){
   output_table$left <- left
   output_table$right <- right
 
-
   # Give only the report column
   output_table <- output_table |>
     ftransform(
-      `_merge` = data.table::fcase(
+      reportvar = data.table::fcase(
         left == TRUE  & right == FALSE, 1,
         left == FALSE & right == TRUE,  2,
         left == TRUE  & right == TRUE,  3
