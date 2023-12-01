@@ -29,11 +29,10 @@
 #'   matched in both tables and the ones that did not match in y. The ones in x
 #'   will be discarded. If *"inner"*, it only keeps the observations that
 #'   matched both tables.
-#' @param roll double: *to be implemented*
-#' @param y_vars_to_keep character: Vector of variable names that will be kept after the
-#'   merge. If TRUE (the default), it keeps all the brings all the variables in
-#'   y into x. If FALSE or NULL, it does not bring any variable into x, but a
-#'   report will be generated.
+#' @param y_vars_to_keep character: Vector of variable names that will be kept
+#'   after the merge. If TRUE (the default), it keeps all the brings all the
+#'   variables in y into x. If FALSE or NULL, it does not bring any variable
+#'   into x, but a report will be generated.
 #' @param reportvar character: Name of reporting variable. Default if "report".
 #'   This is the same as variable "_merge" in Stata after performing a merge. If
 #'   FALSE or NULL, the reporting variable will be excluded from the final
@@ -53,10 +52,10 @@
 #'   `update_NAs = FALSE`
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
-#' @param keep_common_vars logical: If TRUE, it will keep the original variable from
-#'   y when both tables have common variable names. Thus, the prefix "y." will
-#'   be added to the original name to distinguish from the resulting variable in
-#'   the joined table.
+#' @param keep_common_vars logical: If TRUE, it will keep the original variable
+#'   from y when both tables have common variable names. Thus, the prefix "y."
+#'   will be added to the original name to distinguish from the resulting
+#'   variable in the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
 #'   TRUE.
 #' @param allow.cartesian logical: Check documentation in official [web
@@ -64,6 +63,12 @@
 #'   Default is `NULL`, which implies that if the join is "1:1" it will be
 #'   `FALSE`, but if the join has any "m" on it, it will be converted to `TRUE`.
 #'   By specifying `TRUE` of `FALSE` you force the behavior of the join.
+#' @param roll double: *to be implemented*
+#' @param suffixes A character(2) specifying the suffixes to be used for making
+#'   non-by column names unique. The suffix behaviour works in a similar fashion
+#'   as the [base::merge] method does.
+#' @param yvars `r lifecycle::badge("superseded")`: use now `y_vars_to_keep`
+#' @param keep_y_in_x `r lifecycle::badge("superseded")`: use now `keep_common_vars`
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -125,10 +130,10 @@
 joyn <- function(x,
                   y,
                   by              = intersect(names(x), names(y)),
-                  y_vars_to_keep  = TRUE,
                   match_type      = c("m:m", "m:1", "1:m", "1:1"),
                   keep            = c("full", "left", "master",
                                       "right", "using", "inner"),
+                  y_vars_to_keep  = TRUE,
                   update_values   = FALSE,
                   update_NAs      = update_values,
                   reportvar       = getOption("joyn.reportvar"),
@@ -137,6 +142,7 @@ joyn <- function(x,
                   keep_common_vars = FALSE,
                   sort            = TRUE,
                   verbose         = getOption("joyn.verbose"),
+                  suffixes        = getOption("joyn.suffixes"),
                   allow.cartesian = NULL,
                   yvars           = deprecated(),
                   keep_y_in_x     = deprecated()) {
@@ -152,9 +158,9 @@ joyn <- function(x,
   }
   if (lifecycle::is_present(keep_y_in_x)) {
     lifecycle::deprecate_warn("0.1.5",
-                              "merge(keep_common_vars)",
-                              "merge(y_vars_to_keep)")
-    y_vars_to_keep <- keep_common_vars
+                              "merge(keep_y_in_x)",
+                              "merge(keep_common_vars)")
+    keep_common_vars <- keep_y_in_x
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

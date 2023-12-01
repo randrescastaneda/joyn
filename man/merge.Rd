@@ -17,6 +17,7 @@ merge(
   suffixes = c(".x", ".y"),
   no.dups = TRUE,
   allow.cartesian = getOption("datatable.allow.cartesian"),
+  match_type = c("m:m", "m:1", "1:m", "1:1"),
   ...
 )
 }
@@ -55,37 +56,23 @@ as any \code{by.x}.}
 
 \item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
 
-\item{...}{
-  Arguments passed on to \code{\link[=joyn]{joyn}}
-  \describe{
-    \item{\code{match_type}}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
+\item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
 Default is \emph{"m:m"} since this is the default generally used in joins in R.
 However, following Stata's recommendation, it is better to be explicit and
 use any of the other three match types (See details in \emph{match types
 sections}).}
-    \item{\code{keep}}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
-\emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
-regular behavior of joins in R, the objective of \code{joyn} is to present a
-diagnosis of the join, so that it must use by default a full join. Yet, if
-\emph{"left"} or \emph{"master"}, it keeps the observations that matched in both
-tables and the ones that did not match in x. The ones in y will be
-discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations that
-matched in both tables and the ones that did not match in y. The ones in x
-will be discarded. If \emph{"inner"}, it only keeps the observations that
-matched both tables.}
-    \item{\code{roll}}{double: \emph{to be implemented}}
-    \item{\code{y_vars_to_keep}}{character: Vector of variable names that will be kept after the
-merge. If TRUE (the default), it keeps all the brings all the variables in
-y into x. If FALSE or NULL, it does not bring any variable into x, but a
-report will be generated.}
+
+\item{...}{
+  Arguments passed on to \code{\link[=joyn]{joyn}}
+  \describe{
+    \item{\code{y_vars_to_keep}}{character: Vector of variable names that will be kept
+after the merge. If TRUE (the default), it keeps all the brings all the
+variables in y into x. If FALSE or NULL, it does not bring any variable
+into x, but a report will be generated.}
     \item{\code{reportvar}}{character: Name of reporting variable. Default if "report".
 This is the same as variable "_merge" in Stata after performing a merge. If
 FALSE or NULL, the reporting variable will be excluded from the final
 table, though a summary of the join will be display after concluding.}
-    \item{\code{reporttype}}{character: One of \emph{"character"} or \emph{"numeric"}. Default is
-\emph{"character"}. If \emph{"numeric"}, the reporting variable will contain  numeric
-codes of the source and the contents of each observation in the joined
-table.}
     \item{\code{update_NAs}}{logical: If TRUE, it will update NA values of all variables
 in x with actual values of variables in y that have the same name as the
 ones in x. If FALSE, NA values won't be updated, even if \code{update_values} is
@@ -97,10 +84,10 @@ NAs in x will be updated with values in y. To avoid this, make sure to set
 \code{update_NAs = FALSE}}
     \item{\code{verbose}}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
-    \item{\code{keep_common_vars}}{logical: If TRUE, it will keep the original variable from
-y when both tables have common variable names. Thus, the prefix "y." will
-be added to the original name to distinguish from the resulting variable in
-the joined table.}
+    \item{\code{keep_common_vars}}{logical: If TRUE, it will keep the original variable
+from y when both tables have common variable names. Thus, the prefix "y."
+will be added to the original name to distinguish from the resulting
+variable in the joined table.}
   }}
 }
 \description{

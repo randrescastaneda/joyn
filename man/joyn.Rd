@@ -8,9 +8,9 @@ joyn(
   x,
   y,
   by = intersect(names(x), names(y)),
-  y_vars_to_keep = TRUE,
   match_type = c("m:m", "m:1", "1:m", "1:1"),
   keep = c("full", "left", "master", "right", "using", "inner"),
+  y_vars_to_keep = TRUE,
   update_values = FALSE,
   update_NAs = update_values,
   reportvar = getOption("joyn.reportvar"),
@@ -19,6 +19,7 @@ joyn(
   keep_common_vars = FALSE,
   sort = TRUE,
   verbose = getOption("joyn.verbose"),
+  suffixes = getOption("joyn.suffixes"),
   allow.cartesian = NULL,
   yvars = deprecated(),
   keep_y_in_x = deprecated()
@@ -39,11 +40,6 @@ you want to join). To join by different variables on x and y use a vector
 of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
 in y, and "z" in both tables.}
 
-\item{y_vars_to_keep}{character: Vector of variable names that will be kept after the
-merge. If TRUE (the default), it keeps all the brings all the variables in
-y into x. If FALSE or NULL, it does not bring any variable into x, but a
-report will be generated.}
-
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
 Default is \emph{"m:m"} since this is the default generally used in joins in R.
 However, following Stata's recommendation, it is better to be explicit and
@@ -60,6 +56,11 @@ discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations that
 matched in both tables and the ones that did not match in y. The ones in x
 will be discarded. If \emph{"inner"}, it only keeps the observations that
 matched both tables.}
+
+\item{y_vars_to_keep}{character: Vector of variable names that will be kept
+after the merge. If TRUE (the default), it keeps all the brings all the
+variables in y into x. If FALSE or NULL, it does not bring any variable
+into x, but a report will be generated.}
 
 \item{update_values}{logical: If TRUE, it will update all values of variables
 in x with the actual of variables in y with the same name as the ones in x.
@@ -84,10 +85,10 @@ table.}
 
 \item{roll}{double: \emph{to be implemented}}
 
-\item{keep_common_vars}{logical: If TRUE, it will keep the original variable from
-y when both tables have common variable names. Thus, the prefix "y." will
-be added to the original name to distinguish from the resulting variable in
-the joined table.}
+\item{keep_common_vars}{logical: If TRUE, it will keep the original variable
+from y when both tables have common variable names. Thus, the prefix "y."
+will be added to the original name to distinguish from the resulting
+variable in the joined table.}
 
 \item{sort}{logical: If TRUE, sort by key variables in \code{by}. Default is
 TRUE.}
@@ -95,10 +96,18 @@ TRUE.}
 \item{verbose}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
 
+\item{suffixes}{A character(2) specifying the suffixes to be used for making
+non-by column names unique. The suffix behaviour works in a similar fashion
+as the \link[base:merge]{base::merge} method does.}
+
 \item{allow.cartesian}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html/}{web site}.
 Default is \code{NULL}, which implies that if the join is "1:1" it will be
 \code{FALSE}, but if the join has any "m" on it, it will be converted to \code{TRUE}.
 By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
+
+\item{yvars}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now \code{y_vars_to_keep}}
+
+\item{keep_y_in_x}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now \code{keep_common_vars}}
 }
 \value{
 a data.table joining x and y.

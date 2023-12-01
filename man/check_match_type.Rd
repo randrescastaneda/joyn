@@ -13,6 +13,12 @@ it isn't one already.}
 \item{by}{A vector of shared column names in \code{x} and \code{y} to merge on.
 This defaults to the shared key columns between the two tables.
 If \code{y} has no key columns, this defaults to the key of \code{x}.}
+
+\item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
+Default is \emph{"m:m"} since this is the default generally used in joins in R.
+However, following Stata's recommendation, it is better to be explicit and
+use any of the other three match types (See details in \emph{match types
+sections}).}
 }
 \value{
 character vector from \link{split_match_type}

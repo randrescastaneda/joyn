@@ -4,7 +4,9 @@
 #' [data.table::merge], which is why [joyn::merge] masks the other two.
 #'
 #' @inheritParams data.table::merge.data.table
-#' @inheritDotParams joyn
+#' @inheritParams joyn
+#' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
+#'   reporttype keep_common_vars verbose
 merge <- function(x,
                   y,
                   by = NULL,
@@ -18,6 +20,7 @@ merge <- function(x,
                   no.dups = TRUE,
                   # default FALSE
                   allow.cartesian = getOption("datatable.allow.cartesian"),
+                  match_type= c("m:m", "m:1", "1:m", "1:1"),
                   ...) {
 
   # Check arguments ------------
@@ -28,8 +31,29 @@ merge <- function(x,
   ## by vars -----------
   by <- check_dt_by(x, y, by, by.x, by.y)
 
+  # wrap to joyn ------------
 
+  if (isTRUE(all.x) && isTRUE(all.y)) {
+    keep <- "inner"
+  } else if (isFALSE(all.x) && isFALSE(all.y)) {
+    keep <- "full"
+  } else if (isTRUE(all.x) && isFALSE(all.y)) {
+    keep <- "left"
+  } else if (isFALSE(all.x) && isTRUE(all.y)) {
+    keep <- "right"
+  }
 
+  # implement joyn --------
+  dt <- joyn(x = x,
+             y = y,
+             by = by,
+             match_type = match_type,
+             keep = keep,
+             sort = sort,
+             ...)
+
+  # return -------
+  dt
 }
 
 
