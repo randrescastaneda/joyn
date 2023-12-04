@@ -1,6 +1,8 @@
 
 #' Internal workhorse join function, used in the backend of `joyn`
 #'
+#' Always executes a full join. Gives comm
+#'
 #' @param x data object, "left" or "master"
 #' @param y data object, "right" or "using"
 #' @param by atomic character vector: key specifying join
@@ -21,96 +23,87 @@
 #'   will be discarded. If *"inner"*, it only keeps the observations that
 #'   matched both tables.
 #'
-#' @return
+#' @return data object of same class as `x`
 #'
 joyn_workhorse <- function(
     x,
     y,
     by         = intersect(names(x), names(y)),
-    match_type = getOption("joyn.match_type"),
-    suffix     = getOption("joyn.suffixes"), # data.table suffixes
-    keep       = c(
-      "full",
-      "left",
-      "master",
-      "right",
-      "using",
-      "inner"
-    )
+    match_type = c(
+      "1:1",
+      "1:m",
+      "m:1",
+      "m:m"
+    ),
+    suffix     = getOption("joyn.suffixes") # data.table suffixes
 ) {
 
-  # Argument checks ----
-  match_type <- match.arg(match_type)
-  keep       <- match.arg(keep)
+  # Argument checks -----------------------------------------------------------
+  match_type <- match.arg(
+    match_type,
+    choices = c(
+      "1:1",
+      "1:m",
+      "m:1",
+      "m:m"
+    )
+  )
 
   # Measure time
   start_time <- Sys.time()
 
+  # Create report variables
+  x <- x |>
+    ftransform(
+      x_report = 1L
+    )
+  y <- y |>
+    ftransform(
+      y_report = 2L
+    )
 
-  if (!is.null(match_type) && match_type == "m:m") {
+  # Do a full join -------------------------------------------------------------
 
-        # Perform join specified by `keep`
-        if (keep == "inner") {
+  # if many-to-many => use merge.data.table
+  if (match_type == "m:m") {
 
-          dt_result <- data.table::merge.data.table(x               = x,
-                                                    y               = y,
-                                                    by              = by,
-                                                    sort            = FALSE,
-                                                    suffix          = suffix,
-                                                    allow.cartesian = TRUE)
-
-        } else if (keep %in% c("right", "using")) {
-
-          dt_result <- data.table::merge.data.table(x               = x,
-                                                    y               = y,
-                                                    by              = by,
-                                                    all.y           = TRUE,
-                                                    sort            = FALSE,
-                                                    suffix          = suffix,
-                                                    allow.cartesian = TRUE)
-
-        } else if (keep %in% c("left", "master")) {
-          dt_result <- data.table::merge.data.table(x               = x,
-                                                    y               = y,
-                                                    by              = by,
-                                                    all.x           = TRUE,
-                                                    sort            = FALSE,
-                                                    suffix          = suffix,
-                                                    allow.cartesian = TRUE)
-
-        } else  {
-
-          dt_result <- data.table::merge.data.table(x               = x,
-                                                    y               = y,
-                                                    by              = by,
-                                                    all             = TRUE,
-                                                    sort            = FALSE,
-                                                    suffix          = suffix,
-                                                    allow.cartesian = TRUE)
-
-        }
-
+    dt_result <- data.table::merge.data.table(
+      x               = x,
+      y               = y,
+      by              = by,
+      all             = TRUE,
+      sort            = FALSE,
+      suffix          = suffix,
+      allow.cartesian = TRUE
+    )
 
   } else {
 
-    keep_collapse <- switch(
-      keep,
-      "master" = "left",
-      "using"  = "right",
-      keep
-    )
-
+    # not many-to-many => use collapse::join()
     dt_result <- collapse::join( x,
                                  y,
-                                 how            = keep_collapse,
+                                 how            = "full",
                                  on             = by,
                                  validate       = "m:m",    # no checks performed
                                  suffix         = suffix,   # data.table suffixes
                                  keep.col.order = TRUE,
-                                 verbose        = FALSE,    # suppress `collapse` messages
-                                 column         = NULL      # list(getOption("joyn.reportvar"), c("1", "2", "3")),
-                                 )
+                                 verbose        = 1,        # until collapse update
+                                 column         = NULL
+    )
+
+
   }
+
+
+  # Report --------------------------------------------------------------------
+
+  # replace NAs in report vars - using data.table
+  setnafill(
+    dt_result,
+    fill = 0,
+    cols = c("x_report", "y_report")
+  )
+
 
   # Calculate the time taken
   end_time <- Sys.time()
