@@ -21,9 +21,9 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
 y3 <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
 
-x3 <- data.table(id  =c("c","b", "d"),
-                 v   =8:10,
-                 foo =c(4,2, 7))
+x3 <- data.table(id  = c("c","b", "d"),
+                 v   = 8:10,
+                 foo = c(4,2, 7))
 
 x4 = data.table(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),
@@ -141,10 +141,6 @@ test_that("FULL- Compare with base::merge", {
     y  = y1,
     by = "id"
   )
-  jn[
-    ,
-    c("x_report", "y_report") := NULL
-  ]
 
   br <- base::merge(
     x   = x1,
@@ -184,10 +180,6 @@ test_that("FULL- Compare with base::merge", {
     y  = y2,
     by = "id"
   )
-  jn[
-    ,
-    c("x_report", "y_report") := NULL
-  ]
 
   br <- base::merge(
     x   = x2,
@@ -195,12 +187,6 @@ test_that("FULL- Compare with base::merge", {
     by  = "id",
     all = TRUE
   )
-  # br[
-  #   , x := x.x
-  # ][
-  #   ,
-  #   c("x.x", "x.y") := NULL
-  # ]
   setorderv(br, "id", na.last = TRUE)
   setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
