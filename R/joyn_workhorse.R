@@ -51,8 +51,8 @@ joyn_workhorse <- function(
 
   # Do a full join -------------------------------------------------------------
 
-  # if many-to-many => use merge.data.table
-  if (match_type == "m:m") {
+  # if not 1:1 => use merge.data.table
+  if (!match_type == "1:1") {
 
     dt_result <- data.table::merge.data.table(
       x               = x,
@@ -64,24 +64,9 @@ joyn_workhorse <- function(
       allow.cartesian = TRUE
     )
 
-  } else if (match_type == "1:m") {
-
-    # 1:m => use collapse::join() as full, but switch to m:1 (UNTIL COLLAPSE UPDATE)
-    dt_result <- collapse::join( x              = y,        # switch
-                                 y              = x,        # switch
-                                 how            = "full",
-                                 on             = by,
-                                 validate       = "m:m",    # no checks performed
-                                 suffix         = suffix,   # data.table suffixes
-                                 keep.col.order = TRUE,
-                                 verbose        = 1,        # until collapse update
-                                 column         = NULL
-    )
-
-
   } else {
 
-    # 1:1, m:1 => use collapse::join()
+    # 1:1 => use collapse::join()
     dt_result <- collapse::join( x              = x,
                                  y              = y,
                                  how            = "full",
