@@ -196,27 +196,19 @@ check_match_type <- function(x, y, by, match_type, verbose) {
       "warn_x" = {
         store_msg(
           type   = "warn",
-          style  = "warn",
-          glue(
-            'The keys supplied uniquely identify x',
-            'therefore a `1:{ty}` join is executed.'
+          warn   = 'The keys supplied uniquely identify x therefore a `1:{ty}` join is executed'
           )
-        )
       },
       "warn_both" = {
         store_msg(
           type   = "warn",
-          style  = "warn",
-          glue(
-            'The keys supplied uniquely identifies both x and y',
-            'therefore a `1:1` join executed.'
-          )
+          warn   =  cli::symbol$record, "  ",
+          warn   = 'The key/s supplied uniquely identifies both x and y therefore a `1:1` join executed.'
         )
       }
     )
 
   }
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
@@ -256,7 +248,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #'
 #' @inheritParams merge
 #'
-#' @return charactere vector with variable names from Y table
+#' @return character vector with variable names from Y table
 #' @keywords internal
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
@@ -340,7 +332,11 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
                             {.arg update_values} are FALSE.")
     }
 
+  } # end of update vars
 
+
+  return(y_vars_to_keep)
+}
 
 
 
@@ -369,6 +365,10 @@ is_valid_m_key <- function(dt, by){
 
 }
 
-  } # end of update vars
-  return(y_vars_to_keep)
-}
+
+
+
+
+
+
+

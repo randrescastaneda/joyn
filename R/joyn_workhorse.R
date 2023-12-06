@@ -17,12 +17,7 @@ joyn_workhorse <- function(
     x,
     y,
     by         = intersect(names(x), names(y)),
-    match_type = c(
-      "1:1",
-      "1:m",
-      "m:1",
-      "m:m"
-    ),
+    match_type = c("1:1"),
     suffix     = getOption("joyn.suffixes") # data.table suffixes
 ) {
 

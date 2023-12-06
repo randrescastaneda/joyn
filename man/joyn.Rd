@@ -8,7 +8,7 @@ joyn(
   x,
   y,
   by = intersect(names(x), names(y)),
-  match_type = c("m:m", "m:1", "1:m", "1:1"),
+  match_type = getOption("joyn.match_type"),
   keep = c("full", "left", "master", "right", "using", "inner"),
   y_vars_to_keep = TRUE,
   update_values = FALSE,
@@ -20,7 +20,7 @@ joyn(
   sort = TRUE,
   verbose = getOption("joyn.verbose"),
   suffixes = getOption("joyn.suffixes"),
-  allow.cartesian = NULL,
+  allow.cartesian = deprecated(),
   yvars = deprecated(),
   keep_y_in_x = deprecated()
 )
@@ -41,19 +41,20 @@ of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
 in y, and "z" in both tables.}
 
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
-Default is \emph{"m:m"} since this is the default generally used in joins in R.
+Default is \emph{"1:1"} since this the most restrictive.
 However, following Stata's recommendation, it is better to be explicit and
 use any of the other three match types (See details in \emph{match types
 sections}).}
 
-\item{keep}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
+\item{keep}{atomic character vector of length 1:
+One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
 \emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
 regular behavior of joins in R, the objective of \code{joyn} is to present a
-diagnosis of the join, so that it must use by default a full join. Yet, if
-\emph{"left"} or \emph{"master"}, it keeps the observations that matched in both
-tables and the ones that did not match in x. The ones in y will be
-discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations that
-matched in both tables and the ones that did not match in y. The ones in x
+diagnosis of the join which requires a full join. That is why the default
+is a a full join. Yet, if \emph{"left"} or \emph{"master"}, it keeps the observations
+that matched in both tables and the ones that did not match in x. The ones
+in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations
+that matched in both tables and the ones that did not match in y. The ones in x
 will be discarded. If \emph{"inner"}, it only keeps the observations that
 matched both tables.}
 

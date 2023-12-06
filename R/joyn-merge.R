@@ -130,23 +130,23 @@
 #'
 joyn <- function(x,
                   y,
-                  by              = intersect(names(x), names(y)),
-                  match_type      = getOption("joyn.match_type"),
-                  keep            = c("full", "left", "master",
-                                      "right", "using", "inner"),
-                  y_vars_to_keep  = TRUE,
-                  update_values   = FALSE,
-                  update_NAs      = update_values,
-                  reportvar       = getOption("joyn.reportvar"),
-                  reporttype      = c("character", "numeric"),
-                  roll            = NULL,
+                  by               = intersect(names(x), names(y)),
+                  match_type       = "1:1",
+                  keep             = c("full", "left", "master",
+                                       "right", "using", "inner"),
+                  y_vars_to_keep   = TRUE,
+                  update_values    = FALSE,
+                  update_NAs       = update_values,
+                  reportvar        = getOption("joyn.reportvar"),
+                  reporttype       = c("character", "numeric"),
+                  roll             = NULL,
                   keep_common_vars = FALSE,
-                  sort            = TRUE,
-                  verbose         = getOption("joyn.verbose"),
-                  suffixes        = getOption("joyn.suffixes"),
-                  allow.cartesian = deprecated(),
-                  yvars           = deprecated(),
-                  keep_y_in_x     = deprecated()) {
+                  sort             = TRUE,
+                  verbose          = getOption("joyn.verbose"),
+                  suffixes         = getOption("joyn.suffixes"),
+                  allow.cartesian  = deprecated(),
+                  yvars            = deprecated(),
+                  keep_y_in_x      = deprecated()) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Life cycle   ---------
@@ -168,7 +168,7 @@ joyn <- function(x,
                               what = "merge(allow.cartesian)",
                               details = "Now always uses `allow.cartesian = TRUE`
                               if and only if `match_type == 'm:m'`")
-    keep_common_vars <- keep_y_in_x
+    allow.cartesian <- NULL
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -180,7 +180,15 @@ joyn <- function(x,
 
   ## correct inputs --------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  match_type  <- match.arg(match_type)
+  match_type <- match.arg(
+    match_type,
+    choices = c(
+      "1:1",
+      "1:m",
+      "m:1",
+      "m:m"
+    )
+  )
   keep        <- match.arg(keep)
   reporttype  <- match.arg(reporttype)
 
@@ -252,21 +260,16 @@ joyn <- function(x,
   # simple merge
   i.yvars <- paste0("i.", yvars_w)
 
-
-  # cartesian merge
-  if (is.null(allow.cartesian)) {
-    if (tx == "m" || ty == "m") {
-      allow.cartesian <- TRUE
-    } else {
-      allow.cartesian <- FALSE
-    }
-  }
-
   # keep relevant variables in y
-
   y <- y[,
          mget(c(by, yvars_w))]
 
+  if (
+    (keep == "anti" | keep == "semi") &
+    match_type == "m:m"
+  ) stop(
+    "Anti and semi joins cannot be performed on m:m joins at this stage"
+  )
 
   # Perform workhorse join
   x <- joyn_workhorse(
@@ -274,11 +277,8 @@ joyn <- function(x,
     y          = y,
     by         = by,
     match_type = match_type,
-    suffix     = suffixes,
-    keep       = keep
+    suffix     = suffixes
   )
-
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------
@@ -323,6 +323,12 @@ joyn <- function(x,
   # report variable
   x[, (reportvar) :=  .xreport + .yreport]
 
+
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Filter rows - `keep`   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
   ## rows to keep -----
   if (keep  %in% c("master", "left") ) {
 
@@ -341,38 +347,45 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  if (length(upvars) != 0) {
 
-    if  (isTRUE(update_values)) {
 
-      for (i in seq_along(upvars)) {
-        update_values(x, upvars[i])
-      }
+  # update values
+  if (isTRUE(update_values)) {
 
-    }
-
-    if (isTRUE(update_NAs)) {
-
-      for (i in seq_along(upvars)) {
-        update_NAs(x, upvars[i])
-      }
-
-    }
-
-    if (isFALSE(keep_common_vars) && !is.null(y.upvars)) {
-      x[, (y.upvars) := NULL]
-    }
+    x <- update_values(
+      dt  = x, # joined table
+      var = sub(
+        pattern = "\\.y$",
+        "",
+        newyvars
+      )
+    )
 
   }
+
+
+  # update NAs
+  if (isTRUE(update_NAs)) {
+
+    x <- update_NAs(
+      dt  = x,
+      var = sub(
+        pattern = "\\.y$",
+        "",
+        newyvars
+      )
+    )
+
+  }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## cleaning temporary report variables ----
-  x[,
-    c(".xreport", ".yreport") := NULL
-  ]
+  x$`.xreport` <- NULL
+  x$`.yreport` <- NULL
 
 
   ## Rename by variables -----
@@ -386,20 +399,38 @@ joyn <- function(x,
 
   ## Remove temporal yvars -----
   if (exists("temp_yvar")) {
-    x[, (temp_yvar) := NULL]
+
+    x <- x[
+      ,
+      mget(
+        names(x)[
+          which(
+            !names(x) %in% temp_yvar
+          )
+        ]
+      )
+    ]
+
   }
+
+
 
   ## convert to characters if chosen -------
   if (reporttype == "character") {
-    x[,
-      (reportvar) := fcase(get(reportvar) == 1, "x",
-                           get(reportvar) == 2, "y",
-                           get(reportvar) == 3, "x & y",
-                           get(reportvar) == 4, "NA updated",
-                           get(reportvar) == 5, "value updated",
-                           get(reportvar) == 6, "not updated",
-                           default        = "conflict. check")
-    ]
+
+    applySwitch <- function(value) {
+      switch(as.character(value),
+             "1" = "x",
+             "2" = "y",
+             "3" = "x & y",
+             "4" = "NA updated",
+             "5" = "value updated",
+             "6" = "not updated",
+             "conflict. check")
+    }
+
+    # Apply the function to the column
+    x[[reportvar]] <- sapply(x[[reportvar]], applySwitch)
 
   }
 
@@ -428,7 +459,7 @@ joyn <- function(x,
 
   # Report var
   if (dropreport) {
-    x[, (reportvar) := NULL]
+    x$report <- NULL
   }
 
   if (sort) {
