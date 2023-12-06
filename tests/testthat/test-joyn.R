@@ -64,14 +64,14 @@ test_that("Errors if no common variables", {
 
 test_that("m:m and 1:1 gives the same if data is correct", {
   expect_equal(
-    joyn(
+    joyn( # ZP: THIS GIVES ERROR
       x2,
       y2,
       by = "id",
       update_values = TRUE,
       match_type = "1:1"
     ),
-    joyn(
+    joyn( # ZP: THIS GIVES ERROR
       x2,
       y2,
       by = "id",
@@ -82,14 +82,14 @@ test_that("m:m and 1:1 gives the same if data is correct", {
   )
 
   expect_equal(
-    joyn(
+    joyn( # ZP: THIS GIVES ERROR
       x2,
       y2,
       by = "id",
       update_NAs = TRUE,
       match_type = "1:1"
     ),
-    joyn(
+    joyn( # ZP: THIS GIVES ERROR
       x2,
       y2,
       by = "id",
@@ -218,27 +218,26 @@ test_that("LEFT- Compare with base::merge", {
       y1,
       by = "id",
       reportvar = FALSE,
-      keep = "left"
+      keep = "left",
+      match_type = "m:1"
     )
   br <- base::merge(x1, y1, by = "id", all.x = TRUE)
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
-
-
   expect_equal(jn, br)
 
 
-  jn <-
-    joyn(
+  jn <- joyn(
       x2,
       y2,
       by = "id",
       reportvar = FALSE,
-      keep = "left"
+      keep = "left",
+      match_type = "1:1"
     )
   br <- base::merge(x2, y2, by = "id", all.x = TRUE)
   br[, x := x.x][,
-                 c("x.x", "x.y") := NULL]
+                 c("x.x") := NULL] # ZP: changed
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
@@ -258,7 +257,8 @@ test_that("RIGHT - Compare with base::merge", {
       y1,
       by = "id",
       reportvar = FALSE,
-      keep = "right"
+      keep = "right",
+      match_type = "m:1"
     )
   br <- base::merge(x1, y1, by = "id", all.y = TRUE)
   setorderv(br, "id", na.last = TRUE)
@@ -274,12 +274,13 @@ test_that("RIGHT - Compare with base::merge", {
       y2,
       by = "id",
       reportvar = FALSE,
-      keep = "right"
+      keep = "right",
+      match_type = "1:1"
     )
 
   br <- base::merge(x2, y2, by = "id", all.y = TRUE)
   br[, x := x.x][,
-                 c("x.x", "x.y") := NULL]
+                 c("x.x") := NULL]
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
@@ -298,7 +299,8 @@ test_that("INNER - Compare with base::merge", {
       y1,
       by = "id",
       reportvar = FALSE,
-      keep = "inner"
+      keep = "inner",
+      match_type = "m:1"
     )
   br <- base::merge(x1, y1, by = "id")
   setorderv(br, "id", na.last = TRUE)
@@ -314,12 +316,13 @@ test_that("INNER - Compare with base::merge", {
       y2,
       by        = "id",
       reportvar = FALSE,
-      keep      = "inner"
+      keep      = "inner",
+      match_type = "1:1"
     )
   br <- base::merge(x2, y2, by = "id")
 
   br[, x := x.x][,
-                 c("x.x", "x.y") := NULL]
+                 c("x.x") := NULL]
 
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
@@ -392,10 +395,10 @@ test_that("match types work", {
 
 })
 
-
+# ZP: THIS GIVES ERROR
 test_that("Update NAs", {
   # update NAs in x variable form x
-  jn <- joyn(x2,
+  jn <- joyn(x2, # ZP: THIS GIVES ERROR
               y2,
               by = "id",
               update_NAs = TRUE)
@@ -407,7 +410,7 @@ test_that("Update NAs", {
 
 })
 
-
+# ZP: THIS GIVES ERROR
 test_that("Update actual values", {
 
   jn <-
@@ -430,7 +433,7 @@ test_that("Update actual values", {
 
 })
 
-
+# ZP: THIS GIVES ERROR
 test_that("y vars are extracted correctly", {
   yvars <- "y"
   jn <- joyn(x2,
@@ -438,7 +441,7 @@ test_that("y vars are extracted correctly", {
               by = "id",
               yvars = yvars)
 
-  expect_equal(names(jn), c(names(x2), yvars, "report"))
+  expect_equal(names(jn), c(names(x2), yvars, ".joyn"))
 
 
   jn <-
@@ -452,12 +455,12 @@ test_that("y vars are extracted correctly", {
 
   expect_equal(names(jn), c(names(x2), yvars))
 
-  jn <- joyn(x2,
+  jn <- joyn(x2, # ZP: THIS GIVES ERROR
               y2,
               by = "id",
-              yvars = FALSE)
+              y_vars_to_keep = FALSE)
 
-  expect_equal(names(jn), c(names(x2), "report"))
+  expect_equal(names(jn), c(names(x2), ".joyn"))
 
 
   yvars <- "reuiou"
