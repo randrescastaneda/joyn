@@ -89,3 +89,4 @@ test_that("check_new_y_vars checks work", {
                    y_vars_to_keep = c("id2", "salary")) |>
     expect_equal(c("id2.y", "salary"))
 })
+

@@ -22,9 +22,9 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
 y3 <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
 
-x3 <- data.table(id=c("c","b", "d"),
-                 v=8:10,
-                 foo=c(4,2, 7))
+x3 <- data.table(id  = c("c","b", "d"),
+                 v   = 8:10,
+                 foo = c(4,2, 7))
 
 x4 = data.table(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),
@@ -38,14 +38,25 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 x   = c(16:20))
 
 
-test_that("slect by vars when no specified", {
-  expect_equal(joyn(x1, y1),
-               joyn(x1, y1, by = "id"))
+test_that(
+  "select `by` vars when non specified", {
+    expect_equal(
+      joyn(
+        x = x1,
+        y = y1,
+        match_type = "m:1"
+      ),
+      joyn(
+        x  = x1,
+        y  = y1,
+        by = "id",
+        match_type = "m:1"
+      )
+    )
+  }
+)
 
-})
-
-
-test_that("Erros if no common variables", {
+test_that("Errors if no common variables", {
   xf <- copy(x1)
   xf[, id := NULL]
   expect_error(joyn(xf, y1))
@@ -65,7 +76,8 @@ test_that("m:m and 1:1 gives the same if data is correct", {
       y2,
       by = "id",
       update_values = TRUE,
-      verbose = FALSE
+      verbose = FALSE,
+      match_type = "m:m"
     )
   )
 
@@ -92,8 +104,13 @@ test_that("m:m and 1:1 gives the same if data is correct", {
 
 
 test_that("left joyn is correct", {
-  x <- joyn(x1, y1, by = "id",
-             keep = "left")
+  x <- joyn(
+    x1,
+    y1,
+    by = "id",
+    keep = "left",
+    match_type = "m:1"
+  )
   expect_equal(nrow(x), nrow(x1))
 
 
@@ -107,11 +124,12 @@ test_that("left joyn is correct", {
 
 })
 
-test_that("inverse joyn workds", {
+test_that("inverse joyn works", {
   ll <-
     joyn(
       y3,
       x3,
+      keep = "left",
       by = "id",
       match_type = "m:1",
       reportvar = FALSE
@@ -120,6 +138,7 @@ test_that("inverse joyn workds", {
     joyn(
       x3,
       y3,
+      keep = "right",
       by = "id",
       match_type = "1:m",
       reportvar = FALSE
@@ -364,7 +383,7 @@ test_that("match types work", {
 
   uy <- y[, .N, by = by]
 
-  dd <- joyn.data.table(ux, uy, by = "id", all = TRUE)
+  dd <- merge.data.table(ux, uy, by = "id", all = TRUE)
   setnafill(dd, fill = 1)
   cN <- dd[,
            N := N.x * N.y][, sum(N)]
@@ -557,3 +576,103 @@ test_that("convert to data.table", {
 })
 
 
+
+
+
+
+
+# ------------------------------------------------------------------------------
+# zander add from joyn_workhorse
+# ------------------------------------------------------------------------------
+
+test_that("left/right/full/inner/semi/anti joyn is correct", {
+
+  x <- joyn_workhorse(
+    x    = x1,
+    y    = y1,
+    by   = "id",
+    keep = "left"
+  )
+  expect_equal(
+    nrow(x),
+    nrow(x1)
+  )
+
+  x <- joyn_workhorse(
+    x          = x1,
+    y          = y1,
+    by         = "id",
+    keep       = "right"
+  )
+  expect_equal(
+    nrow(x),
+    nrow(y1)
+  )
+
+  x <- joyn_workhorse(
+    x          = x1,
+    y          = y1,
+    by         = "id",
+    keep       = "full",
+    match_type = "1:1"
+  )
+  expect_equal(
+    nrow(x),
+    c(
+      x1$id,
+      y1[!id %in% x1$id]$id
+    ) |>
+      length()
+  )
+
+  x <- joyn_workhorse(
+    x          = x1,
+    y          = y1,
+    by         = "id",
+    keep       = "inner"
+  )
+  expect_equal(
+    nrow(x),
+    max(
+      x1[
+        id %in% intersect(
+          x = x1$id,
+          y = y1$id
+        )
+      ] |> nrow(),
+      y1[
+        id %in% intersect(
+          x = x1$id,
+          y = y1$id
+        )
+      ] |> nrow()
+    )
+  )
+
+  x <- joyn_workhorse(
+    x          = x1,
+    y          = y1,
+    by         = "id",
+    keep       = "anti"
+  )
+  expect_equal(
+    x,
+    x1[
+      !id %in% y1$id
+    ]
+  )
+
+  x <- joyn_workhorse(
+    x          = x1,
+    y          = y1,
+    by         = "id",
+    keep       = "semi"
+  )
+  expect_equal(
+    x,
+    x1[
+      id %in% y1$id
+    ]
+  )
+
+})
