@@ -47,7 +47,14 @@ joyn_workhorse <- function(
   # Do a full join -------------------------------------------------------------
 
   # if not 1:1 => use merge.data.table
-  if (!match_type == "1:1") {
+  if (match_type == "m:m") {
+
+    if (!requireNamespace("data.table", quietly = TRUE)) {
+      stop(
+        "Package \"data.table\" must be installed to use this function.",
+        call. = FALSE
+      )
+    }
 
     dt_result <- data.table::merge.data.table(
       x               = x,
@@ -61,15 +68,22 @@ joyn_workhorse <- function(
 
   } else {
 
-    # 1:1 => use collapse::join()
+    if (!requireNamespace("collapse", quietly = TRUE)) {
+      stop(
+        "Package \"collapse\" must be installed to use this function.",
+        call. = FALSE
+      )
+    }
+    # not m:m => use collapse::join()
     dt_result <- collapse::join( x              = x,
                                  y              = y,
                                  how            = "full",
                                  on             = by,
+                                 multiple       = TRUE,     # matches row in x with m in y
                                  validate       = "m:m",    # no checks performed
                                  suffix         = suffix,   # data.table suffixes
                                  keep.col.order = TRUE,
-                                 verbose        = 1,        # until collapse update
+                                 verbose        = 0,
                                  column         = NULL
     )
 

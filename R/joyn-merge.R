@@ -174,6 +174,14 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  start_joyn <- Sys.time()
+  # copy objects if data.tables
+  if (any(class(x) == "data.table")) {
+    x <- copy(x)
+  }
+  if (any(class(y) == "data.table")) {
+    y <- copy(y)
+  }
 
   ## X and Y -----------
   check_xy(x,y)
@@ -240,8 +248,12 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   newyvars <- check_new_y_vars(x, by, y_vars_to_keep)
 
+
   # rename variables in Y
-  setnames(y, old = y_vars_to_keep, new = newyvars)
+  if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
+    setnames(y, old = y_vars_to_keep, new = newyvars)
+  }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
@@ -261,8 +273,9 @@ joyn <- function(x,
   i.yvars <- paste0("i.", yvars_w)
 
   # keep relevant variables in y
-  y <- y[,
-         mget(c(by, yvars_w))]
+  y <- y |> fselect(
+    by, yvars_w
+  )
 
   if (
     (keep == "anti" | keep == "semi") &
@@ -290,7 +303,7 @@ joyn <- function(x,
   # report variable
   if (isFALSE(reportvar) || is.null(reportvar)) {
 
-    reportvar  <- "report"
+    reportvar  <- ".joyn"
     dropreport <- TRUE
 
   } else {
@@ -321,7 +334,8 @@ joyn <- function(x,
 
 
   # report variable
-  x[, (reportvar) :=  .xreport + .yreport]
+  x$use_util_report <- x$`.xreport` + x$`.yreport`
+  names(x)[length(names(x))] <- reportvar
 
 
 
@@ -344,21 +358,56 @@ joyn <- function(x,
 
 
 
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
+  # return(
+  #   list(
+  #     update_values,
+  #     x,
+  #     newyvars,
+  #     sub(
+  #       pattern = "\\.y$",
+  #       "",
+  #       newyvars,
+  #     ),
+  #     sub(
+  #       pattern = "\\.y$",
+  #       replacement = "",
+  #       x = newyvars[
+  #         grepl(
+  #           pattern = "\\.y$",
+  #           x       = newyvars
+  #         )
+  #       ]
+  #     )
+  #   )
+  # )
   # update values
+
+  if (isTRUE(update_values) || isTRUE(update_NAs)) {
+    var_use <- sub(
+      pattern = "\\.y$",
+      replacement = "",
+      x = newyvars[
+        grepl(
+          pattern = "\\.y$",
+          x       = newyvars
+        )
+      ]
+    )
+  }
+
+  #return(list(reportvar))
   if (isTRUE(update_values)) {
 
     x <- update_values(
-      dt  = x, # joined table
-      var = sub(
-        pattern = "\\.y$",
-        "",
-        newyvars
-      )
+      dt        = x,
+      var       = var_use,
+      reportvar = reportvar
     )
 
   }
@@ -368,12 +417,9 @@ joyn <- function(x,
   if (isTRUE(update_NAs)) {
 
     x <- update_NAs(
-      dt  = x,
-      var = sub(
-        pattern = "\\.y$",
-        "",
-        newyvars
-      )
+      dt        = x,
+      var       = var_use,
+      reportvar = reportvar
     )
 
   }
@@ -459,13 +505,28 @@ joyn <- function(x,
 
   # Report var
   if (dropreport) {
-    x$report <- NULL
+    x |> fselect(get(reportvar)) <- NULL
   }
 
   if (sort) {
     setorderv(x, by, na.last = TRUE)
     setattr(x, 'sorted', by)
   }
+
+  if (verbose == TRUE) {
+    end_joyn <- Sys.time()
+    time_taken_joyn <- end_joyn - start_joyn
+    store_msg(
+      type = "timing",
+      timing = cli::symbol$record, "  ",
+      timing = paste("the entire joyn function, including checks, is executed in", round(time_taken_joyn, 6), "seconds" )
+    )
+
+    # return messages
+    joyn_msg()
+
+  }
+
 
 
   return(x)

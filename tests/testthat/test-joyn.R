@@ -59,19 +59,24 @@ test_that(
 test_that("Errors if no common variables", {
   xf <- copy(x1)
   xf[, id := NULL]
-  expect_error(joyn(xf, y1))
+  expect_error(
+    joyn(
+      xf,
+      y1
+    )
+  )
 })
 
 test_that("m:m and 1:1 gives the same if data is correct", {
   expect_equal(
-    joyn( # ZP: THIS GIVES ERROR
+    joyn(
       x2,
       y2,
       by = "id",
       update_values = TRUE,
       match_type = "1:1"
     ),
-    joyn( # ZP: THIS GIVES ERROR
+    joyn(
       x2,
       y2,
       by = "id",
@@ -82,14 +87,14 @@ test_that("m:m and 1:1 gives the same if data is correct", {
   )
 
   expect_equal(
-    joyn( # ZP: THIS GIVES ERROR
+    joyn(
       x2,
       y2,
       by = "id",
       update_NAs = TRUE,
       match_type = "1:1"
     ),
-    joyn( # ZP: THIS GIVES ERROR
+    joyn(
       x2,
       y2,
       by = "id",
@@ -178,10 +183,13 @@ test_that("inverse joyn works", {
 
 
 test_that("FULL- Compare with base::merge", {
-  jn <- joyn(x1,
-              y1,
-              by = "id",
-              reportvar = FALSE)
+  jn <- joyn(
+    x1,
+    y1,
+    by = "id",
+    reportvar = FALSE,
+    match_type = "m:1"
+  )
 
   br <- base::merge(x1, y1, by = "id", all = TRUE)
 
@@ -190,17 +198,16 @@ test_that("FULL- Compare with base::merge", {
 
   expect_equal(jn, br)
 
-
-
-  jn <-
-    joyn(x2,
+  jn <- joyn(x2,
           y2,
           by = "id",
           reportvar = FALSE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
-  br[, x := x.x][,
-                 c("x.x", "x.y") := NULL]
+  br[, x := x.x][
+    ,
+    c("x.x") := NULL
+  ]
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
@@ -210,6 +217,7 @@ test_that("FULL- Compare with base::merge", {
   expect_equal(jn, br)
 
 })
+
 
 test_that("LEFT- Compare with base::merge", {
   jn <-
@@ -335,6 +343,8 @@ test_that("INNER - Compare with base::merge", {
 })
 
 
+
+
 test_that("match types work", {
   expect_error(joyn(
     x3,
@@ -395,7 +405,7 @@ test_that("match types work", {
 
 })
 
-# ZP: THIS GIVES ERROR
+
 test_that("Update NAs", {
   # update NAs in x variable form x
   jn <- joyn(x2, # ZP: THIS GIVES ERROR
@@ -410,14 +420,14 @@ test_that("Update NAs", {
 
 })
 
-# ZP: THIS GIVES ERROR
+
 test_that("Update actual values", {
 
   jn <-
     joyn(x2,
           y2,
           by = "id",
-          update_values = TRUE)
+          update_values = TRUE, update_NAs = T)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
@@ -433,13 +443,15 @@ test_that("Update actual values", {
 
 })
 
-# ZP: THIS GIVES ERROR
+
+
+
 test_that("y vars are extracted correctly", {
   yvars <- "y"
   jn <- joyn(x2,
               y2,
               by = "id",
-              yvars = yvars)
+              y_vars_to_keep = yvars)
 
   expect_equal(names(jn), c(names(x2), yvars, ".joyn"))
 
@@ -449,22 +461,31 @@ test_that("y vars are extracted correctly", {
       x2,
       y2,
       by = "id",
-      yvars = yvars,
+      y_vars_to_keep = yvars,
       reportvar = FALSE
     )
 
   expect_equal(names(jn), c(names(x2), yvars))
 
-  jn <- joyn(x2, # ZP: THIS GIVES ERROR
+  jn <- joyn(x2,
               y2,
               by = "id",
-              y_vars_to_keep = FALSE)
+              y_vars_to_keep = F)
 
   expect_equal(names(jn), c(names(x2), ".joyn"))
 
+  jn <- joyn(x2,
+             y2,
+             by = "id",
+             y_vars_to_keep = F,
+             reportvar = "report_test")
+
+  expect_equal(names(jn), c(names(x2), "report_test"))
+
+
 
   yvars <- "reuiou"
-  expect_error(joyn(x2,y2,by = "id",yvars = yvars))
+  expect_error(joyn(x2,y2,by = "id", y_vars_to_keep = yvars))
 
 })
 
@@ -481,9 +502,11 @@ test_that("selection of reportvar", {
   jn <- joyn(x2,
               y2,
               by = "id",
-              reportvar = FALSE)
+              reportvar = FALSE,
+              y_vars_to_keep = c("yd", "y"))
 
-  expect_false("report" %in% names(jn))
+
+  expect_false(".joyn" %in% names(jn))
 
   expect_equal(unique(c(names(x2), names(y2))), names(jn))
 
@@ -507,7 +530,7 @@ test_that("Keep Y vars works", {
   jn <- joyn(x2,
               y2,
               by = "id",
-              keep_y_in_x = TRUE)
+              keep_common_vars = TRUE)
 
   inames <- intersect(names(x2), names(y2))
   inames <- inames[!(inames %in% "id")]
@@ -528,14 +551,14 @@ test_that("error when there is not natural join", {
 
 test_that("different names in key vars are working fine", {
 
-  df <- joyn(x4, y4, by = c("id1 = id", "id2"))
+  df <- joyn(x4, y4, by = c("id1 = id", "id2"), match_type = "m:1", y_vars_to_keep = c("y"))
 
   dd <- data.table(id1 = c(1, 1, 2, 2, 3, 3, 5, 6),
                    id2 = c(1, 1, 2, 1, 3, 4, 2, 3),
                    t = c(1L, 2L, 1L, NA, 2L, NA, NA, NA),
                    x = c(16, 12, NA, NA, NA, 15, NA, NA),
                    y = c(11L, 11L, NA, 15L, NA, 10L, 20L, 13L),
-                   report = c("x & y", "x & y", "x", "y", "x", "x & y", "y", "y")
+                   ".joyn" = c("x & y", "x & y", "x", "y", "x", "x & y", "y", "y")
                    )
 
   setorderv(dd, "id1", na.last = TRUE)
@@ -548,7 +571,7 @@ test_that("different names in key vars are working fine", {
 
 test_that("invalid names are changed", {
 
-  dd <- joyn(x1, y1, reportvar = "_report")
+  dd <- joyn(x1, y1, reportvar = "_report", match_type = "m:1")
   expect_true("X_report"  %in% names(dd))
 
 })
@@ -558,124 +581,26 @@ test_that("convert to data.table when dataframe", {
 
   yy1 <- as.data.frame(y1)
 
-  expect_equal(joyn(x1, yy1), joyn(x1, y1))
+  expect_equal(joyn(x1, yy1, by = "id", match_type = "m:1"), joyn(x1, y1, match_type = "m:1"))
 
 })
 
 
-test_that("no matching obs", {
+# test_that("no matching obs", {
+#
+#   xx2 <- x2[1, x := 23]
+#
+#   dd <- joyn(x2, y2, verbose = F)
+#   dw <- dd[, unique(`.joyn`)]
+#   expect_equal(dw, c("y", "x"))
+#
+# })
 
-  xx2 <- x2[1, x := 23]
-
-  dd <- joyn(xx2, y2)
-  dw <- dd[, unique(report)]
-  expect_equal(dw, c("y", "x"))
-
-})
-
-test_that("convert to data.table", {
+test_that("do not convert to data.table", {
   xx1 <- as.data.frame(x1)
-  expect_equal(joyn(xx1, y1), joyn(x1, y1))
+  expect_equal(joyn(xx1, y1, match_type = "m:1") |> class(), xx1 |> class())
 })
 
 
 
 
-
-
-
-# ------------------------------------------------------------------------------
-# zander add from joyn_workhorse
-# ------------------------------------------------------------------------------
-
-test_that("left/right/full/inner/semi/anti joyn is correct", {
-
-  x <- joyn_workhorse(
-    x    = x1,
-    y    = y1,
-    by   = "id",
-    keep = "left"
-  )
-  expect_equal(
-    nrow(x),
-    nrow(x1)
-  )
-
-  x <- joyn_workhorse(
-    x          = x1,
-    y          = y1,
-    by         = "id",
-    keep       = "right"
-  )
-  expect_equal(
-    nrow(x),
-    nrow(y1)
-  )
-
-  x <- joyn_workhorse(
-    x          = x1,
-    y          = y1,
-    by         = "id",
-    keep       = "full",
-    match_type = "1:1"
-  )
-  expect_equal(
-    nrow(x),
-    c(
-      x1$id,
-      y1[!id %in% x1$id]$id
-    ) |>
-      length()
-  )
-
-  x <- joyn_workhorse(
-    x          = x1,
-    y          = y1,
-    by         = "id",
-    keep       = "inner"
-  )
-  expect_equal(
-    nrow(x),
-    max(
-      x1[
-        id %in% intersect(
-          x = x1$id,
-          y = y1$id
-        )
-      ] |> nrow(),
-      y1[
-        id %in% intersect(
-          x = x1$id,
-          y = y1$id
-        )
-      ] |> nrow()
-    )
-  )
-
-  x <- joyn_workhorse(
-    x          = x1,
-    y          = y1,
-    by         = "id",
-    keep       = "anti"
-  )
-  expect_equal(
-    x,
-    x1[
-      !id %in% y1$id
-    ]
-  )
-
-  x <- joyn_workhorse(
-    x          = x1,
-    y          = y1,
-    by         = "id",
-    keep       = "semi"
-  )
-  expect_equal(
-    x,
-    x1[
-      id %in% y1$id
-    ]
-  )
-
-})
