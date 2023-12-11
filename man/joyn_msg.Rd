@@ -4,7 +4,7 @@
 \alias{joyn_msg}
 \title{display type of joyn message}
 \usage{
-joyn_msg(type = type_choices())
+joyn_msg(type = c("all", type_choices()))
 }
 \arguments{
 \item{type}{character: one or more of the following:

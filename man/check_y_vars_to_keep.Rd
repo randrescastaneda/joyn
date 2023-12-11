@@ -12,7 +12,7 @@ This defaults to the shared key columns between the two tables.
 If \code{y} has no key columns, this defaults to the key of \code{x}.}
 }
 \value{
-charactere vector with variable names from Y table
+character vector with variable names from Y table
 }
 \description{
 check variables in Y that will be kept in returning table

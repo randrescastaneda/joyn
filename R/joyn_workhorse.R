@@ -34,10 +34,11 @@ joyn_workhorse <- function(
   if (
     length(by) == 0
   ) {
-    joyn_msg(
+    store_msg(
       type = "err",
       err  = 'Error in `joyn_workhorse`: `by` argument has length of 0',
-      hint = 'Either specify `by` to identify columns to join on in `x` and `y`, or
+      timing = cli::symbol$info, "  ",
+      pale   = 'Either specify `by` to identify columns to join on in `x` and `y`, or
               `x` and `y` should have common column names'
     )
   }
@@ -48,13 +49,6 @@ joyn_workhorse <- function(
 
   # if not 1:1 => use merge.data.table
   if (match_type == "m:m") {
-
-    if (!requireNamespace("data.table", quietly = TRUE)) {
-      stop(
-        "Package \"data.table\" must be installed to use this function.",
-        call. = FALSE
-      )
-    }
 
     dt_result <- data.table::merge.data.table(
       x               = x,
@@ -68,12 +62,6 @@ joyn_workhorse <- function(
 
   } else {
 
-    if (!requireNamespace("collapse", quietly = TRUE)) {
-      stop(
-        "Package \"collapse\" must be installed to use this function.",
-        call. = FALSE
-      )
-    }
     # not m:m => use collapse::join()
     dt_result <- collapse::join( x              = x,
                                  y              = y,

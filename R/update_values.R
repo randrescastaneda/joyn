@@ -22,12 +22,12 @@ update_values <- function(dt, var, reportvar = ".joyn") {
   # create variable for var.x is NA
   dt$varx_na <- dt |>
     fselect(var) |>
-    complete.cases() # TRUE if not NA
+    {\(.) !missing_cases(.)}() # TRUE if not NA
 
   # create variable for var.y is NA
   dt$vary_na <- dt |>
     fselect(y.var) |>
-    complete.cases() # TRUE if not NA
+    {\(.) !missing_cases(.)}() # TRUE if not NA
 
   # let `use_util_reportvar` reflect updates
   dt[

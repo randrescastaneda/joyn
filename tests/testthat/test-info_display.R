@@ -1,3 +1,4 @@
+withr::local_options(joyn.verbose = FALSE)
 df1 <- data.frame(
   id1 = c(1, 1, 2, 3),
   id2 = c("a", "b", "b", "c"),

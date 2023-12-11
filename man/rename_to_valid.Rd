@@ -8,6 +8,9 @@ rename_to_valid(name, verbose = getOption("joyn.verbose"))
 }
 \arguments{
 \item{name}{character: name to be coerced to syntactically valid name}
+
+\item{verbose}{logical: if FALSE, it won't display any message (programmer's
+option). Default is TRUE.}
 }
 \value{
 valide character name

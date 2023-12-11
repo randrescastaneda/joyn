@@ -1,7 +1,7 @@
 Package: joyn
 Type: Package
 Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
-Version: 0.1.4.9002
+Version: 0.1.4.9003
 Authors@R: c(person(given = "R.Andres", 
                     family = "Castaneda", 
                     email = "acastanedaa@worldbank.org",
@@ -23,14 +23,14 @@ Suggests:
     covr,
     knitr,
     rmarkdown,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    withr
 Config/testthat/edition: 3
 Imports: 
     rlang,
     data.table,
     glue,
     cli,
-    stats,
     utils,
     collapse (>= 2.0.7),
     lifecycle

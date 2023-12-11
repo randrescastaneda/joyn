@@ -14,7 +14,7 @@
 #'   err = cli::symbol$cross, "  ",
 #'   note = "This is a warning message")
 #' joyn_msg("all")
-joyn_msg <- function(type = type_choices()) {
+joyn_msg <- function(type = c("all", type_choices())) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
