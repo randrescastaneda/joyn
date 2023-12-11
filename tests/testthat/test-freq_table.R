@@ -1,4 +1,6 @@
-library(data.table)
+withr::local_options(joyn.verbose = FALSE)
+library(data.table) |>
+  suppressPackageStartupMessages()
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
