@@ -7,7 +7,8 @@
 style(..., sep = "")
 }
 \arguments{
-\item{...}{combination of type and text in the form \verb{type1 = text1, type2 = text2}}
+\item{...}{combination of type and text in the form
+\verb{type1 = text1, type2 = text2}}
 
 \item{sep}{a character string to separate the terms to \link{paste}}
 }
@@ -15,7 +16,7 @@ style(..., sep = "")
 formated text
 }
 \description{
-This is from
+This is an adaptation from
 https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
 }
 \keyword{internal}

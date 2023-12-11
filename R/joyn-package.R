@@ -1,9 +1,11 @@
 #' @keywords internal
+#' @aliases joyn-package
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @import data.table
 #' @import collapse
+#' @import data.table
+#' @importFrom lifecycle deprecated
 ## usethis namespace: end
 # .datatable.aware = TRUE
 

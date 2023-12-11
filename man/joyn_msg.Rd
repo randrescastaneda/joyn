@@ -4,10 +4,11 @@
 \alias{joyn_msg}
 \title{display type of joyn message}
 \usage{
-joyn_msg(type = c("all", "info", "note", "warn", "timing"))
+joyn_msg(type = c("all", type_choices()))
 }
 \arguments{
-\item{type}{character: one or more of \code{c("all", "info", "note", "warn", "timing")}}
+\item{type}{character: one or more of the following:
+"info", "note", "warn", "timing", or "err"}
 }
 \value{
 returns data frame with message invisibly. print message in console
@@ -16,7 +17,11 @@ returns data frame with message invisibly. print message in console
 display type of joyn message
 }
 \examples{
-joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
-joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
+joyn:::store_msg("info",
+  ok = cli::symbol$tick, "  ",
+  pale = "This is an info message")
+joyn:::store_msg("warn",
+  err = cli::symbol$cross, "  ",
+  note = "This is a warning message")
 joyn_msg("all")
 }

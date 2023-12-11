@@ -1,15 +1,20 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of `c("all", "info", "note", "warn", "timing")`
+#' @param type character: one or more of the following:
+#' `r cli::format_inline("{.or {.val {type_choices()}}}")`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
 #' @examples
-#' joyn:::store_msg("info", ok = cli::symbol$tick, "  ", pale = "This is an info message")
-#' joyn:::store_msg("warn", err = cli::symbol$cross, "  ", note = "This is a warning message")
+#' joyn:::store_msg("info",
+#'   ok = cli::symbol$tick, "  ",
+#'   pale = "This is an info message")
+#' joyn:::store_msg("warn",
+#'   err = cli::symbol$cross, "  ",
+#'   note = "This is a warning message")
 #' joyn_msg("all")
-joyn_msg <- function(type = c("all", "info", "note", "warn", "timing")) {
+joyn_msg <- function(type = c("all", type_choices())) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
@@ -48,11 +53,18 @@ joyn_msg <- function(type = c("all", "info", "note", "warn", "timing")) {
 store_msg <- function(type, ...) {
 
   # check input ----------
-  type <- match.arg(type, choices = c("info", "note", "warn", "timing"))
+  type <- match.arg(type, choices = type_choices())
   check_style(...)
 
   # style type in dt form -----------
-  dt_msg <-  msg_type_dt(type, ...)
+  style_args <- list(...) |>
+    lapply(\(x){
+      cli::format_inline(x, .envir = parent.frame(3))
+    })
+
+  type_dt_args <- append(list(type = type), style_args)
+  dt_msg <-  do.call(msg_type_dt, type_dt_args)
+
 
   # create new messages   ---------
   if (rlang::env_has(.joynenv, "joyn_msgs")) {
@@ -61,6 +73,8 @@ store_msg <- function(type, ...) {
   } else {
     dt_new_msgs <- dt_msg
   }
+
+  dt_new_msgs <- funique(dt_new_msgs)
 
   # store in env ------
   rlang::env_poke(.joynenv, "joyn_msgs", dt_new_msgs)
@@ -79,6 +93,11 @@ check_style <- \(...) {
   invisible(TRUE)
 }
 
+type_choices <- \(){
+  rlang::env_get(.joynenv, "msg_type_choices")
+}
+
+
 #' convert style to data frame
 #'
 #' @inheritParams joyn_msg
@@ -94,16 +113,19 @@ msg_type_dt <- \(type, ...) {
 
 #' style of text displayed
 #'
-#' This is from
+#' This is an adaptation from
 #' https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
-#' @param ... combination of type and text in the form `type1 = text1, type2 = text2`
+#' @param ... combination of type and text in the form
+#' `type1 = text1, type2 = text2`
 #' @param sep a character string to separate the terms to [paste]
 #'
 #' @return formated text
 #' @keywords internal
 style <- function(..., sep = "") {
   args <- list(...)
-  # st <- names(args)
+  if (is.null(names(args))) {
+    names(args) <- rep("", length(args))
+  }
 
   styles <- list(
     "ok"     = cli::col_green,
@@ -117,7 +139,16 @@ style <- function(..., sep = "") {
     "timing" = cli::make_ansi_style("cyan")
   )
 
-  nms <- names(args)
+  nms      <- names(args)
+  nms2     <- nms[!nms %in% ""]
+  nmstyles <- names(styles)
+
+  if (any(!nms2 %in% nmstyles)) {
+    no_names <- which(!nms2 %in% nmstyles)
+    cli::cli_abort(c("{.val {nms2[no_names]}} {?is/are} not valid style{?s}.",
+                     "i" = "Available styles are {.field {nmstyles}}"))
+  }
+
   x <- lapply(seq_along(args), \(i) {
     if (nzchar(nms[i])) {
 
@@ -132,7 +163,6 @@ style <- function(..., sep = "") {
 
   paste(unlist(x), collapse = sep)
 }
-
 
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {

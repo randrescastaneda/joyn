@@ -2,162 +2,95 @@
 % Please edit documentation in R/merge.R
 \name{merge}
 \alias{merge}
-\title{Merge two tables}
+\title{Merge two data frames}
 \usage{
 merge(
   x,
   y,
-  by = intersect(names(x), names(y)),
-  yvars = TRUE,
-  match_type = c("m:m", "m:1", "1:m", "1:1"),
-  keep = c("full", "left", "master", "right", "using", "inner"),
-  update_values = FALSE,
-  update_NAs = update_values,
-  reportvar = "report",
-  reporttype = c("character", "numeric"),
-  roll = NULL,
-  keep_y_in_x = FALSE,
+  by = NULL,
+  by.x = NULL,
+  by.y = NULL,
+  all = FALSE,
+  all.x = all,
+  all.y = all,
   sort = TRUE,
-  verbose = getOption("joyn.verbose"),
-  allow.cartesian = NULL
+  suffixes = c(".x", ".y"),
+  no.dups = TRUE,
+  allow.cartesian = getOption("datatable.allow.cartesian"),
+  match_type = c("m:m", "m:1", "1:m", "1:1"),
+  ...
 )
 }
 \arguments{
-\item{x}{data frame: referred to \emph{left} in R terminology, or \emph{master} in
-Stata terminology.}
+\item{x, y}{\code{data table}s. \code{y} is coerced to a \code{data.table} if
+it isn't one already.}
 
-\item{y}{data frame: referred to \emph{right} in R terminology, or \emph{using} in
-Stata terminology.}
+\item{by}{A vector of shared column names in \code{x} and \code{y} to merge on.
+This defaults to the shared key columns between the two tables.
+If \code{y} has no key columns, this defaults to the key of \code{x}.}
 
-\item{by}{a character vector of variables to join by. If NULL, the default,
-joyn will do a natural join, using all variables with common names across
-the two tables. A message lists the variables so that you can check they're
-right (to suppress the message, simply explicitly list the variables that
-you want to join). To join by different variables on x and y use a vector
-of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
-in y, and "z" in both tables.}
+\item{by.x, by.y}{Vectors of column names in \code{x} and \code{y} to merge on.}
 
-\item{yvars}{character: Vector of variable names that will be kept after the
-merge. If TRUE (the default), it keeps all the brings all the variables in
-y into x. If FALSE or NULL, it does not bring any variable into x, but a
-report will be generated.}
+\item{all}{logical; \code{all = TRUE} is shorthand to save setting both
+\code{all.x = TRUE} and \code{all.y = TRUE}.}
+
+\item{all.x}{logical; if \code{TRUE}, then extra rows will be added to the
+output, one for each row in \code{x} that has no matching row in \code{y}.
+These rows will have 'NA's in those columns that are usually filled with values
+from \code{y}.  The default is \code{FALSE}, so that only rows with data from both
+\code{x} and \code{y} are included in the output.}
+
+\item{all.y}{logical; analogous to \code{all.x} above.}
+
+\item{sort}{logical. If \code{TRUE} (default), the merged \code{data.table} is
+sorted by setting the key to the \code{by / by.x} columns. If \code{FALSE}, the
+result is not sorted.}
+
+\item{suffixes}{A \code{character(2)} specifying the suffixes to be used for
+making non-\code{by} column names unique. The suffix behaviour works in a similar
+fashion as the \code{\link{merge.data.frame}} method does.}
+
+\item{no.dups}{logical indicating that \code{suffixes} are also appended to
+non-\code{by.y} column names in \code{y} when they have the same column name
+as any \code{by.x}.}
+
+\item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
 
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
-Default is \emph{"m:m"} since this is the default generally used in joins in R.
+Default is \emph{"1:1"} since this the most restrictive.
 However, following Stata's recommendation, it is better to be explicit and
 use any of the other three match types (See details in \emph{match types
 sections}).}
 
-\item{keep}{character: One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
-\emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
-regular behavior of joins in R, the objective of \code{joyn} is to present a
-diagnosis of the join, so that it must use by default a full join. Yet, if
-\emph{"left"} or \emph{"master"}, it keeps the observations that matched in both
-tables and the ones that did not match in x. The ones in y will be
-discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations that
-matched in both tables and the ones that did not match in y. The ones in x
-will be discarded. If \emph{"inner"}, it only keeps the observations that
-matched both tables.}
-
-\item{update_values}{logical: If TRUE, it will update all values of variables
+\item{...}{
+  Arguments passed on to \code{\link[=joyn]{joyn}}
+  \describe{
+    \item{\code{y_vars_to_keep}}{character: Vector of variable names that will be kept
+after the merge. If TRUE (the default), it keeps all the brings all the
+variables in y into x. If FALSE or NULL, it does not bring any variable
+into x, but a report will be generated.}
+    \item{\code{reportvar}}{character: Name of reporting variable. Default if "report".
+This is the same as variable "_merge" in Stata after performing a merge. If
+FALSE or NULL, the reporting variable will be excluded from the final
+table, though a summary of the join will be display after concluding.}
+    \item{\code{update_NAs}}{logical: If TRUE, it will update NA values of all variables
+in x with actual values of variables in y that have the same name as the
+ones in x. If FALSE, NA values won't be updated, even if \code{update_values} is
+\code{TRUE}}
+    \item{\code{update_values}}{logical: If TRUE, it will update all values of variables
 in x with the actual of variables in y with the same name as the ones in x.
 \strong{NAs from y won't be used to update actual values in x}. Yet, by default,
 NAs in x will be updated with values in y. To avoid this, make sure to set
 \code{update_NAs = FALSE}}
-
-\item{update_NAs}{logical: If TRUE, it will update NA values of all variables
-in x with actual values of variables in y that have the same name as the
-ones in x. If FALSE, NA values won't be updated, even if \code{update_values} is
-\code{TRUE}}
-
-\item{reportvar}{character: Name of reporting variable. Default if "report".
-This is the same as variable "_merge" in Stata after performing a merge. If
-FALSE or NULL, the reporting variable will be excluded from the final
-table, though a summary of the join will be display after concluding.}
-
-\item{reporttype}{character: One of \emph{"character"} or \emph{"numeric"}. Default is
-\emph{"character"}. If \emph{"numeric"}, the reporting variable will contain  numeric
-codes of the source and the contents of each observation in the joined
-table.}
-
-\item{roll}{double: \emph{to be implemented}}
-
-\item{keep_y_in_x}{logical: If TRUE, it will keep the original variable from
-y when both tables have common variable names. Thus, the prefix "y." will
-be added to the original name to distinguish from the resulting variable in
-the joined table.}
-
-\item{sort}{logical: If TRUE, sort by key variables in \code{by}. Default is
-TRUE.}
-
-\item{verbose}{logical: if FALSE, it won't display any message (programmer's
+    \item{\code{verbose}}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
-
-\item{allow.cartesian}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html/}{web site}.
-Default is \code{NULL}, which implies that if the join is "1:1" it will be
-\code{FALSE}, but if the join has any "m" on it, it will be converted to \code{TRUE}.
-By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
-}
-\value{
-a data.table joining x and y.
+    \item{\code{keep_common_vars}}{logical: If TRUE, it will keep the original variable
+from y when both tables have common variable names. Thus, the prefix "y."
+will be added to the original name to distinguish from the resulting
+variable in the joined table.}
+  }}
 }
 \description{
-This is the main and, basically, the only function in joyn.
-}
-\section{match types}{
-
-
-Using the same wording of the \href{https://www.stata.com/manuals/dmerge.pdf}{Stata manual}
-
-\strong{1:1}: specifies a one-to-one match merge. The variables specified in
-\code{by}  uniquely identify single observations in both table.
-
-\strong{1:m and m:1}: specify \emph{one-to-many} and \emph{many-to-one} match merges,
-respectively. This means that in of the tables the observations are
-uniquely identify by the variables in \code{by}, while in the other table many
-(two or more)  of the observations are identify by the variables in \code{by}
-
-\strong{m:m} refers to \emph{many-to-many merge}. variables in \code{by} does not uniquely
-identify the observations in either table. Matching is performed by
-combining observations with equal values in \code{by}; within matching values,
-the first observation in the master (i.e. left or x) table is matched with
-the first matching observation in the using (i.e. right or y) table; the
-second, with the second; and so on. If there is an unequal number of
-observations within a group, then the last observation of the shorter group
-is used repeatedly to match with subsequent observations of the longer
-group.
-}
-
-\examples{
-# Simple merge
-library(data.table)
-x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
-t  = c(1L, 2L, 1L, 2L, NA_integer_),
-x  = 11:15)
-
-y1 = data.table(id = 1:2,
-                y  = c(11L, 15L))
-
-x2 = data.table(id = c(1, 1, 2, 3, NA),
-                t  = c(1L, 2L, 1L, 2L, NA_integer_),
-                x  = c(16, 12, NA, NA, 15))
-
-y2 = data.table(id = c(1, 2, 5, 6, 3),
-              yd = c(1, 2, 5, 6, 3),
-              y  = c(11L, 15L, 20L, 13L, 10L),
-              x  = c(16:20))
-merge(x1, y1)
-
-# Bad merge for not specifying by argument
-merge(x2, y2)
-
-# good merge, ignoring variable x from y
-merge(x2, y2, by = "id")
-
-# update NAs in x variable form x
-merge(x2, y2, by = "id", update_NAs = TRUE)
-
-# Update values in x with variables from y
-merge(x2, y2, by = "id", update_values = TRUE)
-
+This is a joyn wrapper that works in a similar fashion to \link[base:merge]{base::merge} and
+\link[data.table:merge]{data.table::merge}, which is why \link{merge} masks the other two.
 }

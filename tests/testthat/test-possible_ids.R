@@ -1,3 +1,4 @@
+withr::local_options(joyn.verbose = FALSE)
 library(data.table)
 # options(possible_ids.verbose = FALSE)
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),

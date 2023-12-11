@@ -7,7 +7,8 @@
 msg_type_dt(type, ...)
 }
 \arguments{
-\item{type}{character: one or more of \code{c("all", "info", "note", "warn", "timing")}}
+\item{type}{character: one or more of the following:
+"info", "note", "warn", "timing", or "err"}
 }
 \value{
 data frame
