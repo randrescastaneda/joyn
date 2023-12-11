@@ -5,6 +5,8 @@
 #'
 #' @inheritParams dplyr::left_join
 #' @inheritParams joyn
+#' @param yvars_to_keep character: vector giving the variables in `y`
+#' the include in the output table
 #' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
 #'   reporttype keep_common_vars verbose
 #'
