@@ -65,11 +65,11 @@ sections}).}
 \item{...}{
   Arguments passed on to \code{\link[=joyn]{joyn}}
   \describe{
-    \item{\code{y_vars_to_keep}}{character: Vector of variable names that will be kept
-after the merge. If TRUE (the default), it keeps all the brings all the
+    \item{\code{y_vars_to_keep}}{character: Vector of variable names in \code{y} that will be
+kept after the merge. If TRUE (the default), it keeps all the brings all the
 variables in y into x. If FALSE or NULL, it does not bring any variable
 into x, but a report will be generated.}
-    \item{\code{reportvar}}{character: Name of reporting variable. Default if "report".
+    \item{\code{reportvar}}{character: Name of reporting variable. Default is ".joyn".
 This is the same as variable "_merge" in Stata after performing a merge. If
 FALSE or NULL, the reporting variable will be excluded from the final
 table, though a summary of the join will be display after concluding.}
