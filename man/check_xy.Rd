@@ -7,10 +7,10 @@
 check_xy(x, y)
 }
 \arguments{
-\item{x}{data frame: referred to \emph{left} in R terminology, or \emph{master} in
+\item{x}{data frame: referred to as \emph{left} in R terminology, or \emph{master} in
 Stata terminology.}
 
-\item{y}{data frame: referred to \emph{right} in R terminology, or \emph{using} in
+\item{y}{data frame: referred to as \emph{right} in R terminology, or \emph{using} in
 Stata terminology.}
 }
 \value{
