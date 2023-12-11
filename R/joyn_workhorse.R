@@ -49,13 +49,6 @@ joyn_workhorse <- function(
   # if not 1:1 => use merge.data.table
   if (match_type == "m:m") {
 
-    if (!requireNamespace("data.table", quietly = TRUE)) {
-      stop(
-        "Package \"data.table\" must be installed to use this function.",
-        call. = FALSE
-      )
-    }
-
     dt_result <- data.table::merge.data.table(
       x               = x,
       y               = y,
@@ -68,12 +61,6 @@ joyn_workhorse <- function(
 
   } else {
 
-    if (!requireNamespace("collapse", quietly = TRUE)) {
-      stop(
-        "Package \"collapse\" must be installed to use this function.",
-        call. = FALSE
-      )
-    }
     # not m:m => use collapse::join()
     dt_result <- collapse::join( x              = x,
                                  y              = y,

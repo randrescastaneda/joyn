@@ -8,7 +8,7 @@ joyn_workhorse(
   x,
   y,
   by = intersect(names(x), names(y)),
-  match_type = c("1:1", "1:m", "m:1", "m:m"),
+  match_type = c("1:1"),
   suffix = getOption("joyn.suffixes")
 )
 }
@@ -25,18 +25,9 @@ in the backend, otherwise uses \code{collapse::join()}}
 
 \item{suffix}{atomic character vector: give suffix to columns common to both
 \code{x} and \code{y}}
-
-\item{keep}{atomic character vector of length 1:
-One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
-\emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
-regular behavior of joins in R, the objective of \code{joyn} is to present a
-diagnosis of the join which requires a full join. That is why the default
-is a a full join. Yet, if \emph{"left"} or \emph{"master"}, it keeps the observations
-that matched in both tables and the ones that did not match in x. The ones
-in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations
-that matched in both tables and the ones that did not match in y. The ones in x
-will be discarded. If \emph{"inner"}, it only keeps the observations that
-matched both tables.}
+}
+\value{
+data object of same class as \code{x}
 }
 \description{
 Always executes a full join. Gives comm

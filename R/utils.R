@@ -1,7 +1,7 @@
 #' rename to syntactically valid names
 #'
 #' @param name character: name to be coerced to syntactically valid name
-#' @inheritParams merge
+#' @inheritParams joyn
 #'
 #' @return valide character name
 #' @export
@@ -73,11 +73,10 @@ fix_by_vars <- function(by, x, y) {
 
 #' Split matching type
 #'
-#' @inheritParams merge
+#' @inheritParams joyn
 #'
 #' @return character vector
 #' @keywords internal
-#' @noRd
 split_match_type <- function(match_type) {
 
   strsplit(match_type, ":", fixed = TRUE) |>

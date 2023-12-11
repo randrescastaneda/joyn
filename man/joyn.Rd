@@ -8,7 +8,7 @@ joyn(
   x,
   y,
   by = intersect(names(x), names(y)),
-  match_type = getOption("joyn.match_type"),
+  match_type = "1:1",
   keep = c("full", "left", "master", "right", "using", "inner"),
   y_vars_to_keep = TRUE,
   update_values = FALSE,

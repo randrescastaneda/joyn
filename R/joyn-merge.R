@@ -301,9 +301,10 @@ joyn <- function(x,
   setnafill(x, fill = 0, cols = c(".xreport", ".yreport"))
 
   # report variable
+  dropreport <- FALSE
   if (isFALSE(reportvar) || is.null(reportvar)) {
 
-    reportvar  <- ".joyn"
+    reportvar  <- getOption("joyn.reportvar")
     dropreport <- TRUE
 
   } else {
@@ -317,19 +318,13 @@ joyn <- function(x,
       check_names <- make.names(check_names, unique = TRUE)
       nrv         <- setdiff(check_names, xnames)
 
-      if (verbose) {
-        cli::cli_alert_info("reportvar {.code {reportvar}} is already
-                            part of the resulting table. It will be changed
-                            to {.code {nrv}}",
-                            wrap = TRUE)
-      }
-
-
+      store_msg(type = "info",
+                note = cli::symbol$info,
+                "reportvar {.code {reportvar}} is already
+                          part of the resulting table. It will be changed
+                          to {.code {nrv}}")
       reportvar <- nrv
-
     }
-
-    dropreport <- FALSE
   }
 
 
@@ -362,31 +357,6 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
-  # return(
-  #   list(
-  #     update_values,
-  #     x,
-  #     newyvars,
-  #     sub(
-  #       pattern = "\\.y$",
-  #       "",
-  #       newyvars,
-  #     ),
-  #     sub(
-  #       pattern = "\\.y$",
-  #       replacement = "",
-  #       x = newyvars[
-  #         grepl(
-  #           pattern = "\\.y$",
-  #           x       = newyvars
-  #         )
-  #       ]
-  #     )
-  #   )
-  # )
-  # update values
 
   if (isTRUE(update_values) || isTRUE(update_NAs)) {
     var_use <- sub(
