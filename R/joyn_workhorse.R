@@ -34,10 +34,11 @@ joyn_workhorse <- function(
   if (
     length(by) == 0
   ) {
-    joyn_msg(
+    store_msg(
       type = "err",
       err  = 'Error in `joyn_workhorse`: `by` argument has length of 0',
-      hint = 'Either specify `by` to identify columns to join on in `x` and `y`, or
+      timing = cli::symbol$info, "  ",
+      pale   = 'Either specify `by` to identify columns to join on in `x` and `y`, or
               `x` and `y` should have common column names'
     )
   }

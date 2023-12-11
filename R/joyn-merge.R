@@ -414,20 +414,20 @@ joyn <- function(x,
   }
 
   ## Remove temporal yvars -----
-  if (exists("temp_yvar")) {
-
-    x <- x[
-      ,
-      mget(
-        names(x)[
-          which(
-            !names(x) %in% temp_yvar
-          )
-        ]
-      )
-    ]
-
-  }
+  # if (exists("temp_yvar")) {
+  #
+  #   x <- x[
+  #     ,
+  #     mget(
+  #       names(x)[
+  #         which(
+  #           !names(x) %in% temp_yvar
+  #         )
+  #       ]
+  #     )
+  #   ]
+  #
+  # }
 
 
 

@@ -31,7 +31,6 @@ Imports:
     data.table,
     glue,
     cli,
-    stats,
     utils,
     collapse (>= 2.0.7),
     lifecycle

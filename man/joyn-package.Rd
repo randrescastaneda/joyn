@@ -2,8 +2,8 @@
 % Please edit documentation in R/joyn-package.R
 \docType{package}
 \name{joyn-package}
-\alias{joyn}
 \alias{joyn-package}
+\alias{_PACKAGE}
 \title{joyn: Tool for Diagnosis of Tables Joins and Complementary Join Features}
 \description{
 Tool for diagnosing table joins. It combines the speed of `collapse` and `data.table`, the flexibility of `dplyr`, and the diagnosis and features of the `merge` command in `Stata`.
