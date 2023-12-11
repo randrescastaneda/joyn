@@ -142,7 +142,7 @@
 #' joyn(x2, y2, by = "id", update_NAs = TRUE, match_type = "m:1")
 #'
 #' # Update values in x with variables from y
-#' joyn(x2, y2, by = "id", update_values = TRUE)
+#' joyn(x2, y2, by = "id", update_values = TRUE, match_type = "m:1")
 #'
 joyn <- function(x,
                   y,
