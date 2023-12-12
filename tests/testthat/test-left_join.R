@@ -37,7 +37,12 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
+x5 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_, 4L),
+                x  = 11:16)
 
+y5 = data.table(id = c(1,2, 4, NA_integer_, NA_integer_),
+                y  = c(11L, 15L, 16, 17L, 18L))
 
 ################################################################################
 
@@ -230,7 +235,35 @@ test_that("update values works", {
 })
 
 
+test_that("reportvar works", {
+
+  jn <- left_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = "report"
+  )
+  expect_true(
+    "report" %in% names(jn)
+  )
+
+})
+
+test_that("NA matches", {
 
 
+  jn <- left_join(
+    x5,
+    y5,
+    relationship = "many-to-many"
+  )
 
+  expect_equal(
+    jn[is.na(id), ] |> nrow(),
+    4
+  )
+
+
+})
 

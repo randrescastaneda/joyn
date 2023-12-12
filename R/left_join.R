@@ -130,6 +130,13 @@ left_join <- function(
       "never"
     )
   )
+  if (na_matches == "never") {
+    store_msg(
+      type = "warn",
+      err  = "Warning: ",
+      warn = "Currently, `joyn` allows only `na_matches = 'na'`"
+    )
+  }
   if (is.null(reportvar) || isFALSE(reportvar)) {
     dropreport <- TRUE
     reportvar <- getOption("joyn.reportvar")
