@@ -205,10 +205,7 @@ test_that("FULL- Compare with base::merge", {
           reportvar = FALSE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
-  br[, x := x.x][
-    ,
-    c("x.x") := NULL
-  ]
+
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
@@ -245,8 +242,6 @@ test_that("LEFT- Compare with base::merge", {
       match_type = "1:1"
     )
   br <- base::merge(x2, y2, by = "id", all.x = TRUE)
-  br[, x := x.x][,
-                 c("x.x") := NULL] # ZP: changed
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
@@ -288,8 +283,7 @@ test_that("RIGHT - Compare with base::merge", {
     )
 
   br <- base::merge(x2, y2, by = "id", all.y = TRUE)
-  br[, x := x.x][,
-                 c("x.x") := NULL]
+
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
@@ -329,9 +323,6 @@ test_that("INNER - Compare with base::merge", {
       match_type = "1:1"
     )
   br <- base::merge(x2, y2, by = "id")
-
-  br[, x := x.x][,
-                 c("x.x") := NULL]
 
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
@@ -416,7 +407,7 @@ test_that("Update NAs", {
 
   idx <- x2[is.na(x), "id"]
 
-  expect_equal(jn[idx, on = "id"][, x], y2[idx, on = "id"][, x])
+  expect_equal(jn[idx, on = "id"][, x.x], y2[idx, on = "id"][, x])
 
 
 })
@@ -432,14 +423,14 @@ test_that("Update actual values", {
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
-  br[, x := fifelse(!is.na(x.x) & is.na(x.y),
+  br[, x.x := fifelse(!is.na(x.x) & is.na(x.y),
                     x.x, x.y)]
 
   setorderv(br, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
 
-  expect_equal(jn[, x], br[, x])
+  expect_equal(jn[, x.x], br[, x.x])
 
 
 })

@@ -148,12 +148,31 @@ left_join <- function(
     dropreport <- FALSE
   }
 
+  # Column names -----------------------------------
+  #xnames <- names(x)
+  #ynames <- names(y)
+  if (keep == TRUE) {
+
+    x_1 <- copy(x)
+    y_1 <- copy(y)
+
+    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
+      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
+    } else {
+      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
+    }
+
+    ykeys <- y |>
+      fselect(by_y_names)
+    names(ykeys) <- paste0(names(ykeys), suffix[2])
+    y <- cbind(
+      ykeys,
+      y
+    )
+  }
+
 
   # left join checks --------------------------------
-
-
-
-  # keep
 
 
   # Do left join ------------------------------------
@@ -217,6 +236,34 @@ left_join <- function(
 
 
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #'

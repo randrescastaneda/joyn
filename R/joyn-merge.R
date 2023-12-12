@@ -251,6 +251,12 @@ joyn <- function(x,
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  common_vars <- intersect(names(x), names(y))
+  if (!is.null(fixby$yby)) {
+    common_vars <- common_vars[!common_vars %in% fixby$yby]
+  } else {
+    common_vars <- common_vars[!common_vars %in% fixby$by]
+  }
   ## treatment of y_vars_to_keep ------
   y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
 
@@ -262,20 +268,21 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # new names in Y for same-name variables in X   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  newyvars <- check_new_y_vars(x, by, y_vars_to_keep)
+  #newyvars <- check_new_y_vars(x, by, y_vars_to_keep) - ZP-------------------------------
 
 
   # rename variables in Y
-  if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
-    setnames(y, old = y_vars_to_keep, new = newyvars)
-  }
+  # if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
+  #   setnames(y, old = y_vars_to_keep, new = newyvars)
+  # }
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(newyvars, ".yreport") # working yvars
+  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars ZP -------------------------------------
+  #yvars_w <- c(newyvars, ".yreport") # working yvars
   x <- x |>
     ftransform(.xreport = 1)
   y <- y |>
@@ -374,38 +381,44 @@ joyn <- function(x,
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  # if (isTRUE(update_values) || isTRUE(update_NAs)) {
+  #   var_use <- sub(
+  #     pattern = "\\.y$",
+  #     replacement = "",
+  #     x = newyvars[
+  #       grepl(
+  #         pattern = "\\.y$",
+  #         x       = newyvars
+  #       )
+  #     ]
+  #   )
+  # }
+  var_use <- NULL
   if (isTRUE(update_values) || isTRUE(update_NAs)) {
-    var_use <- sub(
-      pattern = "\\.y$",
-      replacement = "",
-      x = newyvars[
-        grepl(
-          pattern = "\\.y$",
-          x       = newyvars
-        )
-      ]
-    )
+    var_use <- common_vars
   }
 
   #return(list(reportvar))
-  if (isTRUE(update_values)) {
+  if (isTRUE(update_values) & length(var_use) > 0) {
 
     x <- update_values(
       dt        = x,
       var       = var_use,
-      reportvar = reportvar
+      reportvar = reportvar,
+      suffix    = suffixes
     )
 
   }
 
 
   # update NAs
-  if (isTRUE(update_NAs)) {
+  if (isTRUE(update_NAs) & length(var_use) > 0) {
 
     x <- update_NAs(
       dt        = x,
       var       = var_use,
-      reportvar = reportvar
+      reportvar = reportvar,
+      suffix    = suffixes
     )
 
   }
@@ -429,21 +442,6 @@ joyn <- function(x,
     # setnames(y, fixby$tempkey, fixby$yby)
   }
 
-  ## Remove temporal yvars -----
-  # if (exists("temp_yvar")) {
-  #
-  #   x <- x[
-  #     ,
-  #     mget(
-  #       names(x)[
-  #         which(
-  #           !names(x) %in% temp_yvar
-  #         )
-  #       ]
-  #     )
-  #   ]
-  #
-  # }
 
 
 

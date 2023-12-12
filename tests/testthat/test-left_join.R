@@ -81,12 +81,7 @@ test_that("Conducts left join", {
                          y   = c(11, NA, 15, 10, NA),
                          x.y = c(16, NA, 17, 20, NA))
   jn_dplyr <- jn_dplyr[order(jn_dplyr$id, na.last = T),]
-  jn_dplyr[
-    ,
-    x := x.x
-  ]
-  jn_dplyr$x.x <- NULL
-  jn_dplyr <- jn_dplyr |> fselect(names(jn_joyn |> fselect(-`.joyn`)))
+  #jn_dplyr <- jn_dplyr |> fselect(names(jn_joyn |> fselect(-`.joyn`)))
   attr(
     jn_dplyr,
     "sorted"
