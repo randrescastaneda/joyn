@@ -58,7 +58,7 @@ y5 = data.table(id = c(1,2, 4, NA_integer_, NA_integer_),
 
 
 
-test_that("Conducts left join", {
+test_that("LEFT JOIN - Conducts left join", {
 
   # One way
   jn_joyn <- left_join(
@@ -144,7 +144,7 @@ test_that("Conducts left join", {
 })
 
 
-test_that("no id given", {
+test_that("LEFT JOIN - no id given", {
 
   jn1 <- left_join(
     x2,
@@ -160,7 +160,7 @@ test_that("no id given", {
 })
 
 
-test_that("incorrectly specified arguments give errors", {
+test_that("LEFT JOIN - incorrectly specified arguments give errors", {
 
   expect_error(
     left_join(
@@ -202,7 +202,7 @@ test_that("incorrectly specified arguments give errors", {
 })
 
 
-test_that("argument `keep` preserves keys in output", {
+test_that("LEFT JOIN - argument `keep` preserves keys in output", {
 
   jn <- left_join(
     x = x1,
@@ -224,7 +224,7 @@ test_that("argument `keep` preserves keys in output", {
 
 
 
-test_that("update values works", {
+test_that("LEFT JOIN - update values works", {
 
   x2a <- x2
   x2a$x <- 1:5
@@ -249,7 +249,7 @@ test_that("update values works", {
 })
 
 
-test_that("reportvar works", {
+test_that("LEFT JOIN - reportvar works", {
 
   jn <- left_join(
     x1,
@@ -264,7 +264,7 @@ test_that("reportvar works", {
 
 })
 
-test_that("NA matches", {
+test_that("LEFT JOIN - NA matches", {
 
 
   jn <- left_join(
@@ -293,7 +293,7 @@ test_that("NA matches", {
 
 
 
-test_that("Conducts right join", {
+test_that("RIGHT JOIN - Conducts right join", {
 
   # One way
   jn_joyn <- right_join(
@@ -377,7 +377,7 @@ test_that("Conducts right join", {
 })
 
 
-test_that("no id given", {
+test_that("RIGHT JOIN - no id given", {
 
   jn1 <- right_join(
     x2,
@@ -393,7 +393,7 @@ test_that("no id given", {
 })
 
 
-test_that("incorrectly specified arguments give errors", {
+test_that("RIGHT JOIN - incorrectly specified arguments give errors", {
 
   expect_error(
     right_join(
@@ -435,7 +435,7 @@ test_that("incorrectly specified arguments give errors", {
 })
 
 
-test_that("argument `keep` preserves keys in output", {
+test_that("RIGHT JOIN - argument `keep` preserves keys in output", {
 
   jn <- right_join(
     x = x1,
@@ -457,7 +457,7 @@ test_that("argument `keep` preserves keys in output", {
 
 
 
-test_that("update values works", {
+test_that("RIGHT JOIN - update values works", {
 
   x2a <- x2
   x2a$x <- 1:5
@@ -483,7 +483,7 @@ test_that("update values works", {
 })
 
 
-test_that("reportvar works", {
+test_that("RIGHT JOIN - reportvar works", {
 
   jn <- right_join(
     x1,
@@ -498,7 +498,7 @@ test_that("reportvar works", {
 
 })
 
-test_that("NA matches", {
+test_that("RIGHT JOIN - NA matches", {
 
 
   jn <- right_join(
@@ -528,7 +528,7 @@ test_that("NA matches", {
 
 
 
-test_that("Conducts full join", {
+test_that("FULL JOIN - Conducts full join", {
 
   # One way
   jn_joyn <- full_join(
@@ -564,6 +564,11 @@ test_that("Conducts full join", {
   )
   expect_true(
     all(c("x", "y", "x & y") %in% jn_joyn$.joyn)
+  )
+  expect_true(
+    all(
+      c(jn_joyn$id) %in% c(y1$id, x2$id)
+    )
   )
 
   # Second set of tables ----------------------
@@ -615,7 +620,7 @@ test_that("Conducts full join", {
 })
 
 
-test_that("no id given", {
+test_that("FULL JOIN - no id given", {
 
   jn1 <- full_join(
     x2,
@@ -631,7 +636,7 @@ test_that("no id given", {
 })
 
 
-test_that("incorrectly specified arguments give errors", {
+test_that("FULL JOIN - incorrectly specified arguments give errors", {
 
   expect_error(
     full_join(
@@ -673,7 +678,7 @@ test_that("incorrectly specified arguments give errors", {
 })
 
 
-test_that("argument `keep` preserves keys in output", {
+test_that("FULL JOIN - argument `keep` preserves keys in output", {
 
   jn <- full_join(
     x = x1,
@@ -695,7 +700,7 @@ test_that("argument `keep` preserves keys in output", {
 
 
 
-test_that("update values works", {
+test_that("FULL JOIN - update values works", {
 
   x2a <- x2
   x2a$x <- 1:5
@@ -721,7 +726,7 @@ test_that("update values works", {
 })
 
 
-test_that("reportvar works", {
+test_that("FULL JOIN - reportvar works", {
 
   jn <- full_join(
     x1,
@@ -736,10 +741,241 @@ test_that("reportvar works", {
 
 })
 
-test_that("NA matches", {
+test_that("FULL JOIN - NA matches", {
 
 
   jn <- full_join(
+    x5,
+    y5,
+    relationship = "many-to-many"
+  )
+
+  expect_equal(
+    jn[is.na(id), ] |> nrow(),
+    4
+  )
+
+
+})
+
+
+
+
+
+#-------------------------------------------------------------------------------
+# TEST INNER JOINS -------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+
+
+test_that("INNER JOIN - Conducts inner join", {
+
+  # One way
+  jn_joyn <- inner_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    by = "id"
+  )
+  jn_joyn2 <- inner_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    by = "id",
+    unmatched = "drop"
+  )
+
+  jn_dplyr <- dplyr::inner_join(
+    x1, y1, by = "id", relationship = "many-to-one"
+  )
+  setorder(jn_dplyr, na.last = T)
+  attr(
+    jn_dplyr,
+    "sorted"
+  ) <- "id"
+
+  expect_equal(
+    jn_joyn |> fselect(-`.joyn`),
+    jn_dplyr
+  )
+  expect_equal(
+    jn_joyn,
+    jn_joyn2
+  )
+  expect_true(
+    all(c("x & y") %in% jn_joyn$.joyn)
+  )
+  expect_true(
+    all(
+      c(jn_joyn$id) %in% intersect(y1$id, x2$id)
+    )
+  )
+
+  # Second set of tables ----------------------
+  jn_joyn <- inner_join(
+    x = x2,
+    y = y2,
+    relationship = "one-to-one",
+    by = "id"
+  )
+
+  jn_dplyr <- dplyr::inner_join(
+    x2,
+    y2,
+    relationship = "one-to-one",
+    by = "id"
+  )
+  jn_dplyr <- jn_dplyr[order(jn_dplyr$id, na.last = T),]
+  attr(
+    jn_dplyr,
+    "sorted"
+  ) <- "id"
+
+  expect_equal(
+    jn_joyn |> fselect(-`.joyn`),
+    jn_dplyr
+  )
+
+
+  jn <- inner_join(
+    x4,
+    y4,
+    by = c("id1 = id2"),
+    relationship = "many-to-many"
+  )
+
+  #dplyr::inner_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
+  jn_dplyr <- dplyr::inner_join(
+    x4,
+    y4,
+    by = dplyr::join_by(id1 == id2),
+    relationship = "many-to-many"
+  )
+  attr(jn_dplyr, "sorted") <- "id1"
+  expect_equal(
+    jn |> fselect(-`.joyn`),
+    jn_dplyr
+  )
+
+})
+
+
+test_that("INNER JOIN - no id given", {
+
+  jn1 <- inner_join(
+    x2,
+    y2
+  )
+  jn2 <- inner_join(
+    x2,
+    y2,
+    by = c("id", "x")
+  )
+  expect_equal(jn1, jn2)
+
+})
+
+
+test_that("INNER JOIN - incorrectly specified arguments give errors", {
+
+  expect_error(
+    inner_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = NULL
+    )
+  )
+
+  expect_error(
+    inner_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c("a", "b", "c")
+    )
+  )
+
+  expect_error(
+    inner_join(
+      x = y1,
+      y = x1,
+      relationship = "one-to-many",
+      multiple = "any"
+    )
+  )
+
+
+})
+
+
+test_that("INNER JOIN - argument `keep` preserves keys in output", {
+
+  jn <- inner_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = T,
+    by = "id"
+  )
+
+  expect_true(
+    "id.y" %in% names(jn)
+  )
+  expect_equal(
+    jn[, id.y] |> na.omit() |> unique(),
+    y1[id %in% x1$id]$id    |> unique()
+  )
+
+})
+
+
+
+test_that("INNER JOIN - update values works", {
+
+  x2a <- x2
+  x2a$x <- 1:5
+
+  jn <- inner_join(
+    x = x2a,
+    y = y2,
+    relationship = "one-to-one",
+    update_values = TRUE,
+    by = "id"
+  )
+
+  expect_true(
+    all(jn[`.joyn` == "value updated",]$x.x %in% y2$x)
+  )
+  expect_equal(
+    nrow(jn[`.joyn` == "value updated",]),
+    nrow(x2[id %in% y2$id])
+  )
+
+
+
+})
+
+
+test_that("INNER JOIN - reportvar works", {
+
+  jn <- inner_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = "report"
+  )
+  expect_true(
+    "report" %in% names(jn)
+  )
+
+})
+
+test_that("INNER JOIN - NA matches", {
+
+
+  jn <- inner_join(
     x5,
     y5,
     relationship = "many-to-many"
