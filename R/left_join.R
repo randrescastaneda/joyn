@@ -60,18 +60,17 @@ left_join <- function(
     )
   }
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
-    store_msg(
-      type = "err",
-      err  = paste0(
+    cli::cli_abort(
+      paste0(
         cli::symbol$cross,
         " Error: argument `suffix` must be character vector of length 2"
       )
     )
+
   }
   if (!is.null(keep) & !is.logical(keep)) {
-    store_msg(
-      type = "err",
-      err  = paste0(
+    cli::cli_abort(
+      paste0(
         cli::symbol$cross,
         " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
       )
@@ -84,17 +83,7 @@ left_join <- function(
     )
     keep <- FALSE
   }
-  # if(keep == TRUE){
-  #
-  #   if (length(grep("==?", by, value = TRUE))>0) {
-  #     y_name <-
-  #   }
-  #
-  #   y <- y |>
-  #     ftransform(
-  #       id.y = id
-  #     )
-  # }
+
   na_matches <- match.arg(na_matches)
   multiple   <- match.arg(
     multiple,
@@ -127,10 +116,10 @@ left_join <- function(
     relationship %in% c("1:m", "m:m") &
     !multiple == "all"
   ) {
-    store_msg(
-      type = "err",
-      err  = paste0(
-        cli::symbol$cross, " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
+    cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
       )
     )
   }
@@ -213,12 +202,11 @@ left_join <- function(
     )
     ) {
 
-      store_msg(
-        type = "err",
-        err  = paste0(
+      cli::cli_abort(
+        paste0(
           cli::symbol$cross,
           " Error: some rows in `y` are not matched - this check is due to
-        argument `unmatched = 'error'` "
+           argument `unmatched = 'error'` "
         )
       )
 
