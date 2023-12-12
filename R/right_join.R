@@ -1,7 +1,7 @@
-#' Left join two data frames
+#' Right join two data frames
 #'
 #' This is a `joyn` wrapper that works in a similar
-#' fashion to [dplyr::left_join]
+#' fashion to [dplyr::right_join]
 #'
 #' @param x data frame: referred to as *left* in R terminology, or *master* in
 #'   Stata terminology.
@@ -14,7 +14,7 @@
 #'   you want to join). To join by different variables on x and y use a vector
 #'   of expressions. For example, `by = c("a = b", "z")` will use "a" in `x`, "b"
 #'   in `y`, and "z" in both tables.
-#' @inheritParams dplyr::left_join
+#' @inheritParams dplyr::right_join
 #' @inheritParams joyn
 #' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
 #'   reporttype keep_common_vars verbose
@@ -23,7 +23,7 @@
 #' @export
 #'
 #' @examples
-#' # Simple left join
+#' # Simple right join
 #' library(data.table)
 #'
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -31,8 +31,8 @@
 #'                 x  = 11:15)
 #' y1 = data.table(id = c(1,2, 4),
 #'                 y  = c(11L, 15L, 16))
-#' left_join(x1, y1, relationship = "many-to-one")
-left_join <- function(
+#' right_join(x1, y1, relationship = "many-to-one")
+right_join <- function(
     x,
     y,
     by               = intersect(names(x), names(y)),
@@ -154,25 +154,23 @@ left_join <- function(
   }
 
   # Column names -----------------------------------
-  #xnames <- names(x)
-  #ynames <- names(y)
   if (keep == TRUE) {
 
     x_1 <- copy(x)
     y_1 <- copy(y)
 
     if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
+      by_x_names <- fix_by_vars(by = by, x_1, y_1)$xby
     } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
+      by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
     }
 
-    ykeys <- y |>
-      fselect(by_y_names)
-    names(ykeys) <- paste0(names(ykeys), suffix[2])
-    y <- cbind(
-      ykeys,
-      y
+    xkeys <- x |>
+      fselect(by_x_names)
+    names(xkeys) <- paste0(names(xkeys), suffix[1])
+    x <- cbind(
+      xkeys,
+      x
     )
   }
 
@@ -181,12 +179,12 @@ left_join <- function(
 
 
   # Do left join ------------------------------------
-  lj <- joyn(
+  rj <- joyn(
     x                = x,
     y                = y,
     by               = by,
     match_type       = relationship,
-    keep             = "left",
+    keep             = "right",
     y_vars_to_keep   = y_vars_to_keep,
     suffixes         = suffix,
     update_values    = update_values,
@@ -205,16 +203,16 @@ left_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
     if (any(
-      lj[
+      rj[
         ,
-        get(names(lj)[length(lj)])
-      ] == "x"
+        get(names(rj)[length(rj)])
+      ] == "y"
     ) |
     any(
-      lj[
+      rj[
         ,
-        get(names(lj)[length(lj)])
-      ] == 1
+        get(names(rj)[length(rj)])
+      ] == 2
     )
     ) {
 
@@ -231,11 +229,11 @@ left_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    lj$`.joyn` <- NULL
+    rj$`.joyn` <- NULL
   }
 
   # Return
-  return(lj)
+  return(rj)
 
 
 
@@ -254,159 +252,3 @@ left_join <- function(
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#'
-#' cbind(
-#'   y1,
-#'   y1 |>
-#'     fselect(
-#'       c("y")
-#'     ) |>
-#'     frename(
-#'       paste0, ".x"
-#'     )
-#' )
-#'
-#'
-#' byexp <- grep("==?", by, value = TRUE)
-#'
-#' if (length(byexp) != 0) {
-#'
-#'   xby <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", byexp))
-#'   yby <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", byexp))
-#'   newkeys <- paste0("keyby", 1:length(xby))
-#'
-#'   setnames(x, xby, newkeys)
-#'   setnames(y, yby, newkeys)
-#'
-#'   by[grepl("==?", by)] <- newkeys
-#'
-#'   return(list(by      = by,
-#'               xby     = xby,
-#'               yby     = yby,
-#'               tempkey = newkeys)
-#'   )
-#'
-#' } else {
-#'
-#'   return(list(by      = by,
-#'               xby     = NULL,
-#'               yby     = NULL,
-#'               tempkey = NULL)
-#'   )
-#'
-#' }
-#'
-#'
-#'
-#' if (length(grep("==?", by, value = TRUE))>0) {
-#'   y_name <-
-#' }
-#'
-#' y <- y |>
-#'   ftransform(
-#'     id.y = id
-#'   )
-#'
-#'
-#'
-#'
-#'
-#' #' Internal function for dealing with the `dplyr` joins when `keep = T`
-#' #'
-#' #' When tidyverse joins are used, and the tidyverse argument `keep = T`
-#' #' Note that the tidyverse `keep` is different to the `joyn` keep.
-#' #'
-#' #' @param dt data frame: object to add columns with suffix
-#' #' @param by character: giving column names, `by` argument from join
-#' #' @param suffix character: suffix to add to additional columns
-#' #' @param keep character: "left" or "right" to use for matching suffix
-#' #'
-#' #' @return data frame: same as `dt` but with additional
-#' #'         columns, which are duplicates of the `by` columns
-#' #'         except that the names have an added suffix
-#' #'
-#' #' @examples
-#' check_dplyr_keep <- function(
-#'     dt,
-#'     by,
-#'     suffix,
-#'     keep = c("left", "right")
-#' ){
-#'
-#'   if (
-#'     length(
-#'       grep(
-#'         "==?", by, value = TRUE
-#'       )
-#'     ) == 0
-#'   ){
-#'
-#'     foo_dt <- dt |>
-#'       fselect(
-#'         by,
-#'         c(names(dt)[!names(dt) %in% by]),
-#'         by
-#'       )
-#'     names(foo_dt)[1:length(by)] <- paste0(by, suffix)
-#'
-#'   } else{
-#'
-#'     if(keep == "left"){
-#'       dt1 <- copy(dt)
-#'       dt2 <- copy(dt)
-#'       ynames <- fix_by_vars(by = by, dt, dt)$yby
-#'       foo_dt <- dt |>
-#'         fselect(
-#'           rep(ynames, 2)
-#'         )
-#'       names(foo_dt)[1:length(dt)] <- paste0(names(dt), suffix)
-#'
-#'     } else {
-#'       xnames <- fix_by_vars(by = by, dt, dt)$xby
-#'       foo_dt <- dt |>
-#'         fselect(
-#'           rep(xnames, 2)
-#'         )
-#'       names(foo_dt)[1:length(dt)] <- paste0(names(dt), suffix)
-#'
-#'     }
-#'
-#'
-#'   }
-#'
-#'   return(foo_dt)
-#'
-#' }
-#'
-#' check_dplyr_keep(
-#'   dt = y1,
-#'   by = c("id = id"),
-#'   suffix = ".y",
-#'   keep = "left"
-#' )
-#'
-#'
-#' fooy <- y1 |>
-#'   fselect(
-#'     rep(c("id", "y"),2)
-#'   )
-#' names(fooy)[1:length(y1)] <- paste0(names(y1), ".y")
-#' fooy
-#'
-#'

@@ -47,16 +47,17 @@ y5 = data.table(id = c(1,2, 4, NA_integer_, NA_integer_),
 ################################################################################
 
 
-test_that("Conducts left join", {
+
+test_that("Conducts right join", {
 
   # One way
-  jn_joyn <- left_join(
+  jn_joyn <- right_join(
     x = x1,
     y = y1,
     relationship = "many-to-one",
     by = "id"
   )
-  jn_joyn2 <- left_join(
+  jn_joyn2 <- right_join(
     x = x1,
     y = y1,
     relationship = "many-to-one",
@@ -64,10 +65,9 @@ test_that("Conducts left join", {
     unmatched = "drop"
   )
 
-  jn_dplyr <- data.table(id = c(1, 1, 2, 3, NA),
-                         t = c(1, 2, 1, 2, NA),
-                         x = c(11, 12, 13, 14, 15),
-                         y = c(11, 11, 15, NA, NA))
+  jn_dplyr <- dplyr::right_join(
+    x1, y1, by = "id", relationship = "many-to-one"
+  )
   attr(
     jn_dplyr,
     "sorted"
@@ -84,19 +84,19 @@ test_that("Conducts left join", {
 
 
   # Second set of tables ----------------------
-  jn_joyn <- left_join(
+  jn_joyn <- right_join(
     x = x2,
     y = y2,
     relationship = "one-to-one",
     by = "id"
   )
 
-  jn_dplyr <- data.table(id  = c(1, 4, 2, 3, NA),
-                         t   = c(1, 2, 1, 2, NA),
-                         x.x = c(16, 12, NA, NA, 15),
-                         yd  = c(1, NA, 2, 3, NA),
-                         y   = c(11, NA, 15, 10, NA),
-                         x.y = c(16, NA, 17, 20, NA))
+  jn_dplyr <- dplyr::right_join(
+    x2,
+    y2,
+    relationship = "one-to-one",
+    by = "id"
+  )
   jn_dplyr <- jn_dplyr[order(jn_dplyr$id, na.last = T),]
   attr(
     jn_dplyr,
@@ -109,21 +109,20 @@ test_that("Conducts left join", {
   )
 
 
-  jn <- left_join(
+  jn <- right_join(
     x4,
     y4,
     by = c("id1 = id2"),
     relationship = "many-to-many"
   )
 
-  #dplyr::left_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
-  jn_dplyr <- data.table(id1 = c(1, 1, 1, 1, 2, 3, 3),
-                         id2 = c(1, 1, 1, 1, 2, 3, 4),
-                         t   = c(1, 1, 2, 2, 1, 2, NA),
-                         x.x = c(16, 16, 12, 12, NA, NA, 15),
-                         id  = c(1, 2, 1, 2, 5, 6, 6),
-                         y   = c(11, 15, 11, 15, 20, 13, 13),
-                         x.y = c(16, 17, 16, 17, 18, 19, 19))
+  #dplyr::right_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
+  jn_dplyr <- dplyr::right_join(
+    x4,
+    y4,
+    by = dplyr::join_by(id1 == id2),
+    relationship = "many-to-many"
+  )
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-`.joyn`),
@@ -135,11 +134,11 @@ test_that("Conducts left join", {
 
 test_that("no id given", {
 
-  jn1 <- left_join(
+  jn1 <- right_join(
     x2,
     y2
   )
-  jn2 <- left_join(
+  jn2 <- right_join(
     x2,
     y2,
     by = c("id", "x")
@@ -152,7 +151,7 @@ test_that("no id given", {
 test_that("incorrectly specified arguments give errors", {
 
   expect_error(
-    left_join(
+    right_join(
       x = x1,
       y = y1,
       relationship = "many-to-one",
@@ -161,7 +160,7 @@ test_that("incorrectly specified arguments give errors", {
   )
 
   expect_error(
-    left_join(
+    right_join(
       x = x1,
       y = y1,
       relationship = "many-to-one",
@@ -170,7 +169,7 @@ test_that("incorrectly specified arguments give errors", {
   )
 
   expect_error(
-    left_join(
+    right_join(
       x = y1,
       y = x1,
       relationship = "one-to-many",
@@ -179,7 +178,7 @@ test_that("incorrectly specified arguments give errors", {
   )
 
   expect_error(
-    left_join(
+    right_join(
       x = x1,
       y = y1,
       relationship = "many-to-one",
@@ -193,7 +192,7 @@ test_that("incorrectly specified arguments give errors", {
 
 test_that("argument `keep` preserves keys in output", {
 
-  jn <- left_join(
+  jn <- right_join(
     x = x1,
     y = y1,
     relationship = "many-to-one",
@@ -202,11 +201,11 @@ test_that("argument `keep` preserves keys in output", {
   )
 
   expect_true(
-    "id.y" %in% names(jn)
+    "id.x" %in% names(jn)
   )
   expect_equal(
-    jn[, id.y] |> na.omit() |> unique(),
-    y1[id %in% x1$id]$id
+    jn[, id.x] |> na.omit() |> unique(),
+    x1[id %in% y1$id]$id |> unique()
   )
 
 })
@@ -218,7 +217,7 @@ test_that("update values works", {
   x2a <- x2
   x2a$x <- 1:5
 
-  jn <- left_join(
+  jn <- right_join(
     x = x2a,
     y = y2,
     relationship = "one-to-one",
@@ -235,12 +234,13 @@ test_that("update values works", {
   )
 
 
+
 })
 
 
 test_that("reportvar works", {
 
-  jn <- left_join(
+  jn <- right_join(
     x1,
     y1,
     relationship = "many-to-one",
@@ -256,7 +256,7 @@ test_that("reportvar works", {
 test_that("NA matches", {
 
 
-  jn <- left_join(
+  jn <- right_join(
     x5,
     y5,
     relationship = "many-to-many"
@@ -269,4 +269,10 @@ test_that("NA matches", {
 
 
 })
+
+
+
+
+
+
 
