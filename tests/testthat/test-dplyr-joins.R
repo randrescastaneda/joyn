@@ -1,5 +1,6 @@
 withr::local_options(joyn.verbose = FALSE)
-library(data.table)
+library(data.table) |>
+  suppressWarnings()
 
 
 
