@@ -26,19 +26,19 @@ joyn(
 )
 }
 \arguments{
-\item{x}{data frame: referred to \emph{left} in R terminology, or \emph{master} in
+\item{x}{data frame: referred to as \emph{left} in R terminology, or \emph{master} in
 Stata terminology.}
 
-\item{y}{data frame: referred to \emph{right} in R terminology, or \emph{using} in
+\item{y}{data frame: referred to as \emph{right} in R terminology, or \emph{using} in
 Stata terminology.}
 
 \item{by}{a character vector of variables to join by. If NULL, the default,
 joyn will do a natural join, using all variables with common names across
 the two tables. A message lists the variables so that you can check they're
-right (to suppress the message, simply explicitly list the variables that
+correct (to suppress the message, simply explicitly list the variables that
 you want to join). To join by different variables on x and y use a vector
-of expressions. For example, \code{by = c("a = b", "z")} will use "a" in x, "b"
-in y, and "z" in both tables.}
+of expressions. For example, \code{by = c("a = b", "z")} will use "a" in \code{x}, "b"
+in \code{y}, and "z" in both tables.}
 
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
 Default is \emph{"1:1"} since this the most restrictive.
@@ -56,10 +56,13 @@ that matched in both tables and the ones that did not match in x. The ones
 in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations
 that matched in both tables and the ones that did not match in y. The ones in x
 will be discarded. If \emph{"inner"}, it only keeps the observations that
-matched both tables.}
+matched both tables. Note that if, for example, a \code{keep = "left"}, the \code{joyn()}
+function still executes a full join under the hood and then filters so that
+only rows the output table is a left join. This behaviour, while inefficient,
+allows all the diagnostics and checks conducted by \code{joyn}.}
 
-\item{y_vars_to_keep}{character: Vector of variable names that will be kept
-after the merge. If TRUE (the default), it keeps all the brings all the
+\item{y_vars_to_keep}{character: Vector of variable names in \code{y} that will be
+kept after the merge. If TRUE (the default), it keeps all the brings all the
 variables in y into x. If FALSE or NULL, it does not bring any variable
 into x, but a report will be generated.}
 
@@ -74,7 +77,7 @@ in x with actual values of variables in y that have the same name as the
 ones in x. If FALSE, NA values won't be updated, even if \code{update_values} is
 \code{TRUE}}
 
-\item{reportvar}{character: Name of reporting variable. Default if "report".
+\item{reportvar}{character: Name of reporting variable. Default is ".joyn".
 This is the same as variable "_merge" in Stata after performing a merge. If
 FALSE or NULL, the reporting variable will be excluded from the final
 table, though a summary of the join will be display after concluding.}
@@ -82,7 +85,7 @@ table, though a summary of the join will be display after concluding.}
 \item{reporttype}{character: One of \emph{"character"} or \emph{"numeric"}. Default is
 \emph{"character"}. If \emph{"numeric"}, the reporting variable will contain  numeric
 codes of the source and the contents of each observation in the joined
-table.}
+table. See below for more information.}
 
 \item{roll}{double: \emph{to be implemented}}
 
@@ -114,7 +117,8 @@ By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
 a data.table joining x and y.
 }
 \description{
-This is the main and, basically, the only function in joyn.
+This is the primary function in the \code{joyn} package. It executes a full join,
+performs a number of checks, and filters to allow the user-specified join.
 }
 \section{match types}{
 
@@ -138,10 +142,22 @@ second, with the second; and so on. If there is an unequal number of
 observations within a group, then the last observation of the shorter group
 is used repeatedly to match with subsequent observations of the longer
 group.
+
+@section reporttype:
+
+If \code{reporttype = "numeric"}, then the numeric values have the following
+meaning:
+
+1: row comes from \code{x}, i.e. "x"
+2: row comes from \code{y}, i.e. "y"
+3: row from both \code{x} and \code{y}, i.e. "x & y"
+4: row has NA in \code{x} that has been updated with \code{y}, i.e. "NA updated"
+5: row has valued in \code{x} that has been updated with \code{y}, i.e. "value updated"
+6: row from \code{x} that has not been updated, i.e. "not updated"
 }
 
 \examples{
-# Simple merge
+# Simple join
 library(data.table)
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -158,18 +174,18 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
               yd = c(1, 2, 5, 6, 3),
               y  = c(11L, 15L, 20L, 13L, 10L),
               x  = c(16:20))
-merge(x1, y1)
+joyn(x1, y1, match_type = "m:1")
 
-# Bad merge for not specifying by argument
-merge(x2, y2)
+# Bad merge for not specifying by argument or match_type
+joyn(x2, y2)
 
 # good merge, ignoring variable x from y
-merge(x2, y2, by = "id")
+joyn(x2, y2, by = "id", match_type = "m:1")
 
 # update NAs in x variable form x
-merge(x2, y2, by = "id", update_NAs = TRUE)
+joyn(x2, y2, by = "id", update_NAs = TRUE, match_type = "m:1")
 
 # Update values in x with variables from y
-merge(x2, y2, by = "id", update_values = TRUE)
+joyn(x2, y2, by = "id", update_values = TRUE, match_type = "m:1")
 
 }

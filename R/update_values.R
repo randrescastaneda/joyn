@@ -8,19 +8,24 @@ if (getRversion() >= '2.15.1')
 #'
 #' @param dt joined table
 #' @param var variable to be updated
+#' @param reportvar variables in `dt` that has report
 #'
 #' @return data.table
 #' @noRd
-update_values <- function(dt, var, reportvar = ".joyn") {
+update_values <- function(dt, var, reportvar = ".joyn", suffix = NULL) {
 
-  y.var <- paste0(var, ".y")
+  if (is.null(suffix)) {
+    suffix <- c("", ".y")
+  }
+  x.var <- paste0(var, suffix[1])
+  y.var <- paste0(var, suffix[2])
 
   dt$use_util_reportvar <- dt |>
     fselect(get(reportvar))
 
   # create variable for var.x is NA
   dt$varx_na <- dt |>
-    fselect(var) |>
+    fselect(x.var) |>
     {\(.) !missing_cases(.)}() # TRUE if not NA
 
   # create variable for var.y is NA
@@ -42,19 +47,11 @@ update_values <- function(dt, var, reportvar = ".joyn") {
     c("use_util_reportvar")
   ] <- 6L
 
-  # Now update the vars if 4 or 5
-  # dt[
-  #   dt$use_util_reportvar == 4 | dt$use_util_reportvar == 5,
-  #   mget(var)
-  # ] <- dt[
-  #   dt$use_util_reportvar == 4 | dt$use_util_reportvar == 5,
-  #   mget(y.var)
-  # ]
   if (!"data.table" %in% class(dt)) {
 
     dt[
       which(dt$use_util_reportvar %in% c(4, 5)),
-      var
+      x.var
     ] <- lapply(
       y.var,
       function(y) dt[
@@ -66,7 +63,7 @@ update_values <- function(dt, var, reportvar = ".joyn") {
   } else{
     dt[
       use_util_reportvar %in% c(4, 5),
-      (var) := get(y.var)
+      (x.var) := get(y.var)
     ]
   }
 

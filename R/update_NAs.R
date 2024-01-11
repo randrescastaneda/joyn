@@ -11,15 +11,20 @@ if (getRversion() >= '2.15.1')
 #'
 #' @return data.table
 #' @noRd
-update_NAs <- function(dt, var, reportvar = ".joyn") {
+update_NAs <- function(dt, var, reportvar = ".joyn", suffix = NULL) {
 
-  y.var <- paste0(var, ".y")
+  if (is.null(suffix)) {
+    suffix <- c("", ".y")
+  }
+  x.var <- paste0(var, suffix[1])
+  y.var <- paste0(var, suffix[2])
+
   dt$use_util_reportvar <- dt |>
     fselect(get(reportvar))
 
   # create variable for var.x is NA
   dt$varx_na <- dt |>
-    fselect(var) |>
+    fselect(x.var) |>
     {\(.) !missing_cases(.)}() # TRUE if not NA
 
 
@@ -40,7 +45,7 @@ update_NAs <- function(dt, var, reportvar = ".joyn") {
 
     dt[
       which(dt$use_util_reportvar %in% c(4)),
-      var
+      x.var
     ] <- lapply(
       y.var,
       function(y) dt[
@@ -51,7 +56,7 @@ update_NAs <- function(dt, var, reportvar = ".joyn") {
     # Update x vars if NA by report is 2 (i.e. row only in y)
     dt[
       which(dt$use_util_reportvar %in% c(2) & dt$varx_na == FALSE),
-      var
+      x.var
     ]  <- lapply(
       y.var,
       function(y) dt[
@@ -63,7 +68,7 @@ update_NAs <- function(dt, var, reportvar = ".joyn") {
   } else{
     dt[
       use_util_reportvar %in% c(4),
-      (var) := get(y.var)
+      (x.var) := get(y.var)
     ]
   }
 

@@ -1,24 +1,24 @@
 #' Join two tables
 #'
-#' This is the main and, basically, the only function in joyn.
+#' This is the primary function in the `joyn` package. It executes a full join,
+#' performs a number of checks, and filters to allow the user-specified join.
 #'
-#' @param x data frame: referred to *left* in R terminology, or *master* in
+#' @param x data frame: referred to as *left* in R terminology, or *master* in
 #'   Stata terminology.
-#' @param y data frame: referred to *right* in R terminology, or *using* in
+#' @param y data frame: referred to as *right* in R terminology, or *using* in
 #'   Stata terminology.
 #' @param by a character vector of variables to join by. If NULL, the default,
 #'   joyn will do a natural join, using all variables with common names across
 #'   the two tables. A message lists the variables so that you can check they're
-#'   right (to suppress the message, simply explicitly list the variables that
+#'   correct (to suppress the message, simply explicitly list the variables that
 #'   you want to join). To join by different variables on x and y use a vector
-#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in x, "b"
-#'   in y, and "z" in both tables.
+#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in `x`, "b"
+#'   in `y`, and "z" in both tables.
 #' @param match_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
 #'   Default is *"1:1"* since this the most restrictive.
 #'   However, following Stata's recommendation, it is better to be explicit and
 #'   use any of the other three match types (See details in *match types
 #'   sections*).
-#'
 #' @param keep  atomic character vector of length 1:
 #'   One of *"full"*, *"left"*, *"master"*, *"right"*,
 #'   *"using"*, *"inner"*. Default is *"full"*. Even though this is not the
@@ -29,19 +29,22 @@
 #'   in y will be discarded. If *"right"* or *"using"*, it keeps the observations
 #'   that matched in both tables and the ones that did not match in y. The ones in x
 #'   will be discarded. If *"inner"*, it only keeps the observations that
-#'   matched both tables.
-#' @param y_vars_to_keep character: Vector of variable names that will be kept
-#'   after the merge. If TRUE (the default), it keeps all the brings all the
+#'   matched both tables. Note that if, for example, a `keep = "left"`, the `joyn()`
+#'   function still executes a full join under the hood and then filters so that
+#'   only rows the output table is a left join. This behaviour, while inefficient,
+#'   allows all the diagnostics and checks conducted by `joyn`.
+#' @param y_vars_to_keep character: Vector of variable names in `y` that will be
+#'   kept after the merge. If TRUE (the default), it keeps all the brings all the
 #'   variables in y into x. If FALSE or NULL, it does not bring any variable
 #'   into x, but a report will be generated.
-#' @param reportvar character: Name of reporting variable. Default if "report".
+#' @param reportvar character: Name of reporting variable. Default is ".joyn".
 #'   This is the same as variable "_merge" in Stata after performing a merge. If
 #'   FALSE or NULL, the reporting variable will be excluded from the final
 #'   table, though a summary of the join will be display after concluding.
 #' @param reporttype character: One of *"character"* or *"numeric"*. Default is
 #'   *"character"*. If *"numeric"*, the reporting variable will contain  numeric
 #'   codes of the source and the contents of each observation in the joined
-#'   table.
+#'   table. See below for more information.
 #' @param update_NAs logical: If TRUE, it will update NA values of all variables
 #'   in x with actual values of variables in y that have the same name as the
 #'   ones in x. If FALSE, NA values won't be updated, even if `update_values` is
@@ -96,8 +99,21 @@
 #'   observations within a group, then the last observation of the shorter group
 #'   is used repeatedly to match with subsequent observations of the longer
 #'   group.
+#'
+#'  @section reporttype:
+#'
+#'    If `reporttype = "numeric"`, then the numeric values have the following
+#'    meaning:
+#'
+#'    1: row comes from `x`, i.e. "x"
+#'    2: row comes from `y`, i.e. "y"
+#'    3: row from both `x` and `y`, i.e. "x & y"
+#'    4: row has NA in `x` that has been updated with `y`, i.e. "NA updated"
+#'    5: row has valued in `x` that has been updated with `y`, i.e. "value updated"
+#'    6: row from `x` that has not been updated, i.e. "not updated"
+#'
 #' @examples
-#' # Simple merge
+#' # Simple join
 #' library(data.table)
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #' t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -114,19 +130,19 @@
 #'               yd = c(1, 2, 5, 6, 3),
 #'               y  = c(11L, 15L, 20L, 13L, 10L),
 #'               x  = c(16:20))
-#' merge(x1, y1)
+#' joyn(x1, y1, match_type = "m:1")
 #'
-#' # Bad merge for not specifying by argument
-#' merge(x2, y2)
+#' # Bad merge for not specifying by argument or match_type
+#' joyn(x2, y2)
 #'
 #' # good merge, ignoring variable x from y
-#' merge(x2, y2, by = "id")
+#' joyn(x2, y2, by = "id", match_type = "m:1")
 #'
 #' # update NAs in x variable form x
-#' merge(x2, y2, by = "id", update_NAs = TRUE)
+#' joyn(x2, y2, by = "id", update_NAs = TRUE, match_type = "m:1")
 #'
 #' # Update values in x with variables from y
-#' merge(x2, y2, by = "id", update_values = TRUE)
+#' joyn(x2, y2, by = "id", update_values = TRUE, match_type = "m:1")
 #'
 joyn <- function(x,
                   y,
@@ -235,6 +251,12 @@ joyn <- function(x,
   #              Variables to keep in y   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  common_vars <- intersect(names(x), names(y))
+  if (!is.null(fixby$yby)) {
+    common_vars <- common_vars[!common_vars %in% fixby$yby]
+  } else {
+    common_vars <- common_vars[!common_vars %in% fixby$by]
+  }
   ## treatment of y_vars_to_keep ------
   y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
 
@@ -246,20 +268,21 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # new names in Y for same-name variables in X   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  newyvars <- check_new_y_vars(x, by, y_vars_to_keep)
+  #newyvars <- check_new_y_vars(x, by, y_vars_to_keep) - ZP-------------------------------
 
 
   # rename variables in Y
-  if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
-    setnames(y, old = y_vars_to_keep, new = newyvars)
-  }
+  # if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
+  #   setnames(y, old = y_vars_to_keep, new = newyvars)
+  # }
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(newyvars, ".yreport") # working yvars
+  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars ZP -------------------------------------
+  #yvars_w <- c(newyvars, ".yreport") # working yvars
   x <- x |>
     ftransform(.xreport = 1)
   y <- y |>
@@ -358,38 +381,44 @@ joyn <- function(x,
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
+  # if (isTRUE(update_values) || isTRUE(update_NAs)) {
+  #   var_use <- sub(
+  #     pattern = "\\.y$",
+  #     replacement = "",
+  #     x = newyvars[
+  #       grepl(
+  #         pattern = "\\.y$",
+  #         x       = newyvars
+  #       )
+  #     ]
+  #   )
+  # }
+  var_use <- NULL
   if (isTRUE(update_values) || isTRUE(update_NAs)) {
-    var_use <- sub(
-      pattern = "\\.y$",
-      replacement = "",
-      x = newyvars[
-        grepl(
-          pattern = "\\.y$",
-          x       = newyvars
-        )
-      ]
-    )
+    var_use <- common_vars
   }
 
   #return(list(reportvar))
-  if (isTRUE(update_values)) {
+  if (isTRUE(update_values) & length(var_use) > 0) {
 
     x <- update_values(
       dt        = x,
       var       = var_use,
-      reportvar = reportvar
+      reportvar = reportvar,
+      suffix    = suffixes
     )
 
   }
 
 
   # update NAs
-  if (isTRUE(update_NAs)) {
+  if (isTRUE(update_NAs) & length(var_use) > 0) {
 
     x <- update_NAs(
       dt        = x,
       var       = var_use,
-      reportvar = reportvar
+      reportvar = reportvar,
+      suffix    = suffixes
     )
 
   }
@@ -413,21 +442,6 @@ joyn <- function(x,
     # setnames(y, fixby$tempkey, fixby$yby)
   }
 
-  ## Remove temporal yvars -----
-  # if (exists("temp_yvar")) {
-  #
-  #   x <- x[
-  #     ,
-  #     mget(
-  #       names(x)[
-  #         which(
-  #           !names(x) %in% temp_yvar
-  #         )
-  #       ]
-  #     )
-  #   ]
-  #
-  # }
 
 
 
