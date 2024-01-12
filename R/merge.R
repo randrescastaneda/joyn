@@ -46,14 +46,14 @@ merge <- function(x,
   # NOTE: we should think of anti-joins...
 
   # implement joyn --------
-  dt <- joyn(x = x,
-             y = y,
-             by = by,
-             match_type = match_type,
-             keep = keep,
-             sort = sort,
+  dt <- joyn(x               = x,
+             y               = y,
+             by              = by,
+             match_type      = match_type,
+             keep            = keep,
+             sort            = sort,
              allow.cartesian = allow.cartesian,
-             suffixes = suffixes,
+             suffixes        = suffixes,
              ...)
 
   # wrangling (add filters) -------
@@ -103,8 +103,14 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
     if (!all(by.y %chin% nm_y)) {
       cli::cli_abort("Elements listed in `by.y` must be valid column names in y.")
     }
-    by = by.x
-    names(by) = by.y
+
+
+    # Original data.table code is this:
+    # by = cby.x
+    # names(by) = by.y
+    #
+    # It is replaced by this:
+    by = paste(by.x, "=", by.y)
 
   } else {
     if (is.null(by)) {
