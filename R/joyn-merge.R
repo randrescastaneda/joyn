@@ -364,14 +364,18 @@ joyn <- function(x,
   ## rows to keep -----
   if (keep  %in% c("master", "left") ) {
 
-    x <- x[get(reportvar)  != 2]
+    x <- x |>
+      fsubset(get(reportvar)  != 2)
 
   } else if (keep  %in% c("using", "right") ) {
 
-    x <- x[get(reportvar)  != 1]
+    x <- x |>
+      fsubset(get(reportvar)  != 1)
 
   } else if (keep  == "inner") {
-    x <- x[get(reportvar)  >= 3]
+
+    x <- x |>
+      fsubset(get(reportvar)  >= 3)
   }
 
 
