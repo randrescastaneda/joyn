@@ -389,7 +389,8 @@ test_that("RIGHT JOIN - Conducts right join", {
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dplyr
+    jn_dplyr,
+    ignore_attr = '.internal.selfref'
   )
 
 })
@@ -651,7 +652,8 @@ test_that("FULL JOIN - Conducts full join", {
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dplyr
+    jn_dplyr,
+    ignore_attr = '.internal.selfref'
   )
 
 })
@@ -729,8 +731,14 @@ test_that("FULL JOIN - argument `keep` preserves keys in output", {
     "id.y" %in% names(jn)
   )
   expect_equal(
-    jn[, id.y] |> na.omit() |> unique(),
-    y1$id |> unique()
+    jn |>
+      fselect(id.y) |>
+      na.omit() |>
+      unique() |>
+      reg_elem(),
+
+    y1$id |>
+      unique()
   )
 
 })
@@ -899,7 +907,8 @@ test_that("INNER JOIN - Conducts inner join", {
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dplyr
+    jn_dplyr,
+    ignore_attr = '.internal.selfref'
   )
 
 })
