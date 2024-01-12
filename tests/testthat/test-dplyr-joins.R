@@ -251,17 +251,22 @@ test_that("LEFT JOIN - update values works", {
     by = "id"
   )
 
-  # vupdated <- jn |>
-  #   fsubset(get(reportvar) == "value updated") |>
-  #   fselect(x.x) |>
-  #   reg_elem()
+  vupdated <- jn |>
+    fsubset(get(reportvar) == "value updated") |>
+    fselect(x.x) |>
+    reg_elem()
 
   expect_true(
-    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
+    all(vupdated %in% y2$x)
   )
+
   expect_equal(
-    nrow(jn[get(reportvar) == "value updated",]),
-    nrow(x2[id %in% y2$id])
+    jn |>
+      fsubset(get(reportvar) == "value updated") |>
+      fnrow(),
+    x2 |>
+      fsubset(id %in% y2$id) |>
+      fnrow()
   )
 
 
@@ -293,7 +298,9 @@ test_that("LEFT JOIN - NA matches", {
   )
 
   expect_equal(
-    jn[is.na(id), ] |> nrow(),
+    jn |>
+      fsubset(is.na(id)) |>
+      nrow(),
     4
   )
 
@@ -301,16 +308,7 @@ test_that("LEFT JOIN - NA matches", {
 })
 
 
-
-
-
-
-
-#-------------------------------------------------------------------------------
-# TEST RIGHT JOINS -------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
+# TEST RIGHT JOINS ------------------------------------------------------
 
 test_that("RIGHT JOIN - Conducts right join", {
 
@@ -330,7 +328,8 @@ test_that("RIGHT JOIN - Conducts right join", {
   )
 
   jn_dplyr <- dplyr::right_join(
-    x1, y1, by = "id", relationship = "many-to-one"
+    x1, y1, by = "id",
+    relationship = "many-to-one"
   )
   attr(
     jn_dplyr,
@@ -468,8 +467,16 @@ test_that("RIGHT JOIN - argument `keep` preserves keys in output", {
     "id.x" %in% names(jn)
   )
   expect_equal(
-    jn[, id.x] |> na.omit() |> unique(),
-    x1[id %in% y1$id]$id |> unique()
+    jn |>
+      fselect(id.x) |>
+      na.omit() |>
+      unique() |>
+      reg_elem(),
+    x1 |>
+      fsubset(id %in% y1$id) |>
+      fselect(id) |>
+      unique() |>
+      reg_elem()
   )
 
 })
@@ -489,15 +496,24 @@ test_that("RIGHT JOIN - update values works", {
     by = "id"
   )
 
+
+  vupdated <- jn |>
+    fsubset(get(reportvar) == "value updated") |>
+    fselect(x.x) |>
+    reg_elem()
+
   expect_true(
-    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
+    all(vupdated %in% y2$x)
   )
+
   expect_equal(
-    nrow(jn[get(reportvar) == "value updated",]),
-    nrow(x2[id %in% y2$id])
+    jn |>
+      fsubset(get(reportvar) == "value updated") |>
+      fnrow(),
+    x2 |>
+      fsubset(id %in% y2$id) |>
+      fnrow()
   )
-
-
 
 })
 
@@ -527,10 +543,11 @@ test_that("RIGHT JOIN - NA matches", {
   )
 
   expect_equal(
-    jn[is.na(id), ] |> nrow(),
+    jn |>
+      fsubset(is.na(id)) |>
+      nrow(),
     4
   )
-
 
 })
 
@@ -733,15 +750,23 @@ test_that("FULL JOIN - update values works", {
     by = "id"
   )
 
+  vupdated <- jn |>
+    fsubset(get(reportvar) == "value updated") |>
+    fselect(x.x) |>
+    reg_elem()
+
   expect_true(
-    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
+    all(vupdated %in% y2$x)
   )
+
   expect_equal(
-    nrow(jn[get(reportvar) == "value updated",]),
-    nrow(x2[id %in% y2$id])
+    jn |>
+      fsubset(get(reportvar) == "value updated") |>
+      fnrow(),
+    x2 |>
+      fsubset(id %in% y2$id) |>
+      fnrow()
   )
-
-
 
 })
 
@@ -763,7 +788,6 @@ test_that("FULL JOIN - reportvar works", {
 
 test_that("FULL JOIN - NA matches", {
 
-
   jn <- full_join(
     x5,
     y5,
@@ -771,10 +795,11 @@ test_that("FULL JOIN - NA matches", {
   )
 
   expect_equal(
-    jn[is.na(id), ] |> nrow(),
+    jn |>
+      fsubset(is.na(id)) |>
+      fnrow(),
     4
   )
-
 
 })
 
@@ -943,8 +968,16 @@ test_that("INNER JOIN - argument `keep` preserves keys in output", {
     "id.y" %in% names(jn)
   )
   expect_equal(
-    jn[, id.y] |> na.omit() |> unique(),
-    y1[id %in% x1$id]$id    |> unique()
+    jn |>
+      fselect(id.y) |>
+      na.omit() |>
+      unique() |>
+      reg_elem(),
+    y1 |>
+      fsubset(id %in% x1$id) |>
+      fselect(id) |>
+      unique() |>
+      reg_elem()
   )
 
 })
@@ -964,12 +997,22 @@ test_that("INNER JOIN - update values works", {
     by = "id"
   )
 
+  vupdated <- jn |>
+    fsubset(get(reportvar) == "value updated") |>
+    fselect(x.x) |>
+    reg_elem()
+
   expect_true(
-    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
+    all(vupdated %in% y2$x)
   )
+
   expect_equal(
-    nrow(jn[get(reportvar) == "value updated",]),
-    nrow(x2[id %in% y2$id])
+    jn |>
+      fsubset(get(reportvar) == "value updated") |>
+      fnrow(),
+    x2 |>
+      fsubset(id %in% y2$id) |>
+      fnrow()
   )
 
 
@@ -1002,10 +1045,11 @@ test_that("INNER JOIN - NA matches", {
   )
 
   expect_equal(
-    jn[is.na(id), ] |> nrow(),
+    jn |>
+      fsubset(is.na(id)) |>
+      fnrow(),
     4
   )
-
 
 })
 
