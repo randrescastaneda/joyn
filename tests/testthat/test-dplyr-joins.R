@@ -9,49 +9,50 @@ library(data.table) |>
 #-------------------------------------------------------------------------------
 
 # options(joyn.verbose = FALSE)
-x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+x1 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
 
-y1 = data.table(id = c(1,2, 4),
+y1 = data.frame(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
 
 
-x2 = data.table(id = c(1, 4, 2, 3, NA),
+x2 = data.frame(id = c(1, 4, 2, 3, NA),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = c(16, 12, NA, NA, 15))
 
 
-y2 = data.table(id = c(1, 2, 5, 6, 3),
+y2 = data.frame(id = c(1, 2, 5, 6, 3),
                 yd = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:20))
 
 
-y3 <- data.table(id = c("c","b", "c", "a"),
+y3 <- data.frame(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
 
-x3 <- data.table(id  = c("c","b", "d"),
+x3 <- data.frame(id  = c("c","b", "d"),
                  v   = 8:10,
                  foo = c(4,2, 7))
 
-x4 = data.table(id1 = c(1, 1, 2, 3, 3),
+x4 = data.frame(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
                 x   = c(16, 12, NA, NA, 15))
 
 
-y4 = data.table(id  = c(1, 2, 5, 6, 3),
+y4 = data.frame(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
-x5 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
+x5 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_, 4L),
                 x  = 11:16)
 
-y5 = data.table(id = c(1,2, 4, NA_integer_, NA_integer_),
+y5 = data.frame(id = c(1,2, 4, NA_integer_, NA_integer_),
                 y  = c(11L, 15L, 16, 17L, 18L))
 
+reportvar = getOption("joyn.reportvar")
 
 #-------------------------------------------------------------------------------
 # TEST LEFT JOINS --------------------------------------------------------------
@@ -76,7 +77,7 @@ test_that("LEFT JOIN - Conducts left join", {
     unmatched = "drop"
   )
 
-  jn_dplyr <- data.table(id = c(1, 1, 2, 3, NA),
+  jn_dplyr <- data.frame(id = c(1, 1, 2, 3, NA),
                          t = c(1, 2, 1, 2, NA),
                          x = c(11, 12, 13, 14, 15),
                          y = c(11, 11, 15, NA, NA))
@@ -86,8 +87,9 @@ test_that("LEFT JOIN - Conducts left join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
-    jn_dplyr
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dplyr,
+    ignore_attr = "row.names" # data.table::serorderv convert row.names to characters...
   )
   expect_equal(
     jn_joyn,
@@ -103,7 +105,7 @@ test_that("LEFT JOIN - Conducts left join", {
     by = "id"
   )
 
-  jn_dplyr <- data.table(id  = c(1, 4, 2, 3, NA),
+  jn_dplyr <- data.frame(id  = c(1, 4, 2, 3, NA),
                          t   = c(1, 2, 1, 2, NA),
                          x.x = c(16, 12, NA, NA, 15),
                          yd  = c(1, NA, 2, 3, NA),
@@ -116,8 +118,10 @@ test_that("LEFT JOIN - Conducts left join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
-    jn_dplyr
+    jn_joyn |>
+      fselect(-get(reportvar)), # `jvar` should be `.joyn` in principle
+    jn_dplyr,
+    ignore_attr = TRUE
   )
 
 
@@ -129,7 +133,7 @@ test_that("LEFT JOIN - Conducts left join", {
   )
 
   #dplyr::left_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
-  jn_dplyr <- data.table(id1 = c(1, 1, 1, 1, 2, 3, 3),
+  jn_dplyr <- data.frame(id1 = c(1, 1, 1, 1, 2, 3, 3),
                          id2 = c(1, 1, 1, 1, 2, 3, 4),
                          t   = c(1, 1, 2, 2, 1, 2, NA),
                          x.x = c(16, 16, 12, 12, NA, NA, 15),
@@ -138,7 +142,7 @@ test_that("LEFT JOIN - Conducts left join", {
                          x.y = c(16, 17, 16, 17, 18, 19, 19))
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
-    jn |> fselect(-`.joyn`),
+    jn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -239,10 +243,10 @@ test_that("LEFT JOIN - update values works", {
   )
 
   expect_true(
-    all(jn[`.joyn` == "value updated",]$x.x %in% y2$x)
+    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
   )
   expect_equal(
-    nrow(jn[`.joyn` == "value updated",]),
+    nrow(jn[get(reportvar) == "value updated",]),
     nrow(x2[id %in% y2$id])
   )
 
@@ -320,7 +324,7 @@ test_that("RIGHT JOIN - Conducts right join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
+    jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
   expect_equal(
@@ -350,7 +354,7 @@ test_that("RIGHT JOIN - Conducts right join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
+    jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -371,7 +375,7 @@ test_that("RIGHT JOIN - Conducts right join", {
   )
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
-    jn |> fselect(-`.joyn`),
+    jn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -472,10 +476,10 @@ test_that("RIGHT JOIN - update values works", {
   )
 
   expect_true(
-    all(jn[`.joyn` == "value updated",]$x.x %in% y2$x)
+    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
   )
   expect_equal(
-    nrow(jn[`.joyn` == "value updated",]),
+    nrow(jn[get(reportvar) == "value updated",]),
     nrow(x2[id %in% y2$id])
   )
 
@@ -556,7 +560,7 @@ test_that("FULL JOIN - Conducts full join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
+    jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
   expect_equal(
@@ -593,7 +597,7 @@ test_that("FULL JOIN - Conducts full join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
+    jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -614,7 +618,7 @@ test_that("FULL JOIN - Conducts full join", {
   )
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
-    jn |> fselect(-`.joyn`),
+    jn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -715,10 +719,10 @@ test_that("FULL JOIN - update values works", {
   )
 
   expect_true(
-    all(jn[`.joyn` == "value updated",]$x.x %in% y2$x)
+    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
   )
   expect_equal(
-    nrow(jn[`.joyn` == "value updated",]),
+    nrow(jn[get(reportvar) == "value updated",]),
     nrow(x2[id %in% y2$id])
   )
 
@@ -796,7 +800,7 @@ test_that("INNER JOIN - Conducts inner join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
+    jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
   expect_equal(
@@ -833,7 +837,7 @@ test_that("INNER JOIN - Conducts inner join", {
   ) <- "id"
 
   expect_equal(
-    jn_joyn |> fselect(-`.joyn`),
+    jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -854,7 +858,7 @@ test_that("INNER JOIN - Conducts inner join", {
   )
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
-    jn |> fselect(-`.joyn`),
+    jn |> fselect(-get(reportvar)),
     jn_dplyr
   )
 
@@ -946,10 +950,10 @@ test_that("INNER JOIN - update values works", {
   )
 
   expect_true(
-    all(jn[`.joyn` == "value updated",]$x.x %in% y2$x)
+    all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
   )
   expect_equal(
-    nrow(jn[`.joyn` == "value updated",]),
+    nrow(jn[get(reportvar) == "value updated",]),
     nrow(x2[id %in% y2$id])
   )
 
