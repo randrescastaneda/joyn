@@ -515,8 +515,7 @@ joyn <- function(x,
 
   }
 
-
-
-  return(x)
+  setattr(x, "class", class_x)
+  x
 
 }
