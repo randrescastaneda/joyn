@@ -121,7 +121,7 @@ test_that("LEFT JOIN - Conducts left join", {
     jn_joyn |>
       fselect(-get(reportvar)), # `jvar` should be `.joyn` in principle
     jn_dplyr,
-    ignore_attr = TRUE
+    ignore_attr = "row.names"
   )
 
 
@@ -132,18 +132,20 @@ test_that("LEFT JOIN - Conducts left join", {
     relationship = "many-to-many"
   )
 
-  #dplyr::left_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
-  jn_dplyr <- data.frame(id1 = c(1, 1, 1, 1, 2, 3, 3),
-                         id2 = c(1, 1, 1, 1, 2, 3, 4),
-                         t   = c(1, 1, 2, 2, 1, 2, NA),
-                         x.x = c(16, 16, 12, 12, NA, NA, 15),
-                         id  = c(1, 2, 1, 2, 5, 6, 6),
-                         y   = c(11, 15, 11, 15, 20, 13, 13),
-                         x.y = c(16, 17, 16, 17, 18, 19, 19))
+  jn_dplyr <- dplyr::left_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
+  # jn_dplyr <- data.frame(id1 = c(1, 1, 1, 1, 2, 3, 3),
+  #                        id2 = c(1, 1, 1, 1, 2, 3, 4),
+  #                        t   = c(1, 1, 2, 2, 1, 2, NA),
+  #                        x.x = c(16, 16, 12, 12, NA, NA, 15),
+  #                        id  = c(1, 2, 1, 2, 5, 6, 6),
+  #                        y   = c(11, 15, 11, 15, 20, 13, 13),
+  #                        x.y = c(16, 17, 16, 17, 18, 19, 19))
+
   attr(jn_dplyr, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dplyr
+    jn_dplyr,
+    ignore_attr = ".internal.selfref"
   )
 
 })
@@ -221,8 +223,15 @@ test_that("LEFT JOIN - argument `keep` preserves keys in output", {
     "id.y" %in% names(jn)
   )
   expect_equal(
-    jn[, id.y] |> na.omit() |> unique(),
-    y1[id %in% x1$id]$id
+    jn |>
+      fselect(id.y) |>
+      na.omit() |>
+      unique() |>
+      reg_elem(),
+    y1 |>
+      fsubset(id %in% x1$id) |>
+      fselect(id) |>
+      reg_elem()
   )
 
 })
@@ -598,7 +607,8 @@ test_that("FULL JOIN - Conducts full join", {
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dplyr
+    jn_dplyr,
+    ignore_attr = 'row.names'
   )
 
 
