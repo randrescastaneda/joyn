@@ -44,7 +44,7 @@ update_values <- function(dt, var,
   # Replace values
   to_replace <- which(dt$use_util_reportvar %in% c(4, 5))
 
-  x[[x.var]][to_replace] <- dt[[y.var]][to_replace]
+  dt[[x.var]][to_replace] <- dt[[y.var]][to_replace]
 
 
   # remove unnecessary columns
