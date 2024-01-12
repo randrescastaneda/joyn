@@ -13,7 +13,8 @@ if (getRversion() >= '2.15.1')
 #' @return data.table
 #' @noRd
 update_values <- function(dt, var,
-                          reportvar = ".joyn", suffix = NULL) {
+                          reportvar = getOption("joyn.reportvar"),
+                          suffix = NULL) {
 
   if (is.null(suffix)) {
     suffix <- c("", ".y")
