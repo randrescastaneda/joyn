@@ -8,10 +8,9 @@ split_match_type(match_type)
 }
 \arguments{
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
-Default is \emph{"1:1"} since this the most restrictive.
-However, following Stata's recommendation, it is better to be explicit and
-use any of the other three match types (See details in \emph{match types
-sections}).}
+Default is \emph{"1:1"} since this the most restrictive. However, following
+Stata's recommendation, it is better to be explicit and use any of the
+other three match types (See details in \emph{match types sections}).}
 }
 \value{
 character vector

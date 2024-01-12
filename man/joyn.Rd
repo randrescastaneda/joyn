@@ -22,7 +22,8 @@ joyn(
   suffixes = getOption("joyn.suffixes"),
   allow.cartesian = deprecated(),
   yvars = deprecated(),
-  keep_y_in_x = deprecated()
+  keep_y_in_x = deprecated(),
+  na.last = getOption("joyn.na.last")
 )
 }
 \arguments{
@@ -37,33 +38,32 @@ joyn will do a natural join, using all variables with common names across
 the two tables. A message lists the variables so that you can check they're
 correct (to suppress the message, simply explicitly list the variables that
 you want to join). To join by different variables on x and y use a vector
-of expressions. For example, \code{by = c("a = b", "z")} will use "a" in \code{x}, "b"
-in \code{y}, and "z" in both tables.}
+of expressions. For example, \code{by = c("a = b", "z")} will use "a" in \code{x},
+"b" in \code{y}, and "z" in both tables.}
 
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
-Default is \emph{"1:1"} since this the most restrictive.
-However, following Stata's recommendation, it is better to be explicit and
-use any of the other three match types (See details in \emph{match types
-sections}).}
+Default is \emph{"1:1"} since this the most restrictive. However, following
+Stata's recommendation, it is better to be explicit and use any of the
+other three match types (See details in \emph{match types sections}).}
 
-\item{keep}{atomic character vector of length 1:
-One of \emph{"full"}, \emph{"left"}, \emph{"master"}, \emph{"right"},
+\item{keep}{atomic character vector of length 1: One of \emph{"full"}, \emph{"left"},
+\emph{"master"}, \emph{"right"},
 \emph{"using"}, \emph{"inner"}. Default is \emph{"full"}. Even though this is not the
 regular behavior of joins in R, the objective of \code{joyn} is to present a
 diagnosis of the join which requires a full join. That is why the default
 is a a full join. Yet, if \emph{"left"} or \emph{"master"}, it keeps the observations
 that matched in both tables and the ones that did not match in x. The ones
-in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the observations
-that matched in both tables and the ones that did not match in y. The ones in x
-will be discarded. If \emph{"inner"}, it only keeps the observations that
-matched both tables. Note that if, for example, a \code{keep = "left"}, the \code{joyn()}
-function still executes a full join under the hood and then filters so that
-only rows the output table is a left join. This behaviour, while inefficient,
-allows all the diagnostics and checks conducted by \code{joyn}.}
+in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the
+observations that matched in both tables and the ones that did not match in
+y. The ones in x will be discarded. If \emph{"inner"}, it only keeps the
+observations that matched both tables. Note that if, for example, a \code{keep = "left"}, the \code{joyn()} function still executes a full join under the hood
+and then filters so that only rows the output table is a left join. This
+behaviour, while inefficient, allows all the diagnostics and checks
+conducted by \code{joyn}.}
 
 \item{y_vars_to_keep}{character: Vector of variable names in \code{y} that will be
-kept after the merge. If TRUE (the default), it keeps all the brings all the
-variables in y into x. If FALSE or NULL, it does not bring any variable
+kept after the merge. If TRUE (the default), it keeps all the brings all
+the variables in y into x. If FALSE or NULL, it does not bring any variable
 into x, but a report will be generated.}
 
 \item{update_values}{logical: If TRUE, it will update all values of variables
@@ -111,7 +111,13 @@ By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
 
 \item{yvars}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now \code{y_vars_to_keep}}
 
-\item{keep_y_in_x}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now \code{keep_common_vars}}
+\item{keep_y_in_x}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now
+\code{keep_common_vars}}
+
+\item{na.last}{ \code{logical}. If \code{TRUE}, missing values in the data are placed last; if \code{FALSE}, they are placed first; if \code{NA} they are removed.
+\code{na.last=NA} is valid only for \code{x[order(., na.last)]} and its
+default is \code{TRUE}. \code{setorder} and \code{setorderv} only accept
+\code{TRUE}/\code{FALSE} with default \code{FALSE}. }
 }
 \value{
 a data.table joining x and y.
@@ -142,18 +148,26 @@ second, with the second; and so on. If there is an unequal number of
 observations within a group, then the last observation of the shorter group
 is used repeatedly to match with subsequent observations of the longer
 group.
+}
 
-@section reporttype:
+\section{reporttype}{
+
 
 If \code{reporttype = "numeric"}, then the numeric values have the following
 meaning:
 
-1: row comes from \code{x}, i.e. "x"
-2: row comes from \code{y}, i.e. "y"
-3: row from both \code{x} and \code{y}, i.e. "x & y"
-4: row has NA in \code{x} that has been updated with \code{y}, i.e. "NA updated"
-5: row has valued in \code{x} that has been updated with \code{y}, i.e. "value updated"
-6: row from \code{x} that has not been updated, i.e. "not updated"
+1: row comes from \code{x}, i.e. "x" 2: row comes from \code{y}, i.e. "y" 3: row from
+both \code{x} and \code{y}, i.e. "x & y" 4: row has NA in \code{x} that has been updated
+with \code{y}, i.e. "NA updated" 5: row has valued in \code{x} that has been updated
+with \code{y}, i.e. "value updated" 6: row from \code{x} that has not been updated,
+i.e. "not updated"
+}
+
+\section{NAs order}{
+ \code{NA}s are placed either at first or at last in the
+resulting data.frame depending on the value of \code{getOption("joyn.na.last")}.
+The Default is \code{FALSE} as it is the default value of
+\link[data.table:setorder]{data.table::setorderv}.
 }
 
 \examples{

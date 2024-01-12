@@ -57,17 +57,16 @@ as any \code{by.x}.}
 \item{allow.cartesian}{See \code{allow.cartesian} in \code{\link[data.table]{[.data.table}}.}
 
 \item{match_type}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
-Default is \emph{"1:1"} since this the most restrictive.
-However, following Stata's recommendation, it is better to be explicit and
-use any of the other three match types (See details in \emph{match types
-sections}).}
+Default is \emph{"1:1"} since this the most restrictive. However, following
+Stata's recommendation, it is better to be explicit and use any of the
+other three match types (See details in \emph{match types sections}).}
 
 \item{...}{
   Arguments passed on to \code{\link[=joyn]{joyn}}
   \describe{
     \item{\code{y_vars_to_keep}}{character: Vector of variable names in \code{y} that will be
-kept after the merge. If TRUE (the default), it keeps all the brings all the
-variables in y into x. If FALSE or NULL, it does not bring any variable
+kept after the merge. If TRUE (the default), it keeps all the brings all
+the variables in y into x. If FALSE or NULL, it does not bring any variable
 into x, but a report will be generated.}
     \item{\code{reportvar}}{character: Name of reporting variable. Default is ".joyn".
 This is the same as variable "_merge" in Stata after performing a merge. If

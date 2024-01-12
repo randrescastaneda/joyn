@@ -236,14 +236,11 @@ left_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    lj$`.joyn` <- NULL
+    get_vars(lj, reportvar) <- NULL
   }
 
-  # Return
-  return(lj)
-
-
-
+  # return
+  lj
 }
 
 
@@ -489,13 +486,11 @@ right_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    rj$`.joyn` <- NULL
+    get_vars(rj, reportvar) <- NULL
   }
 
   # Return
-  return(rj)
-
-
+  rj
 
 }
 
@@ -740,13 +735,11 @@ full_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    fj$`.joyn` <- NULL
+    get_vars(fj, reportvar) <- NULL
   }
 
   # Return
-  return(fj)
-
-
+  fj
 
 }
 
@@ -990,13 +983,11 @@ inner_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    fj$`.joyn` <- NULL
+    get_vars(fj, reportvar) <- NULL
   }
 
   # Return
-  return(fj)
-
-
+  fj
 
 }
 

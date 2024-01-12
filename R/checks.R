@@ -350,19 +350,19 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 is_valid_m_key <- function(dt, by){
 
   # Argument checks
-  if (
-    !is.character(by)
-  ) stop(
-    "`by` argument must be character"
-  )
-    if (
-      dt |>
-      gv(by) |>
-      any_duplicated()
-    ) {
-      TRUE
-    } else {FALSE}
+  if ( !is.character(by))
+    stop("`by` argument must be character")
 
+  # by <- unname(by)
+  duplicates <-
+    dt |>
+    get_vars(by) |>
+    any_duplicated()
+
+  if (duplicates)
+    TRUE
+  else
+    FALSE
 }
 
 

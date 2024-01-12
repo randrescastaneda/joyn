@@ -12,30 +12,30 @@
 #'   the two tables. A message lists the variables so that you can check they're
 #'   correct (to suppress the message, simply explicitly list the variables that
 #'   you want to join). To join by different variables on x and y use a vector
-#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in `x`, "b"
-#'   in `y`, and "z" in both tables.
+#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in `x`,
+#'   "b" in `y`, and "z" in both tables.
 #' @param match_type character: one of *"m:m"*, *"m:1"*, *"1:m"*, *"1:1"*.
-#'   Default is *"1:1"* since this the most restrictive.
-#'   However, following Stata's recommendation, it is better to be explicit and
-#'   use any of the other three match types (See details in *match types
-#'   sections*).
-#' @param keep  atomic character vector of length 1:
-#'   One of *"full"*, *"left"*, *"master"*, *"right"*,
+#'   Default is *"1:1"* since this the most restrictive. However, following
+#'   Stata's recommendation, it is better to be explicit and use any of the
+#'   other three match types (See details in *match types sections*).
+#' @param keep  atomic character vector of length 1: One of *"full"*, *"left"*,
+#'   *"master"*, *"right"*,
 #'   *"using"*, *"inner"*. Default is *"full"*. Even though this is not the
 #'   regular behavior of joins in R, the objective of `joyn` is to present a
 #'   diagnosis of the join which requires a full join. That is why the default
 #'   is a a full join. Yet, if *"left"* or *"master"*, it keeps the observations
 #'   that matched in both tables and the ones that did not match in x. The ones
-#'   in y will be discarded. If *"right"* or *"using"*, it keeps the observations
-#'   that matched in both tables and the ones that did not match in y. The ones in x
-#'   will be discarded. If *"inner"*, it only keeps the observations that
-#'   matched both tables. Note that if, for example, a `keep = "left"`, the `joyn()`
-#'   function still executes a full join under the hood and then filters so that
-#'   only rows the output table is a left join. This behaviour, while inefficient,
-#'   allows all the diagnostics and checks conducted by `joyn`.
+#'   in y will be discarded. If *"right"* or *"using"*, it keeps the
+#'   observations that matched in both tables and the ones that did not match in
+#'   y. The ones in x will be discarded. If *"inner"*, it only keeps the
+#'   observations that matched both tables. Note that if, for example, a `keep =
+#'   "left"`, the `joyn()` function still executes a full join under the hood
+#'   and then filters so that only rows the output table is a left join. This
+#'   behaviour, while inefficient, allows all the diagnostics and checks
+#'   conducted by `joyn`.
 #' @param y_vars_to_keep character: Vector of variable names in `y` that will be
-#'   kept after the merge. If TRUE (the default), it keeps all the brings all the
-#'   variables in y into x. If FALSE or NULL, it does not bring any variable
+#'   kept after the merge. If TRUE (the default), it keeps all the brings all
+#'   the variables in y into x. If FALSE or NULL, it does not bring any variable
 #'   into x, but a report will be generated.
 #' @param reportvar character: Name of reporting variable. Default is ".joyn".
 #'   This is the same as variable "_merge" in Stata after performing a merge. If
@@ -72,7 +72,9 @@
 #'   non-by column names unique. The suffix behaviour works in a similar fashion
 #'   as the [base::merge] method does.
 #' @param yvars `r lifecycle::badge("superseded")`: use now `y_vars_to_keep`
-#' @param keep_y_in_x `r lifecycle::badge("superseded")`: use now `keep_common_vars`
+#' @param keep_y_in_x `r lifecycle::badge("superseded")`: use now
+#'   `keep_common_vars`
+#' @inheritParams data.table::setorderv
 #'
 #' @return a data.table joining x and y.
 #' @export
@@ -100,17 +102,22 @@
 #'   is used repeatedly to match with subsequent observations of the longer
 #'   group.
 #'
-#'  @section reporttype:
+#' @section reporttype:
 #'
-#'    If `reporttype = "numeric"`, then the numeric values have the following
-#'    meaning:
+#'   If `reporttype = "numeric"`, then the numeric values have the following
+#'   meaning:
 #'
-#'    1: row comes from `x`, i.e. "x"
-#'    2: row comes from `y`, i.e. "y"
-#'    3: row from both `x` and `y`, i.e. "x & y"
-#'    4: row has NA in `x` that has been updated with `y`, i.e. "NA updated"
-#'    5: row has valued in `x` that has been updated with `y`, i.e. "value updated"
-#'    6: row from `x` that has not been updated, i.e. "not updated"
+#'   1: row comes from `x`, i.e. "x" 2: row comes from `y`, i.e. "y" 3: row from
+#'   both `x` and `y`, i.e. "x & y" 4: row has NA in `x` that has been updated
+#'   with `y`, i.e. "NA updated" 5: row has valued in `x` that has been updated
+#'   with `y`, i.e. "value updated" 6: row from `x` that has not been updated,
+#'   i.e. "not updated"
+#'
+#' @section NAs order: `NA`s are placed either at first or at last in the
+#'   resulting data.frame depending on the value of `getOption("joyn.na.last")`.
+#'   The Default is `FALSE` as it is the default value of
+#'   [data.table::setorderv].
+#'
 #'
 #' @examples
 #' # Simple join
@@ -162,7 +169,8 @@ joyn <- function(x,
                   suffixes         = getOption("joyn.suffixes"),
                   allow.cartesian  = deprecated(),
                   yvars            = deprecated(),
-                  keep_y_in_x      = deprecated()) {
+                  keep_y_in_x      = deprecated(),
+                  na.last          = getOption("joyn.na.last")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Life cycle   ---------
@@ -179,10 +187,10 @@ joyn <- function(x,
                               "merge(keep_common_vars)")
     keep_common_vars <- keep_y_in_x
   }
-  if (lifecycle::is_present(allow.cartesian)) {
+  if (lifecycle::is_present(allow.cartesian) && match_type != "m:m") {
     lifecycle::deprecate_warn(when = "0.1.5",
                               what = "merge(allow.cartesian)",
-                              details = "Now always uses `allow.cartesian = TRUE`
+                              details = "always uses `allow.cartesian = TRUE`
                               if and only if `match_type == 'm:m'`")
     allow.cartesian <- NULL
   }
@@ -497,7 +505,7 @@ joyn <- function(x,
   }
 
   if (sort) {
-    setorderv(x, by, na.last = TRUE)
+    setorderv(x, by, na.last = na.last)
     setattr(x, 'sorted', by)
   }
 
