@@ -251,6 +251,11 @@ test_that("LEFT JOIN - update values works", {
     by = "id"
   )
 
+  # vupdated <- jn |>
+  #   fsubset(get(reportvar) == "value updated") |>
+  #   fselect(x.x) |>
+  #   reg_elem()
+
   expect_true(
     all(jn[get(reportvar) == "value updated",]$x.x %in% y2$x)
   )

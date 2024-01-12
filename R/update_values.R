@@ -12,7 +12,8 @@ if (getRversion() >= '2.15.1')
 #'
 #' @return data.table
 #' @noRd
-update_values <- function(dt, var, reportvar = ".joyn", suffix = NULL) {
+update_values <- function(dt, var,
+                          reportvar = ".joyn", suffix = NULL) {
 
   if (is.null(suffix)) {
     suffix <- c("", ".y")
@@ -69,24 +70,13 @@ update_values <- function(dt, var, reportvar = ".joyn", suffix = NULL) {
 
 
   # remove unnecessary columns
-  dt <- dt[
-    ,
-    mget(
-      names(dt)[
-        which(
-          !names(dt) %in% c("varx_na", "vary_na")
-        )
-      ]
-    )
-  ]
+  vars_to_keep <- names(dt)[names(dt) %!in% c("varx_na", "vary_na")]
+  dt <- get_vars(dt, vars_to_keep)
+
 
   # adjust reportvar
-  dt |> fselect(reportvar) <- NULL
-  names(dt)[
-    which(
-      names(dt) == "use_util_reportvar"
-    )
-  ] <- reportvar
+  get_vars(dt, reportvar) <- NULL
+  setrename(dt, use_util_reportvar = reportvar, .nse = FALSE)
 
   return(dt)
 }
