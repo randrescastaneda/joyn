@@ -61,6 +61,14 @@ test_that("warnings and erros are triggered correctly", {
     by = "id"
   ) |> expect_warning()
 
+  merge(
+    # x = x1,
+    y = y1,
+    match_type = "m:1",
+    allow.cartesian = TRUE,
+    by = "id"
+  ) |> expect_error(label = "")
+
 
   merge(
     x = x1,
@@ -133,7 +141,7 @@ test_that("LEFT JOIN - Conducts left join", {
 
   expect_equal(
     jn_joyn |>
-      fselect(-get(reportvar)), # `jvar` should be `.joyn` in principle
+      fselect(-get(reportvar)), # `reportvar` should be `.joyn` in principle
     jn_dt
   )
 
@@ -157,19 +165,88 @@ test_that("LEFT JOIN - Conducts left join", {
     by.y = "id2"
   )
 
-  # jn_dt <- data.table(id1 = c(1, 1, 1, 1, 2, 3, 3),
-  #                        id2 = c(1, 1, 1, 1, 2, 3, 4),
-  #                        t   = c(1, 1, 2, 2, 1, 2, NA),
-  #                        x.x = c(16, 16, 12, 12, NA, NA, 15),
-  #                        id  = c(1, 2, 1, 2, 5, 6, 6),
-  #                        y   = c(11, 15, 11, 15, 20, 13, 13),
-  #                        x.y = c(16, 17, 16, 17, 18, 19, 19))
+
+  expect_equal(
+    jn |> fselect(-get(reportvar)),
+    jn_dt
+  )
+
+})
+
+
+
+# TEST RIGHT JOINS ------------------------------------------------------
+
+test_that("RIGHT JOIN - Conducts right join", {
+
+  # One way
+  jn_joyn <- merge(
+    x = x1,
+    y = y1,
+    match_type = "m:1",
+    all.y = TRUE,
+    by = "id"
+  )
+
+
+  jn_dt <- merge.data.table(
+    x = x1,
+    y = y1,
+    all.y = TRUE,
+    by = "id"
+  )
+
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dt
+  )
+
+
+  # Second set of tables ----------------------
+  jn_joyn <- merge(
+    x = x2,
+    y = y2,
+    match_type = "1:1",
+    by = "id",
+    all.y = TRUE
+  )
+
+  jn_dt <- merge.data.table(
+    x2,
+    y2,
+    by = "id",
+    all.y = TRUE
+  )
+
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dt
+  )
+
+
+  jn <- merge(
+    x4,
+    y4,
+    by = c("id1 = id2"),
+    match_type = "m:m",
+    all.y = TRUE
+  )
+
+  #merge.data.table(x4, y4, by = dplyr::join_by(id1 == id2), match_type = "m:m")
+  jn_dt <- merge.data.table(
+    x4,
+    y4,
+    by.x = "id1",
+    by.y = "id2",
+    match_type = "m:m"
+  )
 
   attr(jn_dt, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dt,
-    ignore_attr = ".internal.selfref"
+    ignore_attr = '.internal.selfref'
   )
 
 })
+
