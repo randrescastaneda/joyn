@@ -272,3 +272,513 @@ test_that("RIGHT JOIN - Conducts right join", {
 
 })
 
+
+
+
+
+
+
+
+#-------------------------------------------------------------------------------
+# TEST FULL JOINS -------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+
+
+test_that("FULL JOIN - Conducts full join", {
+
+  # One way
+  jn_joyn <- merge(
+    x = x1,
+    y = y1,
+    match_type = "m:1",
+    by = "id"
+  )
+
+
+  jn_dt <- merge.data.table(
+    x1,
+    y1,
+    by = "id",
+  )
+  setorder(jn_dt, na.last = T)
+  attr(
+    jn_dt,
+    "sorted"
+  ) <- "id"
+
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dt
+  )
+  expect_equal(
+    jn_joyn,
+    jn_joyn2
+  )
+  expect_true(
+    all(c("x", "y", "x & y") %in% jn_joyn$.joyn)
+  )
+  expect_true(
+    all(
+      c(jn_joyn$id) %in% c(y1$id, x2$id)
+    )
+  )
+
+  # Second set of tables ----------------------
+  jn_joyn <- merge(
+    x = x2,
+    y = y2,
+    match_type = "1:1",
+    by = "id"
+  )
+
+  jn_dt <- merge.data.table(
+    x2,
+    y2,
+    match_type = "1:1",
+    by = "id"
+  )
+  jn_dt <- jn_dt[order(jn_dt$id, na.last = T),]
+  attr(
+    jn_dt,
+    "sorted"
+  ) <- "id"
+
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dt,
+    ignore_attr = 'row.names'
+  )
+
+
+  jn <- merge(
+    x4,
+    y4,
+    by = c("id1 = id2"),
+    match_type = "m:m"
+  )
+
+  #merge.data.table(x4, y4, by = dplyr::join_by(id1 == id2), match_type = "m:m")
+  jn_dt <- merge.data.table(
+    x4,
+    y4,
+    by = dplyr::join_by(id1 == id2),
+    match_type = "m:m"
+  )
+  attr(jn_dt, "sorted") <- "id1"
+  expect_equal(
+    jn |> fselect(-get(reportvar)),
+    jn_dt,
+    ignore_attr = '.internal.selfref'
+  )
+
+})
+
+
+test_that("FULL JOIN - no id given", {
+
+  jn1 <- merge(
+    x2,
+    y2
+  )
+  jn2 <- merge(
+    x2,
+    y2,
+    by = c("id", "x")
+  )
+  expect_equal(jn1, jn2)
+
+})
+
+
+test_that("FULL JOIN - incorrectly specified arguments give errors", {
+
+  expect_error(
+    merge(
+      x = x1,
+      y = y1,
+      match_type = "m:1",
+      suffix = NULL
+    )
+  )
+
+  expect_error(
+    merge(
+      x = x1,
+      y = y1,
+      match_type = "m:1",
+      suffix = c("a", "b", "c")
+    )
+  )
+
+  expect_error(
+    merge(
+      x = y1,
+      y = x1,
+      match_type = "1:m",
+      multiple = "any"
+    )
+  )
+
+  expect_error(
+    merge(
+      x = x1,
+      y = y1,
+      match_type = "m:1",
+      unmatched = "error"
+    )
+  )
+
+
+})
+
+
+test_that("FULL JOIN - argument `keep` preserves keys in output", {
+
+  jn <- merge(
+    x = x1,
+    y = y1,
+    match_type = "m:1",
+    keep = T,
+    by = "id"
+  )
+
+  expect_true(
+    "id.y" %in% names(jn)
+  )
+  expect_equal(
+    jn |>
+      fselect(id.y) |>
+      na.omit() |>
+      unique() |>
+      reg_elem(),
+
+    y1$id |>
+      unique()
+  )
+
+})
+
+
+
+test_that("FULL JOIN - update values works", {
+
+  x2a <- x2
+  x2a$x <- 1:5
+
+  jn <- merge(
+    x = x2a,
+    y = y2,
+    match_type = "1:1",
+    update_values = TRUE,
+    by = "id"
+  )
+
+  vupdated <- jn |>
+    fsubset(get(reportvar) == "value updated") |>
+    fselect(x.x) |>
+    reg_elem()
+
+  expect_true(
+    all(vupdated %in% y2$x)
+  )
+
+  expect_equal(
+    jn |>
+      fsubset(get(reportvar) == "value updated") |>
+      fnrow(),
+    x2 |>
+      fsubset(id %in% y2$id) |>
+      fnrow()
+  )
+
+})
+
+
+test_that("FULL JOIN - reportvar works", {
+
+  jn <- merge(
+    x1,
+    y1,
+    match_type = "m:1",
+    by = "id",
+    reportvar = "report"
+  )
+  expect_true(
+    "report" %in% names(jn)
+  )
+
+})
+
+test_that("FULL JOIN - NA matches", {
+
+  jn <- merge(
+    x5,
+    y5,
+    match_type = "m:m"
+  )
+
+  expect_equal(
+    jn |>
+      fsubset(is.na(id)) |>
+      fnrow(),
+    4
+  )
+
+})
+
+
+
+
+
+#-------------------------------------------------------------------------------
+# TEST INNER JOINS -------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+
+
+test_that("INNER JOIN - Conducts inner join", {
+
+  # One way
+  jn_joyn <- merge(
+    x = x1,
+    y = y1,
+    match_type = "m:1",
+    by = "id"
+  )
+  jn_joyn2 <- merge(
+    x = x1,
+    y = y1,
+    match_type = "m:1",
+    by = "id",
+    unmatched = "drop"
+  )
+
+  jn_dt <- merge.data.table(
+    x1, y1, by = "id", match_type = "m:1"
+  )
+  setorder(jn_dt, na.last = T)
+  attr(
+    jn_dt,
+    "sorted"
+  ) <- "id"
+
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dt
+  )
+  expect_equal(
+    jn_joyn,
+    jn_joyn2
+  )
+  expect_true(
+    all(c("x & y") %in% jn_joyn$.joyn)
+  )
+  expect_true(
+    all(
+      c(jn_joyn$id) %in% intersect(y1$id, x2$id)
+    )
+  )
+
+  # Second set of tables ----------------------
+  jn_joyn <- merge(
+    x = x2,
+    y = y2,
+    match_type = "1:1",
+    by = "id"
+  )
+
+  jn_dt <- merge.data.table(
+    x2,
+    y2,
+    match_type = "1:1",
+    by = "id"
+  )
+  jn_dt <- jn_dt[order(jn_dt$id, na.last = T),]
+  attr(
+    jn_dt,
+    "sorted"
+  ) <- "id"
+
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dt
+  )
+
+
+  jn <- merge(
+    x4,
+    y4,
+    by = c("id1 = id2"),
+    match_type = "m:m"
+  )
+
+  #merge.data.table(x4, y4, by = dplyr::join_by(id1 == id2), match_type = "m:m")
+  jn_dt <- merge.data.table(
+    x4,
+    y4,
+    by = dplyr::join_by(id1 == id2),
+    match_type = "m:m"
+  )
+  attr(jn_dt, "sorted") <- "id1"
+  expect_equal(
+    jn |> fselect(-get(reportvar)),
+    jn_dt,
+    ignore_attr = '.internal.selfref'
+  )
+
+})
+
+
+test_that("INNER JOIN - no id given", {
+
+  jn1 <- merge(
+    x2,
+    y2
+  )
+  jn2 <- merge(
+    x2,
+    y2,
+    by = c("id", "x")
+  )
+  expect_equal(jn1, jn2)
+
+})
+
+
+test_that("INNER JOIN - incorrectly specified arguments give errors", {
+
+  expect_error(
+    merge(
+      x = x1,
+      y = y1,
+      match_type = "m:1",
+      suffix = NULL
+    )
+  )
+
+  expect_error(
+    merge(
+      x = x1,
+      y = y1,
+      match_type = "m:1",
+      suffix = c("a", "b", "c")
+    )
+  )
+
+  expect_error(
+    merge(
+      x = y1,
+      y = x1,
+      match_type = "1:m",
+      multiple = "any"
+    )
+  )
+
+
+})
+
+
+test_that("INNER JOIN - argument `keep` preserves keys in output", {
+
+  jn <- merge(
+    x = x1,
+    y = y1,
+    match_type = "m:1",
+    keep = T,
+    by = "id"
+  )
+
+  expect_true(
+    "id.y" %in% names(jn)
+  )
+  expect_equal(
+    jn |>
+      fselect(id.y) |>
+      na.omit() |>
+      unique() |>
+      reg_elem(),
+    y1 |>
+      fsubset(id %in% x1$id) |>
+      fselect(id) |>
+      unique() |>
+      reg_elem()
+  )
+
+})
+
+
+
+test_that("INNER JOIN - update values works", {
+
+  x2a <- x2
+  x2a$x <- 1:5
+
+  jn <- merge(
+    x = x2a,
+    y = y2,
+    match_type = "1:1",
+    update_values = TRUE,
+    by = "id"
+  )
+
+  vupdated <- jn |>
+    fsubset(get(reportvar) == "value updated") |>
+    fselect(x.x) |>
+    reg_elem()
+
+  expect_true(
+    all(vupdated %in% y2$x)
+  )
+
+  expect_equal(
+    jn |>
+      fsubset(get(reportvar) == "value updated") |>
+      fnrow(),
+    x2 |>
+      fsubset(id %in% y2$id) |>
+      fnrow()
+  )
+
+
+
+})
+
+
+test_that("INNER JOIN - reportvar works", {
+
+  jn <- merge(
+    x1,
+    y1,
+    match_type = "m:1",
+    by = "id",
+    reportvar = "report"
+  )
+  expect_true(
+    "report" %in% names(jn)
+  )
+
+})
+
+test_that("INNER JOIN - NA matches", {
+
+
+  jn <- merge(
+    x5,
+    y5,
+    match_type = "m:m"
+  )
+
+  expect_equal(
+    jn |>
+      fsubset(is.na(id)) |>
+      fnrow(),
+    4
+  )
+
+})
+
+
+
+
+
