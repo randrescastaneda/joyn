@@ -154,7 +154,7 @@
 joyn <- function(x,
                   y,
                   by               = intersect(names(x), names(y)),
-                  match_type       = "1:1",
+                  match_type       = c("1:1","1:m","m:1","m:m"),
                   keep             = c("full", "left", "master",
                                        "right", "using", "inner"),
                   y_vars_to_keep   = TRUE,
@@ -171,6 +171,12 @@ joyn <- function(x,
                   yvars            = deprecated(),
                   keep_y_in_x      = deprecated(),
                   na.last          = getOption("joyn.na.last")) {
+
+  ## correct inputs --------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  keep        <- match.arg(keep)
+  reporttype  <- match.arg(reporttype)
+  match_type  <- match.arg(match_type)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Life cycle   ---------
@@ -209,20 +215,6 @@ joyn <- function(x,
 
   ## X and Y -----------
   check_xy(x,y)
-
-  ## correct inputs --------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  match_type <- match.arg(
-    match_type,
-    choices = c(
-      "1:1",
-      "1:m",
-      "m:1",
-      "m:m"
-    )
-  )
-  keep        <- match.arg(keep)
-  reporttype  <- match.arg(reporttype)
 
   ## report variable -------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

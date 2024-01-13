@@ -25,6 +25,7 @@ merge <- function(x,
 
   # Check arguments ------------
   # this comes directly from data.table::merge.data.table()
+  match_type  <- match.arg(match_type)
   check_logical(sort, "sort")
   check_logical(no.dups, "no.dups")
 

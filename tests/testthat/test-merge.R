@@ -81,6 +81,17 @@ test_that("warnings and erros are triggered correctly", {
     expect_error(label = "merge did not detect inconsistency in match type 1:1")
 
 
+  merge(
+    x = x2,
+    y = y2,
+    by = "id",
+    match_type = "m:m",
+    all.y = TRUE,
+    reportvar = FALSE
+  ) |>
+    expect_error(label = "1:1 data was not found in m:m match type check")
+
+
 })
 
 
@@ -223,29 +234,40 @@ test_that("RIGHT JOIN - Conducts right join", {
     jn_dt
   )
 
+  expect_equal(
+    merge(
+      x = x2,
+      y = y2,
+      # match_type = "1:1",
+      by = "id",
+      all.y = TRUE,
+      reportvar = FALSE
+    ),
+    jn_dt
+  )
+
 
   jn <- merge(
     x4,
     y4,
-    by = c("id1 = id2"),
+    by.x = "id1",
+    by.y = "id2",
     match_type = "m:m",
     all.y = TRUE
   )
 
-  #merge.data.table(x4, y4, by = dplyr::join_by(id1 == id2), match_type = "m:m")
   jn_dt <- merge.data.table(
     x4,
     y4,
     by.x = "id1",
     by.y = "id2",
-    match_type = "m:m"
+    match_type = "m:m",
+    all.y = TRUE
   )
 
-  attr(jn_dt, "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dt,
-    ignore_attr = '.internal.selfref'
+    jn_dt
   )
 
 })
