@@ -172,6 +172,8 @@ joyn <- function(x,
                   keep_y_in_x      = deprecated(),
                   na.last          = getOption("joyn.na.last")) {
 
+  clear_joynenv()
+
   ## correct inputs --------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   keep        <- match.arg(keep)
@@ -233,11 +235,12 @@ joyn <- function(x,
   }
 
 
-  ## Modify BY when is expression   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ## Modify BY when is expression ---------
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
+  ## Check suffixes -------------
+  check_suffixes(suffixes)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #           Consistency of join   ---------
@@ -313,7 +316,7 @@ joyn <- function(x,
     y          = y,
     by         = by,
     match_type = match_type,
-    suffix     = suffixes
+    suffixes   = suffixes
   )
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

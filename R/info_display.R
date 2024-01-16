@@ -174,7 +174,20 @@ joyn_msgs_exist <- \() {
 
 
 clear_joynenv <- \(){
-  rlang::env_unbind(.joynenv, "joyn_msgs")
-  invisible(TRUE)
+  # get the source function
+  .joyn_source  <- sys.call(-1)[[1]]
+
+  # get what function call clear_joynenv before
+  first_source <- rlang::env_get(.joynenv, "joyn_source", default = NULL)
+
+  # if the first function was joyn or it is null, then clear everything
+  if (first_source == "joyn" || is.null(first_source)) {
+    rlang::env_unbind(.joynenv, "joyn_msgs")
+    rlang::env_unbind(.joynenv, "joyn_source")
+  }
+
+  # replace the source with the current call
+  rlang::env_poke(.joynenv, "joyn_source", .joyn_source)
+  invisible(.joyn_source)
 }
 

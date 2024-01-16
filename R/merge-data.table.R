@@ -23,6 +23,9 @@ merge <- function(x,
                   match_type= c("m:m", "m:1", "1:m", "1:1"),
                   ...) {
 
+  # clear joun env
+  clear_joynenv()
+
   # Check arguments ------------
   # this comes directly from data.table::merge.data.table()
   match_type  <- match.arg(match_type)

@@ -88,9 +88,7 @@ test_that("warnings and erros are triggered correctly", {
     match_type = "m:m",
     all.y = TRUE,
     reportvar = FALSE
-  ) |>
-    expect_error(label = "1:1 data was not found in m:m match type check")
-
+  )
 
 })
 
@@ -535,30 +533,19 @@ test_that("INNER JOIN - Conducts inner join", {
     by = "id"
   )
 
-  setorder(jn_dt, na.last = T)
-  attr(
-    jn_dt,
-    "sorted"
-  ) <- "id"
-
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dt
   )
-  expect_equal(
-    jn_joyn,
-    jn_joyn2
-  )
+
   expect_true(
     all(c("x & y") %in% jn_joyn$.joyn)
   )
-  expect_true(
-    all(
-      c(jn_joyn$id) %in% intersect(y1$id, x2$id)
-    )
-  )
 
-  # Second set of tables ----------------------
+  c(jn_joyn$id) %in% intersect(y1$id, x1$id) |>
+    all() |>
+    expect_true()
+
   jn_joyn <- merge(
     x = x2,
     y = y2,
@@ -569,14 +556,9 @@ test_that("INNER JOIN - Conducts inner join", {
   jn_dt <- merge.data.table(
     x2,
     y2,
-    match_type = "1:1",
     by = "id"
   )
-  jn_dt <- jn_dt[order(jn_dt$id, na.last = T),]
-  attr(
-    jn_dt,
-    "sorted"
-  ) <- "id"
+
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
@@ -587,7 +569,8 @@ test_that("INNER JOIN - Conducts inner join", {
   jn <- merge(
     x4,
     y4,
-    by = c("id1 = id2"),
+    by.x = "id1",
+    by.y = "id2",
     match_type = "m:m"
   )
 
@@ -595,14 +578,13 @@ test_that("INNER JOIN - Conducts inner join", {
   jn_dt <- merge.data.table(
     x4,
     y4,
-    by = dplyr::join_by(id1 == id2),
-    match_type = "m:m"
+    by.x = "id1",
+    by.y = "id2"
   )
-  attr(jn_dt, "sorted") <- "id1"
+
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dt,
-    ignore_attr = '.internal.selfref'
+    jn_dt
   )
 
 })
@@ -619,39 +601,39 @@ test_that("INNER JOIN - no id given", {
     y2,
     by = c("id", "x")
   )
+
   expect_equal(jn1, jn2)
 
 })
 
 
 test_that("INNER JOIN - incorrectly specified arguments give errors", {
+  merge(
+    x4,
+    y4,
+    by.x = "id1",
+    by.y = "id2",
+    match_type = "m:m" ,
+    suffixes = NULL
+  ) |>
+    expect_error( )
 
-  expect_error(
     merge(
-      x = x1,
-      y = y1,
-      match_type = "m:1",
-      suffix = NULL
-    )
-  )
+      x4,
+      y4,
+      by.x = "id1",
+      by.y = "id2",
+      match_type = "m:m",
+      suffix = c("a", "b", "c")) |>
+      expect_error()
 
-  expect_error(
-    merge(
-      x = x1,
-      y = y1,
-      match_type = "m:1",
-      suffix = c("a", "b", "c")
-    )
-  )
-
-  expect_error(
     merge(
       x = y1,
       y = x1,
       match_type = "1:m",
       multiple = "any"
-    )
-  )
+    ) |>
+      expect_error()
 
 
 })

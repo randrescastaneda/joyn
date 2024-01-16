@@ -59,6 +59,7 @@ left_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -245,16 +246,6 @@ left_join <- function(
 
 
 
-
-#-------------------------------------------------------------------------------
-# RIGHT JOIN -------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
-
-
-
-
 #' Right join two data frames
 #'
 #' This is a `joyn` wrapper that works in a similar
@@ -311,6 +302,8 @@ right_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -563,6 +556,7 @@ full_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -747,14 +741,6 @@ full_join <- function(
 
 
 
-
-
-
-#-------------------------------------------------------------------------------
-# INNER JOIN --------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
 #' Inner join two data frames
 #'
 #' This is a `joyn` wrapper that works in a similar
@@ -811,6 +797,7 @@ inner_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {

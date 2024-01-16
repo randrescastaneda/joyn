@@ -367,7 +367,13 @@ is_valid_m_key <- function(dt, by){
 
 
 
+check_suffixes <- function(suffixes) {
 
+  if (length(suffixes) != 2) {
+    cli::cli_abort("argumet {.arg suffixes} must be a character vector of length 2")
+  }
+
+}
 
 
 
