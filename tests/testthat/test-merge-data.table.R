@@ -273,17 +273,7 @@ test_that("RIGHT JOIN - Conducts right join", {
 })
 
 
-
-
-
-
-
-
-#-------------------------------------------------------------------------------
 # TEST FULL JOINS -------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
 
 test_that("FULL JOIN - Conducts full join", {
 
@@ -528,14 +518,7 @@ test_that("FULL JOIN - NA matches", {
 })
 
 
-
-
-
-#-------------------------------------------------------------------------------
 # TEST INNER JOINS -------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
 
 test_that("INNER JOIN - Conducts inner join", {
 
@@ -546,17 +529,12 @@ test_that("INNER JOIN - Conducts inner join", {
     match_type = "m:1",
     by = "id"
   )
-  jn_joyn2 <- merge(
-    x = x1,
-    y = y1,
-    match_type = "m:1",
-    by = "id",
-    unmatched = "drop"
-  )
 
   jn_dt <- merge.data.table(
-    x1, y1, by = "id", match_type = "m:1"
+    x1, y1,
+    by = "id"
   )
+
   setorder(jn_dt, na.last = T)
   attr(
     jn_dt,

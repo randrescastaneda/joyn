@@ -35,9 +35,9 @@ merge <- function(x,
   # wrap to joyn ------------
 
   if (isTRUE(all.x) && isTRUE(all.y)) {
-    keep <- "inner"
-  } else if (isFALSE(all.x) && isFALSE(all.y)) {
     keep <- "full"
+  } else if (isFALSE(all.x) && isFALSE(all.y)) {
+    keep <- "inner"
   } else if (isTRUE(all.x) && isFALSE(all.y)) {
     keep <- "left"
   } else if (isFALSE(all.x) && isTRUE(all.y)) {
