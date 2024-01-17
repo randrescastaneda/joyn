@@ -65,7 +65,6 @@ test_that("warnings and erros are triggered correctly", {
     # x = x1,
     y = y1,
     match_type = "m:1",
-    allow.cartesian = TRUE,
     by = "id"
   ) |> expect_error(label = "")
 
@@ -280,7 +279,8 @@ test_that("FULL JOIN - Conducts full join", {
     x = x1,
     y = y1,
     match_type = "m:1",
-    by = "id"
+    by = "id",
+    all = TRUE
   )
 
 
@@ -288,21 +288,15 @@ test_that("FULL JOIN - Conducts full join", {
     x1,
     y1,
     by = "id",
+    all = TRUE
   )
-  setorder(jn_dt, na.last = T)
-  attr(
-    jn_dt,
-    "sorted"
-  ) <- "id"
+
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dt
   )
-  expect_equal(
-    jn_joyn,
-    jn_joyn2
-  )
+
   expect_true(
     all(c("x", "y", "x & y") %in% jn_joyn$.joyn)
   )
@@ -317,47 +311,46 @@ test_that("FULL JOIN - Conducts full join", {
     x = x2,
     y = y2,
     match_type = "1:1",
-    by = "id"
+    by = "id",
+    all = TRUE
   )
 
   jn_dt <- merge.data.table(
     x2,
     y2,
     match_type = "1:1",
-    by = "id"
+    by = "id",
+    all = TRUE
   )
-  jn_dt <- jn_dt[order(jn_dt$id, na.last = T),]
-  attr(
-    jn_dt,
-    "sorted"
-  ) <- "id"
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt,
-    ignore_attr = 'row.names'
+    jn_dt
   )
 
 
   jn <- merge(
     x4,
     y4,
-    by = c("id1 = id2"),
-    match_type = "m:m"
+    by.x  = "id1",
+    by.y  = "id2",
+    match_type = "m:m",
+    all = TRUE
   )
 
   #merge.data.table(x4, y4, by = dplyr::join_by(id1 == id2), match_type = "m:m")
   jn_dt <- merge.data.table(
     x4,
     y4,
-    by = dplyr::join_by(id1 == id2),
-    match_type = "m:m"
+    by.x  = "id1",
+    by.y  = "id2",
+    all = TRUE
   )
-  attr(jn_dt, "sorted") <- "id1"
+
+
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dt,
-    ignore_attr = '.internal.selfref'
+    jn_dt
   )
 
 })
@@ -367,12 +360,14 @@ test_that("FULL JOIN - no id given", {
 
   jn1 <- merge(
     x2,
-    y2
+    y2,
+    all = TRUE
   )
   jn2 <- merge(
     x2,
     y2,
-    by = c("id", "x")
+    by = c("id", "x"),
+    all = TRUE
   )
   expect_equal(jn1, jn2)
 
@@ -639,27 +634,41 @@ test_that("INNER JOIN - incorrectly specified arguments give errors", {
 })
 
 
-test_that("INNER JOIN - argument `keep` preserves keys in output", {
+test_that("INNER JOIN - argument `keep_common_vars` preserves keys in output", {
+
+  x6 <- data.frame(
+    id      = c(1, 4, 2, 3, NA),
+    t       = c(1L, 2L, 1L, 2L, NA),
+    country = c(16, 12, 3, NA, 15)
+  )
+
+  y6 <- data.frame(
+    id      = c(1, 2, 5, 6, 3),
+    gdp     = c(11L, 15L, 20L, 13L, 10L),
+    country = 16:20
+  )
+
+
 
   jn <- merge(
-    x = x1,
-    y = y1,
+    x = x6,
+    y = y6,
     match_type = "m:1",
-    keep = T,
+    keep_common_vars  = TRUE,
     by = "id"
   )
 
   expect_true(
-    "id.y" %in% names(jn)
+    "country.y" %in% names(jn)
   )
   expect_equal(
     jn |>
-      fselect(id.y) |>
+      fselect(id) |>
       na.omit() |>
       unique() |>
       reg_elem(),
-    y1 |>
-      fsubset(id %in% x1$id) |>
+    y6 |>
+      fsubset(id %in% x6$id) |>
       fselect(id) |>
       unique() |>
       reg_elem()

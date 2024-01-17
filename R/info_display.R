@@ -181,7 +181,7 @@ clear_joynenv <- \(){
   first_source <- rlang::env_get(.joynenv, "joyn_source", default = NULL)
 
   # if the first function was joyn or it is null, then clear everything
-  if (first_source == "joyn" || is.null(first_source)) {
+  if (first_source == "joyn" || is.null(first_source) || is.symbol(first_source)) {
     rlang::env_unbind(.joynenv, "joyn_msgs")
     rlang::env_unbind(.joynenv, "joyn_source")
   }

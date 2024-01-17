@@ -66,6 +66,8 @@ test_that("LEFT JOIN - Conducts left join", {
     relationship = "many-to-one",
     by = "id"
   )
+  setorder(jn_joyn, id, na.last = TRUE)
+
   jn_joyn2 <- left_join(
     x = x1,
     y = y1,
@@ -73,21 +75,24 @@ test_that("LEFT JOIN - Conducts left join", {
     by = "id",
     unmatched = "drop"
   )
+  setorder(jn_joyn2, id, na.last = TRUE)
 
-  jn_dplyr <- data.frame(id = c(1, 1, 2, 3, NA),
-                         t = c(1, 2, 1, 2, NA),
-                         x = c(11, 12, 13, 14, 15),
-                         y = c(11, 11, 15, NA, NA))
-  attr(
-    jn_dplyr,
-    "sorted"
-  ) <- "id"
+  jn_dplyr <- dplyr::left_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    by = "id"
+  )
+
+
+  attr( jn_dplyr, "sorted") <- "id"
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr,
-    ignore_attr = "row.names" # data.table::serorderv convert row.names to characters...
+    ignore_attr = "row.names" # data.table::serorderv convert row.names to characters.
   )
+
   expect_equal(
     jn_joyn,
     jn_joyn2
@@ -101,18 +106,17 @@ test_that("LEFT JOIN - Conducts left join", {
     relationship = "one-to-one",
     by = "id"
   )
+  setorder(jn_joyn, id, na.last = TRUE)
 
-  jn_dplyr <- data.frame(id  = c(1, 4, 2, 3, NA),
-                         t   = c(1, 2, 1, 2, NA),
-                         x.x = c(16, 12, NA, NA, 15),
-                         yd  = c(1, NA, 2, 3, NA),
-                         y   = c(11, NA, 15, 10, NA),
-                         x.y = c(16, NA, 17, 20, NA))
-  jn_dplyr <- jn_dplyr[order(jn_dplyr$id, na.last = T),]
-  attr(
-    jn_dplyr,
-    "sorted"
-  ) <- "id"
+  jn_dplyr <- dplyr::left_join(
+    x = x2,
+    y = y2,
+    relationship = "one-to-one",
+    by = "id"
+  )
+  setorder(jn_dplyr, id, na.last = TRUE)
+
+  attr(jn_dplyr, "sorted") <- "id"
 
   expect_equal(
     jn_joyn |>

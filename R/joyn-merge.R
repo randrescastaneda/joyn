@@ -195,13 +195,16 @@ joyn <- function(x,
                               "merge(keep_common_vars)")
     keep_common_vars <- keep_y_in_x
   }
-  if (lifecycle::is_present(allow.cartesian) && match_type != "m:m") {
-    lifecycle::deprecate_warn(when = "0.1.5",
-                              what = "merge(allow.cartesian)",
-                              details = "always uses `allow.cartesian = TRUE`
-                              if and only if `match_type == 'm:m'`")
-    allow.cartesian <- NULL
-  }
+
+  # This is triggering too many warnings... We should revisit later
+
+  # if (lifecycle::is_present(allow.cartesian) && match_type != "m:m") {
+  #   lifecycle::deprecate_warn(when = "0.1.5",
+  #                             what = "merge(allow.cartesian)",
+  #                             details = "always uses `allow.cartesian = TRUE`
+  #                             if and only if `match_type == 'm:m'`")
+  #   allow.cartesian <- NULL
+  # }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
