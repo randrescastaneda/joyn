@@ -583,23 +583,24 @@ test_that("FULL JOIN - Conducts full join", {
     unmatched = "drop"
   )
 
+  expect_equal(
+    jn_joyn,
+    jn_joyn2
+  )
+
   jn_dplyr <- dplyr::full_join(
     x1, y1, by = "id", relationship = "many-to-one"
   )
-  setorder(jn_dplyr, na.last = T)
-  attr(
-    jn_dplyr,
-    "sorted"
-  ) <- "id"
+  setorder(jn_dplyr, id, na.last = T)
+  setorder(jn_joyn, id, na.last = T)
+  attr(jn_dplyr,
+       "sorted") <- "id"
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
-  expect_equal(
-    jn_joyn,
-    jn_joyn2
-  )
+
   expect_true(
     all(c("x", "y", "x & y") %in% jn_joyn$.joyn)
   )
@@ -623,11 +624,10 @@ test_that("FULL JOIN - Conducts full join", {
     relationship = "one-to-one",
     by = "id"
   )
-  jn_dplyr <- jn_dplyr[order(jn_dplyr$id, na.last = T),]
-  attr(
-    jn_dplyr,
-    "sorted"
-  ) <- "id"
+  setorder(jn_dplyr, id, na.last = T)
+  setorder(jn_joyn, id, na.last = T)
+  attr(jn_dplyr,
+       "sorted") <- "id"
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
