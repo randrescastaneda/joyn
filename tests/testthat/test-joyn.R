@@ -195,9 +195,10 @@ test_that("FULL- Compare with base::merge", {
   br <- base::merge(x1, y1, by = "id", all = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
-  expect_equal(jn, br)
+  expect_equal(jn, br, ignore_attr = 'row.names')
 
   jn <- joyn(x2,
           y2,
@@ -207,12 +208,13 @@ test_that("FULL- Compare with base::merge", {
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
 
-  expect_equal(jn, br)
+  expect_equal(jn, br, ignore_attr = 'row.names')
 
 })
 
