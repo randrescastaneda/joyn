@@ -128,20 +128,14 @@ is_balanced <- function(df,
                     function(y){
                       df |>
                         get_vars(y) |>
-                        collapse::funique()
+                        collapse::funique() |>
+                        na_omit() |>
+                        reg_elem()
                     })
 
   #_____________________________________________________
   # name of list elements ------------------------------
   names(lt_base) <- by
-
-  #_____________________________________________________
-  # elements as vectors, removing NAs ------------------
-  lt_base <- lapply(lt_base,
-                        function(df) {
-                          df[[1]] |>
-                            na_omit()
-                        })
 
   #_____________________________________________________
   # expand grid ----------------------------------------
