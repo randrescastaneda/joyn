@@ -128,7 +128,7 @@ is_balanced <- function(df,
                     function(y){
                       df |>
                         get_vars(y) |>
-                        collapse::funique() |>
+                        funique() |>
                         na_omit() |>
                         reg_elem()
                     })
