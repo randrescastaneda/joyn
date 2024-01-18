@@ -9,7 +9,7 @@ joyn_workhorse(
   y,
   by = intersect(names(x), names(y)),
   match_type = c("1:1"),
-  suffix = getOption("joyn.suffixes")
+  suffixes = getOption("joyn.suffixes")
 )
 }
 \arguments{
@@ -23,7 +23,7 @@ joyn_workhorse(
 "1:m", "m:1", or "m:m". If "m:m" then executes \code{data.table::merge.data.table}
 in the backend, otherwise uses \code{collapse::join()}}
 
-\item{suffix}{atomic character vector: give suffix to columns common to both
+\item{suffixes}{atomic character vector: give suffixes to columns common to both
 \code{x} and \code{y}}
 }
 \value{
