@@ -101,10 +101,10 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
                      for `by.x` and `by.y`.")
     }
 
-    if (!all(by.x %chin% nm_x)) {
+    if (!all(by.x %in% nm_x)) {
       cli::cli_abort("Elements listed in `by.x` must be valid column names in x.")
     }
-    if (!all(by.y %chin% nm_y)) {
+    if (!all(by.y %in% nm_y)) {
       cli::cli_abort("Elements listed in `by.y` must be valid column names in y.")
     }
 
@@ -127,7 +127,7 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
     if (length(by) == 0L || !is.character(by)) {
       cli::cli_abort("A non-empty vector of column names for `by` is required.")
     }
-    if (!all(by %chin% intersect(nm_x, nm_y))) {
+    if (!all(by %in% intersect(nm_x, nm_y))) {
       cli::cli_abort("Elements listed in `by` must be valid column
                      names in x and y")
     }
