@@ -195,9 +195,10 @@ test_that("FULL- Compare with base::merge", {
   br <- base::merge(x1, y1, by = "id", all = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
-  expect_equal(jn, br)
+  expect_equal(jn, br, ignore_attr = 'row.names')
 
   jn <- joyn(x2,
           y2,
@@ -207,12 +208,13 @@ test_that("FULL- Compare with base::merge", {
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
 
-  expect_equal(jn, br)
+  expect_equal(jn, br, ignore_attr = 'row.names')
 
 })
 
@@ -229,8 +231,9 @@ test_that("LEFT- Compare with base::merge", {
     )
   br <- base::merge(x1, y1, by = "id", all.x = TRUE)
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
-  expect_equal(jn, br)
+  expect_equal(jn, br, ignore_attr = "row.names")
 
 
   jn <- joyn(
@@ -241,14 +244,16 @@ test_that("LEFT- Compare with base::merge", {
       keep = "left",
       match_type = "1:1"
     )
+
   br <- base::merge(x2, y2, by = "id", all.x = TRUE)
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
 
-  expect_equal(jn, br)
+  expect_equal(jn, br, ignore_attr = "row.names")
 
 })
 
@@ -419,18 +424,25 @@ test_that("Update actual values", {
     joyn(x2,
           y2,
           by = "id",
-          update_values = TRUE, update_NAs = T)
+          update_values = TRUE,
+         update_NAs = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
-  br[, x.x := fifelse(!is.na(x.x) & is.na(x.y),
-                    x.x, x.y)]
+  br <- br |>
+    ftransform( x.x = fifelse(!is.na(x.x) & is.na(x.y),
+                              x.x, x.y))
+
 
   setorderv(br, "id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
   setattr(br, 'sorted', "id")
 
-
-  expect_equal(jn[, x.x], br[, x.x])
+  expect_equal(jn |>
+                 fselect(x.x),
+               br |>
+                 fselect(x.x),
+               ignore_attr = 'row.names')
 
 
 })

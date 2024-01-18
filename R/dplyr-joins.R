@@ -59,6 +59,7 @@ left_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -236,25 +237,12 @@ left_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    lj$`.joyn` <- NULL
+    get_vars(lj, reportvar) <- NULL
   }
 
-  # Return
-  return(lj)
-
-
-
+  # return
+  lj
 }
-
-
-
-
-#-------------------------------------------------------------------------------
-# RIGHT JOIN -------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
-
 
 
 
@@ -314,6 +302,8 @@ right_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -489,13 +479,11 @@ right_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    rj$`.joyn` <- NULL
+    get_vars(rj, reportvar) <- NULL
   }
 
   # Return
-  return(rj)
-
-
+  rj
 
 }
 
@@ -568,6 +556,7 @@ full_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -740,26 +729,16 @@ full_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    fj$`.joyn` <- NULL
+    get_vars(fj, reportvar) <- NULL
   }
 
   # Return
-  return(fj)
-
-
+  fj
 
 }
 
 
 
-
-
-
-
-
-#-------------------------------------------------------------------------------
-# INNER JOIN --------------------------------------------------------------------
-#-------------------------------------------------------------------------------
 
 
 #' Inner join two data frames
@@ -818,6 +797,7 @@ inner_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+  clear_joynenv()
 
   # Argument checks ---------------------------------
   if (is.null(by)) {
@@ -990,13 +970,11 @@ inner_join <- function(
   }
   ### if dropreport = T
   if (dropreport == T) {
-    fj$`.joyn` <- NULL
+    get_vars(fj, reportvar) <- NULL
   }
 
   # Return
-  return(fj)
-
-
+  fj
 
 }
 

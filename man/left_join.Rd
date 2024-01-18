@@ -135,8 +135,8 @@ exists.
 see \code{unmatched}.}
 
 \item{y_vars_to_keep}{character: Vector of variable names in \code{y} that will be
-kept after the merge. If TRUE (the default), it keeps all the brings all the
-variables in y into x. If FALSE or NULL, it does not bring any variable
+kept after the merge. If TRUE (the default), it keeps all the brings all
+the variables in y into x. If FALSE or NULL, it does not bring any variable
 into x, but a report will be generated.}
 
 \item{update_values}{logical: If TRUE, it will update all values of variables

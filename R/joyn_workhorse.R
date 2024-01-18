@@ -9,7 +9,7 @@
 #' @param match_type atomic character vector length 1: either "1:1" (default)
 #'   "1:m", "m:1", or "m:m". If "m:m" then executes `data.table::merge.data.table`
 #'   in the backend, otherwise uses `collapse::join()`
-#' @param suffix atomic character vector: give suffix to columns common to both
+#' @param suffixes atomic character vector: give suffixes to columns common to both
 #'   `x` and `y`
 #' @return data object of same class as `x`
 #'
@@ -18,7 +18,7 @@ joyn_workhorse <- function(
     y,
     by         = intersect(names(x), names(y)),
     match_type = c("1:1"),
-    suffix     = getOption("joyn.suffixes") # data.table suffixes
+    suffixes     = getOption("joyn.suffixes") # data.table suffixes
 ) {
 
   # Argument checks ------------------------------------------------------------
@@ -56,7 +56,7 @@ joyn_workhorse <- function(
       by              = by,
       all             = TRUE,
       sort            = FALSE,
-      suffix          = suffix,
+      suffixes        = suffixes,
       allow.cartesian = TRUE
     )
 
@@ -69,7 +69,7 @@ joyn_workhorse <- function(
                                  on             = by,
                                  multiple       = TRUE,     # matches row in x with m in y
                                  validate       = "m:m",    # no checks performed
-                                 suffix         = suffix,   # data.table suffixes
+                                 suffix         = suffixes,   # data.table suffixes
                                  keep.col.order = TRUE,
                                  verbose        = 0,
                                  column         = NULL

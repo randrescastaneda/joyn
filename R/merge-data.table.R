@@ -23,8 +23,12 @@ merge <- function(x,
                   match_type= c("m:m", "m:1", "1:m", "1:1"),
                   ...) {
 
+  # clear joun env
+  clear_joynenv()
+
   # Check arguments ------------
   # this comes directly from data.table::merge.data.table()
+  match_type  <- match.arg(match_type)
   check_logical(sort, "sort")
   check_logical(no.dups, "no.dups")
 
@@ -34,9 +38,9 @@ merge <- function(x,
   # wrap to joyn ------------
 
   if (isTRUE(all.x) && isTRUE(all.y)) {
-    keep <- "inner"
-  } else if (isFALSE(all.x) && isFALSE(all.y)) {
     keep <- "full"
+  } else if (isFALSE(all.x) && isFALSE(all.y)) {
+    keep <- "inner"
   } else if (isTRUE(all.x) && isFALSE(all.y)) {
     keep <- "left"
   } else if (isFALSE(all.x) && isTRUE(all.y)) {
@@ -46,14 +50,14 @@ merge <- function(x,
   # NOTE: we should think of anti-joins...
 
   # implement joyn --------
-  dt <- joyn(x = x,
-             y = y,
-             by = by,
-             match_type = match_type,
-             keep = keep,
-             sort = sort,
+  dt <- joyn(x               = x,
+             y               = y,
+             by              = by,
+             match_type      = match_type,
+             keep            = keep,
+             sort            = sort,
              allow.cartesian = allow.cartesian,
-             suffixes = suffixes,
+             suffixes        = suffixes,
              ...)
 
   # wrangling (add filters) -------
@@ -97,14 +101,20 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
                      for `by.x` and `by.y`.")
     }
 
-    if (!all(by.x %chin% nm_x)) {
+    if (!all(by.x %in% nm_x)) {
       cli::cli_abort("Elements listed in `by.x` must be valid column names in x.")
     }
-    if (!all(by.y %chin% nm_y)) {
+    if (!all(by.y %in% nm_y)) {
       cli::cli_abort("Elements listed in `by.y` must be valid column names in y.")
     }
-    by = by.x
-    names(by) = by.y
+
+
+    # Original data.table code is this:
+    # by = cby.x
+    # names(by) = by.y
+    #
+    # It is replaced by this:
+    by = paste(by.x, "=", by.y)
 
   } else {
     if (is.null(by)) {
@@ -117,7 +127,7 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
     if (length(by) == 0L || !is.character(by)) {
       cli::cli_abort("A non-empty vector of column names for `by` is required.")
     }
-    if (!all(by %chin% intersect(nm_x, nm_y))) {
+    if (!all(by %in% intersect(nm_x, nm_y))) {
       cli::cli_abort("Elements listed in `by` must be valid column
                      names in x and y")
     }
