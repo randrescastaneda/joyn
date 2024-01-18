@@ -3,6 +3,7 @@
 export(freq_table)
 export(full_join)
 export(inner_join)
+export(is_balanced)
 export(is_id)
 export(joyn)
 export(joyn_msg)
