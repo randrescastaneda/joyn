@@ -78,7 +78,7 @@ test_that("warnings are triggered correctly", {
 
   })
 
-test_that("erros are triggered correctly", {
+test_that("errors are triggered correctly", {
 
   merge(
     # x = x1,
