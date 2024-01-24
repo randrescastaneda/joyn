@@ -1,18 +1,28 @@
 
 #' Internal workhorse join function, used in the backend of `joyn`
 #'
-#' Always executes a full join. Gives comm
+#' Always executes a full join. 
 #'
 #' @param x data object, "left" or "master"
 #' @param y data object, "right" or "using"
 #' @param by atomic character vector: key specifying join
-#' @param match_type atomic character vector length 1: either "1:1" (default)
+#' @param match_type atomic character vector of length 1: either "1:1" (default)
 #'   "1:m", "m:1", or "m:m". If "m:m" then executes `data.table::merge.data.table`
 #'   in the backend, otherwise uses `collapse::join()`
 #' @param suffixes atomic character vector: give suffixes to columns common to both
 #'   `x` and `y`
 #' @return data object of same class as `x`
 #'
+#' @example 
+#' # Full join 
+#' library(data.table)
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x  = 11:15)
+#' y1 = data.table(id = c(1,2, 4),
+#'                 y  = c(11L, 15L, 16))
+#' joyn_workhorse(x = x1, y=y1)
+
 joyn_workhorse <- function(
     x,
     y,
@@ -74,10 +84,7 @@ joyn_workhorse <- function(
                                  verbose        = 0,
                                  column         = NULL
     )
-
-
   }
-
 
   # Calculate the time taken
   end_time <- Sys.time()
@@ -93,7 +100,6 @@ joyn_workhorse <- function(
   return(
     dt_result
   )
-
 }
 
 

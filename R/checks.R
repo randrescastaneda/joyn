@@ -1,11 +1,24 @@
 #' check tables X and Y
 #'
-#' This checks are inspired on merge.data.table
+#' This function performs checks inspired on merge.data.table:
+#'  * Checks if x and/or y have no columns
+#'  * Checks if x and/or y contain duplicate column names
 #'
 #' @inheritParams joyn
 #'
 #' @return invisible TRUE
 #' @keywords internal
+#' 
+#' @example 
+#' # Check passing with no erros
+#' library(data.table)
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x  = 11:15)
+#' y1 = data.table(id = c(1,2, 4),
+#'                 y  = c(11L, 15L, 16))
+#' check_xy(x = x1, y=y1)
+
 check_xy  <- function(x,y) {
 
   error_exists <- FALSE
@@ -32,9 +45,7 @@ check_xy  <- function(x,y) {
 
   }
 
-
   # check names -----------
-
   error_exists <- check_duplicate_names(x, "x")
   error_exists <- check_duplicate_names(y, "y")
 
@@ -92,12 +103,14 @@ check_reportvar <-
 
 
 
-#' check by input
+#' check `by` input
 #'
 #' @inheritParams merge
 #'
 #' @return list with information about by variables
 #' @keywords internal
+
+
 check_by_vars <- function(by, x, y) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -162,7 +175,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
       y_m <- is_valid_m_key(y, by)
     }
 
-  # Error if user chosen "1" but actually "m" ----
+  # Error if user choses "1" but actually "m" ----
   if (match_type_error) {
     msg     <- "match type inconsistency"
     hint    <-
@@ -175,7 +188,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
   }
 
-  # Warning if user chosen "m" but actually "1" ----
+  # Warning if user choses "m" but actually "1" ----
   m_m <- data.table::fcase(
     isTRUE(x_m)  & isTRUE(y_m),  "none",
     isTRUE(x_m)  & isFALSE(y_m), "warn_y",

@@ -1,4 +1,8 @@
+
+# Testing functions performing checks on x and y ####
+
 withr::local_options(joyn.verbose = FALSE)
+
 x1 = data.frame(
   id = c(1L, 1L, 2L, 3L, NA_integer_),
   t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -27,6 +31,7 @@ df1 <- data.frame(
   name = c("John", "Jane", "Bob", "Carl"),
   age = c(35, 28, 42, 50)
 )
+
 df2 <- data.frame(
   id1 = c(1, 2, 3, 3),
   id2 = c("a", "b", "c", "e"),
@@ -34,8 +39,88 @@ df2 <- data.frame(
   dept = c("IT", "Marketing", "Sales", "IT")
 )
 
+# Test function checking x and y ---------------------------------------------------------------
+test_that("check_xy works as expected", {
+
+  # Inputs 
+  check_xy(x = x1) |>
+    expect_error("argument missing")
+  
+  check_xy(y = y1) |>
+    expect_error("argument missing")
+
+  # Output
+  empty_x = data.frame()
+  out_no_error <- check_xy(x1, y1)
+  
+  print(out_no_error) |>
+    expect_equal(FALSE)
+  
+  # Note (RT): I might be missing why is check_xy always returning TRUE (?)
+  
+  out_error <- check_xy(empty_x, y) 
+  
+  print(out_error) |>
+    expect_equal(TRUE)
+
+})
+
+# Test function checking reportvar ---------------------------------------------
+test_that("check_reportvar works as expected", {
+  
+  # Inputs 
+  check_reportvar(reportvar = NULL) |>
+    expect_no_error()
+  
+  check_reportvar(reportvar = FALSE) |>
+    expect_no_error()
+  
+  check_reportvar(reportvar = 2) |>
+    expect_error()
+  
+  # Output
+
+  check_reportvar(reportvar = NULL) |>
+    expect_equal(check_reportvar(reportvar = FALSE))
+  
+  check_reportvar(reportvar = FALSE) |>
+    expect_equal(NULL)
+  
+  # Valid name
+  check_reportvar("id") |>
+    expect_equal("id")
+  
+  # Invalid name converted to valid name 
+  check_reportvar(" a and b") |>
+    expect_message()
+  
+
+})
+
+# Test function checking `by` input ---------------------------------------------------------------
+
+test_that("check_by_vars function works as expected", {
+
+  # Output
+  res <- check_by_vars(by = 'id', x = x1, y = y1)
+
+  class(res) |>
+    expect_equal("list")
+  
+  names(res) |>
+    expect_equal(c("by", "xby", "yby", "tempkey"))
+  
+  # Check when it is supposed to throw an error 
+
+})
+
+# Test function checking match type consistency -------------------------------------------------
+test_that("check_match_type works as expected", {
+  
+})
 
 
+# Test function TODO -----------------------------------------------------------------------------
 test_that("y_vars_to_keep checks work", {
   # errors ---------
   #

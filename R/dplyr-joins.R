@@ -425,10 +425,10 @@ right_join <- function(
   }
 
 
-  # left join checks --------------------------------
+  # right join checks --------------------------------
 
 
-  # Do left join ------------------------------------
+  # Do right join ------------------------------------
   rj <- joyn(
     x                = x,
     y                = y,
@@ -919,7 +919,7 @@ inner_join <- function(
   }
 
 
-  # Do full join ------------------------------------
+  # Do inner join ------------------------------------
   fj <- joyn(
     x                = x,
     y                = y,
