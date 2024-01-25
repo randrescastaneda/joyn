@@ -189,20 +189,35 @@ test_that("y_vars_to_keep checks work", {
 
 })
 
-
+# Testing function renaming the variables in y after joining
 test_that("check_new_y_vars checks work", {
-  # errors -----------
-
-  # output --------------
 
   ## no common names, return the same ---------
   check_new_y_vars(x = df1, by = "id1",
                    y_vars_to_keep = "salary") |>
     expect_equal("salary")
 
-  ## add suffix -----------
+  ## when common name, add suffix -----------
   check_new_y_vars(x = df1, by = "id1",
                    y_vars_to_keep = c("id2", "salary")) |>
     expect_equal(c("id2.y", "salary"))
+  
+  class(check_new_y_vars(x = df1, by = "id1", y_vars_to_keep = "salary")) |>
+    expect_equal("character")
 })
+
+# Testing the function that checks if specified "many" relationship is valid ####
+test_that("is_valid_m_key works as expected", {
+  
+  is_valid_m_key(x1, by = 2) |>
+    expect_error()
+  
+  is_valid_m_key(x1, by = "id") |>
+    expect_equal(TRUE)
+  
+  is_valid_m_key(x1, by = c("id", "x")) |>
+    expect_equal(FALSE)
+
+})
+
 
