@@ -110,20 +110,48 @@ test_that("check_by_vars function works as expected", {
   names(res) |>
     expect_equal(c("by", "xby", "yby", "tempkey"))
   
-  # Check when it is supposed to throw an error 
+  res$by |>
+    expect_equal("by")
+  
+  # Check it throws an error when by is NULL 
+  check_by_vars(by = NULL, x = x1, y = y1) |> 
+    expect_error()
 
 })
 
 # Test function checking match type consistency -------------------------------------------------
 test_that("check_match_type works as expected", {
+
+  # Inputs 
+  check_match_type(x1, y1, by= NULL) |>
+    expect_error()
+  
+  check_match_type(x1, y1, by = "id", match_type = "invalid match_type") |>
+    expect_error()
+
+  # Outputs
+  # Error if user choses "1" but actually "m" 
+  check_match_type(x1, y1, by = "id", match_type = "1:1") |>
+    expect_error()
+  
+  # If user choses "m" and it is actually "m"
+  check_match_type(x1, y1, by = 'id', match_type = "m:1") |> 
+    expect_equal(c("m", "1"))
+  
+  # Warning if user choses "m" but actually "1"
+  # TODO
+  class(check_match_type(x1, y1, by = 'id', match_type = "m:1")) |>
+    expect_equal("character")
   
 })
 
+# Test function confirming if match_type_error ####
+test_that("is_match_type_error works as expected", {
+  #TODO
+})
 
-# Test function TODO -----------------------------------------------------------------------------
+# Test function checking vars in Y kept in output table -----------------------------------------------------------------------------
 test_that("y_vars_to_keep checks work", {
-  # errors ---------
-  #
   ## var no available ---------
   y_vars_to_keep <- "f"
   by             <- "id"
@@ -150,11 +178,13 @@ test_that("y_vars_to_keep checks work", {
   check_y_vars_to_keep(FALSE, y1, by) |>
     expect_null()
 
-
   check_y_vars_to_keep("y", y1, by) |>
     expect_equal("y")
 
   check_y_vars_to_keep(c("id", "y"), y1, by) |>
+    expect_equal("y")
+  
+  check_y_vars_to_keep(TRUE, y1, by) |>
     expect_equal("y")
 
 })

@@ -104,12 +104,23 @@ check_reportvar <-
 
 
 #' check `by` input
+#' 
+#' This function checks the variable name(s) to be used as key(s) of the join
 #'
 #' @inheritParams merge
 #'
 #' @return list with information about by variables
 #' @keywords internal
-
+#' 
+#' @example
+#' # Good by input
+#' x1 = data.frame(
+#'        id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'        t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'        x  = 11:15)
+#' y1 = data.frame(id = 1:2,
+#'                 y  = c(11L, 15L))
+#' check_by_vars(by = "id", x = x1, y = y1)
 
 check_by_vars <- function(by, x, y) {
 
@@ -142,11 +153,27 @@ check_by_vars <- function(by, x, y) {
 
 
 #' check match type consistency
+#' 
+#' This function checks if the match type chosen by the user is consistent with the data 
 #'
 #' @inheritParams merge
 #'
 #' @return character vector from [split_match_type]
 #' @keywords internal
+#' 
+#' @examples 
+#' # Consistent match type
+#' x1 = data.frame(
+#'        id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'        t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'        x  = 11:15)
+#' y1 = data.frame(id = 1:2,
+#'                 y  = c(11L, 15L))
+#' check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
+#' 
+#' # Inconsistent match type 
+#' check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
+#' 
 check_match_type <- function(x, y, by, match_type, verbose) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -263,6 +290,13 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #'
 #' @return character vector with variable names from Y table
 #' @keywords internal
+#' 
+#' @example 
+#' y1 = data.frame(id = 1:2,
+#'                y  = c(11L, 15L))
+#' # Keep y in y1
+#' check_y_vars_to_keep(TRUE, y1, by = "id")
+
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
   if (length(y_vars_to_keep) > 1 && !is.character(y_vars_to_keep)) {
