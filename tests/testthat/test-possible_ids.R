@@ -68,7 +68,7 @@ test_that("exclude and include", {
 })
 
 
-test_that("get NULL when ducplicates", {
+test_that("get NULL when duplicates", {
 
   expect_null(possible_ids(x1,
                            exclude = "_numeric",
@@ -109,7 +109,7 @@ test_that("Exclude more than one variable", {
 })
 
 
-test_that("dplicated names", {
+test_that("duplicated names", {
   xx4 <- copy(x4)
   setnames(xx4, "t", "x")
 

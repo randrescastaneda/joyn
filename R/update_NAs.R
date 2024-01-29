@@ -11,6 +11,7 @@ if (getRversion() >= '2.15.1')
 #'
 #' @return data.table
 #' @noRd
+
 update_NAs <- function(dt, var,
                        reportvar,
                        suffix = NULL) {
