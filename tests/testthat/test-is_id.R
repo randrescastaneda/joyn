@@ -1,4 +1,6 @@
+# Testing is_id function 
 withr::local_options(joyn.verbose = FALSE)
+
 library(data.table)
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -37,6 +39,7 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
 
+# Checking it correctly identifies whether the dt is (not) uniquely identified by `by` var
 test_that("identifies no ids", {
 
   y <- data.table(
@@ -65,6 +68,7 @@ test_that("identifies no ids", {
 
 })
 
+# Checking output when return_report is TRUE
 test_that("returns correct report table", {
 
   y <- data.table(
@@ -80,7 +84,7 @@ test_that("returns correct report table", {
 
 })
 
-
+# Checking conversion to data table  
 test_that("convert to data.table when dataframe", {
 
   yy3 <- as.data.frame(y3)

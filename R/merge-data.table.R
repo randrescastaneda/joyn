@@ -7,6 +7,37 @@
 #' @inheritParams joyn
 #' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
 #'   reporttype keep_common_vars verbose
+#' @return data.table merging x and y 
+#' @examples
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x  = 11:15)
+#' y1 = data.table(id = c(1,2, 4),
+#'                 y  = c(11L, 15L, 16))
+#' merge(x1, y1, by = "id")
+#' # example of using by.x and by.y
+#' x2 = data.table(id1 = c(1, 1, 2, 3, 3),
+#'                 id2 = c(1, 1, 2, 3, 4),
+#'                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x   = c(16, 12, NA, NA, 15))
+#' y2 = data.table(id  = c(1, 2, 5, 6, 3),
+#'                 id2 = c(1, 1, 2, 3, 4),
+#'                 y   = c(11L, 15L, 20L, 13L, 10L),
+#'                 x   = c(16:20))
+#' jn <- merge(x2,
+#'             y2,
+#'             match_type = "m:m",
+#'             all.x = TRUE,  
+#'             by.x = "id1",
+#'             by.y = "id2")
+#' # example with all = TRUE
+#' jn <- merge(x2,
+#'             y2,
+#'             match_type = "m:m", 
+#'             by.x = "id1",
+#'             by.y = "id2", 
+#'             all = TRUE)
+
 merge <- function(x,
                   y,
                   by = NULL,
@@ -67,7 +98,6 @@ merge <- function(x,
 }
 
 
-
 check_logical <- \(x, name) {
   if (!x %in% c(TRUE, FALSE))
     cli::cli_abort("Argument {.arg {name}} should be logical,
@@ -75,6 +105,27 @@ check_logical <- \(x, name) {
 }
 
 
+#' check variable(s) by which data frames are to be joined
+#'
+#' @param x left table
+#' @param y right table
+#' @param by character: variable to join by (common variable to x and y)
+#' @param by.x character: specified var in x to join by
+#' @param by.y character: specified var in y to join by
+#'
+#' @return character specifying variable(s) to join by
+#' 
+#' @example
+#' x = data.table(id1 = c(1, 1, 2, 3, 3),
+#'                id2 = c(1, 1, 2, 3, 4),
+#'                t   = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                x   = c(16, 12, NA, NA, 15))
+#' y = data.table(id  = c(1, 2, 5, 6, 3),
+#'                id2 = c(1, 1, 2, 3, 4),
+#'                y   = c(11L, 15L, 20L, 13L, 10L),
+#'                x   = c(16:20))
+#' # example specifying by.x and by.y
+#' check_dt_by(x, y, by.x = "id1", by.y = "id2")
 
 check_dt_by <- \(x, y, by, by.x, by.y) {
   nm_x <- names(x)

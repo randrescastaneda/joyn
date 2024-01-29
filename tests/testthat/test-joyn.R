@@ -340,8 +340,6 @@ test_that("INNER - Compare with base::merge", {
 })
 
 
-
-
 test_that("match types work", {
   expect_error(joyn(
     x3,
@@ -604,6 +602,15 @@ test_that("do not convert to data.table", {
   xx1 <- as.data.frame(x1)
   expect_equal(joyn(xx1, y1, match_type = "m:1") |> class(), xx1 |> class())
 })
+
+# Check return table is of the samle class as x
+test_that("output table class", {
+  out <- joyn(x2, y2)
+
+  class(out) |>
+    expect_equal(class(x2))
+})
+
 
 
 

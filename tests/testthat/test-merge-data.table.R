@@ -61,7 +61,6 @@ y6 <- data.frame(
 )
 
 
-
 reportvar = getOption("joyn.reportvar")
 
 # Warnings and errors ---------------
@@ -757,6 +756,48 @@ test_that("INNER JOIN - NA matches", {
 
 })
 
+# Test check logical - (RT) check if needed
+
+# Testing check_dt_by function ####
+# Checking errors 
+test_that("check_dt_by aborts as expected", {
+  y7 = data.table(id  = c(1, 2, 5, 6, 3, 9),
+                  id2 = c(1, 1, 2, 3, 4, 8),
+                  y   = c(11L, 15L, 20L, 13L, 10L, 12L),
+                  x   = c(16:21))
+  
+  y8 = data.table(id  = c(1, 2, 5, 6, 3, 9),
+                  id2 = NULL,
+                  y   = c(11L, 15L, 20L, 13L, 10L, 12L),
+                  x   = c(16:21))
+
+  check_dt_by(x4, y7, by.x = "id1", by.y = "id2") |>
+    expect_error()
+  
+  check_dt_by(x4, y8, by.x = "id1", by.y = "id2") |>
+    expect_error()
+  
+  check_dt_by(x4, y4, by.x = "id", by.y = "id2") |>
+    expect_error()
+  
+  check_dt_by(x4, y4, by.x = "id1", by.y = "id1") |>
+    expect_error()
+  
+})
+
+# Checking outputs
+test_that("check_dt_by output", {
+  res_by_null <- check_dt_by(x4, y4, by = NULL)
+
+  res_by_null |>
+    expect_equal(intersect(names(x4), names(y4)))
+  
+  check_dt_by(x4, y4, by.x = 2, by.y = 3) |>
+    expect_error()
+  
+  check_dt_by(x4, y4, by = "t") |>
+    expect_error()
+})
 
 
 

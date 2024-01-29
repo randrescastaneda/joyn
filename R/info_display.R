@@ -14,6 +14,7 @@
 #'   err = cli::symbol$cross, "  ",
 #'   note = "This is a warning message")
 #' joyn_msg("all")
+
 joyn_msg <- function(type = c("all", type_choices())) {
 
   # Check ---------
@@ -50,6 +51,11 @@ joyn_msg <- function(type = c("all", type_choices())) {
 #'
 #' @return current message data frame invisibly
 #' @keywords internal
+#' @example 
+#' # With type = info and text = "simple message"
+#' store_msg("info", "simple message")
+#' rlang::env_has(env = .joynenv, "joyn_msgs") 
+#' 
 store_msg <- function(type, ...) {
 
   # check input ----------
@@ -119,7 +125,7 @@ msg_type_dt <- \(type, ...) {
 #' `type1 = text1, type2 = text2`
 #' @param sep a character string to separate the terms to [paste]
 #'
-#' @return formated text
+#' @return formatted text
 #' @keywords internal
 style <- function(..., sep = "") {
   args <- list(...)
@@ -163,6 +169,15 @@ style <- function(..., sep = "") {
 
   paste(unlist(x), collapse = sep)
 }
+
+#' Presence of joyn msgs in the environment
+#' 
+#' @return invisible TRUE
+#' @example 
+#' Storing a message 
+#' store_msg("info", "simple message")
+#' Checking if it exists in the environment 
+#' print(joyn_msgs_exist())
 
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {
