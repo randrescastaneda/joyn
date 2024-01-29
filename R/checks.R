@@ -360,6 +360,11 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 #'
 #' @return vector with new variable names for y
 #' @keywords internal
+#' 
+#' @example
+#' y_vars_to_keep <- check_y_vars_to_keep(TRUE, y2, by = "id")
+#' check_new_y_vars(x = x2, by="id", y_vars_to_keep)
+
 check_new_y_vars <- \(x, by, y_vars_to_keep) {
   xvars <- names(x)
   xvars <- xvars[!(xvars %in% by)]
