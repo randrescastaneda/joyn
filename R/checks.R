@@ -1,6 +1,6 @@
 #' check tables X and Y
 #'
-#' This function performs checks inspired on merge.data.table:
+#' This function performs checks inspired on merge.data.table: it
 #'  * Checks if x and/or y have no columns
 #'  * Checks if x and/or y contain duplicate column names
 #'
@@ -8,9 +8,9 @@
 #'
 #' @return invisible TRUE
 #' @keywords internal
-#' 
-#' @example 
-#' # Check passing with no erros
+#'
+#' @example
+#' # Check passing with no errors
 #' library(data.table)
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -58,19 +58,27 @@ check_xy  <- function(x,y) {
   return(invisible(TRUE))
 }
 
-# NOTE (Rossana): I believe data frames cannot have duplicate names in R in the first place, 
+# NOTE (Rossana): I believe data frames cannot have duplicate names in R in the first place,
 #                 unless you set check.names = FALSE when creating the data.frame
 
 #' check if vars in dt have duplicate names
+#'
 #' @param dt data.frame to check
 #' @param name var name to check if has duplicates in dt
 #' @return logical either TRUE, if any duplicates are found, or FALSE otherwise
-#' @example 
+#' @examples
 #' # When no duplicates
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x  = 11:15)
 #' check_duplicate_names(x1, "x")
+#'
+#' # When duplicates
+#' x1_duplicates = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                            x  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                            x  = 11:15,
+#'                            check.names = FALSE)
+#' check_duplicate_names(x1_duplicates, "x")
 
 
 check_duplicate_names <- \(dt, name) {
@@ -93,7 +101,15 @@ check_duplicate_names <- \(dt, name) {
 #'
 #' @inheritParams merge
 #' @keywords internal
-#' @return if character, it returns valid name. If NULL or FALSE, returns NULL.
+#' @return if character, it returns valid name for the report var. If NULL or FALSE, returns NULL.
+#' @example
+#' # When null
+#' check_reportvar(reportvar = NULL)
+#' # When FALSE
+#' check_reportvar(reportvar = FALSE)
+#' # When character
+#' check_reportvar(reportvar = ".joyn")
+
 check_reportvar <-
   function(reportvar, verbose = getOption("joyn.verbose")) {
     if (is.character(reportvar)) {
@@ -121,16 +137,15 @@ check_reportvar <-
 
 
 #' check `by` input
-#' 
+#'
 #' This function checks the variable name(s) to be used as key(s) of the join
 #'
 #' @inheritParams merge
 #'
 #' @return list with information about by variables
 #' @keywords internal
-#' 
+#'
 #' @example
-#' # Good by input
 #' x1 = data.frame(
 #'        id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'        t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -170,15 +185,15 @@ check_by_vars <- function(by, x, y) {
 
 
 #' check match type consistency
-#' 
-#' This function checks if the match type chosen by the user is consistent with the data 
+#'
+#' This function checks if the match type chosen by the user is consistent with the data
 #'
 #' @inheritParams merge
 #'
 #' @return character vector from [split_match_type]
 #' @keywords internal
-#' 
-#' @examples 
+#'
+#' @examples
 #' # Consistent match type
 #' x1 = data.frame(
 #'        id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -187,10 +202,10 @@ check_by_vars <- function(by, x, y) {
 #' y1 = data.frame(id = 1:2,
 #'                 y  = c(11L, 15L))
 #' check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
-#' 
-#' # Inconsistent match type 
+#'
+#' # Inconsistent match type
 #' check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
-#' 
+#'
 check_match_type <- function(x, y, by, match_type, verbose) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -282,9 +297,9 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 #'
 #' @return logical
 #' @keywords internal
-#' @example 
+#' @example
 #' # example with match type error
-#' TODO 
+#' TODO
 
 is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
@@ -311,8 +326,8 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #'
 #' @return character vector with variable names from Y table
 #' @keywords internal
-#' 
-#' @example 
+#'
+#' @example
 #' y1 = data.frame(id = 1:2,
 #'                y  = c(11L, 15L))
 #' # Keep y in y1
@@ -381,9 +396,16 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 #'
 #' @return vector with new variable names for y
 #' @keywords internal
-#' 
+#'
 #' @example
+#' y2 = data.frame(id = c(1, 2, 5, 6, 3),
+#'                 yd = c(1, 2, 5, 6, 3),
+#'                 y  = c(11L, 15L, 20L, 13L, 10L),
+#'                 x  = c(16:20))
 #' y_vars_to_keep <- check_y_vars_to_keep(TRUE, y2, by = "id")
+#' x2 = data.frame(id = c(1, 1, 2, 3, NA),
+#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x  = c(16, 12, NA, NA, 15))
 #' check_new_y_vars(x = x2, by="id", y_vars_to_keep)
 
 check_new_y_vars <- \(x, by, y_vars_to_keep) {
@@ -420,6 +442,13 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #'
 #' @return logical: `TRUE` if valid, `FALSE` if uniquely identified
 #' @keywords internal
+#' @example
+#' x1 = data.frame(id  = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                  x  = 11:15)
+#'
+#' is_valid_m_key(x1, by = "id")
+
 is_valid_m_key <- function(dt, by){
 
   # Argument checks
@@ -438,7 +467,7 @@ is_valid_m_key <- function(dt, by){
     FALSE
 }
 
-
+# Q: Do we document and test this function?
 
 check_suffixes <- function(suffixes) {
 

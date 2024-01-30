@@ -151,8 +151,8 @@ test_that("check_reportvar works as expected", {
     expect_equal(NULL)
 
   # Valid name
-  check_reportvar("id") |>
-    expect_equal("id")
+  check_reportvar(".joyn") |>
+    expect_equal(".joyn")
 
 })
 
@@ -208,6 +208,7 @@ test_that("check_match_type works as expected", {
 test_that("is_match_type_error works as expected", {
   clear_joynenv()
 
+  # Note (Rossana): to check if this is the correct use
   res <- is_match_type_error(x1, "x", by = "id", match_type_error = TRUE)
 
   res |>
