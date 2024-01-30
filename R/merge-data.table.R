@@ -130,10 +130,14 @@ check_logical <- \(x, name) {
 check_dt_by <- \(x, y, by, by.x, by.y) {
   nm_x <- names(x)
   nm_y <- names(y)
+
+  colnames(x)[colnames(x) == by.x] <- by.x
+  colnames(y)[colnames(y) == by.y] <- by.y
+
   ## set up 'by'/'by.x'/'by.y'
-  if ((!is.null(by.x) ||
-       !is.null(by.y)) &&
-      length(by.x) != length(by.y)) {
+  if ((!is.null(x$by.x) ||
+       !is.null(y$by.y)) &&
+      length(x$by.x) != length(y$by.y)) {
     cli::cli_abort("`by.x` and `by.y` must be of same length.")
   }
   if (!missing(by) && !missing(by.x)) {

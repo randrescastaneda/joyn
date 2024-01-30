@@ -282,6 +282,10 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 #'
 #' @return logical
 #' @keywords internal
+#' @example 
+#' # example with match type error
+#' TODO 
+
 is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
   isidx <- is_id(x, by = by, verbose = FALSE)

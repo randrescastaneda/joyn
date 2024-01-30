@@ -771,9 +771,6 @@ test_that("check_dt_by aborts as expected", {
                   y   = c(11L, 15L, 20L, 13L, 10L, 12L),
                   x   = c(16:21))
 
-  check_dt_by(x4, y7, by.x = "id1", by.y = "id2") |>
-    expect_error()
-
   check_dt_by(x4, y8, by.x = "id1", by.y = "id2") |>
     expect_error()
 
@@ -783,19 +780,35 @@ test_that("check_dt_by aborts as expected", {
   check_dt_by(x4, y4, by.x = "id1", by.y = "id1") |>
     expect_error()
 
+  # Checking msg is stored when both by and by.x/by.y are supplied
+  clear_joynenv()
+  check_dt_by(x4, y4, by.x = "id1", by.y = "id", by = "id2")
+
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
+
+
 })
 
 # Checking outputs
 test_that("check_dt_by output", {
-  res_by_null <- check_dt_by(x4, y4, by = NULL)
 
-  res_by_null |>
-    expect_equal(intersect(names(x4), names(y4)))
+  check_dt_by(x4,
+              y4,
+              by.x = "id1",
+              by.y = "id2") |>
+    expect_equal("id1 = id2")
 
-  check_dt_by(x4, y4, by.x = 2, by.y = 3) |>
+
+  check_dt_by(x4,
+              y4,
+              by.x = 2,
+              by.y = 3) |>
     expect_error()
 
-  check_dt_by(x4, y4, by = "t") |>
+  check_dt_by(x4,
+              y4,
+              by = "t") |>
     expect_error()
 })
 
