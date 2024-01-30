@@ -7,12 +7,16 @@
 #' @export
 #'
 #' @examples
+#' # Storing msg with type "info"
 #' joyn:::store_msg("info",
 #'   ok = cli::symbol$tick, "  ",
 #'   pale = "This is an info message")
+#'
+#' # Storing msg with type "warn"
 #' joyn:::store_msg("warn",
 #'   err = cli::symbol$cross, "  ",
 #'   note = "This is a warning message")
+#'
 #' joyn_msg("all")
 
 joyn_msg <- function(type = c("all", type_choices())) {
@@ -51,11 +55,12 @@ joyn_msg <- function(type = c("all", type_choices())) {
 #'
 #' @return current message data frame invisibly
 #' @keywords internal
-#' @example 
+#' @example
 #' # With type = info and text = "simple message"
+#'
 #' store_msg("info", "simple message")
-#' rlang::env_has(env = .joynenv, "joyn_msgs") 
-#' 
+#' rlang::env_has(env = .joynenv, "joyn_msgs")
+#'
 store_msg <- function(type, ...) {
 
   # check input ----------
@@ -90,6 +95,8 @@ store_msg <- function(type, ...) {
   return(invisible(dt_new_msgs))
 
 }
+
+# To check if documentation
 
 check_style <- \(...) {
   if (length(list(...)) == 0) {
@@ -171,12 +178,12 @@ style <- function(..., sep = "") {
 }
 
 #' Presence of joyn msgs in the environment
-#' 
+#'
 #' @return invisible TRUE
-#' @example 
-#' Storing a message 
+#' @example
+#' Storing a message
 #' store_msg("info", "simple message")
-#' Checking if it exists in the environment 
+#' Checking if it exists in the environment
 #' print(joyn_msgs_exist())
 
 joyn_msgs_exist <- \() {
@@ -188,6 +195,18 @@ joyn_msgs_exist <- \() {
 }
 
 
+#' Clearing joyn environment
+#'
+#' @example
+#' # Storing a message
+#' store_msg("info", "simple message")
+#'
+#' # Clearing the environment
+#' clear_joynenv()
+#'
+#' # Checking it does not exist in the environment
+#' print(joyn_msgs_exist())
+#'
 clear_joynenv <- \(){
   # get the source function
   .joyn_source  <- sys.call(-1)[[1]]

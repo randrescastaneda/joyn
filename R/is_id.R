@@ -4,8 +4,6 @@ if (getRversion() >= '2.15.1')
     c('N', '.', 'copies')
   )
 
-# NOTE (RT) - make sure you understand the goal of the function below
-
 #' Report if dt is uniquely identified by `by` var or, if report = TRUE, the duplicates in `by` variable
 #'
 #' @param dt either right of left table
