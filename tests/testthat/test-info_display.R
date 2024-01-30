@@ -37,16 +37,16 @@ test_that("joyn_msg works as expected", {
 
   out_all <- joyn_msg("all")
   out_warn <- joyn_msg("warn")
-  
+
   class(out_all) |>
     expect_equal("data.frame")
-  
+
   class(out_warn) |>
     expect_equal(class(out_warn))
-  
+
   print(out_warn)$type |>
     expect_equal("warn")
-  
+
   type = "err"
 
   if (type %in% types) {
@@ -165,11 +165,11 @@ test_that("joyn_msgs_exist works as expected", {
 
   joyn_msgs_exist() |>
     expect_error()
-  
+
   store_msg("info", "simple message")
 
   joyn_msgs_exist() |>
     expect_equal(TRUE)
 })
 
-# 
+#

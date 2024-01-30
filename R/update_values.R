@@ -8,7 +8,7 @@ if (getRversion() >= '2.15.1')
 #'
 #' @param dt joined table
 #' @param var variable to be updated
-#' @param reportvar variables in `dt` that has report
+#' @param reportvar variable in `dt` that stores joyn's report
 #'
 #' @return data.table
 #' @noRd

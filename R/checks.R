@@ -24,8 +24,10 @@ check_xy  <- function(x,y) {
   error_exists <- FALSE
 
   # check no columns --------------
+
   x0 = length(x) == 0L
   y0 = length(y) == 0L
+
   if (x0 || y0) {
     error_exists <- TRUE
     if (x0 && y0) {
@@ -55,6 +57,21 @@ check_xy  <- function(x,y) {
   }
   return(invisible(TRUE))
 }
+
+# NOTE (Rossana): I believe data frames cannot have duplicate names in R in the first place, 
+#                 unless you set check.names = FALSE when creating the data.frame
+
+#' check if vars in dt have duplicate names
+#' @param dt data.frame to check
+#' @param name var name to check if has duplicates in dt
+#' @return logical either TRUE, if any duplicates are found, or FALSE otherwise
+#' @example 
+#' # When no duplicates
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x  = 11:15)
+#' check_duplicate_names(x1, "x")
+
 
 check_duplicate_names <- \(dt, name) {
   nm_x = names(dt)

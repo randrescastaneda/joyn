@@ -5,7 +5,7 @@ test_that("fix_by_vars -ouput", {
 
   class(res) |>
     expect_equal("list")
-  
+
   names(res) |>
     expect_equal(c("by", "xby", "yby", "tempkey"))
 })

@@ -1,4 +1,4 @@
-# Testing is_id function 
+# Testing is_id function
 withr::local_options(joyn.verbose = FALSE)
 
 library(data.table)
@@ -84,7 +84,7 @@ test_that("returns correct report table", {
 
 })
 
-# Checking conversion to data table  
+# Checking conversion to data table
 test_that("convert to data.table when dataframe", {
 
   yy3 <- as.data.frame(y3)

@@ -121,10 +121,10 @@ test_that("m:m and 1:1 gives the same output if data is correct", {
   # Check output class
   class(joyn_workhorse(x = x2, y = y2, by = "id", match_type = "m:m")) |>
     expect_equal(class(x2))
-  
+
   class(joyn_workhorse(x = x2, y = y2, by = "id", match_type = "1:1")) |>
     expect_equal(class(x2))
-    
+
 })
 
 # Checking full join works as expected -------------------------------------------------------------------
