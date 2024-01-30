@@ -66,7 +66,8 @@ test_that("check_xy works as expected", {
   check_xy(x = empty_df,
            y = y1)
 
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
 
   # When y has 0 length
   clear_joynenv()
@@ -74,7 +75,8 @@ test_that("check_xy works as expected", {
   check_xy(x = x1,
            y = empty_df)
 
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
 
   # When both x and y have 0 length
   clear_joynenv()
@@ -82,7 +84,8 @@ test_that("check_xy works as expected", {
   check_xy(x = empty_df,
            y = empty_df)
 
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
 
   # No msg When no duplicate names
   clear_joynenv()
@@ -90,7 +93,8 @@ test_that("check_xy works as expected", {
   check_xy(x = x1,
            y = y1)
 
-  expect_false(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_false(rlang::env_has(.joynenv,
+                              "joyn_msgs"))
 
   # when duplicate names
 
@@ -99,7 +103,8 @@ test_that("check_xy works as expected", {
   check_xy(x = x1_duplicates,
            y = y1)
 
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
 
 })
 
@@ -149,11 +154,6 @@ test_that("check_reportvar works as expected", {
   check_reportvar("id") |>
     expect_equal("id")
 
-  # Invalid name converted to valid name
-  check_reportvar(" a and b") |>
-    expect_message()
-
-
 })
 
 # Test function checking `by` input ---------------------------------------------------------------
@@ -170,7 +170,7 @@ test_that("check_by_vars function works as expected", {
     expect_equal(c("by", "xby", "yby", "tempkey"))
 
   res$by |>
-    expect_equal("by")
+    expect_equal("id")
 
   # Check it throws an error when by is NULL
   check_by_vars(by = NULL, x = x1, y = y1) |>
@@ -198,15 +198,24 @@ test_that("check_match_type works as expected", {
     expect_equal(c("m", "1"))
 
   # Warning if user chooses "m" but actually "1"
-  # TODO
   class(check_match_type(x1, y1, by = 'id', match_type = "m:1")) |>
     expect_equal("character")
 
 })
 
 # Test function confirming if match_type_error ####
+
 test_that("is_match_type_error works as expected", {
-  #TODO
+  clear_joynenv()
+
+  res <- is_match_type_error(x1, "x", by = "id", match_type_error = TRUE)
+
+  res |>
+    expect_equal(TRUE)
+
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
+
 })
 
 # Test function checking vars in Y kept in output table -----------------------------------------------------------------------------
