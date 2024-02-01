@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_by_vars}
 \alias{check_by_vars}
-\title{check \code{by} input}
+\title{Check \code{by} input}
 \usage{
 check_by_vars(by, x, y)
 }
@@ -27,6 +27,7 @@ x1 = data.frame(
        x  = 11:15)
 y1 = data.frame(id = 1:2,
                 y  = c(11L, 15L))
+# With var "id" shared in x and y
 check_by_vars(by = "id", x = x1, y = y1)
 }
 \keyword{internal}

@@ -64,7 +64,7 @@ check_xy  <- function(x,y) {
 # NOTE (Rossana): I believe data frames cannot have duplicate names in R in the first place,
 #                 unless you set check.names = FALSE when creating the data.frame
 
-#' check if vars in dt have duplicate names
+#' Check if vars in dt have duplicate names
 #'
 #' @param dt data.frame to check
 #' @param name var name to check if has duplicates in dt
@@ -100,15 +100,17 @@ check_duplicate_names <- \(dt, name) {
   return(FALSE)
 }
 
-#' check reportvar input
+#' Check reportvar input
+#'
+#' check reporting variable (storing joyn's report).
 #'
 #' @inheritParams merge
 #' @keywords internal
-#' @return if character, it returns valid name for the report var. If NULL or FALSE, returns NULL.
+#' @return if input reportvar is character, return valid name for the report var. If NULL or FALSE, return NULL.
 #' @examples
-#' # When null
+#' # When null - reporting variable not returned in merged dt
 #' check_reportvar(reportvar = NULL)
-#' # When FALSE
+#' # When FALSE - reporting variable not returned in merged dt
 #' check_reportvar(reportvar = FALSE)
 #' # When character
 #' check_reportvar(reportvar = ".joyn")
@@ -139,7 +141,7 @@ check_reportvar <-
 
 
 
-#' check `by` input
+#' Check `by` input
 #'
 #' This function checks the variable name(s) to be used as key(s) of the join
 #'
@@ -155,6 +157,7 @@ check_reportvar <-
 #'        x  = 11:15)
 #' y1 = data.frame(id = 1:2,
 #'                 y  = c(11L, 15L))
+#' # With var "id" shared in x and y
 #' check_by_vars(by = "id", x = x1, y = y1)
 
 check_by_vars <- function(by, x, y) {
@@ -187,9 +190,10 @@ check_by_vars <- function(by, x, y) {
 }
 
 
-#' check match type consistency
+#' Check match type consistency
 #'
-#' This function checks if the match type chosen by the user is consistent with the data
+#' This function checks if the match type chosen by the user is consistent with the data.
+#' <br>(Valid match types are "1:1", "1:m", "m:1", "m:m")
 #'
 #' @inheritParams merge
 #'
@@ -292,17 +296,22 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
 }
 
-#' confirm if match_type_error
+#' Confirm if match type error
+#'
+#' Confirm if `dt` is not uniquely identified by `by` var
 #'
 #' @inheritParams merge
-#' @param name name of variable
+#' @param name name of data frame
 #' @param match_type_error  logical: from existing code
 #'
 #' @return logical
 #' @keywords internal
 #' @examples
-#' # example with match type error
-#' TODO
+#' # example with dt not uniquely identified by "id"
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                 x  = 11:15)
+#' is_match_type_error(x1, name = "x1", by = "id")
 
 is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
@@ -323,18 +332,26 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
 
 
-#' check variables in Y that will be kept in returning table
+#' Check variables in y that will be kept in returning table
+#'
+#' check and return variable names in y to keep in returning table, excluding those that are keys of the merge
 #'
 #' @inheritParams merge
-#'
-#' @return character vector with variable names from Y table
+#' @param y_vars_to_keep either TRUE, if keep all vars in `y`;
+#'        FALSE or NULL, if keep no vars; or character vector specifying which variables in `y` to keep
+#' @param y data frame
+#' @return character vector with variable names from `y` table
 #' @keywords internal
 #'
 #' @examples
-#' y1 = data.frame(id = 1:2,
+#' y1 = data.table(id = 1:2,
 #'                y  = c(11L, 15L))
-#' # Keep y in y1
+#' # With y_vars_to_keep TRUE
 #' check_y_vars_to_keep(TRUE, y1, by = "id")
+#' # With y_vars_to_keep FALSE
+#' check_y_vars_to_keep(FALSE, y1, by = "id")
+#' # Specifying which y vars to keep
+#' check_y_vars_to_keep("y", y1, by = "id")
 
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
@@ -391,11 +408,13 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 }
 
 
-#' rename vars in y so they are different to x's when joined
+#' Rename vars in y so they are different to x's when joined
+#'
+#' Check which vars in y would have same names as vars in x when joined, and return new variables names for those y vars
 #'
 #' @param x master table
 #' @param by character: by vars
-#' @param y_vars_to_keep  character vector of variables to keep
+#' @param y_vars_to_keep  character vector of y variables to keep
 #'
 #' @return vector with new variable names for y
 #' @keywords internal
@@ -450,7 +469,7 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                  x  = 11:15)
 #'
-#' is_valid_m_key(x1, by = "id")
+#' is_valid_m_key(x1, by = c("id", "t"))
 
 is_valid_m_key <- function(dt, by){
 

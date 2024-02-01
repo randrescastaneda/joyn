@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_new_y_vars}
 \alias{check_new_y_vars}
-\title{rename vars in y so they are different to x's when joined}
+\title{Rename vars in y so they are different to x's when joined}
 \usage{
 check_new_y_vars(x, by, y_vars_to_keep)
 }
@@ -11,13 +11,13 @@ check_new_y_vars(x, by, y_vars_to_keep)
 
 \item{by}{character: by vars}
 
-\item{y_vars_to_keep}{character vector of variables to keep}
+\item{y_vars_to_keep}{character vector of y variables to keep}
 }
 \value{
 vector with new variable names for y
 }
 \description{
-rename vars in y so they are different to x's when joined
+Check which vars in y would have same names as vars in x when joined, and return new variables names for those y vars
 }
 \examples{
 y2 = data.frame(id = c(1, 2, 5, 6, 3),

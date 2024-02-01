@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_duplicate_names}
 \alias{check_duplicate_names}
-\title{check if vars in dt have duplicate names}
+\title{Check if vars in dt have duplicate names}
 \usage{
 check_duplicate_names(dt, name)
 }
@@ -15,7 +15,7 @@ check_duplicate_names(dt, name)
 logical either TRUE, if any duplicates are found, or FALSE otherwise
 }
 \description{
-check if vars in dt have duplicate names
+Check if vars in dt have duplicate names
 }
 \examples{
 # When no duplicates

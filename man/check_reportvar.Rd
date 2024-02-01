@@ -2,20 +2,20 @@
 % Please edit documentation in R/checks.R
 \name{check_reportvar}
 \alias{check_reportvar}
-\title{check reportvar input}
+\title{Check reportvar input}
 \usage{
 check_reportvar(reportvar, verbose = getOption("joyn.verbose"))
 }
 \value{
-if character, it returns valid name for the report var. If NULL or FALSE, returns NULL.
+if input reportvar is character, return valid name for the report var. If NULL or FALSE, return NULL.
 }
 \description{
-check reportvar input
+check reporting variable (storing joyn's report).
 }
 \examples{
-# When null
+# When null - reporting variable not returned in merged dt
 check_reportvar(reportvar = NULL)
-# When FALSE
+# When FALSE - reporting variable not returned in merged dt
 check_reportvar(reportvar = FALSE)
 # When character
 check_reportvar(reportvar = ".joyn")
