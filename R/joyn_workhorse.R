@@ -1,7 +1,7 @@
 
 #' Internal workhorse join function, used in the backend of `joyn`
 #'
-#' Always executes a full join. 
+#' Always executes a full join.
 #'
 #' @param x data object, "left" or "master"
 #' @param y data object, "right" or "using"
@@ -13,8 +13,8 @@
 #'   `x` and `y`
 #' @return data object of same class as `x`
 #'
-#' @example 
-#' # Full join 
+#' @examples
+#' # Full join
 #' library(data.table)
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),

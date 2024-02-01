@@ -17,4 +17,11 @@ logical: \code{TRUE} if valid, \code{FALSE} if uniquely identified
 \description{
 Check whether specified "many" relationship is valid
 }
+\examples{
+x1 = data.frame(id  = c(1L, 1L, 2L, 3L, NA_integer_),
+                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x  = 11:15)
+
+is_valid_m_key(x1, by = "id")
+}
 \keyword{internal}

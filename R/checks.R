@@ -1,15 +1,15 @@
-#' check tables X and Y
+#' Check tables X and Y
 #'
-#' This function performs checks inspired on merge.data.table: it
-#'  * Checks if x and/or y have no columns
-#'  * Checks if x and/or y contain duplicate column names
+#' This function performs checks inspired on merge.data.table: it detects errors
+#'  * if x and/or y have no columns
+#'  * if x and/or y contain duplicate column names
 #'
 #' @inheritParams joyn
 #'
 #' @return invisible TRUE
 #' @keywords internal
 #'
-#' @example
+#' @examples
 #' # Check passing with no errors
 #' library(data.table)
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -48,8 +48,11 @@ check_xy  <- function(x,y) {
   }
 
   # check names -----------
-  error_exists <- check_duplicate_names(x, "x")
-  error_exists <- check_duplicate_names(y, "y")
+  # Note (Rossana): in the previous version, the function was not aborting when duplicate names
+  # were found. This is because it was overwriting the value or error_exists in each step.
+
+  error_exists <- error_exists || check_duplicate_names(x, "x")
+  error_exists <- error_exists || check_duplicate_names(y, "y")
 
   if (error_exists) {
     joyn_msg("err")
@@ -102,7 +105,7 @@ check_duplicate_names <- \(dt, name) {
 #' @inheritParams merge
 #' @keywords internal
 #' @return if character, it returns valid name for the report var. If NULL or FALSE, returns NULL.
-#' @example
+#' @examples
 #' # When null
 #' check_reportvar(reportvar = NULL)
 #' # When FALSE
@@ -145,7 +148,7 @@ check_reportvar <-
 #' @return list with information about by variables
 #' @keywords internal
 #'
-#' @example
+#' @examples
 #' x1 = data.frame(
 #'        id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'        t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -297,7 +300,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 #'
 #' @return logical
 #' @keywords internal
-#' @example
+#' @examples
 #' # example with match type error
 #' TODO
 
@@ -327,7 +330,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #' @return character vector with variable names from Y table
 #' @keywords internal
 #'
-#' @example
+#' @examples
 #' y1 = data.frame(id = 1:2,
 #'                y  = c(11L, 15L))
 #' # Keep y in y1
@@ -397,7 +400,7 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 #' @return vector with new variable names for y
 #' @keywords internal
 #'
-#' @example
+#' @examples
 #' y2 = data.frame(id = c(1, 2, 5, 6, 3),
 #'                 yd = c(1, 2, 5, 6, 3),
 #'                 y  = c(11L, 15L, 20L, 13L, 10L),
@@ -442,7 +445,7 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #'
 #' @return logical: `TRUE` if valid, `FALSE` if uniquely identified
 #' @keywords internal
-#' @example
+#' @examples
 #' x1 = data.frame(id  = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                  x  = 11:15)

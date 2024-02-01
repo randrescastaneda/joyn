@@ -2,7 +2,7 @@
 % Please edit documentation in R/is_id.R
 \name{is_id}
 \alias{is_id}
-\title{Make sure the match type is correct}
+\title{Report if dt is uniquely identified by \code{by} var or, if report = TRUE, the duplicates in \code{by} variable}
 \usage{
 is_id(dt, by, verbose = TRUE, return_report = FALSE)
 }
@@ -21,7 +21,7 @@ by \code{by}}
 logical or data.frame, depending on the value of argument \code{return_report}
 }
 \description{
-Make sure the match type is correct
+Report if dt is uniquely identified by \code{by} var or, if report = TRUE, the duplicates in \code{by} variable
 }
 \examples{
 library(data.table)

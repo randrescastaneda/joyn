@@ -89,7 +89,40 @@ will be added to the original name to distinguish from the resulting
 variable in the joined table.}
   }}
 }
+\value{
+data.table merging x and y
+}
 \description{
 This is a joyn wrapper that works in a similar fashion to \link[base:merge]{base::merge} and
 \link[data.table:merge]{data.table::merge}, which is why \link{merge} masks the other two.
+}
+\examples{
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15)
+y1 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16))
+merge(x1, y1, by = "id")
+# example of using by.x and by.y
+x2 = data.table(id1 = c(1, 1, 2, 3, 3),
+                id2 = c(1, 1, 2, 3, 4),
+                t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                x   = c(16, 12, NA, NA, 15))
+y2 = data.table(id  = c(1, 2, 5, 6, 3),
+                id2 = c(1, 1, 2, 3, 4),
+                y   = c(11L, 15L, 20L, 13L, 10L),
+                x   = c(16:20))
+jn <- merge(x2,
+            y2,
+            match_type = "m:m",
+            all.x = TRUE,
+            by.x = "id1",
+            by.y = "id2")
+# example with all = TRUE
+jn <- merge(x2,
+            y2,
+            match_type = "m:m",
+            by.x = "id1",
+            by.y = "id2",
+            all = TRUE)
 }

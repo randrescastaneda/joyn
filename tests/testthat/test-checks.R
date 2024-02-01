@@ -56,7 +56,8 @@ test_that("check_xy works as expected", {
   check_xy(y = y1) |>
     expect_error()
 
-  # Msgs stored in env when error exists
+  # Checking that msgs stored in env when error exists, and that the function
+  # aborts when wrong input specification
 
   # When x has 0 length
   clear_joynenv()
@@ -64,7 +65,8 @@ test_that("check_xy works as expected", {
   empty_df = data.frame()
 
   check_xy(x = empty_df,
-           y = y1)
+           y = y1) |>
+    expect_error()
 
   expect_true(rlang::env_has(.joynenv,
                              "joyn_msgs"))
@@ -73,7 +75,8 @@ test_that("check_xy works as expected", {
   clear_joynenv()
 
   check_xy(x = x1,
-           y = empty_df)
+           y = empty_df) |>
+      expect_error()
 
   expect_true(rlang::env_has(.joynenv,
                              "joyn_msgs"))
@@ -82,7 +85,8 @@ test_that("check_xy works as expected", {
   clear_joynenv()
 
   check_xy(x = empty_df,
-           y = empty_df)
+           y = empty_df) |>
+      expect_error()
 
   expect_true(rlang::env_has(.joynenv,
                              "joyn_msgs"))
@@ -101,7 +105,8 @@ test_that("check_xy works as expected", {
   clear_joynenv()
 
   check_xy(x = x1_duplicates,
-           y = y1)
+           y = y1) |>
+    expect_error()
 
   expect_true(rlang::env_has(.joynenv,
                              "joyn_msgs"))

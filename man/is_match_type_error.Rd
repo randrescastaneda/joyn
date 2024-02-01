@@ -21,4 +21,8 @@ logical
 \description{
 confirm if match_type_error
 }
+\examples{
+# example with match type error
+TODO
+}
 \keyword{internal}

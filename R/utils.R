@@ -77,9 +77,17 @@ fix_by_vars <- function(by, x, y) {
 #'
 #' @return character vector
 #' @keywords internal
-#' @example split_match_type("1:1")
+#'
+#' @examples
+#' # Examples with valid match types
+#' split_match_type("1:1")
+#' split_match_type("1:m")
+#' split_match_type("m:1")
+#' split_match_type("m:m")
+#'
+
 split_match_type <- function(match_type) {
-  
+
   match_types <- c("1:1", "m:1", "1:m", "m:m")
 
   if (!match_type %in% match_types) {

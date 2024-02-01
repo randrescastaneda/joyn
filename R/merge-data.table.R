@@ -7,7 +7,7 @@
 #' @inheritParams joyn
 #' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
 #'   reporttype keep_common_vars verbose
-#' @return data.table merging x and y 
+#' @return data.table merging x and y
 #' @examples
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -27,15 +27,15 @@
 #' jn <- merge(x2,
 #'             y2,
 #'             match_type = "m:m",
-#'             all.x = TRUE,  
+#'             all.x = TRUE,
 #'             by.x = "id1",
 #'             by.y = "id2")
 #' # example with all = TRUE
 #' jn <- merge(x2,
 #'             y2,
-#'             match_type = "m:m", 
+#'             match_type = "m:m",
 #'             by.x = "id1",
-#'             by.y = "id2", 
+#'             by.y = "id2",
 #'             all = TRUE)
 
 merge <- function(x,
@@ -105,7 +105,10 @@ check_logical <- \(x, name) {
 }
 
 
-#' check variable(s) by which data frames are to be joined
+#' Check dt `by` vars
+#'
+#' check variable(s) by which data frames are joined: either a single `by` var, common to right and left dt,
+#' or
 #'
 #' @param x left table
 #' @param y right table
@@ -113,14 +116,14 @@ check_logical <- \(x, name) {
 #' @param by.x character: specified var in x to join by
 #' @param by.y character: specified var in y to join by
 #'
-#' @return character specifying variable(s) to join by
-#' 
-#' @example
+#' @return character specifying checked variable(s) to join by
+#'
+#' @examples
 #' x = data.table(id1 = c(1, 1, 2, 3, 3),
 #'                id2 = c(1, 1, 2, 3, 4),
 #'                t   = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                x   = c(16, 12, NA, NA, 15))
-#' y = data.table(id  = c(1, 2, 5, 6, 3),
+#'y = data.table(id  = c(1, 2, 5, 6, 3),
 #'                id2 = c(1, 1, 2, 3, 4),
 #'                y   = c(11L, 15L, 20L, 13L, 10L),
 #'                x   = c(16:20))

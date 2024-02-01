@@ -17,4 +17,10 @@ character vector with variable names from Y table
 \description{
 check variables in Y that will be kept in returning table
 }
+\examples{
+y1 = data.frame(id = 1:2,
+               y  = c(11L, 15L))
+# Keep y in y1
+check_y_vars_to_keep(TRUE, y1, by = "id")
+}
 \keyword{internal}

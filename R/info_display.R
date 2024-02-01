@@ -55,7 +55,7 @@ joyn_msg <- function(type = c("all", type_choices())) {
 #'
 #' @return current message data frame invisibly
 #' @keywords internal
-#' @example
+#' @examples
 #' # With type = info and text = "simple message"
 #'
 #' store_msg("info", "simple message")
@@ -180,7 +180,7 @@ style <- function(..., sep = "") {
 #' Presence of joyn msgs in the environment
 #'
 #' @return invisible TRUE
-#' @example
+#' @examples
 #' Storing a message
 #' store_msg("info", "simple message")
 #' Checking if it exists in the environment
@@ -197,7 +197,7 @@ joyn_msgs_exist <- \() {
 
 #' Clearing joyn environment
 #'
-#' @example
+#' @examples
 #' # Storing a message
 #' store_msg("info", "simple message")
 #'

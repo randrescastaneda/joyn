@@ -7,9 +7,17 @@
 check_reportvar(reportvar, verbose = getOption("joyn.verbose"))
 }
 \value{
-if character, it returns valid name. If NULL or FALSE, returns NULL.
+if character, it returns valid name for the report var. If NULL or FALSE, returns NULL.
 }
 \description{
 check reportvar input
+}
+\examples{
+# When null
+check_reportvar(reportvar = NULL)
+# When FALSE
+check_reportvar(reportvar = FALSE)
+# When character
+check_reportvar(reportvar = ".joyn")
 }
 \keyword{internal}
