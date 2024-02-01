@@ -25,12 +25,25 @@ x2 = data.frame(
   x  = c(16, 12, NA, NA, 15)
 )
 
+x3 = data.frame(
+      id  = c(1, 2, 3, 4, NA),
+       t  = c(1L, 2L, 5L, 6L, NA_integer_),
+       x  = c(16, 12, NA, NA, 15)
+   )
+
 y2 = data.frame(
   id = c(1, 2, 5, 6, 3),
   yd = c(1, 2, 5, 6, 3),
   y  = c(11L, 15L, 20L, 13L, 10L),
   x  = c(16:20)
 )
+
+y3 = data.frame(
+       id = c(1, 2, 2, 6, 3),
+       yd = c(1, 2, 5, 6, 3),
+       y  = c(11L, 15L, 20L, 13L, 10L),
+       x  = c(16:20)
+   )
 
 df1 <- data.frame(
   id1 = c(1, 1, 2, 3),
@@ -194,15 +207,65 @@ test_that("check_match_type works as expected", {
     expect_error()
 
   # Outputs
-  # Error if user chooses "1" but actually "m"
+
+  # If user chooses "1:1" but actually "m:1" -----------------------------------
+  clear_joynenv()
+
   check_match_type(x1, y1, by = "id", match_type = "1:1") |>
     expect_error()
 
-  # If user chooses "m" and it is actually "m"
-  check_match_type(x1, y1, by = 'id', match_type = "m:1") |>
+  # check error msg is stored in env
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+      expect_equal("err")
+
+  # If user chooses "1:1" but actually "1:m" -----------------------------------
+  clear_joynenv()
+
+  check_match_type(x3, y3, by = "id", match_type = "1:1") |>
+    expect_error()
+
+  # check error msg is stored in env
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal("err")
+
+  # If user chooses "1:1" but actually "m:m" -----------------------------------
+  clear_joynenv()
+
+  check_match_type(df1, df2, by = "id1", match_type = "1:1") |>
+    expect_error()
+
+  # check error msg is stored in env
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal(c("err", "err"))
+
+  # If user chooses "m:1" but it is actually "m:m" -----------------------------
+  clear_joynenv()
+
+  check_match_type(x3, y3, by = 'id', match_type = "m:1") |>
+    expect_error()
+
+  # check err msg is stored in env
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal(c("err"))
+
+  # Check warning msgs are stored correctly ------------------------------------
+  # TODO - Check function is working well
+
+
+  # Output when correct match type ---------------------------------------------
+  check_match_type(x3, y2, by = "id", match_type = "1:1") |>
+      expect_equal(c("1", "1"))
+
+  check_match_type(df1, df2, by = "id1", match_type = "m:m") |>
+      expect_equal(c("m", "m"))
+
+  check_match_type(x1, y1, by = "id", match_type = "m:1") |>
     expect_equal(c("m", "1"))
 
-  # Warning if user chooses "m" but actually "1"
+  check_match_type(x3, y2, by = "id", match_type = "1:m") |>
+    expect_equal(c("1", "m"))
+
+  # Output class
   class(check_match_type(x1, y1, by = 'id', match_type = "m:1")) |>
     expect_equal("character")
 

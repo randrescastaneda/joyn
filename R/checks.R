@@ -193,7 +193,7 @@ check_by_vars <- function(by, x, y) {
 #' Check match type consistency
 #'
 #' This function checks if the match type chosen by the user is consistent with the data.
-#' <br>(Valid match types are "1:1", "1:m", "m:1", "m:m")
+#' <br>(Match type must be one of valid types: "1:1", "1:m", "m:1", "m:m")
 #'
 #' @inheritParams merge
 #'
@@ -241,7 +241,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
       y_m <- is_valid_m_key(y, by)
     }
 
-  # Error if user choses "1" but actually "m" ----
+  # Error if user chooses "1" but actually "m" ----
   if (match_type_error) {
     msg     <- "match type inconsistency"
     hint    <-
@@ -459,17 +459,28 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 
 #' Check whether specified "many" relationship is valid
 #'
+#' When "many" relationship is specified, check if it is valid. <br> (Specified many relationship not valid if the dt is uniquely identified by specified keys)
+#'
 #' @param dt data object
 #' @param by character vector: specified keys, already fixed
 #'
 #' @return logical: `TRUE` if valid, `FALSE` if uniquely identified
 #' @keywords internal
 #' @examples
+#' # example with data frame uniquely identified by specified `by` vars
 #' x1 = data.frame(id  = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                  x  = 11:15)
 #'
 #' is_valid_m_key(x1, by = c("id", "t"))
+
+#' # example with valid specified "many" relationship
+#' x2 = data.frame(id  = c(1L, 1L, 1L, 3L, NA_integer_),
+#'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#'                  x  = 11:15)
+#' is_valid_m_key(x2, by = c("id", "t"))
+
+
 
 is_valid_m_key <- function(dt, by){
 
