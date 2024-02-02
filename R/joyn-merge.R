@@ -479,19 +479,6 @@ joyn <- function(x,
   ## convert to characters if chosen -------
   if (reporttype == "character") {
 
-    applySwitch <- function(value) {
-      switch(as.character(value),
-             "1" = "x",
-             "2" = "y",
-             "3" = "x & y",
-             "4" = "NA updated",
-             "5" = "value updated",
-             "6" = "not updated",
-             "conflict. check")
-    }
-
-    # Apply the function to the column
-
     rvar_to_chr <- \(x) {
       data.table::fcase(x == 1, "x",
                         x == 2, "y",
@@ -502,10 +489,7 @@ joyn <- function(x,
                         default = "conflict")
     }
 
-    # reportvar <- ".joyn"
     settransformv(x, reportvar, rvar_to_chr)
-
-    # x[[reportvar]] <- sapply(x[[reportvar]], applySwitch)
 
   }
 
