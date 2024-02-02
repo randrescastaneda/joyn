@@ -359,8 +359,7 @@ joyn <- function(x,
 
   # report variable
   x$use_util_report <- x$`.xreport` + x$`.yreport`
-  names(x)[length(names(x))] <- reportvar
-
+  data.table::setnames(x, "use_util_report", reportvar)
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -433,6 +432,26 @@ joyn <- function(x,
 
   }
 
+  ### common vars ----------
+
+  if (isFALSE(keep_common_vars)) {
+    patterns <-
+      suffixes |>
+      gsub("\\.", "\\\\.", x = _) |>
+      paste0("$")
+
+    varx <- grep(patterns[1], names(x), value = TRUE)
+    vary <- grep(patterns[2], names(x), value = TRUE)
+
+    # delete Y vars with suffix
+    collapse::get_vars(x, vary) <- NULL
+
+    # remove suffixes
+    nsvar <- gsub(patterns[1], "", varx)
+    data.table::setnames(x, varx, nsvar)
+
+  }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Display results and cleaning   ---------
@@ -446,7 +465,7 @@ joyn <- function(x,
   ## Rename by variables -----
 
   if (!is.null(fixby$xby)) {
-    setnames(x, fixby$tempkey, fixby$xby)
+    data.table::setnames(x, fixby$tempkey, fixby$xby)
     by <- fixby$xby
     # not necessary
     # setnames(y, fixby$tempkey, fixby$yby)

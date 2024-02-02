@@ -46,7 +46,7 @@ This is the default if you don't use the argument `by`
 ```{r}
 # The variables with the same name, `id` and `x`, are used as key
 # variables.
-merge(x, y)[]
+joyn(x, y)[]
 ```
 
 ### 2. Ignore variable *country* and don't bring it into the resulting table
@@ -55,7 +55,7 @@ This the default if you did not include *country* as part of the key variables
 in argument `by`.
 
 ```{r}
-merge(x, y, by = "id")[]
+joyn(x, y, by = "id")[]
 ```
 
 ### 3. Update only NAs in table x
@@ -66,7 +66,7 @@ with the actual values of the matching observations in *country* from table y
 will remain unchanged.
 
 ```{r}
-merge(x, y, by = "id", update_NAs = TRUE)[]
+joyn(x, y, by = "id", update_NAs = TRUE)[]
 ```
 
 ### 4. Update actual values in table x
@@ -85,7 +85,7 @@ argument `keep_y_in_x`.
 
 ```{r}
 # notice that only the value that are 
-merge(x, y, by = "id", update_values = TRUE)[]
+joyn(x, y, by = "id", update_values = TRUE)[]
 ```
 
 ### 5. Keep matching-names variables from y into x (No update)
@@ -94,7 +94,7 @@ Bring variable *country* from y into the resulting table with a different name
 (*country.y*).
 
 ```{r}
-merge(x, y, by = "id", keep_y_in_x = TRUE)[]
+joyn(x, y, by = "id", keep_common_vars = TRUE)[]
 ```
 
 If you need to update *country* in x, including the actual values with NAs from
@@ -102,7 +102,8 @@ If you need to update *country* in x, including the actual values with NAs from
 variable is not that useful anymore.
 
 ```{r}
-dd <- merge(x, y, by = "id", keep_y_in_x = TRUE, verbose = FALSE)
+dd <- joyn(x, y, by = "id", keep_common_vars = TRUE, verbose = FALSE)
+dd <- joyn(x, y, by = "id", keep_common_vars = FALSE, verbose = FALSE)
 dd[, country := country.y
    ][, country.y := NULL]
 
@@ -121,13 +122,13 @@ be carried over in the join.
 
 ```{r}
 # Bring all variables updating values
-merge(x, y, by = "id", update_values = TRUE)[]
+joyn(x, y, by = "id", update_values = TRUE)[]
 
 # Bring no variables from y
-merge(x, y, by = "id", yvars = FALSE)[]
+joyn(x, y, by = "id", yvars = FALSE)[]
 
 # Bring only variable gdp from table y. So variable country won't be updated either because table y is filtered before the coparison of variables is done. 
-merge(x, y, by = "id", yvars = "gdp")[]
+joyn(x, y, by = "id", yvars = "gdp")[]
 ```
 
 ## Rolling joins
