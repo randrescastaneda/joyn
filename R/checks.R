@@ -100,9 +100,9 @@ check_duplicate_names <- \(dt, name) {
   return(FALSE)
 }
 
-#' Check reportvar input
+#' Check reporting variable
 #'
-#' check reporting variable (storing joyn's report).
+#' check reportvar input <br> If resulting data frame has a reporting variable (storing joyn's report), check and return a valid name.
 #'
 #' @inheritParams merge
 #' @keywords internal
@@ -193,7 +193,7 @@ check_by_vars <- function(by, x, y) {
 #' Check match type consistency
 #'
 #' This function checks if the match type chosen by the user is consistent with the data.
-#' <br>(Match type must be one of valid types: "1:1", "1:m", "m:1", "m:m")
+#' <br>(Match type must be one of the valid types: "1:1", "1:m", "m:1", "m:m")
 #'
 #' @inheritParams merge
 #'
@@ -298,7 +298,6 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
 #' Confirm if match type error
 #'
-#' Confirm if `dt` is not uniquely identified by `by` var
 #'
 #' @inheritParams merge
 #' @param name name of data frame
@@ -410,7 +409,7 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
 #' Rename vars in y so they are different to x's when joined
 #'
-#' Check which vars in y would have same names as vars in x when joined, and return new variables names for those y vars
+#' Check vars in y with same names as vars in x, and return new variables names for those y vars for the joined data frame
 #'
 #' @param x master table
 #' @param by character: by vars
@@ -459,7 +458,7 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 
 #' Check whether specified "many" relationship is valid
 #'
-#' When "many" relationship is specified, check if it is valid. <br> (Specified many relationship not valid if the dt is uniquely identified by specified keys)
+#' When "many" relationship is specified, check if it is valid. <br> (Specified many relationship not valid if the dt is instead uniquely identified by specified keys)
 #'
 #' @param dt data object
 #' @param by character vector: specified keys, already fixed

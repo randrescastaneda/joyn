@@ -2,7 +2,7 @@
 % Please edit documentation in R/freq_table.R
 \name{freq_table}
 \alias{freq_table}
-\title{tabulate simple frequencies}
+\title{Tabulate simple frequencies}
 \usage{
 freq_table(x, byvar, digits = 1, na.rm = TRUE)
 }

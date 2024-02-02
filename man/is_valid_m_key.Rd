@@ -15,7 +15,7 @@ is_valid_m_key(dt, by)
 logical: \code{TRUE} if valid, \code{FALSE} if uniquely identified
 }
 \description{
-When "many" relationship is specified, check if it is valid. \if{html}{\out{<br>}} (Specified many relationship not valid if the dt is uniquely identified by specified keys)
+When "many" relationship is specified, check if it is valid. \if{html}{\out{<br>}} (Specified many relationship not valid if the dt is instead uniquely identified by specified keys)
 }
 \examples{
 # example with data frame uniquely identified by specified `by` vars

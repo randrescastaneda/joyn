@@ -19,7 +19,7 @@ If \code{y} has no key columns, this defaults to the key of \code{x}.}
 logical
 }
 \description{
-Confirm if \code{dt} is not uniquely identified by \code{by} var
+Confirm if match type error
 }
 \examples{
 # example with dt not uniquely identified by "id"

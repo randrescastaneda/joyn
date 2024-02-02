@@ -24,7 +24,7 @@ character vector from \link{split_match_type}
 }
 \description{
 This function checks if the match type chosen by the user is consistent with the data.
-\if{html}{\out{<br>}}(Valid match types are "1:1", "1:m", "m:1", "m:m")
+\if{html}{\out{<br>}}(Match type must be one of the valid types: "1:1", "1:m", "m:1", "m:m")
 }
 \examples{
 # Consistent match type

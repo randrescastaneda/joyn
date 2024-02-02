@@ -4,11 +4,13 @@ if (getRversion() >= '2.15.1')
     c('N', '.', 'copies')
   )
 
-#' Report if dt is uniquely identified by `by` var or, if report = TRUE, the duplicates in `by` variable
+#' Check if dt is uniquely identified by `by` variable
+#'
+#' report if dt is uniquely identified by `by` var or, if report = TRUE, the duplicates in `by` variable
 #'
 #' @param dt either right of left table
 #' @param verbose logical: if TRUE messages will be displayed
-#' @param by by argument in merge
+#' @param by variable to merge by
 #' @param return_report logical: if TRUE, returns data with summary of duplicates.
 #' If FALSE, returns logical value depending on whether `dt` is uniquely identified
 #' by `by`
@@ -18,10 +20,20 @@ if (getRversion() >= '2.15.1')
 #'
 #' @examples
 #' library(data.table)
-#' y3 <- data.table(id = c("c","b", "c", "a"),
+#'
+#' # example with data frame not uniquely identified by `by` var
+#'
+#' y <- data.table(id = c("c","b", "c", "a"),
 #'                  y  = c(11L, 15L, 18L, 20L))
 #' is_id(y3, by = "id")
 #' is_id(y3, by = "id", return_report = TRUE)
+#'
+#' # example with data frame uniquely identified by `by` var
+#'
+#' y1 <- data.table(id = c("1","3", "2", "9"),
+#'                  y  = c(11L, 15L, 18L, 20L))
+#' is_id(y1, by = "id")
+#'
 
 is_id <- function(dt,
                   by,

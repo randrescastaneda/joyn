@@ -1,7 +1,7 @@
 #' display type of joyn message
 #'
 #' @param type character: one or more of the following:
-#' `r cli::format_inline("{.or {.val {type_choices()}}}")`
+#' `r cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
@@ -59,7 +59,7 @@ joyn_msg <- function(type = c("all", type_choices())) {
 #' # With type = info and text = "simple message"
 #'
 #' store_msg("info", "simple message")
-#' rlang::env_has(env = .joynenv, "joyn_msgs")
+#' rlang::env_get(env = .joynenv, "joyn_msgs")
 #'
 store_msg <- function(type, ...) {
 
@@ -111,12 +111,13 @@ type_choices <- \(){
 }
 
 
-#' convert style to data frame
+#' convert style of joyn message to data frame containing type and message
 #'
 #' @inheritParams joyn_msg
 #'
-#' @return data frame
+#' @return data frame with two variables, type and msg
 #' @keywords internal
+
 msg_type_dt <- \(type, ...) {
   c(type = type, msg = style(...)) |>  # named vector
     as.list() |>  # convert to list to pass as data.frame
@@ -178,6 +179,8 @@ style <- function(..., sep = "") {
 }
 
 #' Presence of joyn msgs in the environment
+#'
+#' Checks the presence of joyn messages stored in joyn environment
 #'
 #' @return invisible TRUE
 #' @examples

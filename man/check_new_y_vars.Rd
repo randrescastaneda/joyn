@@ -17,7 +17,7 @@ check_new_y_vars(x, by, y_vars_to_keep)
 vector with new variable names for y
 }
 \description{
-Check which vars in y would have same names as vars in x when joined, and return new variables names for those y vars
+Check vars in y with same names as vars in x, and return new variables names for those y vars for the joined data frame
 }
 \examples{
 y2 = data.frame(id = c(1, 2, 5, 6, 3),

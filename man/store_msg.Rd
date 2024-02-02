@@ -8,7 +8,7 @@ store_msg(type, ...)
 }
 \arguments{
 \item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err"}
+"info", "note", "warn", "timing", or "err" or \code{all}}
 
 \item{...}{combination of type and text in the form \verb{style1 = text1, style2 = text2}, etc.}
 }

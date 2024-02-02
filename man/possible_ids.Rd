@@ -28,7 +28,7 @@ TRUE}
 list with possible identifiers
 }
 \description{
-Find possible unique identifies of data frame
+Identify possible variables uniquely identifying x
 }
 \examples{
 library(data.table)

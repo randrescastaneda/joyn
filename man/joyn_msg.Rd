@@ -8,7 +8,7 @@ joyn_msg(type = c("all", type_choices()))
 }
 \arguments{
 \item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err"}
+"info", "note", "warn", "timing", or "err" or \code{all}}
 }
 \value{
 returns data frame with message invisibly. print message in console

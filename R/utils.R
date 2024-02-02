@@ -3,11 +3,11 @@
 #' @param name character: name to be coerced to syntactically valid name
 #' @inheritParams joyn
 #'
-#' @return valide character name
+#' @return valid character name
 #' @export
 #'
 #' @examples
-#' rename_to_valid("not valid")
+#' rename_to_valid("x y")
 rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -28,6 +28,8 @@ rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
 }
 
 #' Split matching type
+#'
+#' Split matching type (one of `"1:1", "m:1", "1:m", "m:m"`) into its two components
 #'
 #' @inheritParams joyn
 #'
@@ -58,15 +60,15 @@ split_match_type <- function(match_type) {
 
 #' Is data frame balanced by group?
 #'
-#'
+#' Check if the data frame is balanced by group of columns, i.e., if it contains every combination of the elements in the specified variables
 #'
 #' @param df data frame
-#' @param by  character: variables to check balance
-#' @param return character: either "logic" or "table". If logic, returns `TRUE`
-#'   or `FALSE` if data frame is balanced. If "table" returns the unbalanced
-#'   observations - i.e. the combinations not found in input `df`
+#' @param by  character: variables used to check if `df` is balanced
+#' @param return character: either "logic" or "table". If "logic", returns `TRUE`
+#'   or `FALSE` depending on whether data frame is balanced. If "table" returns the unbalanced
+#'   observations - i.e. the combinations of elements in specified variables not found in input `df`
 #'
-#' @return logical if return == "logic", else returns data frame of unbalanced observations
+#' @return logical, if return == "logic", else returns data frame of unbalanced observations
 #' @export
 #'
 #' @examples
@@ -75,10 +77,10 @@ split_match_type <- function(match_type) {
 #'                 x  = 11:15)
 #' is_balanced(df = x1,
 #'             by = c("id", "t"),
-#'             return = "table") # returns combo of "id" and "t" not in df
+#'             return = "table") # returns combination of elements in "id" and "t" not present in df
 #' is_balanced(df = x1,
 #'             by = c("id", "t"),
-#'             return = "logic") # returns TRUE or FALSE
+#'             return = "logic") # FALSE
 is_balanced <- function(df,
                         by,
                         return = c("logic", "table")) {

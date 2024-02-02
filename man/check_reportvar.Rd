@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_reportvar}
 \alias{check_reportvar}
-\title{Check reportvar input}
+\title{Check reporting variable}
 \usage{
 check_reportvar(reportvar, verbose = getOption("joyn.verbose"))
 }
@@ -10,7 +10,7 @@ check_reportvar(reportvar, verbose = getOption("joyn.verbose"))
 if input reportvar is character, return valid name for the report var. If NULL or FALSE, return NULL.
 }
 \description{
-check reporting variable (storing joyn's report).
+check reportvar input \if{html}{\out{<br>}} If resulting data frame has a reporting variable (storing joyn's report), check and return a valid name.
 }
 \examples{
 # When null - reporting variable not returned in merged dt

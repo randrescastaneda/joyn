@@ -68,6 +68,7 @@ test_that("LEFT JOIN - Conducts left join", {
   )
   setorder(jn_joyn, id, na.last = TRUE)
 
+
   jn_joyn2 <- left_join(
     x = x1,
     y = y1,
@@ -168,6 +169,9 @@ test_that("LEFT JOIN - no id given", {
 })
 
 
+
+
+
 test_that("LEFT JOIN - incorrectly specified arguments give errors", {
 
   expect_error(
@@ -206,6 +210,26 @@ test_that("LEFT JOIN - incorrectly specified arguments give errors", {
     )
   )
 
+  expect_error(
+    left_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = "invalid KEEP",
+    by = "id")
+  )
+
+  expect_no_error(
+    left_join(
+      x = x2,
+      y = y2,
+      relationship = NULL,
+      keep = T,
+      by = "id"
+    )
+  )
+
+
 
 })
 
@@ -235,8 +259,20 @@ test_that("LEFT JOIN - argument `keep` preserves keys in output", {
       reg_elem()
   )
 
-})
+  clear_joynenv()
 
+  joyn::left_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = NULL,
+    by = "id"
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+      expect_contains("warn")
+
+})
 
 
 test_that("LEFT JOIN - update values works", {
@@ -448,6 +484,16 @@ test_that("RIGHT JOIN - incorrectly specified arguments give errors", {
       y = y1,
       relationship = "many-to-one",
       unmatched = "error"
+    )
+  )
+
+  expect_no_error(
+    right_join(
+      x = x2,
+      y = y2,
+      relationship = NULL,
+      keep = T,
+      by = "id"
     )
   )
 

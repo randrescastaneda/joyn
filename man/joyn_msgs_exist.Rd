@@ -10,7 +10,7 @@ joyn_msgs_exist()
 invisible TRUE
 }
 \description{
-Presence of joyn msgs in the environment
+Checks the presence of joyn messages stored in joyn environment
 }
 \examples{
 Storing a message

@@ -71,7 +71,7 @@ left_join <- function(
   if (copy == TRUE) {
     store_msg(
       type = "warn",
-      warn = "Warning: that argument `copy = TRUE` is not active in this version of `joyn`"
+      warn = "Warning: argument `copy = TRUE` is not active in this version of `joyn`"
     )
   }
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
@@ -109,9 +109,11 @@ left_join <- function(
       "last"
     )
   )
+
   if (multiple == "any") {
     multiple <- "first"
   }
+
   unmatched  <- match.arg(
     unmatched,
     choices = c(
@@ -119,7 +121,9 @@ left_join <- function(
       "error"
     )
   )
+
   if (is.null(relationship)) {relationship <- "one-to-one"}
+
   relationship <- switch(
     relationship,
     "one-to-one"   = "1:1",
