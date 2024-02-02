@@ -16,7 +16,7 @@ other three match types (See details in \emph{match types sections}).}
 character vector
 }
 \description{
-Split matching type
+Split matching type (one of \verb{"1:1", "m:1", "1:m", "m:m"}) into its two components
 }
 \examples{
 # Examples with valid match types

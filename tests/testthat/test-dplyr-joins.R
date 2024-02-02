@@ -446,6 +446,28 @@ test_that("RIGHT JOIN - no id given", {
   )
   expect_equal(jn1, jn2)
 
+  expect_no_error(
+    right_join(
+      x2,
+      y2,
+      by = NULL
+    ))
+
+})
+
+test_that ("RIGHT JOIN - when copy TRUE get warning message", {
+  clear_joynenv()
+
+  joyn::right_join(
+    x = x2,
+    y = y2,
+    by = "id",
+    copy = TRUE,
+    keep = FALSE
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
 })
 
 
@@ -474,6 +496,15 @@ test_that("RIGHT JOIN - incorrectly specified arguments give errors", {
       x = y1,
       y = x1,
       relationship = "one-to-many",
+      multiple = "any"
+    )
+  )
+
+  expect_error(
+    right_join(
+      x = y1,
+      y = x1,
+      relationship = "many-to-many",
       multiple = "any"
     )
   )
@@ -597,13 +628,20 @@ test_that("RIGHT JOIN - NA matches", {
     4
   )
 
+  clear_joynenv()
+  # checking when na_matches is never warning msg is stored
+
+  joyn::right_join(
+    x = x5,
+    y = y5,
+    relationship = "many-to-many",
+    na_matches = "never"
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+
 })
-
-
-
-
-
-
 
 
 #-------------------------------------------------------------------------------

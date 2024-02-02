@@ -22,7 +22,7 @@ Store joyn message to .joynenv environment
 # With type = info and text = "simple message"
 
 store_msg("info", "simple message")
-rlang::env_has(env = .joynenv, "joyn_msgs")
+rlang::env_get(env = .joynenv, "joyn_msgs")
 
 }
 \keyword{internal}
