@@ -102,12 +102,10 @@ If you need to update *country* in x, including the actual values with NAs from
 variable is not that useful anymore.
 
 ```{r}
-dd <- joyn(x, y, by = "id", keep_common_vars = TRUE, verbose = FALSE)
-dd <- joyn(x, y, by = "id", keep_common_vars = FALSE, verbose = FALSE)
-dd[, country := country.y
-   ][, country.y := NULL]
+joyn(x, y, by = "id", keep_common_vars = TRUE, verbose = FALSE)
 
-dd[]
+joyn(x, y, by = "id", keep_common_vars = FALSE, verbose = FALSE)
+
 ```
 
 ## Bring specific variables from y into x

@@ -203,7 +203,8 @@ test_that("FULL- Compare with base::merge", {
   jn <- joyn(x2,
           y2,
           by = "id",
-          reportvar = FALSE)
+          reportvar = FALSE,
+          keep_common_vars = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
@@ -242,7 +243,8 @@ test_that("LEFT- Compare with base::merge", {
       by = "id",
       reportvar = FALSE,
       keep = "left",
-      match_type = "1:1"
+      match_type = "1:1",
+      keep_common_vars = TRUE
     )
 
   br <- base::merge(x2, y2, by = "id", all.x = TRUE)
@@ -284,7 +286,8 @@ test_that("RIGHT - Compare with base::merge", {
       by = "id",
       reportvar = FALSE,
       keep = "right",
-      match_type = "1:1"
+      match_type = "1:1",
+      keep_common_vars = TRUE
     )
 
   br <- base::merge(x2, y2, by = "id", all.y = TRUE)
@@ -325,7 +328,8 @@ test_that("INNER - Compare with base::merge", {
       by        = "id",
       reportvar = FALSE,
       keep      = "inner",
-      match_type = "1:1"
+      match_type = "1:1",
+      keep_common_vars = TRUE
     )
   br <- base::merge(x2, y2, by = "id")
 
@@ -406,7 +410,8 @@ test_that("Update NAs", {
   jn <- joyn(x2, # ZP: THIS GIVES ERROR
               y2,
               by = "id",
-              update_NAs = TRUE)
+              update_NAs = TRUE,
+             keep_common_vars = TRUE)
 
   idx <- x2[is.na(x), "id"]
 
@@ -423,7 +428,8 @@ test_that("Update actual values", {
           y2,
           by = "id",
           update_values = TRUE,
-         update_NAs = TRUE)
+         update_NAs = TRUE,
+         keep_common_vars = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 

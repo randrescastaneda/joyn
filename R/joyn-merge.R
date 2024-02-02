@@ -358,7 +358,8 @@ joyn <- function(x,
 
 
   # report variable
-  x$use_util_report <- x$`.xreport` + x$`.yreport`
+  collapse::settransform(x, use_util_report = .xreport + .yreport)
+  # Can this be done more efficiently with collapse?
   data.table::setnames(x, "use_util_report", reportvar)
 
 
@@ -458,8 +459,9 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## cleaning temporary report variables ----
-  x$`.xreport` <- NULL
-  x$`.yreport` <- NULL
+  collapse::settransform(x,
+                         .xreport = NULL,
+                         .yreport = NULL)
 
 
   ## Rename by variables -----
@@ -489,7 +491,21 @@ joyn <- function(x,
     }
 
     # Apply the function to the column
-    x[[reportvar]] <- sapply(x[[reportvar]], applySwitch)
+
+    rvar_to_chr <- \(x) {
+      data.table::fcase(x == 1, "x",
+                        x == 2, "y",
+                        x == 3, "x & y",
+                        x == 4, "NA updated",
+                        x == 5, "value updated",
+                        x == 6, "not updated",
+                        default = "conflict")
+    }
+
+    # reportvar <- ".joyn"
+    settransformv(x, reportvar, rvar_to_chr)
+
+    # x[[reportvar]] <- sapply(x[[reportvar]], applySwitch)
 
   }
 

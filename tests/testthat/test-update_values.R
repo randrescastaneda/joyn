@@ -16,7 +16,8 @@ test_that("update_values works as expected", {
             y2,
             by         = "id",
             match_type = "m:1",
-            update_NAs = FALSE)
+            update_NAs = FALSE,
+            keep_common_vars = TRUE)
 
   colnames(dt)[3] = "x"
 

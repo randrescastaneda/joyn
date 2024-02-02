@@ -17,7 +17,8 @@ test_that("update_NAs works as expected", {
   dt = joyn(x2,
             y2,
             by         = "id",
-            match_type = "m:1")
+            match_type = "m:1",
+            keep_common_vars = TRUE)
 
   colnames(dt)[3] = "x"
 

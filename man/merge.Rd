@@ -18,6 +18,7 @@ merge(
   no.dups = TRUE,
   allow.cartesian = getOption("datatable.allow.cartesian"),
   match_type = c("m:m", "m:1", "1:m", "1:1"),
+  keep_common_vars = TRUE,
   ...
 )
 }
@@ -63,6 +64,11 @@ Default is \emph{"1:1"} since this the most restrictive. However, following
 Stata's recommendation, it is better to be explicit and use any of the
 other three match types (See details in \emph{match types sections}).}
 
+\item{keep_common_vars}{logical: If TRUE, it will keep the original variable
+from y when both tables have common variable names. Thus, the prefix "y."
+will be added to the original name to distinguish from the resulting
+variable in the joined table.}
+
 \item{...}{
   Arguments passed on to \code{\link[=joyn]{joyn}}
   \describe{
@@ -85,10 +91,6 @@ NAs in x will be updated with values in y. To avoid this, make sure to set
 \code{update_NAs = FALSE}}
     \item{\code{verbose}}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
-    \item{\code{keep_common_vars}}{logical: If TRUE, it will keep the original variable
-from y when both tables have common variable names. Thus, the prefix "y."
-will be added to the original name to distinguish from the resulting
-variable in the joined table.}
   }}
 }
 \value{

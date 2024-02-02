@@ -52,6 +52,7 @@ merge <- function(x,
                   # default FALSE
                   allow.cartesian = getOption("datatable.allow.cartesian"),
                   match_type= c("m:m", "m:1", "1:m", "1:1"),
+                  keep_common_vars = TRUE,
                   ...) {
 
   # clear joun env
@@ -81,14 +82,15 @@ merge <- function(x,
   # NOTE: we should think of anti-joins...
 
   # implement joyn --------
-  dt <- joyn(x               = x,
-             y               = y,
-             by              = by,
-             match_type      = match_type,
-             keep            = keep,
-             sort            = sort,
-             allow.cartesian = allow.cartesian,
-             suffixes        = suffixes,
+  dt <- joyn(x                = x,
+             y                = y,
+             by               = by,
+             match_type       = match_type,
+             keep             = keep,
+             sort             = sort,
+             allow.cartesian  = allow.cartesian,
+             suffixes         = suffixes,
+             keep_common_vars = keep_common_vars,
              ...)
 
   # wrangling (add filters) -------

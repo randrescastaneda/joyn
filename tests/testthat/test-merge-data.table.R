@@ -126,7 +126,6 @@ test_that("LEFT JOIN - Conducts left join", {
 
   jn_dt <- merge.data.table(x = x1,
                              y = y1,
-                             match_type = "m:1",
                              all.x = TRUE,
                              by = "id")
 
@@ -276,7 +275,6 @@ test_that("RIGHT JOIN - Conducts right join", {
     y4,
     by.x = "id1",
     by.y = "id2",
-    match_type = "m:m",
     all.y = TRUE
   )
 
@@ -336,7 +334,6 @@ test_that("FULL JOIN - Conducts full join", {
   jn_dt <- merge.data.table(
     x2,
     y2,
-    match_type = "1:1",
     by = "id",
     all = TRUE
   )
