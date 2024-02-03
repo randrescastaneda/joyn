@@ -23,5 +23,10 @@ Authors:
   \item Zander Prinsloo \email{zprinsloo@worldbank.org}
 }
 
+Other contributors:
+\itemize{
+  \item Rossana Tatulli \email{rtatulli@worldbank.org} [contributor]
+}
+
 }
 \keyword{internal}

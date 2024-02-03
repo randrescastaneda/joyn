@@ -9,7 +9,11 @@ Authors@R: c(person(given = "R.Andres",
              person(given = "Zander",
                     family = "Prinsloo",
                     role = "aut",
-                    email = "zprinsloo@worldbank.org")
+                    email = "zprinsloo@worldbank.org"),
+              person(given = "Rossana",
+                    family = "Tatulli",
+                    role = "ctb",
+                    email = "rtatulli@worldbank.org")      
                     )
 Description: Tool for diagnosing table joins. It combines the speed of `collapse`
      and `data.table`, the flexibility of `dplyr`, and the diagnosis and features 
