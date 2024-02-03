@@ -4,7 +4,7 @@ if (getRversion() >= '2.15.1')
     c('n', '.', 'percent')
   )
 
-#' tabulate simple frequencies
+#' Tabulate simple frequencies
 #'
 #' tabulate one variable frequencies
 #'

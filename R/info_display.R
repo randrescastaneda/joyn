@@ -1,19 +1,24 @@
 #' display type of joyn message
 #'
 #' @param type character: one or more of the following:
-#' `r cli::format_inline("{.or {.val {type_choices()}}}")`
+#' `r cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
 #' @examples
+#' # Storing msg with type "info"
 #' joyn:::store_msg("info",
 #'   ok = cli::symbol$tick, "  ",
 #'   pale = "This is an info message")
+#'
+#' # Storing msg with type "warn"
 #' joyn:::store_msg("warn",
 #'   err = cli::symbol$cross, "  ",
 #'   note = "This is a warning message")
+#'
 #' joyn_msg("all")
+
 joyn_msg <- function(type = c("all", type_choices())) {
 
   # Check ---------
@@ -85,6 +90,8 @@ store_msg <- function(type, ...) {
 
 }
 
+# To check if documentation
+
 check_style <- \(...) {
   if (length(list(...)) == 0) {
     cli::cli_abort(c("no style provided",
@@ -98,11 +105,11 @@ type_choices <- \(){
 }
 
 
-#' convert style to data frame
+#' convert style of joyn message to data frame containing type and message
 #'
 #' @inheritParams joyn_msg
 #'
-#' @return data frame
+#' @return data frame with two variables, type and msg
 #' @keywords internal
 msg_type_dt <- \(type, ...) {
   c(type = type, msg = style(...)) |>  # named vector
@@ -119,7 +126,7 @@ msg_type_dt <- \(type, ...) {
 #' `type1 = text1, type2 = text2`
 #' @param sep a character string to separate the terms to [paste]
 #'
-#' @return formated text
+#' @return formatted text
 #' @keywords internal
 style <- function(..., sep = "") {
   args <- list(...)
@@ -164,6 +171,18 @@ style <- function(..., sep = "") {
   paste(unlist(x), collapse = sep)
 }
 
+#' Presence of joyn msgs in the environment
+#'
+#' Checks the presence of joyn messages stored in joyn environment
+#'
+#' @return invisible TRUE
+#' @examples
+#' \dontrun{
+#' Storing a message
+#' store_msg("info", "simple message")
+#' Checking if it exists in the environment
+#' print(joyn_msgs_exist())
+#' }
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {
     cli::cli_abort(c("no messages stored in .joynenv",
@@ -173,6 +192,19 @@ joyn_msgs_exist <- \() {
 }
 
 
+#' Clearing joyn environment
+#'
+#' @examples
+#' \dontrun{
+#' # Storing a message
+#' store_msg("info", "simple message")
+#'
+#' # Clearing the environment
+#' clear_joynenv()
+#'
+#' # Checking it does not exist in the environment
+#' print(joyn_msgs_exist())
+#' }
 clear_joynenv <- \(){
   # get the source function
   .joyn_source  <- sys.call(-1)[[1]]

@@ -42,6 +42,12 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
 #                   overwrite = TRUE,
 #                   internal = TRUE)
 
+test_that("correct inputs", {
+  x <- "not a data.table/data.frame"
+
+  freq_table(x) |>
+    expect_error()
+})
 
 test_that("correct frequencies", {
 

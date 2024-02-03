@@ -1,3 +1,5 @@
+# Testing functions displaying messages' info
+
 withr::local_options(joyn.verbose = FALSE)
 df1 <- data.frame(
   id1 = c(1, 1, 2, 3),
@@ -16,16 +18,50 @@ df3 <- df2[, c("id1", "id2")]
 
 collapse::join(df1,df3, on = c("id1", "id2"), how = "inner")
 
-
 x <- c("id1", "id2")
 
 df1 |>
   fselect(x)
 
+# Test that joyn_msg works as expected ####
+test_that("joyn_msg works as expected", {
+  types <- c("info", "note", "warn", "timing", "err")
+  # store some msg
+  store_msg("info",
+    ok = cli::symbol$tick, "  ",
+    pale = "This is an info message")
+
+  store_msg("warn",
+     err = cli::symbol$cross, "  ",
+     note = "This is a warning message")
+
+  out_all <- joyn_msg("all")
+  out_warn <- joyn_msg("warn")
+
+  class(out_all) |>
+    expect_equal("data.frame")
+
+  class(out_warn) |>
+    expect_equal(class(out_warn))
+
+  print(out_warn)$type |>
+    expect_equal("warn")
+
+  type = "err"
+
+  if (type %in% types) {
+      expect_no_error(joyn_msg(type))
+    } else expect_error()
+
+})
+
+
+# Test that joyn store_msg works as expected ####
+
 test_that("storing messages works as expected", {
 
   # errors -------
-  ## wront type ------------
+  ## wrong type ------------
   expect_error(store_msg("blah",
                          ok = cli::symbol$tick, "  ",
                          pale = "another try"))
@@ -72,9 +108,6 @@ test_that("storing messages works as expected", {
 
   nrow(dt) |>
     expect_equal(1)
-
-
-
 
 })
 
@@ -124,5 +157,19 @@ test_that("display messages works", {
   dt <- joyn_msg()
   expect_equal(nrow(dt), 3)
 
-
 })
+
+# Testing joyn_msgs_exist function ####
+test_that("joyn_msgs_exist works as expected", {
+  clear_joynenv()
+
+  joyn_msgs_exist() |>
+    expect_error()
+
+  store_msg("info", "simple message")
+
+  joyn_msgs_exist() |>
+    expect_equal(TRUE)
+})
+
+#

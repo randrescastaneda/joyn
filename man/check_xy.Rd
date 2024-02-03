@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_xy}
 \alias{check_xy}
-\title{check tables X and Y}
+\title{Check tables X and Y}
 \usage{
 check_xy(x, y)
 }
@@ -17,6 +17,22 @@ Stata terminology.}
 invisible TRUE
 }
 \description{
-This checks are inspired on merge.data.table
+This function performs checks inspired on merge.data.table: it detects errors
+\itemize{
+\item if x and/or y have no columns
+\item if x and/or y contain duplicate column names
+}
+}
+\examples{
+\dontrun{
+# Check passing with no errors
+library(data.table)
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15)
+y1 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16))
+check_xy(x = x1, y=y1)
+}
 }
 \keyword{internal}

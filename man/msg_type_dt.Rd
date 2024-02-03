@@ -2,18 +2,18 @@
 % Please edit documentation in R/info_display.R
 \name{msg_type_dt}
 \alias{msg_type_dt}
-\title{convert style to data frame}
+\title{convert style of joyn message to data frame containing type and message}
 \usage{
 msg_type_dt(type, ...)
 }
 \arguments{
 \item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err"}
+"info", "note", "warn", "timing", or "err" or \code{all}}
 }
 \value{
-data frame
+data frame with two variables, type and msg
 }
 \description{
-convert style to data frame
+convert style of joyn message to data frame containing type and message
 }
 \keyword{internal}

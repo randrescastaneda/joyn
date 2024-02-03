@@ -19,7 +19,7 @@ joyn_workhorse(
 
 \item{by}{atomic character vector: key specifying join}
 
-\item{match_type}{atomic character vector length 1: either "1:1" (default)
+\item{match_type}{atomic character vector of length 1: either "1:1" (default)
 "1:m", "m:1", or "m:m". If "m:m" then executes \code{data.table::merge.data.table}
 in the backend, otherwise uses \code{collapse::join()}}
 
@@ -30,5 +30,17 @@ in the backend, otherwise uses \code{collapse::join()}}
 data object of same class as \code{x}
 }
 \description{
-Always executes a full join. Gives comm
+Always executes a full join.
+}
+\examples{
+\dontrun{
+# Full join
+library(data.table)
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15)
+y1 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16))
+joyn_workhorse(x = x1, y=y1)
+}
 }

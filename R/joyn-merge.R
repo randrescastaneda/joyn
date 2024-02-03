@@ -358,9 +358,9 @@ joyn <- function(x,
 
 
   # report variable
-  x$use_util_report <- x$`.xreport` + x$`.yreport`
-  names(x)[length(names(x))] <- reportvar
-
+  collapse::settransform(x, use_util_report = .xreport + .yreport)
+  # Can this be done more efficiently with collapse?
+  data.table::setnames(x, "use_util_report", reportvar)
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -433,20 +433,41 @@ joyn <- function(x,
 
   }
 
+  ### common vars ----------
+
+  if (isFALSE(keep_common_vars)) {
+    patterns <-
+      suffixes |>
+      gsub("\\.", "\\\\.", x = _) |>
+      paste0("$")
+
+    varx <- grep(patterns[1], names(x), value = TRUE)
+    vary <- grep(patterns[2], names(x), value = TRUE)
+
+    # delete Y vars with suffix
+    collapse::get_vars(x, vary) <- NULL
+
+    # remove suffixes
+    nsvar <- gsub(patterns[1], "", varx)
+    data.table::setnames(x, varx, nsvar)
+
+  }
+
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## cleaning temporary report variables ----
-  x$`.xreport` <- NULL
-  x$`.yreport` <- NULL
+  collapse::settransform(x,
+                         .xreport = NULL,
+                         .yreport = NULL)
 
 
   ## Rename by variables -----
 
   if (!is.null(fixby$xby)) {
-    setnames(x, fixby$tempkey, fixby$xby)
+    data.table::setnames(x, fixby$tempkey, fixby$xby)
     by <- fixby$xby
     # not necessary
     # setnames(y, fixby$tempkey, fixby$yby)
@@ -458,19 +479,17 @@ joyn <- function(x,
   ## convert to characters if chosen -------
   if (reporttype == "character") {
 
-    applySwitch <- function(value) {
-      switch(as.character(value),
-             "1" = "x",
-             "2" = "y",
-             "3" = "x & y",
-             "4" = "NA updated",
-             "5" = "value updated",
-             "6" = "not updated",
-             "conflict. check")
+    rvar_to_chr <- \(x) {
+      data.table::fcase(x == 1, "x",
+                        x == 2, "y",
+                        x == 3, "x & y",
+                        x == 4, "NA updated",
+                        x == 5, "value updated",
+                        x == 6, "not updated",
+                        default = "conflict")
     }
 
-    # Apply the function to the column
-    x[[reportvar]] <- sapply(x[[reportvar]], applySwitch)
+    settransformv(x, reportvar, rvar_to_chr)
 
   }
 

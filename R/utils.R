@@ -3,11 +3,11 @@
 #' @param name character: name to be coerced to syntactically valid name
 #' @inheritParams joyn
 #'
-#' @return valide character name
+#' @return valid character name
 #' @export
 #'
 #' @examples
-#' rename_to_valid("not valid")
+#' rename_to_valid("x y")
 rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -27,57 +27,21 @@ rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
     return(nreportnames)
 }
 
-
-
-#' fix variable names in by argument
-#'
-#' @param by argument from merge
-#' @param x left table
-#' @param y right table
-#'
-#' @return list
-#' @keywords internal
-fix_by_vars <- function(by, x, y) {
-
-  byexp <- grep("==?", by, value = TRUE)
-
-  if (length(byexp) != 0) {
-
-    xby <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", byexp))
-    yby <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", byexp))
-    newkeys <- paste0("keyby", 1:length(xby))
-
-    setnames(x, xby, newkeys)
-    setnames(y, yby, newkeys)
-
-    by[grepl("==?", by)] <- newkeys
-
-    return(list(by      = by,
-                xby     = xby,
-                yby     = yby,
-                tempkey = newkeys)
-    )
-
-  } else {
-
-    return(list(by      = by,
-                xby     = NULL,
-                yby     = NULL,
-                tempkey = NULL)
-    )
-
-  }
-
-}
-
-
 #' Split matching type
+#'
+#' Split matching type (one of `"1:1", "m:1", "1:m", "m:m"`) into its two components
 #'
 #' @inheritParams joyn
 #'
 #' @return character vector
 #' @keywords internal
 split_match_type <- function(match_type) {
+
+  match_types <- c("1:1", "m:1", "1:m", "m:m")
+
+  if (!match_type %in% match_types) {
+    cli::cli_abort("invalid match type")
+  }
 
   strsplit(match_type, ":", fixed = TRUE) |>
     unlist()
@@ -87,15 +51,15 @@ split_match_type <- function(match_type) {
 
 #' Is data frame balanced by group?
 #'
-#'
+#' Check if the data frame is balanced by group of columns, i.e., if it contains every combination of the elements in the specified variables
 #'
 #' @param df data frame
-#' @param by  character: variables to check balance
-#' @param return character: either "logic" or "table". If logic, returns `TRUE`
-#'   or `FALSE` if data frame is balanced. If "table" returns the unbalanced
-#'   observations - i.e. the combinations not found in input `df`
+#' @param by  character: variables used to check if `df` is balanced
+#' @param return character: either "logic" or "table". If "logic", returns `TRUE`
+#'   or `FALSE` depending on whether data frame is balanced. If "table" returns the unbalanced
+#'   observations - i.e. the combinations of elements in specified variables not found in input `df`
 #'
-#' @return logical if return == "logic", else returns data frame of unbalanced observations
+#' @return logical, if return == "logic", else returns data frame of unbalanced observations
 #' @export
 #'
 #' @examples
@@ -104,10 +68,10 @@ split_match_type <- function(match_type) {
 #'                 x  = 11:15)
 #' is_balanced(df = x1,
 #'             by = c("id", "t"),
-#'             return = "table") # returns combo of "id" and "t" not in df
+#'             return = "table") # returns combination of elements in "id" and "t" not present in df
 #' is_balanced(df = x1,
 #'             by = c("id", "t"),
-#'             return = "logic") # returns TRUE or FALSE
+#'             return = "logic") # FALSE
 is_balanced <- function(df,
                         by,
                         return = c("logic", "table")) {

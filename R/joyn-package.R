@@ -3,11 +3,11 @@
 "_PACKAGE"
 
 ## usethis namespace: start
-#' @import collapse
-#' @import data.table
+#' @rawNamespace import(collapse, except = fdroplevels)
+#' @rawNamespace import(data.table, except = fdroplevels)
 #' @importFrom lifecycle deprecated
 ## usethis namespace: end
-# .datatable.aware = TRUE
+.datatable.aware = TRUE
 
 # Prevent R CMD check from complaining about the use of pipe expressions
 # standard data.table variables
@@ -22,8 +22,8 @@ if (getRversion() >= "2.15.1") {
       "!!",
       ":=",
       "..output",
-      "x_report",
-      "y_report"
+      ".xreport",
+      ".yreport"
     ),
     package = utils::packageName()
   )

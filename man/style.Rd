@@ -13,7 +13,7 @@ style(..., sep = "")
 \item{sep}{a character string to separate the terms to \link{paste}}
 }
 \value{
-formated text
+formatted text
 }
 \description{
 This is an adaptation from

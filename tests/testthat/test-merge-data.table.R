@@ -61,7 +61,6 @@ y6 <- data.frame(
 )
 
 
-
 reportvar = getOption("joyn.reportvar")
 
 # Warnings and errors ---------------
@@ -127,7 +126,6 @@ test_that("LEFT JOIN - Conducts left join", {
 
   jn_dt <- merge.data.table(x = x1,
                              y = y1,
-                             match_type = "m:1",
                              all.x = TRUE,
                              by = "id")
 
@@ -277,7 +275,6 @@ test_that("RIGHT JOIN - Conducts right join", {
     y4,
     by.x = "id1",
     by.y = "id2",
-    match_type = "m:m",
     all.y = TRUE
   )
 
@@ -337,7 +334,6 @@ test_that("FULL JOIN - Conducts full join", {
   jn_dt <- merge.data.table(
     x2,
     y2,
-    match_type = "1:1",
     by = "id",
     all = TRUE
   )
@@ -757,6 +753,61 @@ test_that("INNER JOIN - NA matches", {
 
 })
 
+# Test check logical - (RT) check if needed
+
+# Testing check_dt_by function ####
+# Checking errors
+test_that("check_dt_by aborts as expected", {
+  y7 = data.table(id  = c(1, 2, 5, 6, 3, 9),
+                  id2 = c(1, 1, 2, 3, 4, 8),
+                  y   = c(11L, 15L, 20L, 13L, 10L, 12L),
+                  x   = c(16:21))
+
+  y8 = data.table(id  = c(1, 2, 5, 6, 3, 9),
+                  id2 = NULL,
+                  y   = c(11L, 15L, 20L, 13L, 10L, 12L),
+                  x   = c(16:21))
+
+  check_dt_by(x4, y8, by.x = "id1", by.y = "id2") |>
+    expect_error()
+
+  check_dt_by(x4, y4, by.x = "id", by.y = "id2") |>
+    expect_error()
+
+  check_dt_by(x4, y4, by.x = "id1", by.y = "id1") |>
+    expect_error()
+
+  # Checking msg is stored when both by and by.x/by.y are supplied
+  clear_joynenv()
+  check_dt_by(x4, y4, by.x = "id1", by.y = "id", by = "id2")
+
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
+
+
+})
+
+# Checking outputs
+test_that("check_dt_by output", {
+
+  check_dt_by(x4,
+              y4,
+              by.x = "id1",
+              by.y = "id2") |>
+    expect_equal("id1 = id2")
+
+
+  check_dt_by(x4,
+              y4,
+              by.x = 2,
+              by.y = 3) |>
+    expect_error()
+
+  check_dt_by(x4,
+              y4,
+              by = "t") |>
+    expect_error()
+})
 
 
 

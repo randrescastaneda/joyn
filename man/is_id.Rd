@@ -2,14 +2,14 @@
 % Please edit documentation in R/is_id.R
 \name{is_id}
 \alias{is_id}
-\title{Make sure the match type is correct}
+\title{Check if dt is uniquely identified by \code{by} variable}
 \usage{
 is_id(dt, by, verbose = TRUE, return_report = FALSE)
 }
 \arguments{
 \item{dt}{either right of left table}
 
-\item{by}{by argument in merge}
+\item{by}{variable to merge by}
 
 \item{verbose}{logical: if TRUE messages will be displayed}
 
@@ -21,12 +21,21 @@ by \code{by}}
 logical or data.frame, depending on the value of argument \code{return_report}
 }
 \description{
-Make sure the match type is correct
+report if dt is uniquely identified by \code{by} var or, if report = TRUE, the duplicates in \code{by} variable
 }
 \examples{
 library(data.table)
-y3 <- data.table(id = c("c","b", "c", "a"),
+
+# example with data frame not uniquely identified by `by` var
+
+y <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
-is_id(y3, by = "id")
-is_id(y3, by = "id", return_report = TRUE)
+is_id(y, by = "id")
+is_id(y, by = "id", return_report = TRUE)
+
+# example with data frame uniquely identified by `by` var
+
+y1 <- data.table(id = c("1","3", "2", "9"),
+                 y  = c(11L, 15L, 18L, 20L))
+is_id(y1, by = "id")
 }

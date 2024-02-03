@@ -2,7 +2,7 @@
 % Please edit documentation in R/checks.R
 \name{check_match_type}
 \alias{check_match_type}
-\title{check match type consistency}
+\title{Check match type consistency}
 \usage{
 check_match_type(x, y, by, match_type, verbose)
 }
@@ -23,6 +23,22 @@ other three match types (See details in \emph{match types sections}).}
 character vector from \link{split_match_type}
 }
 \description{
-check match type consistency
+This function checks if the match type chosen by the user is consistent with the data.
+\if{html}{\out{<br>}}(Match type must be one of the valid types: "1:1", "1:m", "m:1", "m:m")
+}
+\examples{
+\dontrun{
+# Consistent match type
+x1 = data.frame(
+       id = c(1L, 1L, 2L, 3L, NA_integer_),
+       t  = c(1L, 2L, 1L, 2L, NA_integer_),
+       x  = 11:15)
+y1 = data.frame(id = 1:2,
+                y  = c(11L, 15L))
+check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
+
+# Inconsistent match type
+check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
+}
 }
 \keyword{internal}

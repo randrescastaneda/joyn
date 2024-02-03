@@ -69,7 +69,7 @@ summary table.
 ```{r}
 # Natural join. i.e., using as key all the variables that appear in both tables.
 # without display the resulting table.
-merge(x1, y1)
+joyn(x1, y1, match_type = "m:m")
 ```
 
 You can use the reporting format of the `report` variables, by setting the
@@ -92,14 +92,14 @@ knitr::kable(
 
 Since the object returned is a `data.table`, we display the results in the
 console by concatenating a pair of squared brackets at the end of the call. That
-is `merge(x1, y1)[]` instead of `merge(x1, y1)`.
+is `joyn(x1, y1)[]` instead of `joyn(x1, y1)`.
 
 ```{r}
 # Natural join.  display the results.
-merge(x1, y1)[]
+joyn(x1, y1, match_type = "m:m")[]
 
 # Making explicit the key variables (strongly suggested)
-merge(x1, y1, by = "id")[]
+joyn(x1, y1, by = "id", match_type = "m:m")[]
 ```
 
 If the key variables have different names in both tables, you can create the
@@ -107,10 +107,10 @@ equivalency as an element of `by` vector.
 
 ```{r}
 # joining by id1 in x and id in y
-merge(x4, y4, by = c("id1 = id"))
+joyn(x4, y4, by = c("id1 = id"), match_type = "m:m")
 
 # joining by id1 in x and id in y, and id2  in both
-merge(x4, y4, by = c("id1 = id", "id2"))
+joyn(x4, y4, by = c("id1 = id", "id2"), match_type = "m:m")
 ```
 
 ## Match type
@@ -151,10 +151,10 @@ something is not right.
 
 ```{r join-type, error=TRUE}
 # Merging correctly but getting error because something is not right in the data
-merge(x3, y3, by = "id", match_type = "1:1")
+joyn(x3, y3, by = "id", match_type = "1:1")
 
 # Merging wrongly but getting NO errors because  you did not use match_type
-merge(x3, y3, by = "id")
+joyn(x3, y3, by = "id")
 ```
 
 ## Join type
@@ -171,7 +171,7 @@ the default.
 
     ```{r}
     # Full merge
-    merge(x1, y1)
+    joyn(x1, y1, match_type = "m:m")
     ```
 
 -   `keep = "left"` or `keep = "master"` keeps all observations in x, regardless
@@ -179,7 +179,7 @@ the default.
 
     ```{r}
     # keep obs in x
-    merge(x1, y1, keep = "left")
+    joyn(x1, y1, keep = "left", match_type = "m:m")
     ```
 
 -   `keep = "right"` or `keep = "using"` keeps all observations in y, regardless
@@ -187,12 +187,12 @@ the default.
 
     ```{r}
     # keep obs in y
-    merge(x1, y1, keep = "right")
+    joyn(x1, y1, keep = "right", match_type = "m:m")
     ```
 
 -   `keep = "inner"` keeps only the observations that match in both tables.
 
     ```{r}
     # keep matching obs in both tables
-    merge(x1, y1, keep = "inner")
+    joyn(x1, y1, keep = "inner", match_type = "m:m")
     ```

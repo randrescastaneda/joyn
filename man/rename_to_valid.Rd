@@ -13,11 +13,11 @@ rename_to_valid(name, verbose = getOption("joyn.verbose"))
 option). Default is TRUE.}
 }
 \value{
-valide character name
+valid character name
 }
 \description{
 rename to syntactically valid names
 }
 \examples{
-rename_to_valid("not valid")
+rename_to_valid("x y")
 }

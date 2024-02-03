@@ -6,11 +6,13 @@ if (getRversion() >= '2.15.1')
 
 #' Update NA values
 #'
-#' @param dt  data.table
+#' @param dt  joined data.table
 #' @param var variable to be updated
+#' @param reportvar variable in `dt` that stores joyn's report
 #'
 #' @return data.table
 #' @noRd
+
 update_NAs <- function(dt, var,
                        reportvar,
                        suffix = NULL) {
