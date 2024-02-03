@@ -1,4 +1,4 @@
-# joyn (development version)
+# joyn 0.1.5
 
 # joyn 0.1.4
 * update_NAs now could be FALSE even if update_values is TRUE
