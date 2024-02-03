@@ -22,10 +22,12 @@ logical
 Confirm if match type error
 }
 \examples{
+\dontrun{
 # example with dt not uniquely identified by "id"
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
 is_match_type_error(x1, name = "x1", by = "id")
+}
 }
 \keyword{internal}

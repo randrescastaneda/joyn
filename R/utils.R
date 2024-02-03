@@ -35,15 +35,6 @@ rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
 #'
 #' @return character vector
 #' @keywords internal
-#'
-#' @examples
-#' # Examples with valid match types
-#' split_match_type("1:1")
-#' split_match_type("1:m")
-#' split_match_type("m:1")
-#' split_match_type("m:m")
-#'
-
 split_match_type <- function(match_type) {
 
   match_types <- c("1:1", "m:1", "1:m", "m:m")

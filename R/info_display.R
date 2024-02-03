@@ -55,12 +55,6 @@ joyn_msg <- function(type = c("all", type_choices())) {
 #'
 #' @return current message data frame invisibly
 #' @keywords internal
-#' @examples
-#' # With type = info and text = "simple message"
-#'
-#' store_msg("info", "simple message")
-#' rlang::env_get(env = .joynenv, "joyn_msgs")
-#'
 store_msg <- function(type, ...) {
 
   # check input ----------
@@ -117,7 +111,6 @@ type_choices <- \(){
 #'
 #' @return data frame with two variables, type and msg
 #' @keywords internal
-
 msg_type_dt <- \(type, ...) {
   c(type = type, msg = style(...)) |>  # named vector
     as.list() |>  # convert to list to pass as data.frame
@@ -184,11 +177,12 @@ style <- function(..., sep = "") {
 #'
 #' @return invisible TRUE
 #' @examples
+#' \dontrun{
 #' Storing a message
 #' store_msg("info", "simple message")
 #' Checking if it exists in the environment
 #' print(joyn_msgs_exist())
-
+#' }
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {
     cli::cli_abort(c("no messages stored in .joynenv",
@@ -201,6 +195,7 @@ joyn_msgs_exist <- \() {
 #' Clearing joyn environment
 #'
 #' @examples
+#' \dontrun{
 #' # Storing a message
 #' store_msg("info", "simple message")
 #'
@@ -209,7 +204,7 @@ joyn_msgs_exist <- \() {
 #'
 #' # Checking it does not exist in the environment
 #' print(joyn_msgs_exist())
-#'
+#' }
 clear_joynenv <- \(){
   # get the source function
   .joyn_source  <- sys.call(-1)[[1]]

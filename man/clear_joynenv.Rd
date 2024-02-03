@@ -10,6 +10,7 @@ clear_joynenv()
 Clearing joyn environment
 }
 \examples{
+\dontrun{
 # Storing a message
 store_msg("info", "simple message")
 
@@ -18,5 +19,5 @@ clear_joynenv()
 
 # Checking it does not exist in the environment
 print(joyn_msgs_exist())
-
+}
 }

@@ -22,8 +22,8 @@ if (getRversion() >= "2.15.1") {
       "!!",
       ":=",
       "..output",
-      "x_report",
-      "y_report"
+      ".xreport",
+      ".yreport"
     ),
     package = utils::packageName()
   )

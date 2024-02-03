@@ -30,13 +30,12 @@ library(data.table)
 
 y <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
-is_id(y3, by = "id")
-is_id(y3, by = "id", return_report = TRUE)
+is_id(y, by = "id")
+is_id(y, by = "id", return_report = TRUE)
 
 # example with data frame uniquely identified by `by` var
 
 y1 <- data.table(id = c("1","3", "2", "9"),
                  y  = c(11L, 15L, 18L, 20L))
 is_id(y1, by = "id")
-
 }

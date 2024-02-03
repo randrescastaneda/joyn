@@ -25,6 +25,7 @@ check variable(s) by which data frames are joined: either a single \code{by} var
 or
 }
 \examples{
+\dontrun{
 x = data.table(id1 = c(1, 1, 2, 3, 3),
                id2 = c(1, 1, 2, 3, 4),
                t   = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -35,4 +36,5 @@ y = data.table(id  = c(1, 2, 5, 6, 3),
                x   = c(16:20))
 # example specifying by.x and by.y
 check_dt_by(x, y, by.x = "id1", by.y = "id2")
+}
 }

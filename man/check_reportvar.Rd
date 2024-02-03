@@ -13,11 +13,13 @@ if input reportvar is character, return valid name for the report var. If NULL o
 check reportvar input \if{html}{\out{<br>}} If resulting data frame has a reporting variable (storing joyn's report), check and return a valid name.
 }
 \examples{
+\dontrun{
 # When null - reporting variable not returned in merged dt
 check_reportvar(reportvar = NULL)
 # When FALSE - reporting variable not returned in merged dt
 check_reportvar(reportvar = FALSE)
 # When character
 check_reportvar(reportvar = ".joyn")
+}
 }
 \keyword{internal}

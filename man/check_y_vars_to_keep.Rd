@@ -23,6 +23,7 @@ character vector with variable names from \code{y} table
 check and return variable names in y to keep in returning table, excluding those that are keys of the merge
 }
 \examples{
+\dontrun{
 y1 = data.table(id = 1:2,
                y  = c(11L, 15L))
 # With y_vars_to_keep TRUE
@@ -31,5 +32,6 @@ check_y_vars_to_keep(TRUE, y1, by = "id")
 check_y_vars_to_keep(FALSE, y1, by = "id")
 # Specifying which y vars to keep
 check_y_vars_to_keep("y", y1, by = "id")
+}
 }
 \keyword{internal}

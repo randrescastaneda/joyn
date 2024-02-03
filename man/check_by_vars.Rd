@@ -21,6 +21,7 @@ list with information about by variables
 This function checks the variable name(s) to be used as key(s) of the join
 }
 \examples{
+\dontrun{
 x1 = data.frame(
        id = c(1L, 1L, 2L, 3L, NA_integer_),
        t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -29,5 +30,6 @@ y1 = data.frame(id = 1:2,
                 y  = c(11L, 15L))
 # With var "id" shared in x and y
 check_by_vars(by = "id", x = x1, y = y1)
+}
 }
 \keyword{internal}

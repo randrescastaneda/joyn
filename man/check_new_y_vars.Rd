@@ -20,6 +20,7 @@ vector with new variable names for y
 Check vars in y with same names as vars in x, and return new variables names for those y vars for the joined data frame
 }
 \examples{
+\dontrun{
 y2 = data.frame(id = c(1, 2, 5, 6, 3),
                 yd = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
@@ -29,5 +30,6 @@ x2 = data.frame(id = c(1, 1, 2, 3, NA),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = c(16, 12, NA, NA, 15))
 check_new_y_vars(x = x2, by="id", y_vars_to_keep)
+}
 }
 \keyword{internal}

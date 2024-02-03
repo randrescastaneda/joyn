@@ -10,6 +10,7 @@
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' # Check passing with no errors
 #' library(data.table)
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -18,7 +19,7 @@
 #' y1 = data.table(id = c(1,2, 4),
 #'                 y  = c(11L, 15L, 16))
 #' check_xy(x = x1, y=y1)
-
+#' }
 check_xy  <- function(x,y) {
 
   error_exists <- FALSE
@@ -70,6 +71,7 @@ check_xy  <- function(x,y) {
 #' @param name var name to check if has duplicates in dt
 #' @return logical either TRUE, if any duplicates are found, or FALSE otherwise
 #' @examples
+#' \dontrun{
 #' # When no duplicates
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -82,8 +84,7 @@ check_xy  <- function(x,y) {
 #'                            x  = 11:15,
 #'                            check.names = FALSE)
 #' check_duplicate_names(x1_duplicates, "x")
-
-
+#' }
 check_duplicate_names <- \(dt, name) {
   nm_x = names(dt)
   if (anyDuplicated(nm_x)) {
@@ -108,12 +109,14 @@ check_duplicate_names <- \(dt, name) {
 #' @keywords internal
 #' @return if input reportvar is character, return valid name for the report var. If NULL or FALSE, return NULL.
 #' @examples
+#' \dontrun{
 #' # When null - reporting variable not returned in merged dt
 #' check_reportvar(reportvar = NULL)
 #' # When FALSE - reporting variable not returned in merged dt
 #' check_reportvar(reportvar = FALSE)
 #' # When character
 #' check_reportvar(reportvar = ".joyn")
+#' }
 
 check_reportvar <-
   function(reportvar, verbose = getOption("joyn.verbose")) {
@@ -151,6 +154,7 @@ check_reportvar <-
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' x1 = data.frame(
 #'        id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'        t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -159,7 +163,7 @@ check_reportvar <-
 #'                 y  = c(11L, 15L))
 #' # With var "id" shared in x and y
 #' check_by_vars(by = "id", x = x1, y = y1)
-
+#'}
 check_by_vars <- function(by, x, y) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -201,6 +205,7 @@ check_by_vars <- function(by, x, y) {
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' # Consistent match type
 #' x1 = data.frame(
 #'        id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -212,7 +217,7 @@ check_by_vars <- function(by, x, y) {
 #'
 #' # Inconsistent match type
 #' check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
-#'
+#' }
 check_match_type <- function(x, y, by, match_type, verbose) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -306,11 +311,13 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 #' @return logical
 #' @keywords internal
 #' @examples
+#' \dontrun{
 #' # example with dt not uniquely identified by "id"
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x  = 11:15)
 #' is_match_type_error(x1, name = "x1", by = "id")
+#' }
 
 is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
@@ -343,6 +350,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' y1 = data.table(id = 1:2,
 #'                y  = c(11L, 15L))
 #' # With y_vars_to_keep TRUE
@@ -351,6 +359,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #' check_y_vars_to_keep(FALSE, y1, by = "id")
 #' # Specifying which y vars to keep
 #' check_y_vars_to_keep("y", y1, by = "id")
+#' }
 
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
@@ -419,6 +428,7 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 #' @keywords internal
 #'
 #' @examples
+#' \dontrun{
 #' y2 = data.frame(id = c(1, 2, 5, 6, 3),
 #'                 yd = c(1, 2, 5, 6, 3),
 #'                 y  = c(11L, 15L, 20L, 13L, 10L),
@@ -428,6 +438,7 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x  = c(16, 12, NA, NA, 15))
 #' check_new_y_vars(x = x2, by="id", y_vars_to_keep)
+#' }
 
 check_new_y_vars <- \(x, by, y_vars_to_keep) {
   xvars <- names(x)
@@ -466,6 +477,7 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #' @return logical: `TRUE` if valid, `FALSE` if uniquely identified
 #' @keywords internal
 #' @examples
+#' \dontrun{
 #' # example with data frame uniquely identified by specified `by` vars
 #' x1 = data.frame(id  = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -478,9 +490,7 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                  x  = 11:15)
 #' is_valid_m_key(x2, by = c("id", "t"))
-
-
-
+#' }
 is_valid_m_key <- function(dt, by){
 
   # Argument checks

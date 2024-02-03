@@ -33,6 +33,7 @@ data object of same class as \code{x}
 Always executes a full join.
 }
 \examples{
+\dontrun{
 # Full join
 library(data.table)
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -41,4 +42,5 @@ x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 y1 = data.table(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
 joyn_workhorse(x = x1, y=y1)
+}
 }

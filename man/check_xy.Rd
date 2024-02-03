@@ -24,6 +24,7 @@ This function performs checks inspired on merge.data.table: it detects errors
 }
 }
 \examples{
+\dontrun{
 # Check passing with no errors
 library(data.table)
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -32,5 +33,6 @@ x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 y1 = data.table(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
 check_xy(x = x1, y=y1)
+}
 }
 \keyword{internal}
