@@ -154,7 +154,7 @@
 joyn <- function(x,
                   y,
                   by               = intersect(names(x), names(y)),
-                  match_type       = c("1:1","1:m","m:1","m:m"),
+                  match_type       = getOption("joyn.match_type"),
                   keep             = c("full", "left", "master",
                                        "right", "using", "inner"),
                   y_vars_to_keep   = TRUE,
