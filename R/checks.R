@@ -34,15 +34,15 @@ check_xy  <- function(x,y) {
     if (x0 && y0) {
       xy <- c("x", "y")
       store_msg("err",
-                err = paste(cli::symbol$cross, "Error:"),
+                err  = paste(cli::symbol$cross, "Error:"),
                 pale = "   Neither {.or {.field {xy}}} table has columns.")
     } else if (x0) {
       store_msg("err",
-                err = paste(cli::symbol$cross, "Error:"),
+                err  = paste(cli::symbol$cross, "Error:"),
                 pale = "   Input table {.field x} has no columns.")
     } else {
       store_msg("err",
-                err = paste(cli::symbol$cross, "Error:"),
+                err  = paste(cli::symbol$cross, "Error:"),
                 pale = "   Input table {.field y} has no columns.")
     }
 
@@ -91,11 +91,11 @@ check_duplicate_names <- \(dt, name) {
     dups <- nm_x[duplicated(nm_x)] |>
       unique()
     store_msg("err",
-          err = paste(cli::symbol$cross, "Error:"),
-          pale = " Table {.field {name}} has the following
-                  {cli::qty(length(dups))} column{?s} duplicated:", 
-          timing = "{.var {dups}}", 
-          pale = "\nPlease rename or remove and try again.")
+          err     = paste(cli::symbol$cross, "Error:"),
+          pale    = " Table {.field {name}} has the following
+                    {cli::qty(length(dups))} column{?s} duplicated:", 
+          timing  = "{.var {dups}}", 
+          pale    = "\nPlease rename or remove and try again.")
     return(TRUE)
   }
   return(FALSE)
@@ -133,11 +133,10 @@ check_reportvar <-
     } else if (is.null(reportvar) || isFALSE(reportvar)) {
 
      store_msg("info",
-           ok = cli::symbol$info, "  ", ok = "Note:",
-           "   ",
-           pale = "Reporting variable is", 
-           bolded_pale = "\nnot", 
-           pale = "\nreturned")
+           ok           = paste(cli::symbol$info, "  Note:"),
+           pale         = "  Reporting variable is", 
+           bolded_pale  = "\nnot", 
+           pale         = "\nreturned")
 
       return(NULL)
     } else  {
@@ -276,41 +275,38 @@ check_match_type <- function(x, y, by, match_type, verbose) {
       m_m,
       "warn_y" = {
         store_msg(
-          type   = "warn",
-          warn = cli::symbol$warn, 
-          warn = "\nWarning:",
-          pale   = "\nThe keys supplied uniquely identify",
-          bolded_pale = "\ny",
-          pale = "\ntherefore a",
-          bolded_pale = "\n{tx}:1",
-          pale = "\njoin is executed."
+          type         = "warn",
+          warn         = paste(cli::symbol$warn, "\nWarning:"),
+          pale         = "\nThe keys supplied uniquely identify",
+          bolded_pale  = "\ny",
+          pale         = "\ntherefore a",
+          bolded_pale  = "\n{tx}:1",
+          pale         = "\njoin is executed."
         )
       },
 
       "warn_x" = {
         store_msg(
-          type   = "warn",
-          warn = cli::symbol$warn, 
-          warn = "\nWarning:",
-          pale   = "\nThe keys supplied uniquely identify",
+          type        = "warn",
+          warn        = paste(cli::symbol$warn,"\nWarning:"),
+          pale        = "\nThe keys supplied uniquely identify",
           bolded_pale = "\nx",
-          pale = "\ntherefore a",
+          pale        = "\ntherefore a",
           bolded_pale = "\n1:{ty}",
-          pale = "\njoin is executed."
+          pale        = "\njoin is executed."
         )
       },
 
       #},
       "warn_both" = {
         store_msg(
-          type   = "warn",
-          warn = cli::symbol$warn, "  ",
-          warn = "Warning:",
-          pale   = "\nThe keys supplied uniquely identify both",
+          type        = "warn",
+          warn        = paste(cli::symbol$warn, "\nWarning:"),
+          pale        = "\nThe keys supplied uniquely identify both",
           bolded_pale = "\nx and y",
-          pale = "\ntherefore a",
+          pale        = "\ntherefore a",
           bolded_pale = "\n1:1",
-          pale = "\njoin is executed."
+          pale        = "\njoin is executed."
         )
       }
     )
@@ -351,10 +347,10 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
     match_type_error <- TRUE
     by2 <- by
     store_msg("err",
-              err = paste(cli::symbol$cross, "Error:"),
-              pale = "   table",
+              err         = paste(cli::symbol$cross, "Error:"),
+              pale        = "   table",
               bolded_pale = "  {name}", 
-              pale = "  is not uniquely identified by",
+              pale        = "  is not uniquely identified by",
               bolded_pale = "  {by2}")
 
   }
@@ -422,11 +418,10 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
     if (any(y_in_by)) {
       store_msg("info",
-                ok = cli::symbol$info, "  ",
-                ok = cli::symbol$pointer, "  ",
-                pale = "Removing key variables",
+                ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
+                pale        = "Removing key variables",
                 bolded_pale = "  {y_vars_to_keep[y_in_by]}",
-                pale = "  from",
+                pale        = "  from",
                 bolded_pale = "  {y_vars_to_keep}")
     }
 
@@ -481,15 +476,14 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
     if (isFALSE(update_NAs) && isFALSE(update_values)) {
       store_msg(
         "note",
-        ok = cli::symbol$info, "  ", 
-        ok = cli::symbol$pointer, "  ",
-        pale = "variable{?s} ",
+        ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
+        pale        = "variable{?s} ",
         bolded_pale = "{upvars}", 
-        pale = "  in table", 
+        pale        = "  in table", 
         bolded_pale = "  {y}",
-        pale = "  {?is/are} ignored because arguments",
+        pale        = "  {?is/are} ignored because arguments",
         bolded_pale = "  update_NAs and update_values",
-        pale = "  are FALSE.")
+        pale        = "  are FALSE.")
     }
 
   } # end of update vars

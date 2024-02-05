@@ -70,12 +70,11 @@ left_join <- function(
   }
   if (copy == TRUE) {
     store_msg(
-     type = "warn", 
-     warn = cli::symbol$warn, 
-     warn = "\nWarning:",
-     pale = "\nargument", 
+     type        = "warn", 
+     warn        = paste(cli::symbol$warn, "\nWarning:"),
+     pale        = "\nargument", 
      bolded_pale = "  copy = TRUE", 
-     pale = "\nis not active in this version of", 
+     pale        = "\nis not active in this version of", 
      bolded_pale = "  joyn"
  )
   }
@@ -98,12 +97,11 @@ left_join <- function(
   }
   if (is.null(keep)) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  joyn does not currently allow inequality joins, so",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn,"\nWarning:"),
+      pale        = "  joyn does not currently allow inequality joins, so",
       bolded_pale = "  keep = NULL",
-      pale = "  will retain only keys in x"
+      pale        = "  will retain only keys in x"
     )
     keep <- FALSE
   }
@@ -160,10 +158,9 @@ left_join <- function(
   )
   if (na_matches == "never") {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  Currently, joyn allows only",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  Currently, joyn allows only",
       bolded_pale = "  na_matches = 'na'"
     )
   }
@@ -329,12 +326,11 @@ right_join <- function(
   }
   if (copy == TRUE) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  argument",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  argument",
       bolded_pale = "  copy = TRUE",
-      pale = " is not active in this version of joyn"
+      pale        = " is not active in this version of joyn"
     )
   }
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
@@ -356,12 +352,11 @@ right_join <- function(
   }
   if (is.null(keep)) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  joyn does not currently allow inequality joins, so",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  joyn does not currently allow inequality joins, so",
       bolded_pale = "  keep = NULL",
-      pale = "  will retain only keys in x"
+      pale        = "  will retain only keys in x"
     )
     keep <- FALSE
   }
@@ -414,10 +409,9 @@ right_join <- function(
   )
   if (na_matches == "never") {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  Currently, joyn allows only",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  Currently, joyn allows only",
       bolded_pale = "  na_matches = 'na'"
     )
   }
@@ -592,12 +586,11 @@ full_join <- function(
   }
   if (copy == TRUE) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  argument",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn,  "\nWarning:"),
+      pale        = "  argument",
       bolded_pale = "  copy = TRUE",
-      pale = " is not active in this version of joyn"
+      pale        =  " is not active in this version of joyn"
     )
   }
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
@@ -619,12 +612,11 @@ full_join <- function(
   }
   if (is.null(keep)) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  joyn does not currently allow inequality joins, so",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  joyn does not currently allow inequality joins, so",
       bolded_pale = "  keep = NULL",
-      pale = "  will retain only keys in x"
+      pale        = "  will retain only keys in x"
     )
   }
 
@@ -676,10 +668,9 @@ full_join <- function(
   )
   if (na_matches == "never") {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  Currently, joyn allows only",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  Currently, joyn allows only",
       bolded_pale = "na_matches = 'na'"
     )
   }
@@ -842,12 +833,11 @@ inner_join <- function(
   }
   if (copy == TRUE) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  argument",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  argument",
       bolded_pale = "  copy = TRUE",
-      pale = " is not active in this version of joyn"
+      pale        = " is not active in this version of joyn"
     )
   }
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
@@ -869,12 +859,11 @@ inner_join <- function(
   }
   if (is.null(keep)) {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  joyn does not currently allow inequality joins, so",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  joyn does not currently allow inequality joins, so",
       bolded_pale = "  keep = NULL",
-      pale = "  will retain only keys in x"
+      pale        = "  will retain only keys in x"
     )
     keep <- FALSE
   }
@@ -927,10 +916,9 @@ inner_join <- function(
   )
   if (na_matches == "never") {
     store_msg(
-      type = "warn",
-      warn = cli::symbol$warn, 
-      warn = "\nWarning:",
-      pale = "  Currently, joyn allows only",
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  Currently, joyn allows only",
       bolded_pale = "  na_matches = 'na'"
     )
   }
