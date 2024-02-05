@@ -47,10 +47,19 @@ joyn_workhorse <- function(
   ) {
     store_msg(
       type = "err",
-      err  = 'Error in `joyn_workhorse`: `by` argument has length of 0',
-      timing = cli::symbol$info, "  ",
-      pale   = 'Either specify `by` to identify columns to join on in `x` and `y`, or
-              `x` and `y` should have common column names'
+      err  = cli::symbol$cross,
+      err  = "  Error:",
+      pale = "  in joyn_workhorse,",
+      bolded_pale = "  by",
+      pale = "  argument has length of 0"
+    )
+
+    store_msg(
+      type = "info", 
+      ok = cli::symbol$info, "  ",
+      note = "\nNote:",
+      pale   = "  Either specify by to identify columns to join on in x and y, or
+              x and y should have common column names"
     )
   }
   # Measure time
@@ -93,9 +102,11 @@ joyn_workhorse <- function(
 
   store_msg(
     type = "timing",
-    timing = cli::symbol$record, "  ",
-    timing = paste("the full joyn is executed in", round(time_taken, 6), "seconds" )
-  )
+    timing = paste(cli::symbol$record, "  Timing:"),
+    pale = "  The full joyn is executed in  ", 
+    timing = round(time_taken, 6),
+    pale = "  seconds" )
+  
 
   # Return ----
   return(

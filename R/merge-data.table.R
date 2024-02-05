@@ -149,9 +149,10 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
   }
   if (!missing(by) && !missing(by.x)) {
     store_msg("warn",
-              warn = cli::symbol$warning,
-              " Supplied both `by` and `by.x/by.y`.
-              `by` argument will be ignored.")
+              warn = paste(cli::symbol$warning, "  Warning:"),
+              pale = " Supplied both",
+              bolded_pale = "  by and by.x/by.y. by",
+              pale = "argument will be ignored.")
   }
   if (!is.null(by.x)) {
 
