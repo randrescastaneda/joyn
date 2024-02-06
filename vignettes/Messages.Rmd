@@ -1,0 +1,49 @@
+---
+title: "Messages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Messages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+#withr::local_options(joyn.verbose = FALSE)
+#withr::local_options(joyn.match_type = "1:1")
+withr::local_options(joyn.verbose = TRUE)
+
+```
+
+✅ This vignette is dedicated to one specific set of additional tools that joyn provides you : **messages**.
+
+Messages in joyn are intended to inform you about the status of your join, so that you can better understand what the merge does, ... XXXX TODO.
+
+We'll start with a rough overview of the different kinds of messages you can get when merging two data tables, then discuss each of them in detail with representative examples.
+
+# Overview
+
+Joyn messages can be of 4 different types:
+
+1.  <span style = "color: #228B22;">**Info**
+
+2.  `<span style = "color: #`{=html}0000B8`;">`{=html}**Timing**
+
+3.  `<span style = "color: #`{=html}FE5A1D`;">`{=html}**Warning**
+
+4.  `<span style = "color: #`{=html}CE2029`;">`{=html}**Error**
+
+```{r msg-type, eval = TRUE}
+
+# Setup
+library(joyn)
+
+# Checking available types of messages
+msgs_types = joyn:::type_choices()
+
+```
