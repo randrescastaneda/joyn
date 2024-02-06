@@ -20,13 +20,13 @@ withr::local_options(joyn.verbose = TRUE)
 
 ```
 
-✅ This vignette is dedicated to one specific set of additional tools that joyn provides you : **messages**.
+✅ This vignette is dedicated to one specific feature of joyn: displaying information through **messages**.
 
 Messages in joyn are intended to inform you about the status of your join, so that you can better understand what the merge does, ... XXXX TODO.
 
-We'll start with a rough overview of the different kinds of messages you can get when merging two data tables, then discuss each of them in detail with representative examples.
+We'll start with a rough overview of the different kinds of messages that might be generated when merging two data tables, then discuss each of them in detail with representative examples.
 
-# Overview
+## Overview
 
 Joyn messages can be of 4 different types:
 
@@ -38,12 +38,78 @@ Joyn messages can be of 4 different types:
 
 4.  `<span style = "color: #`{=html}CE2029`;">`{=html}**Error**
 
-```{r msg-type, eval = TRUE}
+```{r setup}
 
-# Setup
+# Setup 
 library(joyn)
+library(data.table)
+library(cli)
+
+```
+
+
+```{r msg-type}
 
 # Checking available types of messages
 msgs_types = joyn:::type_choices()
+print(msgs_types)
 
 ```
+
+### Information messages
+
+Info messages inform you about XXX TODO, as you can see in the examples below. 
+
+Recall that one of the additional features of joyn is that it returns a reporting variable with the status of the join. Info messages are generated to tell you in which variable it is available the joyn report, or if the reporting variable is not returned instead. 
+
+```{r info-ex1, eval = FALSE}
+
+# Example dataframes
+
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15)
+
+y1 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16))
+
+
+x2 = data.table(id = c(1, 4, 2, 3, NA),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = c(16, 12, NA, NA, 15))
+
+
+y2 = data.table(id = c(1, 2, 5, 6, 3),
+                yd = c(1, 2, 5, 6, 3),
+                y  = c(11L, 15L, 20L, 13L, 10L),
+                x  = c(16:20))
+
+
+# ------------------- Showing which var contains joyn report -------------------
+
+# Joining x1 and y1
+joyn(x = x2,
+     y = y2,
+     by = "id", 
+     y_vars_to_keep = FALSE)
+
+# Printing the info message
+print(joyn_msg(type = "info"))
+
+# ---------------- Info about change in reporting variable name ----------------
+
+```
+
+Also, an info message might be generated to let you know that the name you have specified (?you want to assign) for the reporting variable is already present in the returning table so that it will be changed to a valid one.
+
+```{r info-ex2}
+
+```
+
+
+### Timing messages
+
+### Warning messages
+
+### Error messages
+
