@@ -347,11 +347,12 @@ joyn <- function(x,
       check_names <- make.names(check_names, unique = TRUE)
       nrv         <- setdiff(check_names, xnames)
 
-      store_msg(type = "info",
-                note = cli::symbol$info,
-                "reportvar {.code {reportvar}} is already
-                          part of the resulting table. It will be changed
-                          to {.code {nrv}}")
+      store_msg(type        = "info",
+                ok          = paste(cli::symbol$info, " Note:  "),
+                pale        = "reportvar",
+                bolded_pale = "  {reportvar}",
+                pale        = "  is already part of the resulting table. It will be changed to",
+                bolded_pale = " {nrv}")
       reportvar <- nrv
     }
   }
@@ -530,9 +531,11 @@ joyn <- function(x,
     end_joyn <- Sys.time()
     time_taken_joyn <- end_joyn - start_joyn
     store_msg(
-      type = "timing",
-      timing = cli::symbol$record, "  ",
-      timing = paste("the entire joyn function, including checks, is executed in", round(time_taken_joyn, 6), "seconds" )
+      type    = "timing",
+      timing  = paste(cli::symbol$record, "  Timing:"),
+      pale    = "  the entire joyn function, including checks, is executed in  ", 
+      timing  = round(time_taken_joyn, 6), 
+      pale    = "  seconds" 
     )
 
     # return messages
