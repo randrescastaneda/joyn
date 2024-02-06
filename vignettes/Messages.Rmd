@@ -3,8 +3,10 @@ title: "Messages"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Messages}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -20,11 +22,9 @@ withr::local_options(joyn.verbose = TRUE)
 
 ```
 
-✅ This vignette is dedicated to one specific feature of joyn: displaying information through **messages**.
+✅ This vignette is dedicated to one specific feature of `joyn` displaying information through **messages**.
 
-Messages in joyn are intended to inform you about the status of your join, so that you can better understand what the merge does, ... XXXX TODO.
-
-We'll start with a rough overview of the different kinds of messages that might be generated when merging two data tables, then discuss each of them in detail with representative examples.
+Messages in `joyn` are intended to inform you about the status of your join and the data tables involved. We'll start with a rough overview of the different kinds of messages that might be generated when merging two data tables, then discuss each of them in detail with representative examples.
 
 ## Overview
 
@@ -47,7 +47,6 @@ library(cli)
 
 ```
 
-
 ```{r msg-type}
 
 # Checking available types of messages
@@ -56,13 +55,13 @@ print(msgs_types)
 
 ```
 
-### Information messages
+### Information messages ℹ️ {style="color: green"}
 
-Info messages inform you about XXX TODO, as you can see in the examples below. 
+Info messages are intended to inform you about XXX TODO, as you can see in the examples below.
 
-Recall that one of the additional features of joyn is that it returns a reporting variable with the status of the join. Info messages are generated to tell you in which variable it is available the joyn report, or if the reporting variable is not returned instead. 
+Recall that one of the additional features of joyn is that it returns a reporting variable with the status of the join. Examples in this regard include info messages that tell you in which variable it is available the `joyn` report, or if the reporting variable is not returned instead. Also, an info message might let you know that the name you want to assign to the reporting variable is already present in the returning table, so that it will be changed to a another one.
 
-```{r info-ex1, eval = FALSE}
+```{r info-ex1}
 
 # Example dataframes
 
@@ -87,29 +86,113 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
 
 # ------------------- Showing which var contains joyn report -------------------
 
-# Joining x1 and y1
-joyn(x = x2,
-     y = y2,
-     by = "id", 
+# Joining x2 and y2
+joyn(x              = x2,
+     y              = y2,
+     by             = "id", 
      y_vars_to_keep = FALSE)
 
 # Printing the info message
-print(joyn_msg(type = "info"))
+joyn_msg(type = "info")
 
 # ---------------- Info about change in reporting variable name ----------------
+joyn(x              = x2,
+     y              = y2,
+     by             = "id", 
+     reportvar      = "x",
+     y_vars_to_keep = FALSE)
+
+joyn_msg(type = "info")
+
+# ------------- Informing that reporting variable is not returned -------------
+joyn(x              = x2,
+     y              = y2,
+     by             = "id", 
+     reportvar      = FALSE,
+     y_vars_to_keep = FALSE)
+
+joyn_msg(type = "info")
+
 
 ```
 
-Also, an info message might be generated to let you know that the name you have specified (?you want to assign) for the reporting variable is already present in the returning table so that it will be changed to a valid one.
+Furthermore, info messages will help you keep track of which variables in `y` will be kept after the merging, for example notifying you if any of the y variables you have specified to keep will be removed because they are part of the `by` variables.
 
 ```{r info-ex2}
 
+joyn(x              = x2,
+     y              = y2,
+     by             = "id", 
+     y_vars_to_keep = TRUE)
+
+joyn_msg(type = "info")
+
 ```
 
+Another instance when info messages come in handy is when the options `update_NAs` or `update_values` are set to FALSE. In this case, a message will be generated so that you know which variables are being ignored.
 
-### Timing messages
+```{r info-x3}
 
-### Warning messages
+#ADD EXAMPLE 
 
-### Error messages
+```
 
+### Timing messages 🔵 {style="color: blue"}
+
+Timing messages report in how many seconds the join is executed, including the time spent to perform all checks.
+
+```{r timing-ex1}
+
+# Example with full join
+
+joyn(x          = x1, 
+     y          = y1, 
+     match_type = "m:1")
+
+joyn_msg("timing")
+
+
+# Example with left join 
+left_join(x            = x1, 
+          y            = y1, 
+          relationship = "many-to-one")
+
+```
+
+### Warning messages ⚠️ {style="color: orange"}
+
+`joyn` generates warning messages to alert you about possible problematic situation which however do not warrant terminating execution of the merge. For example, if you provide a match type that is inconsistent with the data, `joyn` will generate a warning to inform you about the actual relationship and to alert that the join will be executed accordingly.
+
+In the example below, both `x2` and `y2` are uniquely identified by the key `id`, but the user is choosing a "one to many" relationship instead. The user will be alerted and a "one to one" join will be executed instead.
+
+```{r warn-ex1}
+
+# Warning that "id" uniquely identify y2 
+
+joyn(x2, y2, by = "id", match_type = "1:m", verbose = TRUE)
+joyn_msg("warn")
+
+```
+
+Other examples of warnings are those that arise when you are trying to supply certain arguments to the merging functions that are not yet supported by the current version of `joyn`. Suppose you are executing a left-join and you try to set the `na_matches` argument to 'never'. `joyn` will warn you that it currently allows only `na_matches = 'na'`. A similar message is displayed when `keep = NULL`. Given that the current version of `joyn` does not support inequality joins, `joyn` will warn you that `keep = NULL` will make the join retain only keys in `x`.
+
+```{r}
+
+joyn::left_join(x            = x1, 
+                y            = y1, 
+                relationship = "many-to-one", 
+                keep         = NULL,
+                na_matches   = "never")
+
+joyn_msg("warn")
+
+```
+
+### Error messages ❌ {style="color: red"}
+
+```{r}
+
+check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
+joyn_msg("err")
+
+```

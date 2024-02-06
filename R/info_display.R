@@ -90,7 +90,6 @@ store_msg <- function(type, ...) {
 
 }
 
-# To check if documentation
 
 check_style <- \(...) {
   if (length(list(...)) == 0) {
