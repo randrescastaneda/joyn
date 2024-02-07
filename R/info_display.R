@@ -148,20 +148,20 @@ style <- function(..., sep = "") {
       },
 
     "err"    = \(x) {
-      make_ansi_style("#CE2029")(x) |>
+      cli::make_ansi_style("#CE2029")(x) |>
       cli::style_bold() 
       }, 
 
     "pale"   = cli::make_ansi_style("darkgrey"),
 
     "bolded_pale" = \(x) {
-      make_ansi_style("#555555")(x) |>
+      cli::make_ansi_style("#555555")(x) |>
       cli::style_bold() |>
       cli::style_italic()
       },
 
     "timing" = \(x) {
-      make_ansi_style("#0000B8")(x) |>
+      cli::make_ansi_style("#0000B8")(x) |>
       cli::style_bold() 
   
       }
