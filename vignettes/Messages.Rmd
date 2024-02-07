@@ -150,9 +150,20 @@ Another instance when info messages come in handy is when the options `update_NA
 
 ```
 
-### Timing messages 🔵 
+### Timing messages 🔵
 
 Timing messages report in how many seconds the join is executed, including the time spent to perform all checks.
+
+While performing the join, `joyn` keeps track of the **time spent for the execution**. This is then displayed in timing messages, which report the elapsed time measured in seconds.
+
+Before visualizing some examples, it is important to remind a feature of how `joyn` executes any join between two data tables.
+
+Specifically, `joyn` always first executes a full join between the data tables - which includes all matching and non matching rows in the resulting table. Then, it filters the rows depending on the specific type of join that user wants to execute. For example, if the user sets `keep = "right"`, `joyn` will filter the table resulting from the full join and return to the user the data table retaining *all* rows from the right table and only *matching* rows from the left table. In addition, note that since `joyn` performs a number of checks throughout the execution (e.g., checking that the specified key for the merge is valid, or the match type consistency), the time spent on checks will also be included in reported time.
+
+As a result, timing messages enable you to be aware of both:
+
+1.  Time spent to execute the *full join*
+2.  Time spent to execute the *entire joyn function, including checks*
 
 ```{r timing-ex1}
 
@@ -286,3 +297,4 @@ joyn_msg(type = "info")
 
 
 ```
+
