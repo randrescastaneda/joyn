@@ -101,7 +101,7 @@ However, `joyn::left_join()` allows you to enjoy both the intuitive syntax from 
 
 ## Some examples
 
-#### 1. Left join 
+#### 1. Left join
 
 ```{r left-ex1}
 
@@ -172,14 +172,14 @@ right_join(x            = df1,
 
 ```
 
-#### 3. Full join 
+#### 3. Full join
 
 ```{r}
 
 # ADD EXAMPLE
 ```
 
-#### 4. Inner join 
+#### 4. Inner join
 
 ***Simple inner join***
 

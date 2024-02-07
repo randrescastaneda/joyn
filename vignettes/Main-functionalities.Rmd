@@ -1,0 +1,161 @@
+---
+title: "Main-functionalities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Main-functionalities}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+withr::local_options(joyn.verbose = FALSE)
+withr::local_options(joyn.match_type = "m:m")
+
+# Importing packages 
+library(reactable)
+library()
+```
+
+```{r setup}
+library(joyn)
+```
+
+## Overview
+
+📌 In `joyn`, there are two major sets of tools to join data tables:
+
+1.   The primary function `joyn()`
+
+2.   Dplyr-like join functions: `left_join()`, `right_join()`, `full_join()`, `inner_join()`
+
+This vignette will explore the main function `joyn()`. You can read about dplyr-joins in the [insert link of dplyr-joins vignette ?] articles instead.
+
+## General features
+
+```{r dt}
+
+library(joyn)
+library(data.table)
+
+x1 <- data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x  = 11:15)
+
+y1 <- data.table(id = c(1,2, 4),
+                 y  = c(11L, 15L, 16))
+
+
+x2 <- data.table(id = c(1, 4, 2, 3, NA),
+                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x  = c(16, 12, NA, NA, 15))
+
+
+y2 <- data.table(id = c(1, 2, 5, 6, 3),
+                 yd = c(1, 2, 5, 6, 3),
+                 y  = c(11L, 15L, 20L, 13L, 10L),
+                 x  = c(16:20))
+
+x3 <- data.table(id  = c("c","b", "d"),
+                 v   = 8:10,
+                 foo = c(4,2, 7))
+
+y3 <- data.table(id = c("c","b", "c", "a"),
+                 y  = c(11L, 15L, 18L, 20L))
+
+
+x4 <- data.table(id1 = c(1, 1, 2, 3, 3),
+                 id2 = c(1, 1, 2, 3, 4),
+                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x   = c(16, 12, NA, NA, 15))
+
+y4 <- data.table(id  = c(1, 2, 5, 6, 3),
+                 id2 = c(1, 1, 2, 3, 4),
+                 y   = c(11L, 15L, 20L, 13L, 10L),
+                 x   = c(16:20))
+
+```
+
+### The basics 
+
+Let's suppose that you want to join the two tables `x1` and `y1`.
+
+```{r simple-join}
+
+# Calling joyn() to join x1 and y1
+
+joyn(x = x1,
+     y = y1)
+
+```
+
+The output table is the result of a *full join* -which is what `joyn` executes by default. This means that it retains both matching and non matching rows from both `x1` and `y1`. In addition, the resulting table contains the `.joyn` variable, which is the *reporting variable*. (see below ⬇️)
+
+#### Reporting variable
+
+A particular feature of `joyn` is that, in the returning table, it includes the **`reportvar:`** a variable informing you about the status of the join. You can modify both the name and the format of the reporting variable as follows:
+
+-   Name: by default `reportvar = ".joyn"`, but you can modify it with `reportvar = "myname"` .
+
+-   Format: by default `reporttype = "character"` , but you can also set it to numeric by `reporttype = "numeric"`
+
+You can see the difference between the two types in the table below[^1]:
+
+[^1]: *for a comprehensive understanding of the meaning column check the [update .TODO.] sections*
+
+TODO: CHOOSE ONE OF THE TWO TABLES
+
+```{r echo =FALSE}
+
+knitr::kable(
+  tibble::tribble(
+~numeric, ~character, ~meaning,
+1, "x", "Obs only available in x table",
+2, "y", "Obs only available in y table",
+3, "x & y", "Matching obs available in both tables",
+4, "NA updated", "NAs in x updated with actual values in variables with same names in y",
+5, "value updated", "Actual values and NAs in x updated with actual values in variables with same names in y",
+6, "not updated", "Actual values and NAs in x are NOT updated with actual values in y"
+), format = "simple", align = "lcl")
+
+```
+
+```{r echo =FALSE}
+
+df_reportvar <- data.frame(
+  numeric   = c(1:6),
+  character = c("x", "y", "x & y", "NA updated", "value updated", "not updated"),
+  meaning   = c("Obs only available in x table", "Obs only available in y table", "Matching obs available in both tables", "NAs in x updated with actual values in variables with same names in y", "Actual values and NAs in x updated with actual values in variables with same names in y", "Actual values and NAs in x are NOT updated with actual values in y")
+)
+
+reactable::reactable(df_reportvar, highlight = TRUE, striped = TRUE, theme = cerulean())
+
+```
+
+#### Key variables (memo: add sort)
+
+### Match type 
+
+### Type of join  
+
+## Advanced features
+
+### Updating values in left table 
+
+### Keeping variables from right table 
+
+### Keeping common variables
+
+### 
+
+#### JOYn report
+
+**Displaying messages**
+
+### 
