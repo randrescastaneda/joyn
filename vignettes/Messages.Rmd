@@ -43,7 +43,6 @@ We'll start with a rough overview of the different kinds of messages that might 
 # Setup 
 library(joyn)
 library(data.table)
-library(cli)
 
 ```
 
@@ -297,4 +296,3 @@ joyn_msg(type = "info")
 
 
 ```
-
