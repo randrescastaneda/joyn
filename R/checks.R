@@ -18,7 +18,7 @@
 #'                 x  = 11:15)
 #' y1 = data.table(id = c(1,2, 4),
 #'                 y  = c(11L, 15L, 16))
-#' check_xy(x = x1, y=y1)
+#' joyn:::check_xy(x = x1, y=y1)
 #' }
 check_xy  <- function(x,y) {
 
@@ -76,14 +76,14 @@ check_xy  <- function(x,y) {
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x  = 11:15)
-#' check_duplicate_names(x1, "x")
+#' joyn:::check_duplicate_names(x1, "x")
 #'
 #' # When duplicates
 #' x1_duplicates = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                            x  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                            x  = 11:15,
 #'                            check.names = FALSE)
-#' check_duplicate_names(x1_duplicates, "x")
+#' joyn:::check_duplicate_names(x1_duplicates, "x")
 #' }
 check_duplicate_names <- \(dt, name) {
   nm_x = names(dt)
@@ -111,11 +111,11 @@ check_duplicate_names <- \(dt, name) {
 #' @examples
 #' \dontrun{
 #' # When null - reporting variable not returned in merged dt
-#' check_reportvar(reportvar = NULL)
+#' joyn:::check_reportvar(reportvar = NULL)
 #' # When FALSE - reporting variable not returned in merged dt
-#' check_reportvar(reportvar = FALSE)
+#' joyn:::check_reportvar(reportvar = FALSE)
 #' # When character
-#' check_reportvar(reportvar = ".joyn")
+#' joyn:::check_reportvar(reportvar = ".joyn")
 #' }
 
 check_reportvar <-
@@ -164,7 +164,7 @@ check_reportvar <-
 #' y1 = data.frame(id = 1:2,
 #'                 y  = c(11L, 15L))
 #' # With var "id" shared in x and y
-#' check_by_vars(by = "id", x = x1, y = y1)
+#' joyn:::check_by_vars(by = "id", x = x1, y = y1)
 #'}
 check_by_vars <- function(by, x, y) {
 
@@ -218,7 +218,7 @@ check_by_vars <- function(by, x, y) {
 #' check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
 #'
 #' # Inconsistent match type
-#' check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
+#' joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 #' }
 check_match_type <- function(x, y, by, match_type, verbose) {
 
@@ -335,7 +335,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 #' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x  = 11:15)
-#' is_match_type_error(x1, name = "x1", by = "id")
+#' joyn:::is_match_type_error(x1, name = "x1", by = "id")
 #' }
 
 is_match_type_error <- function(x, name, by, verbose, match_type_error) {
@@ -375,11 +375,11 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #' y1 = data.table(id = 1:2,
 #'                y  = c(11L, 15L))
 #' # With y_vars_to_keep TRUE
-#' check_y_vars_to_keep(TRUE, y1, by = "id")
+#' joyn:::check_y_vars_to_keep(TRUE, y1, by = "id")
 #' # With y_vars_to_keep FALSE
-#' check_y_vars_to_keep(FALSE, y1, by = "id")
+#' joyn:::check_y_vars_to_keep(FALSE, y1, by = "id")
 #' # Specifying which y vars to keep
-#' check_y_vars_to_keep("y", y1, by = "id")
+#' joyn:::check_y_vars_to_keep("y", y1, by = "id")
 #' }
 
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
@@ -456,11 +456,11 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 #'                 yd = c(1, 2, 5, 6, 3),
 #'                 y  = c(11L, 15L, 20L, 13L, 10L),
 #'                 x  = c(16:20))
-#' y_vars_to_keep <- check_y_vars_to_keep(TRUE, y2, by = "id")
+#' joyn:::y_vars_to_keep <- check_y_vars_to_keep(TRUE, y2, by = "id")
 #' x2 = data.frame(id = c(1, 1, 2, 3, NA),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x  = c(16, 12, NA, NA, 15))
-#' check_new_y_vars(x = x2, by="id", y_vars_to_keep)
+#' joyn:::check_new_y_vars(x = x2, by="id", y_vars_to_keep)
 #' }
 
 check_new_y_vars <- \(x, by, y_vars_to_keep) {
@@ -510,13 +510,13 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                  x  = 11:15)
 #'
-#' is_valid_m_key(x1, by = c("id", "t"))
+#' joyn:::is_valid_m_key(x1, by = c("id", "t"))
 
 #' # example with valid specified "many" relationship
 #' x2 = data.frame(id  = c(1L, 1L, 1L, 3L, NA_integer_),
 #'                  t  = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                  x  = 11:15)
-#' is_valid_m_key(x2, by = c("id", "t"))
+#' joyn:::is_valid_m_key(x2, by = c("id", "t"))
 #' }
 is_valid_m_key <- function(dt, by){
 
