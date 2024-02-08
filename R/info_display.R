@@ -202,7 +202,7 @@ style <- function(..., sep = "") {
 #' Storing a message
 #' store_msg("info", "simple message")
 #' Checking if it exists in the environment
-#' print(joyn_msgs_exist())
+#' print(joyn:::joyn_msgs_exist())
 #' }
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {
@@ -221,10 +221,10 @@ joyn_msgs_exist <- \() {
 #' store_msg("info", "simple message")
 #'
 #' # Clearing the environment
-#' clear_joynenv()
+#' joyn:::clear_joynenv()
 #'
 #' # Checking it does not exist in the environment
-#' print(joyn_msgs_exist())
+#' print(joyn:::joyn_msgs_exist())
 #' }
 clear_joynenv <- \(){
   # get the source function
