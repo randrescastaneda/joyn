@@ -16,11 +16,11 @@ knitr::opts_chunk$set(
 )
 
 withr::local_options(joyn.verbose = FALSE)
-withr::local_options(joyn.match_type = "m:m")
+#withr::local_options(joyn.match_type = )
 
 # Importing packages 
 library(reactable)
-library()
+library(reactablefmtr)
 ```
 
 ```{r setup}
@@ -62,9 +62,9 @@ y2 <- data.table(id = c(1, 2, 5, 6, 3),
                  y  = c(11L, 15L, 20L, 13L, 10L),
                  x  = c(16:20))
 
-x3 <- data.table(id  = c("c","b", "d"),
-                 v   = 8:10,
-                 foo = c(4,2, 7))
+x3 <- data.table(id  = c("c","b", "d", "d"),
+                 v   = 8:11,
+                 foo = c(4,2, 7, 3))
 
 y3 <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
@@ -80,6 +80,15 @@ y4 <- data.table(id  = c(1, 2, 5, 6, 3),
                  y   = c(11L, 15L, 20L, 13L, 10L),
                  x   = c(16:20))
 
+
+x5 <- data.table(id      = c(1, 4, 2, 3, NA),
+                 t       = c(1L, 2L, 1L, 2L, NA),
+                 country = c(16, 12, 3, NA, 15))
+  
+y5 <- data.table(id      = c(1, 2, 2, 6, 3),
+                 gdp     = c(11L, 15L, 20L, 13L, 10L),
+                 country = 16:20)
+
 ```
 
 ### The basics 
@@ -91,7 +100,8 @@ Let's suppose that you want to join the two tables `x1` and `y1`.
 # Calling joyn() to join x1 and y1
 
 joyn(x = x1,
-     y = y1)
+     y = y1, 
+     match_type = "m:1" ) #Note RT: remove this argument once fixing the default value
 
 ```
 
@@ -140,9 +150,97 @@ reactable::reactable(df_reportvar, highlight = TRUE, striped = TRUE, theme = cer
 
 #### Key variables (memo: add sort)
 
+When performing a join, you might want to specify which variable(s) `joyn` should join by.
+
+While by default `joyn` will consider the variable(s) in common between `x` and `y` as key(s) for the join, our suggestion is to make them explicit - i.e., specifying it/them in the `by` argument
+
+```{r by-vars}
+
+# Join with one variable in common
+
+joyn(x = x1,
+     y = y1, 
+     by = "id", 
+     match_type = "m:1")
+
+```
+
+If you don't want to join by all variables in common between `x` and `y`, you can alternately use equivalency as an element of `by` vector. This specification allows you to join on different variables between `x` and `y.`
+
+```{r diff-by-vars}
+
+joyn(x = x4, 
+     y = y4, 
+     by = c("id1 = id", "id2"), 
+     match_type = "m:m")
+
+```
+
 ### Match type 
 
+💡Match type refers to the relationship that exists between the observations of the joining tables. The possibility to perform joins based on the match type is one of the value added of using `joyn`.
+
+Following Stata's convention, we could have four different match types:
+
+1.  **1:1** (one to one): each observation in left table has a unique match in the right table and viceversa
+
+2.  **1:m** (one to many): each observation in left table can have multiple matches in the right table
+
+3.  **m:1** (many to one): each observation in left table can have only one match in the right table but observations in the right table might have multiple matches in the left table
+
+4.  **m:m** (many-to-many): both tables can have multiple matches for each observation
+
+BY DEAFULT \>\> TO CHECK!
+
+We recommend you always specify the match type when joining tables to ensure the output is correct.
+
+```{r relationships}
+
+# Many to one match type
+joyn(x = x1,
+     y = y1,
+     by = "id",
+     match_type = "m:1")
+
+# Many to many match type
+joyn(x = x3,
+     y = y3,
+     by = "id",
+     match_type = "m:m")
+
+# One to one match type 
+joyn(x = x2,
+     y = y2,
+     by = "id",
+     match_type = "1:1")
+
+
+# One to many match type 
+joyn(x = x5,
+     y = y5,
+     by = "id",
+     match_type = "1:m")
+
+```
+
+Furthermore, suppose you are unsure/wrong about the relationships between the observations if your table. For example, you think your data is uniquely identified by variable `id`, while it is not.
+By setting `match_type = "1:1"` you will get and error, letting you know that
+something is not right.
+
+```{r join-type, error=TRUE}
+
+# Merging correctly but getting error because something is not right in the data
+joyn(x3, y3, by = "id", match_type = "1:1")
+
+# Merging wrongly but getting NO errors because you did not use match_type
+joyn(x3, y3, by = "id")
+
+```
+
+If instead you don't care about match types or you don't think it is necessary to use them for your particular needs, you might be fine without `joyn`.
+
 ### Type of join  
+
 
 ## Advanced features
 

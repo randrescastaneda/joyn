@@ -241,7 +241,7 @@ Sometimes error messages are due to a wrong/missing provision of the inputs, for
 
 Representative messages in this regard can be visualized below:
 
-```{r err-ex1, eval = FALSE}
+```{r err-ex1, error = TRUE}
 
 # ----------------- Error due to input table x with no columns -----------------
 
@@ -267,7 +267,7 @@ joyn_msg("err")
 
 Furthermore, errors messages are generated when choosing the wrong `match_type`, that is not consistent with the actual relationship between the variables being used for merging. `joyn` will therefore display the following message:
 
-```{r err-ex2, eval = FALSE}
+```{r err-ex2, error=TRUE}
 
 joyn(x = x1, y=y1, by="id", match_type = "1:1")
 joyn_msg("err")
