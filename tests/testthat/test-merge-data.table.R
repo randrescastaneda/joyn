@@ -66,7 +66,8 @@ reportvar = getOption("joyn.reportvar")
 # Warnings and errors ---------------
 
 test_that("warnings are triggered correctly", {
-  skip("warning of cartesian is not working well yet")
+  skip("warning of cartesian is not working well yet -
+       found in `joyn()` due to deprecated arg")
   merge(
     x = x1,
     y = y1,

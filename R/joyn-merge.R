@@ -178,7 +178,8 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   keep        <- match.arg(keep)
   reporttype  <- match.arg(reporttype)
-  match_type  <- match.arg(match_type)
+  match_type  <- match.arg(match_type,
+                           choices = c("1:1", "1:m", "m:1", "m:m"))
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Life cycle   ---------
@@ -533,9 +534,9 @@ joyn <- function(x,
     store_msg(
       type    = "timing",
       timing  = paste(cli::symbol$record, "  Timing:"),
-      pale    = "  the entire joyn function, including checks, is executed in  ", 
-      timing  = round(time_taken_joyn, 6), 
-      pale    = "  seconds" 
+      pale    = "  the entire joyn function, including checks, is executed in  ",
+      timing  = round(time_taken_joyn, 6),
+      pale    = "  seconds"
     )
 
     # return messages

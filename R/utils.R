@@ -17,14 +17,14 @@ rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
   if (!is.character(name)) {
     cli::cli_abort("name {.var name} should be character")
   }
-    nreportnames <- make.names(name)
-    if (!identical(name,nreportnames) & isTRUE(verbose)) {
+  nreportnames <- make.names(name)
+  if (!identical(name, nreportnames) & isTRUE(verbose)) {
 
-      cli::cli_alert_info("name {.field {name}} is an invalid variable name.
-                          It will be changed to {.field {nreportnames}}",
-                          wrap = TRUE)
-    }
-    return(nreportnames)
+    cli::cli_alert_info("name {.field {name}} is an invalid variable name.
+                        It will be changed to {.field {nreportnames}}",
+                        wrap = TRUE)
+  }
+  return(nreportnames)
 }
 
 #' Split matching type

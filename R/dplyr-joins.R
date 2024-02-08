@@ -47,7 +47,7 @@ left_join <- function(
     na_matches       = c("na", "never"),
     multiple         = "all",
     unmatched        = "drop",
-    relationship     = "one-to-one",
+    relationship     = NULL,
     y_vars_to_keep   = TRUE,
     update_values    = FALSE,
     update_NAs       = update_values,
@@ -70,11 +70,11 @@ left_join <- function(
   }
   if (copy == TRUE) {
     store_msg(
-     type        = "warn", 
+     type        = "warn",
      warn        = paste(cli::symbol$warn, "\nWarning:"),
-     pale        = "\nargument", 
-     bolded_pale = "  copy = TRUE", 
-     pale        = "\nis not active in this version of", 
+     pale        = "\nargument",
+     bolded_pale = "  copy = TRUE",
+     pale        = "\nis not active in this version of",
      bolded_pale = "  joyn"
  )
   }
@@ -616,8 +616,9 @@ full_join <- function(
       warn        = paste(cli::symbol$warn, "\nWarning:"),
       pale        = "  joyn does not currently allow inequality joins, so",
       bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
+      pale        = "  will retain only keys in x. Equivalent to `keep = FALSE`"
     )
+    keep <- FALSE
   }
 
   na_matches <- match.arg(na_matches)

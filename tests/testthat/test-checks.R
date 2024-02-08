@@ -3,6 +3,7 @@
 
 withr::local_options(joyn.verbose = FALSE)
 
+
 x1 = data.frame(
   id = c(1L, 1L, 2L, 3L, NA_integer_),
   t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -58,6 +59,7 @@ df2 <- data.frame(
   salary = c(60000, 55000, 70000, 80000),
   dept = c("IT", "Marketing", "Sales", "IT")
 )
+
 
 # Test function checking x and y ---------------------------------------------------------------
 test_that("check_xy works as expected", {

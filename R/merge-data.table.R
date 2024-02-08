@@ -37,7 +37,6 @@
 #'             by.x = "id1",
 #'             by.y = "id2",
 #'             all = TRUE)
-
 merge <- function(x,
                   y,
                   by = NULL,
