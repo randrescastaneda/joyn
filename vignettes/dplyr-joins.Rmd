@@ -176,7 +176,11 @@ right_join(x            = df1,
 
 ```{r}
 
-# ADD EXAMPLE
+full_join(x = x1, 
+          y = y1, 
+          relationship = "many-to-one", 
+          keep = TRUE)
+
 ```
 
 #### 4. Inner join
@@ -186,8 +190,8 @@ right_join(x            = df1,
 ```{r }
 
 inner_join(x            = df1, 
-          y             = df2,
-          relationship  = "many-to-one", 
-          by            = "id")
+           y             = df2,
+           relationship  = "many-to-one", 
+           by            = "id")
 
 ```
