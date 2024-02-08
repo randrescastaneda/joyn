@@ -114,7 +114,7 @@ joyn(x = x,
 
 ```
 
-### 5. Keep original *country* variable from y into returning table 
+### 5. Keep original *country* variable from y into returning table
 
 #### (Keep matching-names variable from y into x -not updating values in x)
 
