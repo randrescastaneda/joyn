@@ -35,7 +35,7 @@ library(joyn)
 
 2.  Dplyr-like join functions: `left_join()`, `right_join()`, `full_join()`, `inner_join()`
 
-This vignette will explore the main function `joyn()`. You can read about dplyr-joins in the [insert link of dplyr-joins vignette ?] article instead.
+This vignette will explore the main function `joyn()`. You can read about dplyr-joins in the "**dplyr-joins"** article instead.
 
 ## General use
 
@@ -111,7 +111,7 @@ The output table is the result of a *full join* -which is what `joyn` always exe
 
 A particular feature of `joyn` is that it includes the **`reportvar`** in the returning table, which informs you about the status of the join. You can modify both the name and the format of the reporting variable as follows:
 
--   Name: by default `reportvar = ".joyn"`, but you can modify it with `reportvar = "myname"` specifiying the name you want to assign
+-   Name: by default `reportvar = ".joyn"`, but you can modify it with `reportvar = "myname"` specifying the name you want to assign
 
 -   Format: by default `reporttype = "character"` , but you can also set it to numeric using `reporttype = "numeric"`
 
@@ -313,4 +313,4 @@ By default, `joyn` returns the *JOYn report* , i.e., a summary table of the merg
 
 One of the value added of `joyn` is that it produces a number of messages that are intended to inform you about the status of the join. The display of such messages controlled by the argument `verbose`, which allows you to show (`verbose = TRUE`) or silent (`verbose = FALSE`) any messages.
 
-To further explore messages in `joyn`, please refer to the [TODO: ADD LINK] **messages article**.
+To further explore messages in `joyn`, please refer to the "**Messages"** article.

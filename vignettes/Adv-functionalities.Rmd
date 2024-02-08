@@ -2,7 +2,7 @@
 title: "Advanced functionalities"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Advanced-functionalities}
+  %\VignetteIndexEntry{Advanced functionalities}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
