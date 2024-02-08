@@ -148,7 +148,7 @@ reactable::reactable(df_reportvar, highlight = TRUE, striped = TRUE, theme = cer
 
 ```
 
-#### Key variables (memo: add sort)
+#### Key variables
 
 When performing a join, you might want to specify which variable(s) `joyn` should join by.
 
@@ -300,3 +300,17 @@ This argument is called `keep` rather than `join_type` to avoid confusion with t
     joyn(x1, y1, keep = "inner", match_type = "m:m")
 
     ```
+
+## An important feature: JOYn report and info display
+
+Recall that `joyn` is intended to be informative about the status and quality of the merging.
+
+📊 **JOYn report**
+
+By default, `joyn` returns the *JOYn report* , i.e., a summary table of the merging. This includes the reporting variable, the number of rows that come from `x`, the number of rows that come from `y` and those that are common to both `x` and `y`. This info is also shown in percentage form in the *percent* column.
+
+📝 **Displaying messages**
+
+One of the value added of `joyn` is that it produces a number of messages that are intended to inform you about the status of the join. The display of such messages controlled by the argument `verbose`, which allows you to show (`verbose = TRUE`) or silent (`verbose = FALSE`) any messages.
+
+To further explore messages in `joyn`, please refer to the [TODO: ADD LINK] **messages article**.
