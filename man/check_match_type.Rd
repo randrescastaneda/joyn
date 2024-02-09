@@ -38,7 +38,7 @@ y1 = data.frame(id = 1:2,
 check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
 
 # Inconsistent match type
-check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
+joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 }
 }
 \keyword{internal}

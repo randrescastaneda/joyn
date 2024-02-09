@@ -35,19 +35,17 @@ If \code{y} has no key columns, this defaults to the key of \code{x}.}
 \item{all}{logical; \code{all = TRUE} is shorthand to save setting both
 \code{all.x = TRUE} and \code{all.y = TRUE}.}
 
-\item{all.x}{logical; if \code{TRUE}, rows from \code{x} which have no matching row
-in \code{y} are included. These rows will have 'NA's in the columns that are usually
-filled with values from \code{y}. The default is \code{FALSE} so that only rows with
-data from both \code{x} and \code{y} are included in the output.}
+\item{all.x}{logical; if \code{TRUE}, then extra rows will be added to the
+output, one for each row in \code{x} that has no matching row in \code{y}.
+These rows will have 'NA's in those columns that are usually filled with values
+from \code{y}.  The default is \code{FALSE}, so that only rows with data from both
+\code{x} and \code{y} are included in the output.}
 
 \item{all.y}{logical; analogous to \code{all.x} above.}
 
-\item{sort}{logical. If \code{TRUE} (default), the rows of the merged
-\code{data.table} are sorted by setting the key to the \code{by / by.x} columns. If
-\code{FALSE}, unlike base R's \code{merge} for which row order is unspecified, the
-row order in \code{x} is retained (including retaining the position of missings when
-\code{all.x=TRUE}), followed by \code{y} rows that don't match \code{x} (when \code{all.y=TRUE})
-retaining the order those appear in \code{y}.}
+\item{sort}{logical. If \code{TRUE} (default), the merged \code{data.table} is
+sorted by setting the key to the \code{by / by.x} columns. If \code{FALSE}, the
+result is not sorted.}
 
 \item{suffixes}{A \code{character(2)} specifying the suffixes to be used for
 making non-\code{by} column names unique. The suffix behaviour works in a similar
@@ -106,7 +104,7 @@ x1 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 x  = 11:15)
 y1 = data.frame(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
-merge(x1, y1, by = "id")
+joyn:::merge(x1, y1, by = "id")
 # example of using by.x and by.y
 x2 = data.frame(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),
@@ -116,14 +114,14 @@ y2 = data.frame(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
-jn <- merge(x2,
+jn <- joyn:::merge(x2,
             y2,
             match_type = "m:m",
             all.x = TRUE,
             by.x = "id1",
             by.y = "id2")
 # example with all = TRUE
-jn <- merge(x2,
+jn <- joyn:::merge(x2,
             y2,
             match_type = "m:m",
             by.x = "id1",

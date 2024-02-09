@@ -18,9 +18,6 @@ knitr::opts_chunk$set(
 withr::local_options(joyn.verbose = FALSE)
 #withr::local_options(joyn.match_type = )
 
-# Importing packages 
-library(reactable)
-library(reactablefmtr)
 ```
 
 ```{r setup}
@@ -119,8 +116,6 @@ You can see the difference between the two types in the table below[^1]:
 
 [^1]: for a better understandingof the *meaning* column check the [update .TODO.] sections
 
-TODO: CHOOSE ONE OF THE TWO TABLES
-
 ```{r echo =FALSE}
 
 knitr::kable(
@@ -133,18 +128,6 @@ knitr::kable(
 5, "value updated", "Actual values and NAs in x updated with actual values in variables with same names in y",
 6, "not updated", "Actual values and NAs in x are NOT updated with actual values in y"
 ), format = "simple", align = "lcl")
-
-```
-
-```{r echo =FALSE}
-
-df_reportvar <- data.frame(
-  numeric   = c(1:6),
-  character = c("x", "y", "x & y", "NA updated", "value updated", "not updated"),
-  meaning   = c("Obs only available in x table", "Obs only available in y table", "Matching obs available in both tables", "NAs in x updated with actual values in variables with same names in y", "Actual values and NAs in x updated with actual values in variables with same names in y", "Actual values and NAs in x are NOT updated with actual values in y")
-)
-
-reactable::reactable(df_reportvar, highlight = TRUE, striped = TRUE, theme = cerulean())
 
 ```
 

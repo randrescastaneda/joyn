@@ -23,13 +23,13 @@ Check if vars in dt have duplicate names
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
-check_duplicate_names(x1, "x")
+joyn:::check_duplicate_names(x1, "x")
 
 # When duplicates
 x1_duplicates = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
                            x  = c(1L, 2L, 1L, 2L, NA_integer_),
                            x  = 11:15,
                            check.names = FALSE)
-check_duplicate_names(x1_duplicates, "x")
+joyn:::check_duplicate_names(x1_duplicates, "x")
 }
 }

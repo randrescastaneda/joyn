@@ -15,7 +15,7 @@ possible_ids(
 \item{dt}{data frame}
 
 \item{exclude}{character: Exclude variables to be selected as identifiers. It
-could be either the name of the variables of one type of the variable
+could be either the name of the variables or one type of the variable
 prefixed by "_". For instance, "_numeric" or "_character".}
 
 \item{include}{character: Name of variable to be included, that might belong

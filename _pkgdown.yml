@@ -36,16 +36,29 @@ reference:
     Since the objective of joyn is to join tables with joy, there is only one
     main function in this package
   contents:
-  - '`merge`'
+  - '`joyn`'
+- title: "dplyr-joins"
+  contents:
+  - '`left_join`'
+  - '`right_join`'
+  - '`full_join`'
+  - '`inner_join'
 - title: "Auxiliary functions"
   contents:
   - '`is_id`'
   - '`freq_table`'
   - '`possible_ids`'
+  - '`is_balanced`'
+  - '`rename_to_valid`'
+  - '`joyn_msg`'
+
 
 articles:
 - title: Usage
   navbar: ~
   contents:
-  - general-use
-  - advanced-use
+  - Main-functionalities
+  - Adv-functionalities
+  - dplyr-joins
+  - Messages
+  - Additional-functions
