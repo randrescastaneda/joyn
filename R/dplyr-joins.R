@@ -586,11 +586,8 @@ full_join <- function(
   }
   if (copy == TRUE) {
     store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn,  "\nWarning:"),
-      pale        = "  argument",
-      bolded_pale = "  copy = TRUE",
-      pale        =  " is not active in this version of joyn"
+      type = "warn",
+      warn = "Warning: that argument `copy = TRUE` is not active in this version of `joyn`"
     )
   }
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
@@ -612,12 +609,10 @@ full_join <- function(
   }
   if (is.null(keep)) {
     store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
+      type = "warn",
+      warn = "Warning: `joyn` does not currently allow inequality joins, so `keep = NULL` will retain only keys in `x`"
     )
+    keep <- FALSE
   }
 
   na_matches <- match.arg(na_matches)
@@ -668,10 +663,9 @@ full_join <- function(
   )
   if (na_matches == "never") {
     store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "na_matches = 'na'"
+      type = "warn",
+      err  = "Warning: ",
+      warn = "Currently, `joyn` allows only `na_matches = 'na'`"
     )
   }
   if (is.null(reportvar) || isFALSE(reportvar)) {
@@ -761,6 +755,8 @@ full_join <- function(
   fj
 
 }
+
+
 
 
 
