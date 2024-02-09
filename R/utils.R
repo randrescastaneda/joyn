@@ -7,7 +7,7 @@
 #' @export
 #'
 #' @examples
-#' rename_to_valid("x y")
+#' joyn:::rename_to_valid("x y")
 rename_to_valid <- function(name, verbose = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

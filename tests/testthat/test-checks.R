@@ -1,7 +1,7 @@
 
 # Testing functions performing checks on x and y ####
 
-withr::local_options(joyn.verbose = FALSE)
+#withr::local_options(joyn.verbose = FALSE)
 
 x1 = data.frame(
   id = c(1L, 1L, 2L, 3L, NA_integer_),
@@ -73,7 +73,6 @@ test_that("check_xy works as expected", {
   # aborts when wrong input specification
 
   # When x has 0 length
-  clear_joynenv()
 
   empty_df = data.frame()
 
@@ -85,7 +84,6 @@ test_that("check_xy works as expected", {
                              "joyn_msgs"))
 
   # When y has 0 length
-  clear_joynenv()
 
   check_xy(x = x1,
            y = empty_df) |>
@@ -249,7 +247,17 @@ test_that("check_match_type works as expected", {
     expect_equal(c("err"))
 
   # Check warning msgs are stored correctly ------------------------------------
-  # TODO - Check function is working well
+  # Warn x
+  check_match_type(x3, y3, by = 'id', match_type = "m:m")
+
+  rlang::env_get(.joynenv,"joyn_msgs")$type|>
+    expect_contains("warn")
+
+
+  # Warn y
+
+
+  # Warn both
 
 
   # Output when correct match type ---------------------------------------------

@@ -22,7 +22,7 @@
 #'                 x  = 11:15)
 #' y1 = data.table(id = c(1,2, 4),
 #'                 y  = c(11L, 15L, 16))
-#' joyn_workhorse(x = x1, y=y1)
+#' joyn:::joyn_workhorse(x = x1, y=y1)
 #' }
 joyn_workhorse <- function(
     x,
