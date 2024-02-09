@@ -45,6 +45,7 @@ reportvar = getOption("joyn.reportvar")
 
 
 test_that("LEFT JOIN - Conducts left join", {
+
   # One way
   jn_joyn <- left_join(
     x = x1,
@@ -123,7 +124,37 @@ test_that("LEFT JOIN - Conducts left join", {
     jn_dplyr,
     ignore_attr = ".internal.selfref"
   )
+
+  # With "many-to-one" relationship
+  jn <- left_join(
+    x1,
+    y2,
+    by = "id",
+    relationship = "many-to-one"
+  )
+
+  jn_dplyr <- dplyr::left_join(
+    x1,
+    y2,
+    by = "id",
+    relationship = "many-to-one"
+  )
+
+  attr(jn_dplyr, "sorted") <- "id"
+  jn_dplyr <- roworder(jn_dplyr, "id", na.last = FALSE)
+
+  rownames(jn) <- c(1:length(x1$id))
+
+  expect_equal(
+    jn |> fselect(-get(reportvar)),
+    jn_dplyr,
+    ignore_attr = ".internal.selfref"
+  )
+
+
 })
+
+
 
 test_that("LEFT JOIN - no id given", {
   jn1 <- left_join(
@@ -138,7 +169,17 @@ test_that("LEFT JOIN - no id given", {
   expect_equal(jn1, jn2)
 })
 
+test_that("LEFT JOIN - copy given", {
+  jn1 <- joyn::left_join(
+    x2,
+    y2,
+    copy = TRUE
+  )
 
+  (length(joyn_msg("warn")) > 0) |>
+    expect_equal(TRUE)
+
+})
 
 
 test_that("LEFT JOIN - incorrectly specified arguments give errors", {
@@ -158,6 +199,16 @@ test_that("LEFT JOIN - incorrectly specified arguments give errors", {
       suffix = c("a", "b", "c")
     )
   )
+
+  expect_error(
+    left_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c(1, 2)
+    )
+  )
+
   expect_error(
     left_join(
       x = y1,
@@ -166,6 +217,27 @@ test_that("LEFT JOIN - incorrectly specified arguments give errors", {
       multiple = "any"
     )
   )
+
+  expect_error(
+    left_join(
+      x = x4,
+      y = y4,
+      relationship = "many-to-many",
+      by = "id2",
+      multiple = "any"
+    )
+  )
+
+  expect_no_error(
+    left_join(
+      x = x4,
+      y = y4,
+      relationship = "many-to-many",
+      by = "id2",
+      multiple = "all"
+    )
+  )
+
   expect_error(
     left_join(
       x = x1,
@@ -192,7 +264,6 @@ test_that("LEFT JOIN - incorrectly specified arguments give errors", {
     )
   )
 
-
 })
 
 test_that("LEFT JOIN - argument `keep` preserves keys in output", {
@@ -203,9 +274,11 @@ test_that("LEFT JOIN - argument `keep` preserves keys in output", {
     keep = T,
     by = "id"
   )
+
   expect_true(
     "id.y" %in% names(jn)
   )
+
   expect_equal(
     jn |>
       fselect(id.y) |>
@@ -217,7 +290,7 @@ test_that("LEFT JOIN - argument `keep` preserves keys in output", {
       fselect(id) |>
       reg_elem()
   )
-  clear_joynenv()
+
   joyn::left_join(
     x = x1,
     y = y1,
@@ -225,8 +298,19 @@ test_that("LEFT JOIN - argument `keep` preserves keys in output", {
     keep = NULL,
     by = "id"
   )
+
   rlang::env_get(.joynenv, "joyn_msgs")$type |>
       expect_contains("warn")
+
+  joyn::left_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = "invalid keep",
+    by = "id"
+  ) |>
+    expect_error()
+
 })
 
 test_that("LEFT JOIN - update values works", {
@@ -265,10 +349,46 @@ test_that("LEFT JOIN - reportvar works", {
     by = "id",
     reportvar = "report"
   )
+
   expect_true(
     "report" %in% names(jn)
   )
+
+  expect_no_error(
+    left_join(
+      x1,
+      y1,
+      relationship = "many-to-one",
+      by = "id",
+      reportvar = FALSE)
+    )
+
+  expect_no_error(
+    left_join(
+      x1,
+      y1,
+      relationship = "many-to-one",
+      by = "id",
+      reportvar = NULL)
+  )
+
 })
+
+
+
+test_that("LEFT JOIN - unmatched throws error", {
+
+  expect_error(
+    left_join(x            = x1,
+              y            = y1,
+              relationship = "many-to-one",
+              by           = "id",
+              unmatched    = "error")
+  )
+
+})
+
+
 test_that("LEFT JOIN - NA matches", {
 
   jn <- left_join(
@@ -410,6 +530,16 @@ test_that("RIGHT JOIN - incorrectly specified arguments give errors", {
       suffix = c("a", "b", "c")
     )
   )
+
+  expect_error(
+    right_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c(1, 2)
+    )
+  )
+
   expect_error(
     right_join(
       x = y1,
@@ -511,6 +641,24 @@ test_that("RIGHT JOIN - reportvar works", {
   expect_true(
     "report" %in% names(jn)
   )
+
+  expect_no_error(
+    right_join(
+      x1,
+      y1,
+      relationship = "many-to-one",
+      by = "id",
+      reportvar = NULL))
+
+
+  expect_no_error(
+    right_join(
+      x1,
+      y1,
+      relationship = "many-to-one",
+      by = "id",
+      reportvar = FALSE))
+
 })
 test_that("RIGHT JOIN - NA matches", {
 
@@ -525,7 +673,7 @@ test_that("RIGHT JOIN - NA matches", {
       nrow(),
     4
   )
-  clear_joynenv()
+
   # checking when na_matches is never warning msg is stored
   joyn::right_join(
     x = x5,
@@ -654,6 +802,16 @@ test_that("FULL JOIN - incorrectly specified arguments give errors", {
       suffix = c("a", "b", "c")
     )
   )
+
+  expect_error(
+    full_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c(1, 2)
+    )
+  )
+
   expect_error(
     full_join(
       x = y1,
@@ -662,6 +820,7 @@ test_that("FULL JOIN - incorrectly specified arguments give errors", {
       multiple = "any"
     )
   )
+
   expect_error(
     full_join(
       x = x1,
@@ -731,11 +890,35 @@ test_that("FULL JOIN - reportvar works", {
     by = "id",
     reportvar = "report"
   )
+
   expect_true(
     "report" %in% names(jn)
   )
+
+  expect_no_error(
+    full_join(
+      x1,
+      y1,
+      relationship = "many-to-one",
+      by = "id",
+      reportvar = NULL
+    )
+  )
+
+  expect_no_error(
+    full_join(
+      x1,
+      y1,
+      relationship = "many-to-one",
+      by = "id",
+      reportvar = FALSE
+    ))
+
 })
+
+
 test_that("FULL JOIN - NA matches", {
+
   jn <- full_join(
     x5,
     y5,
@@ -748,8 +931,6 @@ test_that("FULL JOIN - NA matches", {
     4
   )
 })
-
-
 
 
 #-------------------------------------------------------------------------------
@@ -870,6 +1051,16 @@ test_that("INNER JOIN - incorrectly specified arguments give errors", {
       suffix = c("a", "b", "c")
     )
   )
+
+  expect_error(
+    inner_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c(1, 2)
+    )
+  )
+
   expect_error(
     inner_join(
       x = y1,
@@ -878,6 +1069,14 @@ test_that("INNER JOIN - incorrectly specified arguments give errors", {
       multiple = "any"
     )
   )
+
+  inner_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    unmatched = "error"
+  ) |>
+    expect_error()
 
 })
 
@@ -947,6 +1146,27 @@ test_that("INNER JOIN - reportvar works", {
   expect_true(
     "report" %in% names(jn)
   )
+
+  inner_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = FALSE
+  ) |>
+    expect_no_error()
+
+  inner_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = NULL
+  ) |>
+    expect_no_error()
+
+
+
 })
 test_that("INNER JOIN - NA matches", {
 
