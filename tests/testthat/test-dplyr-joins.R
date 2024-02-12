@@ -728,6 +728,33 @@ test_that("FULL JOIN - Conducts full join", {
       c(jn_joyn$id) %in% c(y1$id, x2$id)
     )
   )
+
+  # With one-to-many relationship
+  jn_joyn <- full_join(
+    x = x2,
+    y = y5,
+    relationship = "one-to-many",
+    by = "id"
+  )
+
+  jn_dplyr <- dplyr::full_join(
+    x2,
+    y5,
+    relationship = "one-to-many",
+    by = "id"
+  )
+
+  setorder(jn_dplyr, id, na.last = T)
+  setorder(jn_joyn, id, na.last = T)
+  attr(jn_dplyr,
+       "sorted") <- "id"
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dplyr,
+    ignore_attr = 'row.names'
+  )
+
+
   # Second set of tables ----------------------
   jn_joyn <- full_join(
     x = x2,
@@ -770,9 +797,17 @@ test_that("FULL JOIN - Conducts full join", {
     jn_dplyr,
     ignore_attr = '.internal.selfref'
   )
+
 })
 
+
 test_that("FULL JOIN - no id given", {
+  jn <- full_join(
+    x2,
+    y2,
+    by = NULL
+  )
+
   jn1 <- full_join(
     x2,
     y2
@@ -782,10 +817,29 @@ test_that("FULL JOIN - no id given", {
     y2,
     by = c("id", "x")
   )
+
+  expect_equal(jn, jn2)
   expect_equal(jn1, jn2)
 })
 
-test_that("FULL JOIN - incorrectly specified arguments give errors", {
+test_that("FULL JOIN - copy arg", {
+  expect_no_error(
+    joyn::full_join(
+      x            = x1,
+      y            = y1,
+      by           = "id",
+      relationship = "many-to-one",
+      copy         = TRUE
+    )
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+
+
+})
+
+test_that("FULL JOIN - (correctly) incorrectly specified arguments give (no) errors", {
   expect_error(
     full_join(
       x = x1,
@@ -829,6 +883,118 @@ test_that("FULL JOIN - incorrectly specified arguments give errors", {
       unmatched = "error"
     )
   )
+
+  expect_no_error(
+    full_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      unmatched = "drop"
+    )
+  )
+
+  expect_error(
+    full_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      keep = "invalid keep",
+      by = "id"
+    )
+  )
+
+
+  joyn::full_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    by = "id",
+    keep = NULL
+  ) |>
+    expect_no_error()
+
+  joyn::full_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    by = "id",
+    keep = NULL)
+
+    rlang::env_get(.joynenv, "joyn_msgs")$type |>
+      expect_contains("warn")
+
+  # Error when relationship 1:m or m:m and multiple is not "all"
+    expect_error(
+      full_join(
+        x = x1,
+        y = y5,
+        relationship = "many-to-many",
+        by = "id",
+        multiple = "any"
+      )
+    )
+
+    expect_error(
+      full_join(
+        x = x1,
+        y = y5,
+        relationship = "many-to-many",
+        by = "id",
+        multiple = "first"
+      )
+    )
+
+    expect_error(
+      full_join(
+        x = x1,
+        y = y5,
+        relationship = "many-to-many",
+        by = "id",
+        multiple = "last"
+      )
+    )
+
+
+    expect_error(
+      full_join(
+        x = x2,
+        y = y5,
+        relationship = "one-to-many",
+        by = "id",
+        multiple = "any"
+      )
+    )
+
+    expect_error(
+      full_join(
+        x = x2,
+        y = y5,
+        relationship = "one-to-many",
+        by = "id",
+        multiple = "first"
+      )
+    )
+
+    expect_error(
+      full_join(
+        x = x2,
+        y = y5,
+        relationship = "one-to-many",
+        by = "id",
+        multiple = "last"
+      )
+    )
+
+    expect_error(
+      full_join(
+        x            = x2,
+        y            = y5,
+        relationship = "one-to-many",
+        by           = "id",
+        unmatched    = "error"
+      )
+    )
+
 
 })
 
@@ -930,6 +1096,16 @@ test_that("FULL JOIN - NA matches", {
       fnrow(),
     4
   )
+
+  # Warning when na_matches is never
+  joyn::full_join(x            = x5,
+                  y            = y5,
+                  relationship = "many-to-many",
+                  keep         = TRUE,
+                  na_matches   = "never")
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
 })
 
 
@@ -977,6 +1153,32 @@ test_that("INNER JOIN - Conducts inner join", {
       c(jn_joyn$id) %in% intersect(y1$id, x2$id)
     )
   )
+
+  # One to many relationship
+  jn_joyn <- inner_join(
+    x = x2,
+    y = y5,
+    relationship = "one-to-many",
+    by = "id"
+  )
+
+  jn_dplyr <- dplyr::inner_join(
+    x2,
+    y5,
+    relationship = "one-to-many",
+    by = "id"
+  )
+
+  setorder(jn_dplyr, id, na.last = T)
+  setorder(jn_joyn, id, na.last = T)
+  attr(jn_dplyr,
+       "sorted") <- "id"
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dplyr,
+    ignore_attr = 'row.names'
+  )
+
   # Second set of tables ----------------------
   jn_joyn <- inner_join(
     x = x2,
@@ -1022,6 +1224,12 @@ test_that("INNER JOIN - Conducts inner join", {
 })
 
 test_that("INNER JOIN - no id given", {
+  jn <- inner_join(
+    x2,
+    y2,
+    by = NULL
+  )
+
   jn1 <- inner_join(
     x2,
     y2
@@ -1031,10 +1239,12 @@ test_that("INNER JOIN - no id given", {
     y2,
     by = c("id", "x")
   )
+
+  expect_equal(jn, jn2)
   expect_equal(jn1, jn2)
 })
 
-test_that("INNER JOIN - incorrectly specified arguments give errors", {
+test_that("INNER JOIN - incorrectly(correctly) specified arguments give (no)errors", {
   expect_error(
     inner_join(
       x = x1,
@@ -1063,6 +1273,15 @@ test_that("INNER JOIN - incorrectly specified arguments give errors", {
 
   expect_error(
     inner_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      unmatched = "error"
+    )
+  )
+
+  expect_error(
+    inner_join(
       x = y1,
       y = x1,
       relationship = "one-to-many",
@@ -1077,6 +1296,97 @@ test_that("INNER JOIN - incorrectly specified arguments give errors", {
     unmatched = "error"
   ) |>
     expect_error()
+
+  expect_no_error(
+    joyn::inner_join(
+      x2,
+      y2,
+      by = c("id", "x"),
+      copy = TRUE,
+      keep = TRUE)
+    )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+
+
+  expect_error(
+    joyn::inner_join(
+      x2,
+      y2,
+      by = c("id", "x"),
+      keep = "invalid keep")
+  )
+
+  expect_no_error(
+    inner_join(
+      x = x2,
+      y = y1,
+      by = "id"
+    )
+  )
+
+  # Error when relationship 1:m or m:m and multiple is not "all"
+  expect_error(
+    inner_join(
+      x = x1,
+      y = y5,
+      relationship = "many-to-many",
+      by = "id",
+      multiple = "any"
+    )
+  )
+
+  expect_error(
+    inner_join(
+      x = x1,
+      y = y5,
+      relationship = "many-to-many",
+      by = "id",
+      multiple = "first"
+    )
+  )
+
+  expect_error(
+    inner_join(
+      x = x1,
+      y = y5,
+      relationship = "many-to-many",
+      by = "id",
+      multiple = "last"
+    )
+  )
+
+
+  expect_error(
+    inner_join(
+      x = x2,
+      y = y5,
+      relationship = "one-to-many",
+      by = "id",
+      multiple = "any"
+    )
+  )
+
+  expect_error(
+    inner_join(
+      x = x2,
+      y = y5,
+      relationship = "one-to-many",
+      by = "id",
+      multiple = "first"
+    )
+  )
+
+  expect_error(
+    inner_join(
+      x = x2,
+      y = y5,
+      relationship = "one-to-many",
+      by = "id",
+      multiple = "last"
+    )
+  )
 
 })
 
@@ -1103,6 +1413,19 @@ test_that("INNER JOIN - argument `keep` preserves keys in output", {
       unique() |>
       reg_elem()
   )
+
+  # When keep is NULL
+  joyn::inner_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = NULL,
+    by = "id"
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+
 })
 
 
@@ -1181,4 +1504,14 @@ test_that("INNER JOIN - NA matches", {
       fnrow(),
     4
   )
+
+  # Warning when na_matches is never
+  joyn::inner_join(x            = x5,
+                  y            = y5,
+                  relationship = "many-to-many",
+                  keep         = TRUE,
+                  na_matches   = "never")
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
 })
