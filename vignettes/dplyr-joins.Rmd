@@ -26,7 +26,7 @@ Joining data tables with `joyn` is particularly convenient as it allows you to a
 
 This vignette explores dplyr-like join functions available in `joyn`. Their major objective is to let you employ a syntax you are supposedly already familiar with - the `dplyr` one - while at the same time benefiting of the additional tools that `joyn` offers. That is, obtaining additional information and verification of the joining.
 
-There are four types of dplyr-like join functions
+There are four types of dplyr-like join functions in `joyn`:
 
 -   Left joins: `joyn::left_join()`
 
@@ -97,11 +97,13 @@ dplyr::left_join(x            = x1,
 
 Comparing the results, the same returning data table is produced.
 
-However, `joyn::left_join()` allows you to enjoy both the intuitive syntax from `dplyr` and the additional tools from `joyn`. These include additional arguments to be used, the availability of the joyn report, messages informing you on time of execution and the status of the join as well as the execution of various checks during the merging.
+However, `joyn::left_join()` allows you to enjoy both the intuitive syntax from `dplyr` and the additional tools from `joyn`. These include additional options to customize how the join is performed, the availability of the joyn report, messages informing you on time of execution and the status of the join as well as the execution of various checks during the merging. (For additional information on each of these `joyn`'s features, please take a look at all the other articles in this website.)
 
 ## Some examples
 
 #### 1. Left join
+
+ℹ️ Left joins return in the output table all rows from `x`, i.e., the left table, and only matching rows from `y`, i.e., the right table.
 
 ```{r left-ex1}
 
@@ -117,6 +119,8 @@ df2 <- data.frame(id = c(1,2, 4, NA_integer_, 8),
 
 
 ```
+
+*Example usage of some of the `joyn`'s additional options:*
 
 ***Updating NAs in left table***
 
@@ -146,6 +150,10 @@ left_join(x              = df1,
 
 #### 2. Right join
 
+ℹ️ Right joins return in the output table matching rows from `x`, i.e., the left table, and all rows from `y`, i.e., the right table.
+
+*Example usage of some of the `joyn`'s additional options:*
+
 ***Specifying a name for the reporting variable***
 
 ```{r right-ex1}
@@ -174,6 +182,8 @@ right_join(x            = df1,
 
 #### 3. Full join
 
+ℹ️ Full joins return in the output table all rows, both matching and non matching rows from `x`, i.e., the left table, and `y`, i.e., the right table.
+
 ```{r}
 
 full_join(x = x1, 
@@ -184,6 +194,8 @@ full_join(x = x1,
 ```
 
 #### 4. Inner join
+
+ℹ️ Inner joins return in the output table only rows that match between `x`, i.e., the left table, and `y`, i.e., the right table.
 
 ***Simple inner join***
 
