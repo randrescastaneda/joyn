@@ -35,7 +35,7 @@ if (getRversion() >= '2.15.1')
 #' is_id(y1, by = "id")
 is_id <- function(dt,
                   by,
-                  verbose = TRUE,
+                  verbose        = getOption("joyn.verbose"),
                   return_report  = FALSE) {
 
   # make sure it is data.table

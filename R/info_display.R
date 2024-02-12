@@ -135,16 +135,38 @@ style <- function(..., sep = "") {
   }
 
   styles <- list(
-    "ok"     = cli::col_green,
-    "note"   = cli::make_ansi_style("orange"),
+    "ok"     = cli::make_ansi_style("#228B22"),
+    
+    "note"   =  \(x) {
+      cli::make_ansi_style("#228B22")(x) |>
+        cli::style_bold()
+      },
+
     "warn"   = \(x) {
-      cli::make_ansi_style("#cc6677")(x) |>
+      cli::make_ansi_style("#FE5A1D")(x) |>
       cli::style_bold()
       },
-    "err"    = cli::col_red,
+
+    "err"    = \(x) {
+      cli::make_ansi_style("#CE2029")(x) |>
+      cli::style_bold() 
+      }, 
+
     "pale"   = cli::make_ansi_style("darkgrey"),
-    "timing" = cli::make_ansi_style("cyan")
-  )
+
+    "bolded_pale" = \(x) {
+      cli::make_ansi_style("#555555")(x) |>
+      cli::style_bold() |>
+      cli::style_italic()
+      },
+
+    "timing" = \(x) {
+      cli::make_ansi_style("#007FFF")(x) |>
+      cli::style_bold() 
+  
+      }
+    )
+    
 
   nms      <- names(args)
   nms2     <- nms[!nms %in% ""]

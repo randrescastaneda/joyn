@@ -21,10 +21,14 @@ test_that("rename_to_valid works as expected", {
 
   # Valid name
   rename_to_valid("x-") |>
-    expect_message()
-
+    expect_equal("x.")
   rename_to_valid("") |>
-    expect_message()
+    expect_equal("X")
+  # rename_to_valid("x-") |>
+  #   expect_message()
+  #
+  # rename_to_valid("") |>
+  #   expect_message()
 
 })
 

@@ -23,9 +23,13 @@ joyn:::store_msg("info",
   pale = "This is an info message")
 
 # Storing msg with type "warn"
-joyn:::store_msg("warn",
-  err = cli::symbol$cross, "  ",
-  note = "This is a warning message")
+joyn:::store_msg(
+  type        = "warn",
+  warn        = paste(cli::symbol$warn, "\nWarning:"),
+  pale        = "  joyn does not currently allow inequality joins, so",
+  bolded_pale = "  keep = NULL",
+  pale        = "  will retain only keys in x. Equivalent to `keep = FALSE`"
+)
 
 joyn_msg("all")
 }
