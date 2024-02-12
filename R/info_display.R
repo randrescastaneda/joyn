@@ -13,15 +13,12 @@
 #'   pale = "This is an info message")
 #'
 #' # Storing msg with type "warn"
-#' joyn:::store_msg(
-#'   type        = "warn",
-#'   warn        = paste(cli::symbol$warn, "\nWarning:"),
-#'   pale        = "  joyn does not currently allow inequality joins, so",
-#'   bolded_pale = "  keep = NULL",
-#'   pale        = "  will retain only keys in x. Equivalent to `keep = FALSE`"
-#' )
+#' joyn:::store_msg("warn",
+#'   err = cli::symbol$cross, "  ",
+#'   note = "This is a warning message")
 #'
 #' joyn_msg("all")
+
 joyn_msg <- function(type = c("all", type_choices())) {
 
   # Check ---------
@@ -139,7 +136,7 @@ style <- function(..., sep = "") {
 
   styles <- list(
     "ok"     = cli::make_ansi_style("#228B22"),
-
+    
     "note"   =  \(x) {
       cli::make_ansi_style("#228B22")(x) |>
         cli::style_bold()
@@ -152,8 +149,8 @@ style <- function(..., sep = "") {
 
     "err"    = \(x) {
       cli::make_ansi_style("#CE2029")(x) |>
-      cli::style_bold()
-      },
+      cli::style_bold() 
+      }, 
 
     "pale"   = cli::make_ansi_style("darkgrey"),
 
@@ -164,12 +161,12 @@ style <- function(..., sep = "") {
       },
 
     "timing" = \(x) {
-      cli::make_ansi_style("#0000B8")(x) |>
-      cli::style_bold()
-
+      cli::make_ansi_style("#007FFF")(x) |>
+      cli::style_bold() 
+  
       }
     )
-
+    
 
   nms      <- names(args)
   nms2     <- nms[!nms %in% ""]
