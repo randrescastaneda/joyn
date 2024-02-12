@@ -534,7 +534,7 @@ joyn <- function(x,
     store_msg(
       type    = "timing",
       timing  = paste(cli::symbol$record, "  Timing:"),
-      pale    = "  the entire joyn function, including checks, is executed in  ",
+      pale    = "  The entire joyn function, including checks, is executed in  ",
       timing  = round(time_taken_joyn, 6),
       pale    = "  seconds"
     )
