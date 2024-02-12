@@ -161,7 +161,7 @@ style <- function(..., sep = "") {
       },
 
     "timing" = \(x) {
-      cli::make_ansi_style("#0000B8")(x) |>
+      cli::make_ansi_style("#007FFF")(x) |>
       cli::style_bold() 
   
       }
