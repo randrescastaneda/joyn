@@ -16,8 +16,6 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-#withr::local_options(joyn.verbose = FALSE)
-#withr::local_options(joyn.match_type = "1:1")
 withr::local_options(joyn.verbose = TRUE)
 
 ```
@@ -138,14 +136,6 @@ joyn(x              = x2,
      y_vars_to_keep = TRUE)
 
 joyn_msg(type = "info")
-
-```
-
-Another instance when info messages come in handy is when the options `update_NAs` or `update_values` are set to FALSE. In this case, a message will be generated so that you know which variables are being ignored.
-
-```{r info-x3}
-
-#ADD EXAMPLE 
 
 ```
 

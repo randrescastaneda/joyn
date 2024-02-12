@@ -1,8 +1,8 @@
 ---
-title: "Main-functionalities"
+title: "Main functionalities"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Main-functionalities}
+  %\VignetteIndexEntry{Main functionalities}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
@@ -114,7 +114,7 @@ A particular feature of `joyn` is that it includes the **`reportvar`** in the re
 
 You can see the difference between the two types in the table below[^1]:
 
-[^1]: for a better understandingof the *meaning* column check the [update .TODO.] sections
+[^1]: For a better understanding of the *meaning* column check the "Advanced functionalities" article
 
 ```{r echo =FALSE}
 
@@ -292,8 +292,18 @@ Recall that `joyn` is intended to be informative about the status and quality of
 
 By default, `joyn` returns the *JOYn report* , i.e., a summary table of the merging. This includes the reporting variable, the number of rows that come from `x`, the number of rows that come from `y` and those that are common to both `x` and `y`. This info is also shown in percentage form in the *percent* column.
 
+```{r ex-verbose}
+
+joyn(x = x3, 
+     y = y3, 
+     by = "id", 
+     match_type = "m:m",
+     verbose = TRUE)
+
+```
+
 📝 **Displaying messages**
 
-One of the value added of `joyn` is that it produces a number of messages that are intended to inform you about the status of the join. The display of such messages controlled by the argument `verbose`, which allows you to show (`verbose = TRUE`) or silent (`verbose = FALSE`) any messages.
+One of the value added of `joyn` is that it produces a number of messages that are intended to inform you about the status of the join. The display of such messages is controlled by the argument `verbose`, which allows you to show (`verbose = TRUE`) or silent (`verbose = FALSE`) any messages.
 
 To further explore messages in `joyn`, please refer to the "**Messages"** article.
