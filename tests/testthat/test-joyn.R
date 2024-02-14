@@ -55,6 +55,7 @@ test_that(
       )
     )
   }
+
 )
 
 test_that("Errors if no common variables", {
@@ -452,8 +453,6 @@ test_that("Update actual values", {
 })
 
 
-
-
 test_that("y vars are extracted correctly", {
   yvars <- "y"
   jn <- joyn(x2,
@@ -609,7 +608,7 @@ test_that("do not convert to data.table", {
   expect_equal(joyn(xx1, y1, match_type = "m:1") |> class(), xx1 |> class())
 })
 
-# Check return table is of the samle class as x
+# Check return table is of the same class as x
 test_that("output table class", {
   out <- joyn(x2, y2)
 
