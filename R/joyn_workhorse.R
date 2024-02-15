@@ -12,6 +12,7 @@
 #' @param suffixes atomic character vector: give suffixes to columns common to both
 #'   `x` and `y`
 #' @return data object of same class as `x`
+#' @keywords internal
 #'
 #' @examples
 #' \dontrun{
@@ -55,7 +56,7 @@ joyn_workhorse <- function(
     )
 
     store_msg(
-      type  = "info", 
+      type  = "info",
       ok    = cli::symbol$info, "  ",
       note  = "\nNote:",
       pale  = "  Either specify by to identify columns to join on in x and y, or
@@ -103,10 +104,10 @@ joyn_workhorse <- function(
   store_msg(
     type    = "timing",
     timing  = paste(cli::symbol$record, "  Timing:"),
-    pale    = "  The full joyn is executed in  ", 
+    pale    = "  The full joyn is executed in  ",
     timing  = round(time_taken, 6),
     pale    = "  seconds" )
-  
+
 
   # Return ----
   return(

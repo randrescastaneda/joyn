@@ -1,4 +1,43 @@
 url: https://rossanatat.github.io/joyn/
 template:
   bootstrap: 5
+  bootswatch: materia
+
+development:
+  mode: auto
+
+home:
+  title: An R package for joining tables
+  description: The joy of joining tables in R
+
+authors:
+  R.Andres Castaneda:
+    href: https://randrescastaneda.rbind.io/
+
+navbar:
+  structure:
+    left:
+    - home
+    - start here
+    - reference
+    - articles
+    - news
+    right: github
+  components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    github:
+      icon: fab fa-github fa-lg
+      href: https://rossanatat.github.io/joyn/
+
+articles:
+- title: Usage
+  navbar: ~
+  contents:
+  - main-functionalities
+  - adv-functionalities
+  - dplyr-joins
+  - messages
+  - aux-functions
 
