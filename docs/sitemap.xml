@@ -4,13 +4,28 @@
     <loc>/404.html</loc>
   </url>
   <url>
+    <loc>/articles/adv-functionalities.html</loc>
+  </url>
+  <url>
     <loc>/articles/advanced-use.html</loc>
+  </url>
+  <url>
+    <loc>/articles/aux-functions.html</loc>
+  </url>
+  <url>
+    <loc>/articles/dplyr-joins.html</loc>
   </url>
   <url>
     <loc>/articles/general-use.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
+  </url>
+  <url>
+    <loc>/articles/main-functionalities.html</loc>
+  </url>
+  <url>
+    <loc>/articles/messages.html</loc>
   </url>
   <url>
     <loc>/authors.html</loc>
@@ -28,25 +43,103 @@
     <loc>/news/index.html</loc>
   </url>
   <url>
+    <loc>/reference/check_by_vars.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_dt_by.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_duplicate_names.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_match_type.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_new_y_vars.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_reportvar.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_xy.html</loc>
+  </url>
+  <url>
+    <loc>/reference/check_y_vars_to_keep.html</loc>
+  </url>
+  <url>
+    <loc>/reference/clear_joynenv.html</loc>
+  </url>
+  <url>
     <loc>/reference/fix_by_vars.html</loc>
   </url>
   <url>
     <loc>/reference/freq_table.html</loc>
   </url>
   <url>
+    <loc>/reference/full_join.html</loc>
+  </url>
+  <url>
     <loc>/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>/reference/inner_join.html</loc>
+  </url>
+  <url>
+    <loc>/reference/is_balanced.html</loc>
   </url>
   <url>
     <loc>/reference/is_id.html</loc>
   </url>
   <url>
+    <loc>/reference/is_match_type_error.html</loc>
+  </url>
+  <url>
+    <loc>/reference/is_valid_m_key.html</loc>
+  </url>
+  <url>
     <loc>/reference/join_consistency.html</loc>
+  </url>
+  <url>
+    <loc>/reference/joyn-package.html</loc>
+  </url>
+  <url>
+    <loc>/reference/joyn.html</loc>
+  </url>
+  <url>
+    <loc>/reference/joyn_msg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/joyn_msgs_exist.html</loc>
+  </url>
+  <url>
+    <loc>/reference/joyn_workhorse.html</loc>
+  </url>
+  <url>
+    <loc>/reference/left_join.html</loc>
   </url>
   <url>
     <loc>/reference/merge.html</loc>
   </url>
   <url>
+    <loc>/reference/msg_type_dt.html</loc>
+  </url>
+  <url>
     <loc>/reference/possible_ids.html</loc>
+  </url>
+  <url>
+    <loc>/reference/rename_to_valid.html</loc>
+  </url>
+  <url>
+    <loc>/reference/right_join.html</loc>
+  </url>
+  <url>
+    <loc>/reference/split_match_type.html</loc>
+  </url>
+  <url>
+    <loc>/reference/store_msg.html</loc>
+  </url>
+  <url>
+    <loc>/reference/style.html</loc>
   </url>
   <url>
     <loc>/reference/update_NAs.html</loc>
