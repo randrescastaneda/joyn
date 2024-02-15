@@ -14,7 +14,7 @@ left_join(
   na_matches = c("na", "never"),
   multiple = "all",
   unmatched = "drop",
-  relationship = "one-to-one",
+  relationship = NULL,
   y_vars_to_keep = TRUE,
   update_values = FALSE,
   update_NAs = update_values,

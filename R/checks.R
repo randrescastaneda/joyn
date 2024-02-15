@@ -34,16 +34,16 @@ check_xy  <- function(x,y) {
     if (x0 && y0) {
       xy <- c("x", "y")
       store_msg("err",
-                err = paste(cli::symbol$cross, "Error:"),
-                "   Neither {.or {.field {xy}}} table has columns.")
+                err  = paste(cli::symbol$cross, "Error:"),
+                pale = "   Neither {.or {.field {xy}}} table has columns.")
     } else if (x0) {
       store_msg("err",
-                err = paste(cli::symbol$cross, "Error:"),
-                "   Input table {.field x} has no columns.")
+                err  = paste(cli::symbol$cross, "Error:"),
+                pale = "   Input table {.field x} has no columns.")
     } else {
       store_msg("err",
-                err = paste(cli::symbol$cross, "Error:"),
-                "   Input table {.field y} has no columns.")
+                err  = paste(cli::symbol$cross, "Error:"),
+                pale = "   Input table {.field y} has no columns.")
     }
 
   }
@@ -91,11 +91,11 @@ check_duplicate_names <- \(dt, name) {
     dups <- nm_x[duplicated(nm_x)] |>
       unique()
     store_msg("err",
-              err = paste(cli::symbol$cross, "Error:"),
-              "  table {.field {name}} has the folowing
-              {cli::qty(length(dups))} column{?s} duplicated:
-              {.var {dups}}.
-              Please remove or rename {?it/them} and try again.")
+          err     = paste(cli::symbol$cross, "Error:"),
+          pale    = " Table {.field {name}} has the following
+                    {cli::qty(length(dups))} column{?s} duplicated:", 
+          timing  = "{.var {dups}}", 
+          pale    = "\nPlease rename or remove and try again.")
     return(TRUE)
   }
   return(FALSE)
@@ -123,18 +123,20 @@ check_reportvar <-
     if (is.character(reportvar)) {
       reportvar <- rename_to_valid(reportvar, verbose)
       store_msg("info",
-                timing = cli::symbol$star,
-                "   ",
-                pale = "Joyn's report available in variable {.var {reportvar}}")
+           ok = cli::symbol$info, "  ", ok = cli::symbol$pointer, 
+           "  ",
+           pale = "Joyn's report available in variable", 
+           bolded_pale = "  {reportvar}")
 
       return(reportvar)
 
     } else if (is.null(reportvar) || isFALSE(reportvar)) {
 
-      store_msg("info",
-                timing = cli::symbol$star,
-                "   ",
-                "Reporting variable is not returned")
+     store_msg("info",
+           ok           = paste(cli::symbol$info, "  Note:"),
+           pale         = "  Reporting variable is", 
+           bolded_pale  = "\nnot", 
+           pale         = "\nreturned")
 
       return(NULL)
     } else  {
@@ -273,21 +275,38 @@ check_match_type <- function(x, y, by, match_type, verbose) {
       m_m,
       "warn_y" = {
         store_msg(
-          type   = "warn",
-          warn   = 'The keys supplied uniquely identify y therefore a `{tx}:1` join is executed.'
+          type         = "warn",
+          warn         = paste(cli::symbol$warn, "\nWarning:"),
+          pale         = "\nThe keys supplied uniquely identify",
+          bolded_pale  = "\ny",
+          pale         = "\ntherefore a",
+          bolded_pale  = "\n{tx}:1",
+          pale         = "\njoin is executed."
         )
       },
+
       "warn_x" = {
         store_msg(
-          type   = "warn",
-          warn   = 'The keys supplied uniquely identify x therefore a `1:{ty}` join is executed'
-          )
+          type        = "warn",
+          warn        = paste(cli::symbol$warn,"\nWarning:"),
+          pale        = "\nThe keys supplied uniquely identify",
+          bolded_pale = "\nx",
+          pale        = "\ntherefore a",
+          bolded_pale = "\n1:{ty}",
+          pale        = "\njoin is executed."
+        )
       },
+
+      #},
       "warn_both" = {
         store_msg(
-          type   = "warn",
-          warn   =  cli::symbol$record, "  ",
-          warn   = 'The key/s supplied uniquely identifies both x and y therefore a `1:1` join executed.'
+          type        = "warn",
+          warn        = paste(cli::symbol$warn, "\nWarning:"),
+          pale        = "\nThe keys supplied uniquely identify both",
+          bolded_pale = "\nx and y",
+          pale        = "\ntherefore a",
+          bolded_pale = "\n1:1",
+          pale        = "\njoin is executed."
         )
       }
     )
@@ -328,13 +347,15 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
     match_type_error <- TRUE
     by2 <- by
     store_msg("err",
-              err = paste(cli::symbol$cross, "Error:"),
-              "   table {.field {name}} is not uniquely identified
-              by {.val {by2}}")
+              err         = paste(cli::symbol$cross, "Error:"),
+              pale        = "   table",
+              bolded_pale = "  {name}", 
+              pale        = "  is not uniquely identified by",
+              bolded_pale = "  {by2}")
 
   }
   match_type_error
-}
+  }
 
 
 
@@ -397,9 +418,11 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
     if (any(y_in_by)) {
       store_msg("info",
-                note = cli::symbol$circle_filled, "  ",
-                pale = "removing key variables {.val {y_vars_to_keep[y_in_by]}}
-                   from {.arg y_vars_to_keep}")
+                ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
+                pale        = "Removing key variables",
+                bolded_pale = "  {y_vars_to_keep[y_in_by]}",
+                pale        = "  from",
+                bolded_pale = "  {y_vars_to_keep}")
     }
 
     y_vars_to_keep <- y_vars_to_keep[!y_in_by]
@@ -453,10 +476,14 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
     if (isFALSE(update_NAs) && isFALSE(update_values)) {
       store_msg(
         "note",
-        note = cli::symbol$square_small_filled,
-        "variable{?s} {.code {upvars}} in table {.field y} {?is/are}
-                            ignored because arguments {.arg update_NAs} and
-                            {.arg update_values} are FALSE.")
+        ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
+        pale        = "variable{?s} ",
+        bolded_pale = "{upvars}", 
+        pale        = "  in table", 
+        bolded_pale = "  {y}",
+        pale        = "  {?is/are} ignored because arguments",
+        bolded_pale = "  update_NAs and update_values",
+        pale        = "  are FALSE.")
     }
 
   } # end of update vars
