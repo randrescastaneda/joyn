@@ -538,7 +538,7 @@ is_valid_m_key <- function(dt, by){
     FALSE
 }
 
-# Q: Do we document and test this function?
+
 
 check_suffixes <- function(suffixes) {
 

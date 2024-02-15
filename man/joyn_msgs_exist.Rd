@@ -20,3 +20,4 @@ Checking if it exists in the environment
 print(joyn_msgs_exist())
 }
 }
+\keyword{internal}

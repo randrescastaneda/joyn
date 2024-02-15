@@ -1,7 +1,8 @@
 url: https://rossanatat.github.io/joyn/
 template:
   bootstrap: 5
-  bootswatch: materia
+  bootswatch: cosmo
+
 
 development:
   mode: auto
@@ -40,4 +41,27 @@ articles:
   - dplyr-joins
   - messages
   - aux-functions
+
+reference:
+- title: "Main function"
+  desc: >
+    Since the objective of joyn is to join tables with joy, there is only one
+    main function in this package
+  contents:
+  - joyn
+- title: "Dplyr-joins"
+  contents:
+  - full_join
+  - right_join
+  - left_join
+  - inner_join
+- title: "Auxiliary functions"
+  contents:
+  - is_id
+  - check_dt_by
+  - freq_table
+  - possible_ids
+  - is_balanced
+  - rename_to_valid
+  - joyn_msg
 

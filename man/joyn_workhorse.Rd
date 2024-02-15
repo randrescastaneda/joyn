@@ -44,3 +44,4 @@ y1 = data.table(id = c(1,2, 4),
 joyn_workhorse(x = x1, y=y1)
 }
 }
+\keyword{internal}
