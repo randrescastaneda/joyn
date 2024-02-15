@@ -19,5 +19,5 @@ valid character name
 rename to syntactically valid names
 }
 \examples{
-rename_to_valid("x y")
+joyn:::rename_to_valid("x y")
 }

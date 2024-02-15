@@ -15,8 +15,8 @@ Checks the presence of joyn messages stored in joyn environment
 \examples{
 \dontrun{
 Storing a message
-store_msg("info", "simple message")
+joyn:::store_msg("info", "simple message")
 Checking if it exists in the environment
-print(joyn_msgs_exist())
+print(joyn:::joyn_msgs_exist())
 }
 }

@@ -35,6 +35,6 @@ y = data.table(id  = c(1, 2, 5, 6, 3),
                y   = c(11L, 15L, 20L, 13L, 10L),
                x   = c(16:20))
 # example specifying by.x and by.y
-check_dt_by(x, y, by.x = "id1", by.y = "id2")
+joyn:::check_dt_by(x, y, by.x = "id1", by.y = "id2")
 }
 }

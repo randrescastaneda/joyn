@@ -29,7 +29,7 @@ x1 = data.frame(
 y1 = data.frame(id = 1:2,
                 y  = c(11L, 15L))
 # With var "id" shared in x and y
-check_by_vars(by = "id", x = x1, y = y1)
+joyn:::check_by_vars(by = "id", x = x1, y = y1)
 }
 }
 \keyword{internal}

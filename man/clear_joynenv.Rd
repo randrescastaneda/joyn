@@ -12,12 +12,12 @@ Clearing joyn environment
 \examples{
 \dontrun{
 # Storing a message
-store_msg("info", "simple message")
+joyn:::store_msg("info", "simple message")
 
 # Clearing the environment
-clear_joynenv()
+joyn:::clear_joynenv()
 
 # Checking it does not exist in the environment
-print(joyn_msgs_exist())
+print(joyn:::joyn_msgs_exist())
 }
 }

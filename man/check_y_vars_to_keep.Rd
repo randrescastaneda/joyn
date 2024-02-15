@@ -27,11 +27,11 @@ check and return variable names in y to keep in returning table, excluding those
 y1 = data.table(id = 1:2,
                y  = c(11L, 15L))
 # With y_vars_to_keep TRUE
-check_y_vars_to_keep(TRUE, y1, by = "id")
+joyn:::check_y_vars_to_keep(TRUE, y1, by = "id")
 # With y_vars_to_keep FALSE
-check_y_vars_to_keep(FALSE, y1, by = "id")
+joyn:::check_y_vars_to_keep(FALSE, y1, by = "id")
 # Specifying which y vars to keep
-check_y_vars_to_keep("y", y1, by = "id")
+joyn:::check_y_vars_to_keep("y", y1, by = "id")
 }
 }
 \keyword{internal}
