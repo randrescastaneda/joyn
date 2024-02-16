@@ -16,6 +16,7 @@ authors:
     href: https://randrescastaneda.rbind.io/
 
 navbar:
+  bg:
   structure:
     left:
     - home
@@ -58,10 +59,14 @@ reference:
 - title: "Auxiliary functions"
   contents:
   - is_id
-  - check_dt_by
   - freq_table
   - possible_ids
   - is_balanced
   - rename_to_valid
   - joyn_msg
 
+page-footer:
+  left:
+  - icon: geo-alt
+  - icon: geo-fill
+  - text: "Test"
