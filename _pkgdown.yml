@@ -1,7 +1,9 @@
 url: https://rossanatat.github.io/joyn/
 template:
   bootstrap: 5
-  bootswatch: cosmo
+  bottswatch: cosmo
+  bslib:
+    primary: "#87CEFA"
 
 
 development:
@@ -16,7 +18,7 @@ authors:
     href: https://randrescastaneda.rbind.io/
 
 navbar:
-  bg:
+  bg: primary
   structure:
     left:
     - home
