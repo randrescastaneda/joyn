@@ -70,6 +70,7 @@ check_xy  <- function(x,y) {
 #' @param dt data.frame to check
 #' @param name var name to check if has duplicates in dt
 #' @return logical either TRUE, if any duplicates are found, or FALSE otherwise
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' # When no duplicates

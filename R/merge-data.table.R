@@ -118,7 +118,7 @@ check_logical <- \(x, name) {
 #' @param by.y character: specified var in y to join by
 #'
 #' @return character specifying checked variable(s) to join by
-#'
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' x = data.table(id1 = c(1, 1, 2, 3, 3),
