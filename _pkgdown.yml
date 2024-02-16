@@ -58,6 +58,9 @@ reference:
   - right_join
   - left_join
   - inner_join
+- title: "Merge data tables"
+  contents:
+  - merge
 - title: "Auxiliary functions"
   contents:
   - is_id
