@@ -8,6 +8,7 @@
 #' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
 #'   reporttype keep_common_vars verbose
 #' @return data.table merging x and y
+#' @export
 #' @examples
 #' x1 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
 #'                 t  = c(1L, 2L, 1L, 2L, NA_integer_),

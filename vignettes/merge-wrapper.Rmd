@@ -87,7 +87,7 @@ By default, `sort` is `TRUE`, so that the merged table will be sorted by the `by
 
 #### Going further
 
-In a similar fashion as the `joyn()` primary function does, also `merge()` offers a number of arguments to control the merge[^1].
+In a similar fashion as the `joyn()` primary function does, `merge()` offers a number of arguments to verify/control the merge[^1].
 
 [^1]: See the "Advanced functionalities" article for more details
 
@@ -96,17 +96,19 @@ For example, `joyn::joyn` allows to execute one-to-one, one-to-many, many-to-one
 ```{r ex3}
 
 # Example with many to many merge
-merge(x = x2,
-      y = y2,
-      by.x = "id1",
-      by.y = "id2",
-      match_type = "m:m")
+joyn::merge(x          = x2,
+            y          = y2,
+            by.x       = "id1",
+            by.y       = "id2",
+            match_type = "m:m")
 
 # Example with many to many merge
-merge(x = x1,
-      y = y1,
-      by = "id",
-      match_type = "m:1")
+joyn::merge(x          = x1,
+            y          = y1,
+            by         = "id",
+            match_type = "m:1")
 
 
 ```
+
+In a similar way, you can exploit all the other additional options available in `joyn()`, e.g., for keeping common variables, updating NAs and values, displaying messages etc..., which you can explore in the "Advanced functionalities" article.
