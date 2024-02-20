@@ -42,6 +42,7 @@ articles:
   - main-functionalities
   - adv-functionalities
   - dplyr-joins
+  - merge-wrapper
   - messages
   - aux-functions
 
