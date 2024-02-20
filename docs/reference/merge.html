@@ -29,6 +29,7 @@ data.table::merge, which is why merge masks the other two."><!-- mathjax --><scr
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
     <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
+    <a class="dropdown-item" href="../articles/merge-wrapper.html">Merging data tables</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -202,10 +203,24 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">merge</span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>   id t  x  y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 1 11 11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 2 12 11</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2 1 13 15</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 3    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: total 3    100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> m:1</span><span style="color: #9E9E9E;"> join is</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">executed.</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.00407</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.061649</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   id t  x  y .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 1 11 11 x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 2 12 11 x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  2 1 13 15 x &amp; y</span>
 <span class="r-in"><span><span class="co"># example of using by.x and by.y</span></span></span>
 <span class="r-in"><span><span class="va">x2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id1 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">3</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                id2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
@@ -221,6 +236,18 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span>            all.x <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>            by.x <span class="op">=</span> <span class="st">"id1"</span>,</span></span>
 <span class="r-in"><span>            by.y <span class="op">=</span> <span class="st">"id2"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2: total 7    100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, y, and x</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.002363</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.035644</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 <span class="r-in"><span><span class="co"># example with all = TRUE</span></span></span>
 <span class="r-in"><span><span class="va">jn</span> <span class="op">&lt;-</span> <span class="fu">merge</span><span class="op">(</span><span class="va">x2</span>,</span></span>
 <span class="r-in"><span>            <span class="va">y2</span>,</span></span>
@@ -228,6 +255,19 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span>            by.x <span class="op">=</span> <span class="st">"id1"</span>,</span></span>
 <span class="r-in"><span>            by.y <span class="op">=</span> <span class="st">"id2"</span>,</span></span>
 <span class="r-in"><span>            all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 7   87.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     y 1   12.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: total 8    100%</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, y, and x</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.003108</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.043978</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

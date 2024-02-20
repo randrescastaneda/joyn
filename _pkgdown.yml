@@ -71,8 +71,3 @@ reference:
   - rename_to_valid
   - joyn_msg
 
-page-footer:
-  left:
-  - icon: geo-alt
-  - icon: geo-fill
-  - text: "Test"

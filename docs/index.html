@@ -44,6 +44,7 @@
     <a class="dropdown-item" href="articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="articles/adv-functionalities.html">Advanced functionalities</a>
     <a class="dropdown-item" href="articles/dplyr-joins.html">dplyr-joins</a>
+    <a class="dropdown-item" href="articles/merge-wrapper.html">Merging data tables</a>
     <a class="dropdown-item" href="articles/messages.html">Messages</a>
     <a class="dropdown-item" href="articles/aux-functions.html">Additional functions</a>
   </div>
@@ -81,7 +82,7 @@
 <h2 id="motivation">Motivation<a class="anchor" aria-label="anchor" href="#motivation"></a>
 </h2>
 <p>The objective of <code>joyn</code> is to make your life easier when joining tables. As a former Stata user (I still work with Stata but not that much as I work with R now), I had missed, until now, the ability to assess the accuracy of my join after mergin two tables in R. With one single command, <code>merge</code>, Stata allows the user to perform any kind of equi-join. The reason for this is that, by default, Stata merges fully both tables into one and then it is up to the user to keep the observation she needs. Most importantly, Stata forces the user to know how the joining tables relate to each other. Most tables have a one-to-one (1:1 ) relation, but it is common to find one-to-many (1:m), many-to-one (m:1), and many-to-many (m:m) relations. Finally, Stata’s <code>merge</code> command returns by default a variable with useful information about the table’s join.</p>
-<p>The following features are the value added of <code>joyn</code>:</p>
+<p><strong>The following features are the value added of <code>joyn</code>:</strong></p>
 <ol style="list-style-type: decimal">
 <li><p><code>joyn</code> performs a full join by default (i.e., resulting table has all the observations from both original, joining tables). Yet, the user can select “left”, “right” or “inner” joins using the argument <code>keep</code>.</p></li>
 <li>
@@ -139,7 +140,7 @@
 <span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">20L</span>, <span class="fl">13L</span>, <span class="fl">10L</span><span class="op">)</span>,</span>
 <span>                x  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># using commong variable `id` as key.</span></span>
+<span><span class="co"># using common variable `id` as key.</span></span>
 <span><span class="fu"><a href="reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>, </span>
 <span>     y <span class="op">=</span> <span class="va">y1</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span>
@@ -154,8 +155,8 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id and y</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.001037 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.083779</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000778 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.049526</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
 <span><span class="co">#&gt; 1: NA NA 15 NA     x</span></span>
@@ -179,8 +180,8 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id and y</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 1e-04 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.076301</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 7.3e-05 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.042698</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id t  x  y .joyn</span></span>
 <span><span class="co">#&gt; 1:  1 1 11 11 x &amp; y</span></span>
@@ -202,8 +203,8 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id and x from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000105 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.05279</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8e-05 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.035755</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id  t  x yd  y .joyn</span></span>
 <span><span class="co">#&gt; 1: NA NA 15 NA NA     x</span></span>
@@ -232,8 +233,8 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000146 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.064137</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.2e-05 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.03433</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id  t  x yd  y .joyn</span></span>
 <span><span class="co">#&gt; 1: NA NA 15 NA NA     x</span></span>
@@ -260,8 +261,8 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000159 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.063671</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.5e-05 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.037088</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id  t  x yd  y      .joyn</span></span>
 <span><span class="co">#&gt; 1: NA NA 15 NA NA          x</span></span>
@@ -288,8 +289,8 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000166 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.060555</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8e-05 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.038001</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id  t  x yd  y         .joyn</span></span>
 <span><span class="co">#&gt; 1: NA NA 15 NA NA   not updated</span></span>
@@ -316,8 +317,8 @@
 <span><span class="co">#&gt; 4: total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000102 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.03327</span></span>
+<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.3e-05 seconds</span></span>
+<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.023695</span></span>
 <span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt;    id  t  x .joyn</span></span>
 <span><span class="co">#&gt; 1: NA NA 15     x</span></span>

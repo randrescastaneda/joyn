@@ -6,8 +6,9 @@ articles:
   aux-functions: aux-functions.html
   dplyr-joins: dplyr-joins.html
   main-functionalities: main-functionalities.html
+  merge-wrapper: merge-wrapper.html
   messages: messages.html
-last_built: 2024-02-16T21:01Z
+last_built: 2024-02-20T21:40Z
 urls:
   reference: https://rossanatat.github.io/joyn/reference
   article: https://rossanatat.github.io/joyn/articles
