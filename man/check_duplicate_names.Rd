@@ -33,3 +33,4 @@ x1_duplicates = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
 joyn:::check_duplicate_names(x1_duplicates, "x")
 }
 }
+\keyword{internal}

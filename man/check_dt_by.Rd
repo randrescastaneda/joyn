@@ -38,3 +38,4 @@ y = data.table(id  = c(1, 2, 5, 6, 3),
 joyn:::check_dt_by(x, y, by.x = "id1", by.y = "id2")
 }
 }
+\keyword{internal}
