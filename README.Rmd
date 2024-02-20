@@ -51,7 +51,7 @@ many-to-one (m:1), and many-to-many (m:m) relations. Finally, Stata's
 `merge` command returns by default a variable with useful information
 about the table's join.
 
-The following features are the value added of `joyn`:
+**The following features are the value added of `joyn`:**
 
 1.  `joyn` performs a full join by default (i.e., resulting table has
     all the observations from both original, joining tables). Yet, the
@@ -153,7 +153,7 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:20))
 
-# using commong variable `id` as key.
+# using common variable `id` as key.
 joyn(x = x1, 
      y = y1,
      match_type = "m:1")

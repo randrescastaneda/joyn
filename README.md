@@ -36,7 +36,7 @@ many-to-one (m:1), and many-to-many (m:m) relations. Finally, Stata’s
 `merge` command returns by default a variable with useful information
 about the table’s join.
 
-The following features are the value added of `joyn`:
+**The following features are the value added of `joyn`:**
 
 1.  `joyn` performs a full join by default (i.e., resulting table has
     all the observations from both original, joining tables). Yet, the
@@ -138,7 +138,7 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:20))
 
-# using commong variable `id` as key.
+# using common variable `id` as key.
 joyn(x = x1, 
      y = y1,
      match_type = "m:1")
@@ -153,8 +153,8 @@ joyn(x = x1,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id and y
-#> ● Timing: The full joyn is executed in 0.001037 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.083779
+#> ● Timing: The full joyn is executed in 0.000778 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.049526
 #> seconds
 #>    id  t  x  y .joyn
 #> 1: NA NA 15 NA     x
@@ -178,8 +178,8 @@ joyn(x = x1,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id and y
-#> ● Timing: The full joyn is executed in 1e-04 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.076301
+#> ● Timing: The full joyn is executed in 7.3e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.042698
 #> seconds
 #>    id t  x  y .joyn
 #> 1:  1 1 11 11 x & y
@@ -201,8 +201,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id and x from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 0.000105 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.05279
+#> ● Timing: The full joyn is executed in 8e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.035755
 #> seconds
 #>    id  t  x yd  y .joyn
 #> 1: NA NA 15 NA NA     x
@@ -231,8 +231,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 0.000146 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.064137
+#> ● Timing: The full joyn is executed in 8.2e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.03433
 #> seconds
 #>    id  t  x yd  y .joyn
 #> 1: NA NA 15 NA NA     x
@@ -259,8 +259,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 0.000159 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.063671
+#> ● Timing: The full joyn is executed in 8.5e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.037088
 #> seconds
 #>    id  t  x yd  y      .joyn
 #> 1: NA NA 15 NA NA          x
@@ -287,8 +287,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 0.000166 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.060555
+#> ● Timing: The full joyn is executed in 8e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.038001
 #> seconds
 #>    id  t  x yd  y         .joyn
 #> 1: NA NA 15 NA NA   not updated
@@ -315,8 +315,8 @@ joyn(x = x2,
 #> 4: total 7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
-#> ● Timing: The full joyn is executed in 0.000102 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.03327
+#> ● Timing: The full joyn is executed in 8.3e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.023695
 #> seconds
 #>    id  t  x .joyn
 #> 1: NA NA 15     x
