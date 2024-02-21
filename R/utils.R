@@ -1,4 +1,4 @@
-#' rename to syntactically valid names
+#' Rename to syntactically valid names
 #'
 #' @param name character: name to be coerced to syntactically valid name
 #' @inheritParams joyn

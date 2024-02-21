@@ -71,6 +71,7 @@ check_xy  <- function(x,y) {
 #' @param name var name to check if has duplicates in dt
 #' @return logical either TRUE, if any duplicates are found, or FALSE otherwise
 #' @keywords internal
+#'
 #' @examples
 #' \dontrun{
 #' # When no duplicates
@@ -94,8 +95,8 @@ check_duplicate_names <- \(dt, name) {
     store_msg("err",
           err     = paste(cli::symbol$cross, "Error:"),
           pale    = " Table {.field {name}} has the following
-                    {cli::qty(length(dups))} column{?s} duplicated:", 
-          timing  = "{.var {dups}}", 
+                    {cli::qty(length(dups))} column{?s} duplicated:",
+          timing  = "{.var {dups}}",
           pale    = "\nPlease rename or remove and try again.")
     return(TRUE)
   }
@@ -124,9 +125,9 @@ check_reportvar <-
     if (is.character(reportvar)) {
       reportvar <- rename_to_valid(reportvar, verbose)
       store_msg("info",
-           ok = cli::symbol$info, "  ", ok = cli::symbol$pointer, 
+           ok = cli::symbol$info, "  ", ok = cli::symbol$pointer,
            "  ",
-           pale = "Joyn's report available in variable", 
+           pale = "Joyn's report available in variable",
            bolded_pale = "  {reportvar}")
 
       return(reportvar)
@@ -135,8 +136,8 @@ check_reportvar <-
 
      store_msg("info",
            ok           = paste(cli::symbol$info, "  Note:"),
-           pale         = "  Reporting variable is", 
-           bolded_pale  = "\nnot", 
+           pale         = "  Reporting variable is",
+           bolded_pale  = "\nnot",
            pale         = "\nreturned")
 
       return(NULL)
@@ -350,7 +351,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
     store_msg("err",
               err         = paste(cli::symbol$cross, "Error:"),
               pale        = "   table",
-              bolded_pale = "  {name}", 
+              bolded_pale = "  {name}",
               pale        = "  is not uniquely identified by",
               bolded_pale = "  {by2}")
 
@@ -479,8 +480,8 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
         "note",
         ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
         pale        = "variable{?s} ",
-        bolded_pale = "{upvars}", 
-        pale        = "  in table", 
+        bolded_pale = "{upvars}",
+        pale        = "  in table",
         bolded_pale = "  {y}",
         pale        = "  {?is/are} ignored because arguments",
         bolded_pale = "  update_NAs and update_values",

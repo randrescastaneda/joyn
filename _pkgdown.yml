@@ -1,6 +1,10 @@
+url: https://rossanatat.github.io/joyn/
 template:
   bootstrap: 5
-  bootswatch: flatly
+  bottswatch: cosmo
+  bslib:
+    primary: "#87CEFA"
+
 
 development:
   mode: auto
@@ -14,6 +18,7 @@ authors:
     href: https://randrescastaneda.rbind.io/
 
 navbar:
+  bg: primary
   structure:
     left:
     - home
@@ -28,7 +33,18 @@ navbar:
       href: reference/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://github.com/randrescastaneda/joyn/
+      href: https://rossanatat.github.io/joyn/
+
+articles:
+- title: Usage
+  navbar: ~
+  contents:
+  - main-functionalities
+  - adv-functionalities
+  - dplyr-joins
+  - merge-wrapper
+  - messages
+  - aux-functions
 
 reference:
 - title: "Main function"
@@ -36,16 +52,22 @@ reference:
     Since the objective of joyn is to join tables with joy, there is only one
     main function in this package
   contents:
-  - '`merge`'
+  - joyn
+- title: "Dplyr-joins"
+  contents:
+  - full_join
+  - right_join
+  - left_join
+  - inner_join
+- title: "Merge data tables"
+  contents:
+  - merge
 - title: "Auxiliary functions"
   contents:
-  - '`is_id`'
-  - '`freq_table`'
-  - '`possible_ids`'
+  - is_id
+  - freq_table
+  - possible_ids
+  - is_balanced
+  - rename_to_valid
+  - joyn_msg
 
-articles:
-- title: Usage
-  navbar: ~
-  contents:
-  - general-use
-  - advanced-use

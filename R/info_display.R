@@ -136,7 +136,7 @@ style <- function(..., sep = "") {
 
   styles <- list(
     "ok"     = cli::make_ansi_style("#228B22"),
-    
+
     "note"   =  \(x) {
       cli::make_ansi_style("#228B22")(x) |>
         cli::style_bold()
@@ -149,8 +149,8 @@ style <- function(..., sep = "") {
 
     "err"    = \(x) {
       cli::make_ansi_style("#CE2029")(x) |>
-      cli::style_bold() 
-      }, 
+      cli::style_bold()
+      },
 
     "pale"   = cli::make_ansi_style("darkgrey"),
 
@@ -162,11 +162,11 @@ style <- function(..., sep = "") {
 
     "timing" = \(x) {
       cli::make_ansi_style("#007FFF")(x) |>
-      cli::style_bold() 
-  
+      cli::style_bold()
+
       }
     )
-    
+
 
   nms      <- names(args)
   nms2     <- nms[!nms %in% ""]
@@ -198,6 +198,7 @@ style <- function(..., sep = "") {
 #' Checks the presence of joyn messages stored in joyn environment
 #'
 #' @return invisible TRUE
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' Storing a message
@@ -215,7 +216,7 @@ joyn_msgs_exist <- \() {
 
 
 #' Clearing joyn environment
-#'
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' # Storing a message

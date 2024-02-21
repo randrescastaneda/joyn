@@ -20,7 +20,7 @@ Description: Tool for diagnosing table joins. It combines the speed of `collapse
      of the `merge` command in `Stata`.
 License: MIT + file LICENSE
 Encoding: UTF-8
-URL: https://github.com/randrescastaneda/joyn
+URL: https://github.com/randrescastaneda/joyn, https://rossanatat.github.io/joyn/
 BugReports: https://github.com/randrescastaneda/joyn/issues
 Suggests: 
     badger,
