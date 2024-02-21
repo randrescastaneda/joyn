@@ -1,0 +1,147 @@
+---
+title: "Advanced functionalities"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Advanced functionalities}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+
+```
+
+```{r setup}
+
+library(joyn)
+library(data.table)
+
+x <- data.table(id = c(1, 4, 2, 3, NA),
+                t  = c(1L, 2L, 1L, 2L, NA),
+                country = c(16, 12, 3, NA, 15))
+  
+y <- data.table(id  = c(1, 2, 5, 6, 3),
+                gdp = c(11L, 15L, 20L, 13L, 10L),
+                country = 16:20)
+
+```
+
+## Advanced use
+
+This vignette will let you explore some additional features available in `joyn`, through an example use case.
+
+Suppose you want to join tables `x` and `y`, where the variable *country* is available in both. You could do one of five things:
+
+### 1. Use variable *country* as one of the key variables
+
+If you don't use the argument `by`, `joyn` will consider *country* and *id* as key variables by default given that they are common between `x` and `y`.
+
+```{r ex1}
+
+# The variables with the same name, `id` and `country`, are used as key
+# variables.
+
+joyn(x = x, 
+     y = y)
+
+```
+
+Alternatively, you can specify to join by *country*
+
+```{r ex2}
+
+# Joining by country
+
+joyn(x = x, 
+     y = y, 
+     by = "country")
+
+```
+
+### 2. Ignore the values of *country* from `y` and don't bring it into the resulting table
+
+This the default if you did not include *country* as part of the key variables in argument `by`.
+
+```{r}
+
+joyn(x = x, 
+     y = y, 
+     by = "id")
+
+```
+
+### 3. Update only NAs in table x
+
+Another possibility is to make use of the `update_NAs` argument of `joyn()`. This allows you to update the NAs values in variable *country* in table `x` with the actual values of the matching observations in *country* from table y. In this case, actual values in *country* from table x will remain unchanged.
+
+```{r ex3}
+
+joyn(x = x,
+     y = y, 
+     by = "id", 
+     update_NAs = TRUE)
+
+```
+
+### 4. Update actual values in table x
+
+You can also update all the values - both NAs and actual - in variable *country* of table `x` with the actual values of the matching observations in *country* from `y`. This is done by setting `update_values = TRUE`.
+
+Notice that the `reportvar` allows you keep track of how the update worked. In this case, *value update* means that only the values that are different between *country* from `x` and *country* from `y` are updated.
+
+However, let's consider other possible cases:
+
+-   If, for the same matching observations, the values between the two *country* variables were the same, the reporting variable would report *x & y* instead (so you know that there is no update to make).
+
+-   if there are NAs in *country* from `y`, the actual values in `x` will be unchanged, and you would see a *not updated* status in the reporting variable. Nevertheless, notice there is another way for you to bring *country* from `y` to `x`. This is done through the argument `keep_y_in_x` (*see 5. below* ⬇️)
+
+```{r ex4}
+
+# Notice that only the value that are 
+
+joyn(x = x, 
+     y = y, 
+     by = "id", 
+     update_values = TRUE)
+
+```
+
+### 5. Keep original *country* variable from y into returning table
+
+#### (Keep matching-names variable from y into x -not updating values in x)
+
+Another available option is that of bringing the original variable *country* from `y` into the resulting table, without using it to update the values in `x`. In order to distinguish *country* from `x` and *country* from `y`, `joyn` will assign a suffix to the variable's name: so that you will get *country.y* and *country.x*. All of this can be done specifying `keep_common_vars = TRUE.`
+
+```{r ex5}
+
+joyn(x = x, 
+     y = y, 
+     by = "id", 
+     keep_common_vars = TRUE)
+
+```
+
+### Bring other variables from y into returning table
+
+In `joyn` , you can also bring non common variables from `y` into the resulting table. In fact you can specify them in `y_vars_to_keep`, as shown in the example below:
+
+```{r ex6}
+
+# Keeping variable gdp 
+
+joyn(x = x, 
+     y = y, 
+     by = "id", 
+     y_vars_to_keep = "gdp")
+
+```
+
+Notice that if you set `y_vars_to_keep = FALSE` or `y_vars_to_keep = NULL`, then `joyn` won't bring any variable into the returning table.

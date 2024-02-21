@@ -1,0 +1,114 @@
+---
+title: "Merging data tables"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Merging data tables}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+
+library(joyn)
+library(data.table)
+
+ x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x  = 11:15)
+ y1 = data.table(id = c(1,2, 4),
+                 y  = c(11L, 15L, 16))
+ 
+ x2 = data.table(id1 = c(1, 1, 2, 3, 3),
+                 id2 = c(1, 1, 2, 3, 4),
+                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x   = c(16, 12, NA, NA, 15))
+ 
+ y2 = data.table(id  = c(1, 2, 5, 6, 3),
+                 id2 = c(1, 1, 2, 3, 4),
+                 y   = c(11L, 15L, 20L, 13L, 10L),
+                 x   = c(16:20))
+ 
+```
+
+This vignette describes the use of the `joyn` `merge()` function.
+
+🔀 `joyn::merge` resembles the usability of `base::merge` and `data.table::merge`, while also incorporating the additional features that characterize `joyn`. In fact, `joyn::merge` masks the other two.
+
+### Examples
+
+#### Simple merge
+
+Suppose you want to merge `x1` and `y1`. First notice that while `base::merge` is principally for data frames, `joyn::merge` coerces `x` and `y` to data tables if they are not already.
+
+By default, `merge` will join by the shared column name(s) in `x` and `y`.
+
+```{r ex1}
+
+# Example not specifying the key
+merge(x = x1, 
+      y = y1)
+
+# Example specifying the key
+merge(x = x1, 
+      y = y1,
+      by = "id")
+
+```
+
+As usual, if the columns you want to join by don’t have the same name, you need to tell merge which columns you want to join by: `by.x` for the x data frame column name, and `by.y` for the y one. For example,
+
+```{r ex2}
+
+df1 <- data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
+                  t  = c(1L, 2L, 1L, 2L, NA_integer_, 4L),
+                  x  = 11:16)
+
+df2 <- data.frame(id = c(1,2, 4, NA_integer_, 8),
+                  y  = c(11L, 15L, 16, 17L, 18L),
+                  t  = c(13:17))
+
+merge(x    = df1,
+      y    = df2,
+      by.x = "x",
+      by.y = "y")
+
+```
+
+By default, `sort` is `TRUE`, so that the merged table will be sorted by the `by.x` column. Notice that the output table distinguishes non-by column *t* coming from `x` from the one coming from `y` by adding the *.x* and *.y* suffixes -which occurs because the `no.dups` argument is set to `TRUE` by default.
+
+#### Going further
+
+In a similar fashion as the `joyn()` primary function does, `merge()` offers a number of arguments to verify/control the merge[^1].
+
+[^1]: See the "Advanced functionalities" article for more details
+
+For example, `joyn::joyn` allows to execute one-to-one, one-to-many, many-to-one and many-to-many joins. Similarly, `merge` accepts the `match_type` argument:
+
+```{r ex3}
+
+# Example with many to many merge
+joyn::merge(x          = x2,
+            y          = y2,
+            by.x       = "id1",
+            by.y       = "id2",
+            match_type = "m:m")
+
+# Example with many to many merge
+joyn::merge(x          = x1,
+            y          = y1,
+            by         = "id",
+            match_type = "m:1")
+
+
+```
+
+In a similar way, you can exploit all the other additional options available in `joyn()`, e.g., for keeping common variables, updating NAs and values, displaying messages etc..., which you can explore in the "Advanced functionalities" article.
