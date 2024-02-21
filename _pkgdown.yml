@@ -1,4 +1,4 @@
-url: https://rossanatat.github.io/joyn/
+url: https://randrescastaneda.github.io/joyn/
 template:
   bootstrap: 5
   bottswatch: cosmo
@@ -16,6 +16,7 @@ home:
 authors:
   R.Andres Castaneda:
     href: https://randrescastaneda.rbind.io/
+  Zander Prinsloo
 
 navbar:
   bg: primary
@@ -33,7 +34,7 @@ navbar:
       href: reference/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://rossanatat.github.io/joyn/
+      href: https://randrescastaneda.github.io/joyn/
 
 articles:
 - title: Usage
