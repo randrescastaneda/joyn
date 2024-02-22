@@ -7,8 +7,8 @@
 store_msg(type, ...)
 }
 \arguments{
-\item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err" or \code{all}}
+\item{type}{character: one or more of the following: info, note, warn, timing, err
+cli::format_inline("{.or {.val {type_choices()}}}")\code{or}all`}
 
 \item{...}{combination of type and text in the form \verb{style1 = text1, style2 = text2}, etc.}
 }

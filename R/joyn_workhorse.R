@@ -126,17 +126,31 @@ joyn_workhorse <- function(
         # This is inefficient but it is the only way to return the table when
         # there is a warning
 
-        collapse::join( x              = x,
-                        y              = y,
-                        how            = "full",
-                        on             = by,
-                        multiple       = TRUE,     # matches row in x with m in y
-                        validate       = "m:m",    # no checks performed
-                        suffix         = suffixes,   # data.table suffixes
-                        keep.col.order = TRUE,
-                        verbose        = 0,
-                        column         = NULL) |>
-          suppressWarnings()
+        if (match_type == "m:m") {
+          data.table::merge.data.table(
+            x               = x,
+            y               = y,
+            by              = by,
+            all             = TRUE,
+            sort            = FALSE,
+            suffixes        = suffixes,
+            allow.cartesian = TRUE
+          ) |>
+            suppressWarnings()
+
+        } else {
+          collapse::join( x              = x,
+                          y              = y,
+                          how            = "full",
+                          on             = by,
+                          multiple       = TRUE,     # matches row in x with m in y
+                          validate       = "m:m",    # no checks performed
+                          suffix         = suffixes,   # data.table suffixes
+                          keep.col.order = TRUE,
+                          verbose        = 0,
+                          column         = NULL)  |>
+            suppressWarnings()
+        }
 
       }
 
