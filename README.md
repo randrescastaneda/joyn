@@ -39,7 +39,7 @@ detailed reports. `joyn` fills this gap by offering:
   helpful reports that identify duplicate observations, missing values,
   and potential inconsistencies.
 
-**Beyond the basics: What makes `joyn` special?**
+## What makes `joyn` special?
 
 While standard R merge functions offer basic functionality, `joyn` goes
 above and beyond by providing comprehensive tools and features tailored
@@ -51,13 +51,17 @@ to your data joining needs:
 included, but you have full control to tailor the results.
 
 **2. Seamless variable handling:** No more wrestling with duplicate
-variable names! `joyn` offers multiple options: \* **Update values:**
-Use `update_values` or `update_NA` to automatically update conflicting
-variables in the left table with values from the right table. \* **Keep
-both (with different names):** Enable `keep_common_vars = TRUE` to
-retain both variables, each with a unique suffix. \* **Selective
-inclusion:** Choose specific variables from the right table with
-`y_vars_to_keep`, ensuring you get only the data you need.
+variable names! `joyn` offers multiple options:
+
+- **Update values:** Use `update_values` or `update_NA` to automatically
+  update conflicting variables in the left table with values from the
+  right table.
+
+- **Keep both (with different names):** Enable `keep_common_vars = TRUE`
+  to retain both variables, each with a unique suffix.
+
+- **Selective inclusion:** Choose specific variables from the right
+  table with `y_vars_to_keep`, ensuring you get only the data you need.
 
 **3. Relationship awareness:** `joyn` recognizes one-to-one,
 one-to-many, many-to-one, and many-to-many relationships between tables.
@@ -77,7 +81,7 @@ success.
 
 ## Performance and flexibility
 
-### The cost of Reliability\*
+### The cost of Reliability
 
 While raw speed is essential, understanding your joins every step of the
 way is equally crucial. `joyn` prioritizes providing **insightful
@@ -97,7 +101,7 @@ compared to functions like `data.table::merge.data.table()` or
 `collapse::join()`. However, the benefits of **preventing errors and
 gaining invaluable insights** far outweigh the minor speed difference.
 
-**Know your needs, choose your tool**
+### Know your needs, choose your tool
 
 - **Speed is your top priority for massive datasets?** Consider using
   `data.table` or `collapse` directly.
@@ -119,7 +123,7 @@ Currently, `joyn` focuses on the most common and valuable join types.
 Future development might explore expanding its flexibility based on user
 needs and feedback.
 
-## joyn as wrapper: Familiar Syntax, Familiar Power
+## `joyn` as wrapper: Familiar Syntax, Familiar Power
 
 While `joyn::join()` offers the core functionality and Stata-inspired
 arguments, you might prefer a syntax more aligned with your existing
@@ -202,8 +206,8 @@ joyn(x = x1,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id and y
-#> ● Timing: The full joyn is executed in 0.000746 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.049501
+#> ● Timing: The full joyn is executed in 0.000718 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.048331
 #> seconds
 #> Key: <id>
 #>       id     t     x     y  .joyn
@@ -230,8 +234,8 @@ joyn(x = x1,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id and y
-#> ● Timing: The full joyn is executed in 7.5e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.041669
+#> ● Timing: The full joyn is executed in 7.4e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.041525
 #> seconds
 #> Key: <id>
 #>       id     t     x     y  .joyn
@@ -256,8 +260,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id and x from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.5e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.033381
+#> ● Timing: The full joyn is executed in 8.1e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.033808
 #> seconds
 #> Key: <id, x>
 #>       id     t     x    yd     y  .joyn
@@ -289,8 +293,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 9.6e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.036078
+#> ● Timing: The full joyn is executed in 8.5e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.035442
 #> seconds
 #> Key: <id>
 #>       id     t     x    yd     y  .joyn
@@ -320,8 +324,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.4e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.035083
+#> ● Timing: The full joyn is executed in 8.2e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.038231
 #> seconds
 #> Key: <id>
 #>       id     t     x    yd     y      .joyn
@@ -351,8 +355,8 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.4e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.032323
+#> ● Timing: The full joyn is executed in 8.1e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.033889
 #> seconds
 #> Key: <id>
 #>       id     t     x    yd     y         .joyn
@@ -382,8 +386,8 @@ joyn(x = x2,
 #> 4:  total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
-#> ● Timing: The full joyn is executed in 7.8e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.024418
+#> ● Timing: The full joyn is executed in 7.7e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.025583
 #> seconds
 #> Key: <id>
 #>       id     t     x  .joyn

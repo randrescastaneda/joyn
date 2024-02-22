@@ -41,16 +41,19 @@ While standard R merge functions are powerful, they often lack features like ass
 * **Intuitive join handling:** Whether you're dealing with one-to-one, one-to-many, or many-to-many relationships, `joyn` helps you navigate them confidently.
 * **Informative reports:** Get clear insights into the join process with helpful reports that identify duplicate observations, missing values, and potential inconsistencies.
 
-**Beyond the basics: What makes `joyn` special?**
+## What makes `joyn` special?
 
 While standard R merge functions offer basic functionality, `joyn` goes above and beyond by providing comprehensive tools and features tailored to your data joining needs:
 
 **1. Flexibility in join types:** Choose your ideal join type ("left", "right", or "inner") with the `keep` argument. Unlike R's default, `joyn` performs a full join by default, ensuring all observations are included, but you have full control to tailor the results.
 
 **2. Seamless variable handling:** No more wrestling with duplicate variable names! `joyn` offers multiple options:
-    * **Update values:** Use `update_values` or `update_NA` to automatically update conflicting variables in the left table with values from the right table.
-    * **Keep both (with different names):** Enable `keep_common_vars = TRUE` to retain both variables, each with a unique suffix.
-    * **Selective inclusion:** Choose specific variables from the right table with `y_vars_to_keep`, ensuring you get only the data you need.
+
+* **Update values:** Use `update_values` or `update_NA` to automatically update conflicting variables in the left table with values from the right table.
+
+* **Keep both (with different names):** Enable `keep_common_vars = TRUE` to retain both variables, each with a unique suffix.
+
+* **Selective inclusion:** Choose specific variables from the right table with `y_vars_to_keep`, ensuring you get only the data you need.
 
 **3. Relationship awareness:** `joyn` recognizes one-to-one, one-to-many, many-to-one, and many-to-many relationships between tables. While it defaults to many-to-many for compatibility, **remember this is often not ideal**. **Always specify the correct relationship using `by` arguments** for accurate and meaningful results.
 
@@ -61,7 +64,7 @@ By addressing these common pain points and offering enhanced flexibility, `joyn`
 
 ## Performance and flexibility
 
-### The cost of Reliability*
+### The cost of Reliability
 
 While raw speed is essential, understanding your joins every step of the way is equally crucial. `joyn` prioritizes providing **insightful information** and preventing errors over solely focusing on speed. Unlike other functions, it adds:
 
@@ -71,7 +74,7 @@ While raw speed is essential, understanding your joins every step of the way is 
 
 These valuable features contribute to a slightly slower performance compared to functions like `data.table::merge.data.table()` or `collapse::join()`. However, the benefits of **preventing errors and gaining invaluable insights** far outweigh the minor speed difference.
 
-**Know your needs, choose your tool**
+### Know your needs, choose your tool
 
 * **Speed is your top priority for massive datasets?** Consider using `data.table` or `collapse` directly.
 * **Seek clear understanding and error prevention for your joins?** `joyn` is your trusted guide.
@@ -84,7 +87,7 @@ These valuable features contribute to a slightly slower performance compared to 
 
 Currently, `joyn` focuses on the most common and valuable join types. Future development might explore expanding its flexibility based on user needs and feedback.
 
-## joyn as wrapper: Familiar Syntax, Familiar Power
+## `joyn` as wrapper: Familiar Syntax, Familiar Power
 
 While `joyn::join()` offers the core functionality and Stata-inspired arguments, you might prefer a syntax more aligned with your existing workflow. `joyn` has you covered!
 
