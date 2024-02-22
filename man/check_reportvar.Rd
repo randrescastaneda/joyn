@@ -15,11 +15,11 @@ check reportvar input \if{html}{\out{<br>}} If resulting data frame has a report
 \examples{
 \dontrun{
 # When null - reporting variable not returned in merged dt
-check_reportvar(reportvar = NULL)
+joyn:::check_reportvar(reportvar = NULL)
 # When FALSE - reporting variable not returned in merged dt
-check_reportvar(reportvar = FALSE)
+joyn:::check_reportvar(reportvar = FALSE)
 # When character
-check_reportvar(reportvar = ".joyn")
+joyn:::check_reportvar(reportvar = ".joyn")
 }
 }
 \keyword{internal}

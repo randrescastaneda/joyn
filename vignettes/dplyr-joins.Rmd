@@ -1,0 +1,209 @@
+---
+title: "dplyr joins wrappers"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{dplyr-joins}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+```{r, include = FALSE}
+
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+withr::local_options(joyn.verbose = TRUE)
+
+```
+
+## Overview
+
+Joining data tables with `joyn` is particularly convenient as it allows you to analyze/be aware of the quality of the merging.
+
+This vignette explores dplyr-like join functions available in `joyn`. Their major objective is to let you employ a syntax you are supposedly already familiar with - the `dplyr` one - while at the same time benefiting of the additional tools that `joyn` offers. That is, obtaining additional information and verification of the joining.
+
+There are four types of dplyr-like join functions in `joyn`:
+
+-   Left joins: `joyn::left_join()`
+
+-   Right joins: `joyn::right_join()`
+
+-   Full joins: `joyn::full_join()`
+
+-   Inner joins: `joyn::inner_join()`
+
+Each of them is a wrapper that works in a similar way as the corresponding `dplyr` function.
+
+```{r setup}
+
+library(joyn)
+library(data.table)
+
+```
+
+## Rationale
+
+```{r}
+
+x1 <- data.table(id  = c(1L, 1L, 2L, 3L, NA_integer_),
+                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                 x   = 11:15)
+
+y1 <- data.table(id  = c(1,2, 4),
+                 y   = c(11L, 15L, 16))
+
+
+```
+
+Suppose you want to perform a **simple left join** between tables `x1` and `y1`.
+
+With `joyn` you have two possibilities:
+
+-   using the `joyn()` function, specifying `keep = "left"`
+
+-   using the **`joyn::left_join()`** function
+
+In addition, you could use `dplyr::left_join()` or base R merging functions.
+
+Consider these three options:
+
+```{r example}
+
+# Option 1
+
+joyn(x          = x1, 
+     y          = y1, 
+     keep       = "left",
+     match_type = "m:1")
+
+# Option 2 
+
+joyn::left_join(x            = x1, 
+                y            = y1, 
+                relationship = "many-to-one") 
+
+# Option 3
+
+dplyr::left_join(x            = x1, 
+                 y            = y1, 
+                 relationship = "many-to-one") 
+
+
+```
+
+Comparing the results, the same returning data table is produced.
+
+However, `joyn::left_join()` allows you to enjoy both the intuitive syntax from `dplyr` and the additional tools from `joyn`. These include additional options to customize how the join is performed, the availability of the joyn report, messages informing you on time of execution and the status of the join as well as the execution of various checks during the merging. (For additional information on each of these `joyn`'s features, please take a look at all the other articles in this website.)
+
+## Some examples
+
+#### 1. Left join
+
+ℹ️ Left joins return in the output table all rows from `x`, i.e., the left table, and only matching rows from `y`, i.e., the right table.
+
+```{r left-ex1}
+
+# Data tables to be joined 
+
+df1 <- data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
+                  t  = c(1L, 2L, 1L, 2L, NA_integer_, 4L),
+                  x  = 11:16)
+
+df2 <- data.frame(id = c(1,2, 4, NA_integer_, 8),
+                  y  = c(11L, 15L, 16, 17L, 18L),
+                  t  = c(13:17))
+
+
+```
+
+*Example usage of some of the `joyn`'s additional options:*
+
+***Updating NAs in left table***
+
+Using the `update_NAs` argument from `joyn` you can update the values that are NA in the *t* variable in the left table with the actual values from the matching column *t* in the right one
+
+```{r left-ex2}
+
+left_join(x            = df1, 
+          y            = df2,
+          relationship = "many-to-one", 
+          by           = "id",
+          update_NAs   = TRUE)
+
+```
+
+***Specifying which variables to keep from the right table after the join***
+
+```{r}
+
+left_join(x              = df1, 
+          y              = df2,
+          relationship   = "many-to-one", 
+          by             = "id", 
+          y_vars_to_keep = "y")
+
+```
+
+#### 2. Right join
+
+ℹ️ Right joins return in the output table matching rows from `x`, i.e., the left table, and all rows from `y`, i.e., the right table.
+
+*Example usage of some of the `joyn`'s additional options:*
+
+***Specifying a name for the reporting variable***
+
+```{r right-ex1}
+
+right_join(x            = df1, 
+          y            = df2,
+          relationship = "many-to-one", 
+          by           = "id",
+          reportvar    = "right.joyn")
+
+```
+
+***Updating values in common variables***
+
+By setting `update_values = TRUE`, all values in x (both NAs and not) will be updated with the actual values of variables in y with the same name as the ones in x. You can then see the status of the update in the reporting variable.
+
+```{r right-ex2}
+
+right_join(x            = df1, 
+           y            = df2,
+           relationship = "many-to-one", 
+           by           = "id",
+           reportvar    = "right.joyn")
+
+```
+
+#### 3. Full join
+
+ℹ️ Full joins return in the output table all rows, both matching and non matching rows from `x`, i.e., the left table, and `y`, i.e., the right table.
+
+```{r}
+
+full_join(x = x1, 
+          y = y1, 
+          relationship = "many-to-one", 
+          keep = TRUE)
+
+```
+
+#### 4. Inner join
+
+ℹ️ Inner joins return in the output table only rows that match between `x`, i.e., the left table, and `y`, i.e., the right table.
+
+***Simple inner join***
+
+```{r }
+
+inner_join(x            = df1, 
+           y             = df2,
+           relationship  = "many-to-one", 
+           by            = "id")
+
+```

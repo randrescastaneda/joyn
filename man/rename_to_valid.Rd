@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{rename_to_valid}
 \alias{rename_to_valid}
-\title{rename to syntactically valid names}
+\title{Rename to syntactically valid names}
 \usage{
 rename_to_valid(name, verbose = getOption("joyn.verbose"))
 }
@@ -16,8 +16,8 @@ option). Default is TRUE.}
 valid character name
 }
 \description{
-rename to syntactically valid names
+Rename to syntactically valid names
 }
 \examples{
-rename_to_valid("x y")
+joyn:::rename_to_valid("x y")
 }

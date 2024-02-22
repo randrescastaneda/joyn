@@ -106,7 +106,7 @@ x1 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 x  = 11:15)
 y1 = data.frame(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
-merge(x1, y1, by = "id")
+joyn::merge(x1, y1, by = "id")
 # example of using by.x and by.y
 x2 = data.frame(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),
@@ -116,14 +116,14 @@ y2 = data.frame(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
-jn <- merge(x2,
+jn <- joyn::merge(x2,
             y2,
             match_type = "m:m",
             all.x = TRUE,
             by.x = "id1",
             by.y = "id2")
 # example with all = TRUE
-jn <- merge(x2,
+jn <- joyn::merge(x2,
             y2,
             match_type = "m:m",
             by.x = "id1",

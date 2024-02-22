@@ -1,7 +1,7 @@
 
 # Testing functions performing checks on x and y ####
 
-withr::local_options(joyn.verbose = FALSE)
+#withr::local_options(joyn.verbose = FALSE)
 
 
 x1 = data.frame(
@@ -27,7 +27,7 @@ x2 = data.frame(
 )
 
 x3 = data.frame(
-      id  = c(1, 2, 3, 4, NA),
+      id  = c(1, 2, 3, 4, 5),
        t  = c(1L, 2L, 5L, 6L, NA_integer_),
        x  = c(16, 12, NA, NA, 15)
    )
@@ -75,7 +75,6 @@ test_that("check_xy works as expected", {
   # aborts when wrong input specification
 
   # When x has 0 length
-  clear_joynenv()
 
   empty_df = data.frame()
 
@@ -87,7 +86,6 @@ test_that("check_xy works as expected", {
                              "joyn_msgs"))
 
   # When y has 0 length
-  clear_joynenv()
 
   check_xy(x = x1,
            y = empty_df) |>
@@ -208,7 +206,12 @@ test_that("check_match_type works as expected", {
   check_match_type(x1, y1, by = "id", match_type = "invalid match_type") |>
     expect_error()
 
-  # Outputs
+  # Wrong by var
+  check_match_type(x4, y2, by = 'id', match_type = "m:m") |>
+    expect_error()
+
+
+  # Outputs - Errors & Warnings
 
   # If user chooses "1:1" but actually "m:1" -----------------------------------
   clear_joynenv()
@@ -243,15 +246,56 @@ test_that("check_match_type works as expected", {
   # If user chooses "m:1" but it is actually "m:m" -----------------------------
   clear_joynenv()
 
-  check_match_type(x3, y3, by = 'id', match_type = "m:1") |>
+  check_match_type(x2, y3, by = 'id', match_type = "m:1") |>
     expect_error()
 
   # check err msg is stored in env
   rlang::env_get(.joynenv, "joyn_msgs")$type |>
     expect_equal(c("err"))
 
+  # If user chooses "m:1" but it is actually "1:m" -----------------------------
+  clear_joynenv()
+  check_match_type(x3, y3, by = 'id', match_type = "m:1") |>
+    expect_error()
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal(c("err"))
+
+
   # Check warning msgs are stored correctly ------------------------------------
-  # TODO - Check function is working well
+  # Warn x
+  check_match_type(x3, y3, by = 'id', match_type = "m:m")
+
+  rlang::env_get(.joynenv,"joyn_msgs")$type|>
+    expect_contains("warn")
+
+  clear_joynenv()
+  check_match_type(x3, y2, by = 'id', match_type = "m:1")
+
+  rlang::env_get(.joynenv,"joyn_msgs")$type|>
+    expect_contains("warn")
+
+
+  # Warn y
+  clear_joynenv()
+  check_match_type(x2, y2, by = 'id', match_type = "m:m", verbose = TRUE)
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal(c("warn"))
+
+  clear_joynenv()
+  check_match_type(x3, y2, by = 'id', match_type = "1:m", verbose = TRUE)
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal(c("warn"))
+
+  # Warn both
+
+  clear_joynenv()
+  check_match_type(x3, y2, by = 'id', match_type = "m:m")
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_equal(c("warn"))
 
 
   # Output when correct match type ---------------------------------------------

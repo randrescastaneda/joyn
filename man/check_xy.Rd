@@ -32,7 +32,7 @@ x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 x  = 11:15)
 y1 = data.table(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
-check_xy(x = x1, y=y1)
+joyn:::check_xy(x = x1, y=y1)
 }
 }
 \keyword{internal}

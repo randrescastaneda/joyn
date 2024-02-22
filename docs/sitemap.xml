@@ -1,81 +1,177 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>/404.html</loc>
+    <loc>https://rossanatat.github.io/joyn/404.html</loc>
   </url>
   <url>
-    <loc>/articles/advanced-use.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/adv-functionalities.html</loc>
   </url>
   <url>
-    <loc>/articles/general-use.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/advanced-use.html</loc>
   </url>
   <url>
-    <loc>/articles/index.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/aux-functions.html</loc>
   </url>
   <url>
-    <loc>/authors.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/dplyr-joins.html</loc>
   </url>
   <url>
-    <loc>/index.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/general-use.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/index.html</loc>
   </url>
   <url>
-    <loc>/LICENSE.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/main-functionalities.html</loc>
   </url>
   <url>
-    <loc>/news/index.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/merge-wrapper.html</loc>
   </url>
   <url>
-    <loc>/reference/fix_by_vars.html</loc>
+    <loc>https://rossanatat.github.io/joyn/articles/messages.html</loc>
   </url>
   <url>
-    <loc>/reference/freq_table.html</loc>
+    <loc>https://rossanatat.github.io/joyn/authors.html</loc>
   </url>
   <url>
-    <loc>/reference/index.html</loc>
+    <loc>https://rossanatat.github.io/joyn/index.html</loc>
   </url>
   <url>
-    <loc>/reference/is_id.html</loc>
+    <loc>https://rossanatat.github.io/joyn/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/reference/join_consistency.html</loc>
+    <loc>https://rossanatat.github.io/joyn/LICENSE.html</loc>
   </url>
   <url>
-    <loc>/reference/merge.html</loc>
+    <loc>https://rossanatat.github.io/joyn/news/index.html</loc>
   </url>
   <url>
-    <loc>/reference/possible_ids.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_by_vars.html</loc>
   </url>
   <url>
-    <loc>/reference/update_NAs.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_dt_by.html</loc>
   </url>
   <url>
-    <loc>/reference/update_values.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_duplicate_names.html</loc>
   </url>
   <url>
-    <loc>/reference/x1.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_match_type.html</loc>
   </url>
   <url>
-    <loc>/reference/x2.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_new_y_vars.html</loc>
   </url>
   <url>
-    <loc>/reference/x3.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_reportvar.html</loc>
   </url>
   <url>
-    <loc>/reference/x4.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_xy.html</loc>
   </url>
   <url>
-    <loc>/reference/y1.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/check_y_vars_to_keep.html</loc>
   </url>
   <url>
-    <loc>/reference/y2.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/clear_joynenv.html</loc>
   </url>
   <url>
-    <loc>/reference/y3.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/fix_by_vars.html</loc>
   </url>
   <url>
-    <loc>/reference/y4.html</loc>
+    <loc>https://rossanatat.github.io/joyn/reference/freq_table.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/full_join.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/index.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/inner_join.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/is_balanced.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/is_id.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/is_match_type_error.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/is_valid_m_key.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/join_consistency.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/joyn-package.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/joyn.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/joyn_msg.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/joyn_msgs_exist.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/joyn_workhorse.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/left_join.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/merge.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/msg_type_dt.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/possible_ids.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/rename_to_valid.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/right_join.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/split_match_type.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/store_msg.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/style.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/update_NAs.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/update_values.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/x1.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/x2.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/x3.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/x4.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/y1.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/y2.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/y3.html</loc>
+  </url>
+  <url>
+    <loc>https://rossanatat.github.io/joyn/reference/y4.html</loc>
   </url>
 </urlset>

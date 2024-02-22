@@ -9,90 +9,144 @@
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn?branch=master)
 <!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
-<!-- [![](https://img.shields.io/badge/devel%20version-0.1.4-blue.svg)](https://github.com/randrescastaneda/joyn) -->
+<!-- [![](https://img.shields.io/badge/devel%20version-0.1.5-blue.svg)](https://github.com/randrescastaneda/joyn) -->
 <!-- [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing) -->
 [![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml)
+
 <!-- badges: end -->
 
-`joyn` provides the user with a set of tools to analyze the quality of
-merging (i.e., joining) data frames, so that it is a **JOY** to join
-tables with `joyn`. This is inspired on the command `merge` of the
-statistical software `Stata`.
+`joyn` empowers you to assess the results of joining data frames, making
+it easier and more efficient to combine your tables. Similar in
+philosophy to the `merge` command in `Stata`, `joyn` offers matching key
+variables and detailed join reports to ensure accurate and insightful
+results.
 
 ## Motivation
 
-The objective `joyn` is to make your life easier when joining tables. As
-a former Stata user (I still work with Stata but not that much as I work
-with R now), I had missed, until now, the ability to assess the accuracy
-of my join after mergin two tables in R. With one single command,
-`merge`, Stata allows the user to perform any kind of equi-join. The
-reason for this is that, by default, Stata merges fully both tables into
-one and then it is up to the user to keep the observation she needs.
-Most importantly, Stata forces the user to know how her joining tables
-relate to each other. Most tables have a one-to-one (1:1 ) relation, but
-it is common to find one-to-many (1:m), many-to-one (m:1), and
-many-to-many (m:m) relations. Finally, Stata’s `merge` command returns
-by default a variable with useful information about the table’s join.
-So, the following features are the value added of `joyn`:
+Merging tables in R can be tricky. Ensuring accuracy and understanding
+the joined data fully can be tedious tasks. That’s where `joyn` comes
+in. Inspired by Stata’s informative approach to merging, `joyn` makes
+the process smoother and more insightful.
 
-1.  `joyn` performs a full join by default (i.e., resulting table has
-    all the observations from both original, joining tables). Yet, the
-    user can select “left”, “right” or “inner” joins using the argument
-    `keep`.
+While standard R merge functions are powerful, they often lack features
+like assessing join accuracy, detecting potential issues, and providing
+detailed reports. `joyn` fills this gap by offering:
 
-2.  In the same vain, `joyn` keeps all the columns form both joining
-    tables. Two caveats are worth mentioning.
+- **Intuitive join handling:** Whether you’re dealing with one-to-one,
+  one-to-many, or many-to-many relationships, `joyn` helps you navigate
+  them confidently.
+- **Informative reports:** Get clear insights into the join process with
+  helpful reports that identify duplicate observations, missing values,
+  and potential inconsistencies.
 
-    1.  If both tables have variables with the same name, by default
-        `joyn` does not bring those variables from the second (i.e,
-        right, using) table into the first (i.e., left, master) table.
-        Yet, you can do one of two things. First, you can use arguments
-        `update_values` or `updateNA` to update the value of those
-        variable in the first table with the ones in the second table.
-        Or, you can use argument `keep_y_in_x = TRUE` to keep both
-        variables with a different name.
+## What makes `joyn` special?
 
-    2.  You can use the argument `yvars` to select which variables you
-        want to bring from the second table into the first one.
+While standard R merge functions offer basic functionality, `joyn` goes
+above and beyond by providing comprehensive tools and features tailored
+to your data joining needs:
 
-3.  `joyn` allows the user to perform one-to-one (1:1) , one-to-many
-    (1:m), many-to-one (m:1), and many-to-many (m:m) joins. The default
-    is m:m, following general R’s practice, but its is highly
-    discouraged. Since you want to use `joyn`, I recommend you always
-    specify the right relationship between your joining tables.
+**1. Flexibility in join types:** Choose your ideal join type (“left”,
+“right”, or “inner”) with the `keep` argument. Unlike R’s default,
+`joyn` performs a full join by default, ensuring all observations are
+included, but you have full control to tailor the results.
 
-4.  `joyn` returns a reporting variable with the status of the join.
+**2. Seamless variable handling:** No more wrestling with duplicate
+variable names! `joyn` offers multiple options:
 
-## Regarding speed and flexibility
+- **Update values:** Use `update_values` or `update_NA` to automatically
+  update conflicting variables in the left table with values from the
+  right table.
 
-Notice the `joyn` is not intended to be a super fast joining tool. By
-construction, it does a lot of things that will make it slower than
-other tools out there. However, `joyn` is basically a wrapper around
-`data.table`’s `merge.data.table()` function. So, the lost of speed of
-`joyn` is mainly due to evaluating several conditions, creating the
-reporting variable, and present a nice summary table at the end of the
-process. Also, keep in mind that `joyn` is intended to be informative,
-so it displays messages here and there to inform you about your join
-(you can silence any message in `joyn`, including the reporting table,
-by using the argument `verbose = FALSE`). This, of course, makes `joyn`
-a little slower than using regular `data.table` syntax. However, the
-loss of speed is not much and you’re gaining a lot of information. The
-main reason why `joyn` is a little slower is than pure `data.table` is
-that it will always perform a full join of data in the same way `Stata`
-does. Again, `joyn` is intended for information and verification of
-joins of tables. If you are working on a project that executes many
-(say, 1000) joins or you are constantly merging super big data sets, it
-is recommended that you use `data.table`’s syntaz x directly.
+- **Keep both (with different names):** Enable `keep_common_vars = TRUE`
+  to retain both variables, each with a unique suffix.
 
-As of now, the flexibility of `joyn` is limited to the basic joins, yet
-the most used and useful ones. If you want to learn more about different
-kinds of joins available in `data.table` and how they relate to `dplyr`,
-I recommend you start with this [blog
-post](https://atrebas.github.io/post/2019-03-03-datatable-dplyr/#joinbind-data-sets/).
+- **Selective inclusion:** Choose specific variables from the right
+  table with `y_vars_to_keep`, ensuring you get only the data you need.
+
+**3. Relationship awareness:** `joyn` recognizes one-to-one,
+one-to-many, many-to-one, and many-to-many relationships between tables.
+While it defaults to many-to-many for compatibility, **remember this is
+often not ideal**. **Always specify the correct relationship using `by`
+arguments** for accurate and meaningful results.
+
+**4. Join success at a glance:** Get instant feedback on your join with
+the automatically generated reporting variable. Identify potential
+issues like unmatched observations or missing values to ensure data
+integrity and informed decision-making.
+
+By addressing these common pain points and offering enhanced
+flexibility, `joyn` empowers you to confidently and effectively join
+your data frames, paving the way for deeper insights and data-driven
+success.
+
+## Performance and flexibility
+
+### The cost of Reliability
+
+While raw speed is essential, understanding your joins every step of the
+way is equally crucial. `joyn` prioritizes providing **insightful
+information** and preventing errors over solely focusing on speed.
+Unlike other functions, it adds:
+
+- **Meticulous checks:** `joyn` performs comprehensive checks to ensure
+  your join is accurate and avoids potential missteps, like unmatched
+  observations or missing values.
+- **Detailed reporting:** Get a clear picture of your join with a
+  dedicated report, highlighting any issues you should be aware of.
+- **User-friendly summary:** Quickly grasp the join’s outcome with a
+  concise overview presented in a clear table.
+
+These valuable features contribute to a slightly slower performance
+compared to functions like `data.table::merge.data.table()` or
+`collapse::join()`. However, the benefits of **preventing errors and
+gaining invaluable insights** far outweigh the minor speed difference.
+
+### Know your needs, choose your tool
+
+- **Speed is your top priority for massive datasets?** Consider using
+  `data.table` or `collapse` directly.
+- **Seek clear understanding and error prevention for your joins?**
+  `joyn` is your trusted guide.
+
+### Protective by design
+
+`joyn` intentionally restricts certain actions and provides clear
+messages when encountering unexpected data configurations. This might
+seem **opinionated**, but it’s designed to **protect you from
+accidentally creating inaccurate or misleading joins**. This “safety
+net” empowers you to confidently merge your data, knowing `joyn` has
+your back.
+
+### Flexibility
+
+Currently, `joyn` focuses on the most common and valuable join types.
+Future development might explore expanding its flexibility based on user
+needs and feedback.
+
+## `joyn` as wrapper: Familiar Syntax, Familiar Power
+
+While `joyn::join()` offers the core functionality and Stata-inspired
+arguments, you might prefer a syntax more aligned with your existing
+workflow. `joyn` has you covered!
+
+**Embrace base R and `data.table`:**
+
+- `joyn::merge()`: Leverage familiar base R and `data.table` syntax for
+  seamless integration with your existing code.
+
+**Join with flair using `dplyr`:**
+
+- `joyn::{dplyr verbs}()`: Enjoy the intuitive
+  [verb-based](https://dplyr.tidyverse.org/reference/mutate-joins.html)
+  syntax of `dplyr` for a powerful and expressive way to perform joins.
+
+**Dive deeper:** Explore the corresponding vignettes to unlock the full
+potential of these alternative interfaces and find the perfect fit for
+your data manipulation style.
 
 ## Installation
 
-You can install the stable version of joyn from
+You can install the stable version of `joyn` from
 [CRAN](https://CRAN.R-project.org) with:
 
 ``` r
@@ -106,9 +160,10 @@ The development version from [GitHub](https://github.com/) with:
 devtools::install_github("randrescastaneda/joyn")
 ```
 
-## Example
+## Examples
 
 ``` r
+
 library(joyn)
 #> 
 #> Attaching package: 'joyn'
@@ -116,7 +171,7 @@ library(joyn)
 #> 
 #>     merge
 library(data.table)
-#> Warning: package 'data.table' was built under R version 4.3.2
+
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
@@ -135,145 +190,213 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:20))
 
-# using commong variable `id` as key.
-merge(x1, y1)[]
-#> → removing key variables `id` from yvars
+# using common variable `id` as key.
+joyn(x = x1, 
+     y = y1,
+     match_type = "m:1")
 #> 
 #> ── JOYn Report ──
 #> 
-#>    report n percent
-#> 1:      x 2   33.3%
-#> 2:  x & y 3     50%
-#> 3:      y 1   16.7%
-#> 4:  total 6    100%
+#>     .joyn     n percent
+#>    <char> <int>  <char>
+#> 1:      x     2   33.3%
+#> 2:  x & y     3     50%
+#> 3:      y     1   16.7%
+#> 4:  total     6    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id  t  x  y report
-#> 1:  1  1 11 11  x & y
-#> 2:  1  2 12 11  x & y
-#> 3:  2  1 13 15  x & y
-#> 4:  3  2 14 NA      x
-#> 5:  4 NA NA 16      y
-#> 6: NA NA 15 NA      x
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ℹ ❯ Removing key variables id from id and y
+#> ● Timing: The full joyn is executed in 0.000718 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.048331
+#> seconds
+#> Key: <id>
+#>       id     t     x     y  .joyn
+#>    <num> <int> <int> <num> <char>
+#> 1:    NA    NA    15    NA      x
+#> 2:     1     1    11    11  x & y
+#> 3:     1     2    12    11  x & y
+#> 4:     2     1    13    15  x & y
+#> 5:     3     2    14    NA      x
+#> 6:     4    NA    NA    16      y
 
 # keep just those observations that match
-merge(x1, y1, keep = "inner")[]
-#> → removing key variables `id` from yvars
+joyn(x = x1, 
+     y = y1, 
+     match_type = "m:1",
+     keep = "inner")
+#> 
 #> ── JOYn Report ──
 #> 
-#>    report n percent
-#> 1:  x & y 3    100%
-#> 2:  total 3    100%
+#>     .joyn     n percent
+#>    <char> <int>  <char>
+#> 1:  x & y     3    100%
+#> 2:  total     3    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id t  x  y report
-#> 1:  1 1 11 11  x & y
-#> 2:  1 2 12 11  x & y
-#> 3:  2 1 13 15  x & y
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ℹ ❯ Removing key variables id from id and y
+#> ● Timing: The full joyn is executed in 7.4e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.041525
+#> seconds
+#> Key: <id>
+#>       id     t     x     y  .joyn
+#>    <num> <int> <int> <num> <char>
+#> 1:     1     1    11    11  x & y
+#> 2:     1     2    12    11  x & y
+#> 3:     2     1    13    15  x & y
 
 # Bad merge for not specifying by argument
-merge(x2, y2)[]
-#> → removing key variables `id` and `x` from yvars
+joyn(x = x2, 
+     y = y2,
+     match_type = "1:1")
+#> 
 #> ── JOYn Report ──
 #> 
-#>    report n percent
-#> 1:      x 4   44.4%
-#> 2:  x & y 1   11.1%
-#> 3:      y 4   44.4%
-#> 4:  total 9    100%
+#>     .joyn     n percent
+#>    <char> <int>  <char>
+#> 1:      x     4   44.4%
+#> 2:  x & y     1   11.1%
+#> 3:      y     4   44.4%
+#> 4:  total     9    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id  x  t yd  y report
-#> 1:  1 16  1  1 11  x & y
-#> 2:  2 17 NA  2 15      y
-#> 3:  2 NA  1 NA NA      x
-#> 4:  3 20 NA  3 10      y
-#> 5:  3 NA  2 NA NA      x
-#> 6:  4 12  2 NA NA      x
-#> 7:  5 18 NA  5 20      y
-#> 8:  6 19 NA  6 13      y
-#> 9: NA 15 NA NA NA      x
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ℹ ❯ Removing key variables id and x from id, yd, y, and x
+#> ● Timing: The full joyn is executed in 8.1e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.033808
+#> seconds
+#> Key: <id, x>
+#>       id     t     x    yd     y  .joyn
+#>    <num> <int> <num> <num> <int> <char>
+#> 1:    NA    NA    15    NA    NA      x
+#> 2:     1     1    16     1    11  x & y
+#> 3:     2     1    NA    NA    NA      x
+#> 4:     2    NA    17     2    15      y
+#> 5:     3     2    NA    NA    NA      x
+#> 6:     3    NA    20     3    10      y
+#> 7:     4     2    12    NA    NA      x
+#> 8:     5    NA    18     5    20      y
+#> 9:     6    NA    19     6    13      y
 
 # good merge, ignoring variable x from y
-merge(x2, y2, by = "id")[]
-#> → removing key variables `id` from yvars
-#> ℹ variable `x` in table y is ignored because arguments `update_NAs` and
-#> `update_values` are FALSE.
+joyn(x = x2, 
+     y = y2,
+     by = "id",
+     match_type = "1:1")
 #> 
 #> ── JOYn Report ──
 #> 
-#>    report n percent
-#> 1:      x 2   28.6%
-#> 2:  x & y 3   42.9%
-#> 3:      y 2   28.6%
-#> 4:  total 7    100%
+#>     .joyn     n percent
+#>    <char> <int>  <char>
+#> 1:      x     2   28.6%
+#> 2:  x & y     3   42.9%
+#> 3:      y     2   28.6%
+#> 4:  total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id  t  x yd  y report
-#> 1:  1  1 16  1 11  x & y
-#> 2:  2  1 NA  2 15  x & y
-#> 3:  3  2 NA  3 10  x & y
-#> 4:  4  2 12 NA NA      x
-#> 5:  5 NA NA  5 20      y
-#> 6:  6 NA NA  6 13      y
-#> 7: NA NA 15 NA NA      x
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ℹ ❯ Removing key variables id from id, yd, y, and x
+#> ● Timing: The full joyn is executed in 8.5e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.035442
+#> seconds
+#> Key: <id>
+#>       id     t     x    yd     y  .joyn
+#>    <num> <int> <num> <num> <int> <char>
+#> 1:    NA    NA    15    NA    NA      x
+#> 2:     1     1    16     1    11  x & y
+#> 3:     2     1    NA     2    15  x & y
+#> 4:     3     2    NA     3    10  x & y
+#> 5:     4     2    12    NA    NA      x
+#> 6:     5    NA    NA     5    20      y
+#> 7:     6    NA    NA     6    13      y
 
-# update NAs in x variable form x
-merge(x2, y2, by = "id", update_NAs = TRUE)[]
-#> → removing key variables `id` from yvars
-#> ── JOYn Report ──
-#> 
-#>        report n percent
-#> 1: NA updated 2   28.6%
-#> 2:          x 2   28.6%
-#> 3:      x & y 1   14.3%
-#> 4:          y 2   28.6%
-#> 5:      total 7    100%
-#> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id  t  x yd  y     report
-#> 1:  1  1 16  1 11      x & y
-#> 2:  2  1 17  2 15 NA updated
-#> 3:  3  2 20  3 10 NA updated
-#> 4:  4  2 12 NA NA          x
-#> 5:  5 NA 18  5 20          y
-#> 6:  6 NA 19  6 13          y
-#> 7: NA NA 15 NA NA          x
-
-# Update values in x with variables from y
-merge(x2, y2, by = "id", update_values = TRUE)[]
-#> → removing key variables `id` from yvars
-#> ── JOYn Report ──
-#> 
-#>         report n percent
-#> 1:  NA updated 2   28.6%
-#> 2: not updated 2   28.6%
-#> 3:       x & y 1   14.3%
-#> 4:           y 2   28.6%
-#> 5:       total 7    100%
-#> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id  t  x yd  y      report
-#> 1:  1  1 16  1 11       x & y
-#> 2:  2  1 17  2 15  NA updated
-#> 3:  3  2 20  3 10  NA updated
-#> 4:  4  2 12 NA NA not updated
-#> 5:  5 NA 18  5 20           y
-#> 6:  6 NA 19  6 13           y
-#> 7: NA NA 15 NA NA not updated
-
-
-# do not bring any variable from Y into x, just the report
-merge(x2, y2, by = "id", yvars = NULL)[]
+# update NAs in var x in table x from var x in y
+joyn(x = x2, 
+     y = y2, 
+     by = "id", 
+     update_NAs = TRUE)
 #> 
 #> ── JOYn Report ──
 #> 
-#>    report n percent
-#> 1:      x 2   28.6%
-#> 2:  x & y 3   42.9%
-#> 3:      y 2   28.6%
-#> 4:  total 7    100%
+#>         .joyn     n percent
+#>        <char> <int>  <char>
+#> 1: NA updated     4   57.1%
+#> 2:          x     2   28.6%
+#> 3:      x & y     1   14.3%
+#> 4:      total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#>    id  t  x report
-#> 1:  1  1 16  x & y
-#> 2:  2  1 NA  x & y
-#> 3:  3  2 NA  x & y
-#> 4:  4  2 12      x
-#> 5:  5 NA NA      y
-#> 6:  6 NA NA      y
-#> 7: NA NA 15      x
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ℹ ❯ Removing key variables id from id, yd, y, and x
+#> ● Timing: The full joyn is executed in 8.2e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.038231
+#> seconds
+#> Key: <id>
+#>       id     t     x    yd     y      .joyn
+#>    <num> <int> <num> <num> <int>     <char>
+#> 1:    NA    NA    15    NA    NA          x
+#> 2:     1     1    16     1    11      x & y
+#> 3:     2     1    17     2    15 NA updated
+#> 4:     3     2    20     3    10 NA updated
+#> 5:     4     2    12    NA    NA          x
+#> 6:     5    NA    18     5    20 NA updated
+#> 7:     6    NA    19     6    13 NA updated
+
+# update values in var x in table x from var x in y
+joyn(x = x2, 
+     y = y2, 
+     by = "id", 
+     update_values = TRUE)
+#> 
+#> ── JOYn Report ──
+#> 
+#>            .joyn     n percent
+#>           <char> <int>  <char>
+#> 1:    NA updated     4   57.1%
+#> 2:   not updated     2   28.6%
+#> 3: value updated     1   14.3%
+#> 4:         total     7    100%
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ℹ ❯ Removing key variables id from id, yd, y, and x
+#> ● Timing: The full joyn is executed in 8.1e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.033889
+#> seconds
+#> Key: <id>
+#>       id     t     x    yd     y         .joyn
+#>    <num> <int> <num> <num> <int>        <char>
+#> 1:    NA    NA    15    NA    NA   not updated
+#> 2:     1     1    16     1    11 value updated
+#> 3:     2     1    17     2    15    NA updated
+#> 4:     3     2    20     3    10    NA updated
+#> 5:     4     2    12    NA    NA   not updated
+#> 6:     5    NA    18     5    20    NA updated
+#> 7:     6    NA    19     6    13    NA updated
+
+
+# do not bring any variable from y into x, just the report
+joyn(x = x2, 
+     y = y2, 
+     by = "id", 
+     y_vars_to_keep = NULL)
+#> 
+#> ── JOYn Report ──
+#> 
+#>     .joyn     n percent
+#>    <char> <int>  <char>
+#> 1:      x     2   28.6%
+#> 2:  x & y     3   42.9%
+#> 3:      y     2   28.6%
+#> 4:  total     7    100%
+#> ────────────────────────────────────────────────────────── End of JOYn report ──
+#> ℹ ❯ Joyn's report available in variable .joyn
+#> ● Timing: The full joyn is executed in 7.7e-05 seconds
+#> ● Timing: The entire joyn function, including checks, is executed in 0.025583
+#> seconds
+#> Key: <id>
+#>       id     t     x  .joyn
+#>    <num> <int> <num> <char>
+#> 1:    NA    NA    15      x
+#> 2:     1     1    16  x & y
+#> 3:     2     1    NA  x & y
+#> 4:     3     2    NA  x & y
+#> 5:     4     2    12      x
+#> 6:     5    NA    NA      y
+#> 7:     6    NA    NA      y
 ```

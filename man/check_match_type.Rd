@@ -35,10 +35,10 @@ x1 = data.frame(
        x  = 11:15)
 y1 = data.frame(id = 1:2,
                 y  = c(11L, 15L))
-check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
+joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "m:1")
 
 # Inconsistent match type
-check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
+joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 }
 }
 \keyword{internal}

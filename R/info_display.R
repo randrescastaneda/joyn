@@ -90,7 +90,7 @@ store_msg <- function(type, ...) {
 
 }
 
-# To check if documentation
+
 
 check_style <- \(...) {
   if (length(list(...)) == 0) {
@@ -136,7 +136,7 @@ style <- function(..., sep = "") {
 
   styles <- list(
     "ok"     = cli::make_ansi_style("#228B22"),
-    
+
     "note"   =  \(x) {
       cli::make_ansi_style("#228B22")(x) |>
         cli::style_bold()
@@ -149,8 +149,8 @@ style <- function(..., sep = "") {
 
     "err"    = \(x) {
       cli::make_ansi_style("#CE2029")(x) |>
-      cli::style_bold() 
-      }, 
+      cli::style_bold()
+      },
 
     "pale"   = cli::make_ansi_style("darkgrey"),
 
@@ -162,11 +162,11 @@ style <- function(..., sep = "") {
 
     "timing" = \(x) {
       cli::make_ansi_style("#007FFF")(x) |>
-      cli::style_bold() 
-  
+      cli::style_bold()
+
       }
     )
-    
+
 
   nms      <- names(args)
   nms2     <- nms[!nms %in% ""]
@@ -198,12 +198,13 @@ style <- function(..., sep = "") {
 #' Checks the presence of joyn messages stored in joyn environment
 #'
 #' @return invisible TRUE
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' Storing a message
-#' store_msg("info", "simple message")
+#' joyn:::store_msg("info", "simple message")
 #' Checking if it exists in the environment
-#' print(joyn_msgs_exist())
+#' print(joyn:::joyn_msgs_exist())
 #' }
 joyn_msgs_exist <- \() {
   if (!rlang::env_has(.joynenv, "joyn_msgs")) {
@@ -215,17 +216,17 @@ joyn_msgs_exist <- \() {
 
 
 #' Clearing joyn environment
-#'
+#' @keywords internal
 #' @examples
 #' \dontrun{
 #' # Storing a message
-#' store_msg("info", "simple message")
+#' joyn:::store_msg("info", "simple message")
 #'
 #' # Clearing the environment
-#' clear_joynenv()
+#' joyn:::clear_joynenv()
 #'
 #' # Checking it does not exist in the environment
-#' print(joyn_msgs_exist())
+#' print(joyn:::joyn_msgs_exist())
 #' }
 clear_joynenv <- \(){
   # get the source function
