@@ -2,9 +2,9 @@
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
 on:
   push:
-    branches: [website, update_all]
+    branches: [master, DEV, update_all]
   pull_request:
-    branches: [website, update_all]
+    branches: [master, DEV]
   release:
     types: [published]
   workflow_dispatch:
