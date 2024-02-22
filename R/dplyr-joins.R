@@ -172,26 +172,16 @@ left_join <- function(
   }
 
   # Column names -----------------------------------
-  #xnames <- names(x)
-  #ynames <- names(y)
+
+
   if (keep == TRUE) {
 
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
-    } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    ykeys <- y |>
-      fselect(by_y_names)
-    names(ykeys) <- paste0(names(ykeys), suffix[2])
-    y <- cbind(
-      ykeys,
-      y
-    )
+    keep = "left"
+    set_col_names(x      = x,
+                  y      = y,
+                  by     = by,
+                  keep   = keep,
+                  suffix = suffix)
   }
 
 
@@ -425,22 +415,12 @@ right_join <- function(
   # Column names -----------------------------------
   if (keep == TRUE) {
 
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_x_names <- fix_by_vars(by = by, x_1, y_1)$xby
-    } else {
-      by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    xkeys <- x |>
-      fselect(by_x_names)
-    names(xkeys) <- paste0(names(xkeys), suffix[1])
-    x <- cbind(
-      xkeys,
-      x
-    )
+    keep = "right"
+    set_col_names(x      = x,
+                  y      = y,
+                  by     = by,
+                  keep   = keep,
+                  suffix = suffix)
   }
 
 
@@ -685,22 +665,12 @@ full_join <- function(
   # Column names -----------------------------------
   if (keep == TRUE) {
 
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
-    } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    ykeys <- y |>
-      fselect(by_y_names)
-    names(ykeys) <- paste0(names(ykeys), suffix[2])
-    y <- cbind(
-      ykeys,
-      y
-    )
+    keep = "full"
+    set_col_names(x      = x,
+                  y      = y,
+                  by     = by,
+                  keep   = keep,
+                  suffix = suffix)
   }
 
 
@@ -933,22 +903,12 @@ inner_join <- function(
   # Column names -----------------------------------
   if (keep == TRUE) {
 
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
-    } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    ykeys <- y |>
-      fselect(by_y_names)
-    names(ykeys) <- paste0(names(ykeys), suffix[2])
-    y <- cbind(
-      ykeys,
-      y
-    )
+    keep = "inner"
+    set_col_names(x      = x,
+                  y      = y,
+                  by     = by,
+                  keep   = keep,
+                  suffix = suffix)
   }
 
 
@@ -1012,9 +972,51 @@ inner_join <- function(
 }
 
 
+# HELPER FUNCTIONS -------------------------------------------------------------
+
+## Column names ####
+
+set_col_names <- function(x, y, by, suffix, keep) {
+
+  x_1 <- copy(x)
+  y_1 <- copy(y)
+
+  if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
+
+    if (keep == "right") {
+      by_x_names <- fix_by_vars(by = by, x_1, y_1)$xby
+    }
+
+    else if (keep == "left" | keep == "full" | keep == "inner") {
+      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
+    }
+
+  } else {
+    by_y_names <- by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
+    }
 
 
+  if (keep == "right") {
+    xkeys <- x |>
+      fselect(by_x_names)
+    names(xkeys) <- paste0(names(xkeys), suffix[1])
+    x <- cbind(
+      xkeys,
+      x
+    )
+  } else if (keep == "left" | keep == "full" | keep == "inner")  {
 
+    ykeys <- y |>
+      fselect(by_y_names)
+    names(ykeys) <- paste0(names(ykeys), suffix[2])
+    y <- cbind(
+      ykeys,
+      y
+    )
+
+  } #close else
+
+} #close function
 
 
 
