@@ -1,5 +1,5 @@
 ---
-title: "Merging data tables"
+title: "`data.table::merge()` wrapper"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Merging data tables}
