@@ -19,7 +19,8 @@
 #'
 #' joyn_msg("all")
 
-joyn_msg <- function(type = c("all", type_choices())) {
+joyn_msg <- function(type = c("all", type_choices()),
+                     msg  = NULL) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
@@ -39,6 +40,9 @@ joyn_msg <- function(type = c("all", type_choices())) {
     cli::cli_text(.)
   })
 
+  if ("err" %in% type_to_use & is.character(msg)) {
+    cli::cli_abort(msg)
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
