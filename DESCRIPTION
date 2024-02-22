@@ -29,7 +29,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     withr,
-    dplyr
+    dplyr,
+    tibble
 Config/testthat/edition: 3
 Imports: 
     rlang,
@@ -37,7 +38,7 @@ Imports:
     glue,
     cli,
     utils,
-    collapse (>= 2.0.7),
+    collapse (>= 2.0.9),
     lifecycle
 Depends: 
     R (>= 2.10)
