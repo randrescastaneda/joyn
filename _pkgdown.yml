@@ -11,7 +11,7 @@ development:
 
 home:
   title: An R package for joining tables
-  description: The joy of joining tables in R
+  description: It is a joy to join tables in R with `joyn`
 
 authors:
   R.Andres Castaneda:
@@ -34,7 +34,7 @@ navbar:
       href: reference/index.html
     github:
       icon: fab fa-github fa-lg
-      href: https://randrescastaneda.github.io/joyn/
+      href: https://github.com/randrescastaneda/joyn/
 
 articles:
 - title: Usage
