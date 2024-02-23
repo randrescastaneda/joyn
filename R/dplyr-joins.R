@@ -112,6 +112,8 @@ left_join <- function(
                                    by     = args_check$by,
                                    jn_type= jn_type,
                                    suffix = args_check$suffix)
+    x = modified_cols$x
+    y = modified_cols$y
   }
 
 
@@ -120,8 +122,8 @@ left_join <- function(
 
   # Do left join ------------------------------------
   lj <- joyn(
-    x                = modified_cols$x,
-    y                = modified_cols$y,
+    x                = x,
+    y                = y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "left",
@@ -284,6 +286,8 @@ right_join <- function(
                                    by     = args_check$by,
                                    jn_type= jn_type,
                                    suffix = args_check$suffix)
+    x = modified_cols$x
+    y = modified_cols$y
   }
 
 
@@ -292,8 +296,8 @@ right_join <- function(
 
   # Do right join ------------------------------------
   rj <- joyn(
-    x                = modified_cols$x,
-    y                = modified_cols$y,
+    x                = x,
+    y                = y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "right",
@@ -461,13 +465,15 @@ full_join <- function(
                                    by     = args_check$by,
                                    jn_type= jn_type,
                                    suffix = args_check$suffix)
+    x = modified_cols$x
+    y = modified_cols$y
   }
 
 
   # Do full join ------------------------------------
   fj <- joyn(
-    x                = modified_cols$x,
-    y                = modified_cols$y,
+    x                = x,
+    y                = y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "full",
@@ -635,13 +641,15 @@ inner_join <- function(
                                    by     = args_check$by,
                                    jn_type= jn_type,
                                    suffix = args_check$suffix)
+    x = modified_cols$x
+    y = modified_cols$y
   }
 
 
   # Do inner join ------------------------------------
   fj <- joyn(
-    x                = modified_cols$x,
-    y                = modified_cols$y,
+    x                = x,
+    y                = y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "inner",
