@@ -73,7 +73,7 @@ joyn_workhorse <- function(
   # not m:m => use collapse::join()
     dt_result <- tryCatch(
       expr = {
-        souce_pkg <- if (match_type == "m:m") "data.table::merge" else "collapse::join"
+        source_pkg <- if (match_type == "m:m") "data.table::merge" else "collapse::join"
         if (match_type == "m:m") {
           data.table::merge.data.table(
             x               = x,
@@ -102,7 +102,7 @@ joyn_workhorse <- function(
       error = function(e) {
 
 
-        joyn_msg("err", c("{.pkg {souce_pkg}} returned the following:",
+        joyn_msg("err", c("{.pkg {source_pkg}} returned the following:",
                           x = e$message))
       }, # end of error section
 
@@ -111,14 +111,14 @@ joyn_workhorse <- function(
           store_msg(
             type  = "warn",
             ok    = paste(cli::symbol$warning, "\nWarning: "),
-            pale  = "Your data is overidentified. Below the original message from {.pkg {souce_pkg}}:",
+            pale  = "Your data is overidentified. Below the original message from {.pkg {source_pkg}}:",
             bolded_pale  = "\n{w$message}"
           )
         } else {
           store_msg(
             type  = "warn",
             ok    = paste(cli::symbol$warning, "\nWarning: "),
-            pale  = "{.pkg {souce_pkg}} returned the following warning:",
+            pale  = "{.pkg {source_pkg}} returned the following warning:",
             bolded_pale  = "\n{w$message}"
           )
         }
