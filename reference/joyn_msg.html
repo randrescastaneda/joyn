@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.5</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,8 +26,7 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
-    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr joins wrappers</a>
-    <a class="dropdown-item" href="../articles/merge-wrapper.html">`data.table::merge()` wrapper</a>
+    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -39,7 +38,7 @@
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="external-link nav-link" href="https://github.com/randrescastaneda/joyn/">
+  <a class="nav-link" href="https://rossanatat.github.io/joyn/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -83,19 +82,19 @@
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co"># Storing msg with type "info"</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="fu">:::</span><span class="fu"><a href="store_msg.html">store_msg</a></span><span class="op">(</span><span class="st">"info"</span>,</span></span>
-<span class="r-in"><span>  ok <span class="op">=</span> <span class="fu">cli</span><span class="fu">::</span><span class="va"><a href="https://cli.r-lib.org/reference/symbol.html" class="external-link">symbol</a></span><span class="op">$</span><span class="va">tick</span>, <span class="st">"  "</span>,</span></span>
+<span class="r-in"><span>  ok <span class="op">=</span> <span class="fu">cli</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/cli/man/symbol.html" class="external-link">symbol</a></span><span class="op">$</span><span class="va">tick</span>, <span class="st">"  "</span>,</span></span>
 <span class="r-in"><span>  pale <span class="op">=</span> <span class="st">"This is an info message"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Storing msg with type "warn"</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="fu">:::</span><span class="fu"><a href="store_msg.html">store_msg</a></span><span class="op">(</span><span class="st">"warn"</span>,</span></span>
-<span class="r-in"><span>  err <span class="op">=</span> <span class="fu">cli</span><span class="fu">::</span><span class="va"><a href="https://cli.r-lib.org/reference/symbol.html" class="external-link">symbol</a></span><span class="op">$</span><span class="va">cross</span>, <span class="st">"  "</span>,</span></span>
+<span class="r-in"><span>  err <span class="op">=</span> <span class="fu">cli</span><span class="fu">::</span><span class="va"><a href="https://rdrr.io/pkg/cli/man/symbol.html" class="external-link">symbol</a></span><span class="op">$</span><span class="va">cross</span>, <span class="st">"  "</span>,</span></span>
 <span class="r-in"><span>  note <span class="op">=</span> <span class="st">"This is a warning message"</span><span class="op">)</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="fu">joyn_msg</span><span class="op">(</span><span class="st">"all"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000151</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.042855</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">9.7e-05</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.05649</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">✔</span> <span style="color: #9E9E9E;">This is an info message</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #D70000; font-weight: bold;">✖</span> <span style="color: #00AF00; font-weight: bold;">This is a warning message</span></span>
