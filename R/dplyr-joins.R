@@ -62,51 +62,15 @@ left_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  if (is.null(by)) {
-    by <- intersect(
-      names(x),
-      names(y)
+  # get args
+  na_matches <- match.arg(
+    na_matches,
+    choices = c(
+      "na",
+      "never"
     )
-  }
-  if (copy == TRUE) {
-    store_msg(
-     type        = "warn",
-     warn        = paste(cli::symbol$warn, "\nWarning:"),
-     pale        = "\nargument",
-     bolded_pale = "  copy = TRUE",
-     pale        = "\nis not active in this version of",
-     bolded_pale = "  joyn"
- )
-  }
-  if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `suffix` must be character vector of length 2"
-      )
-    )
+  )
 
-  }
-  if (!is.null(keep) & !is.logical(keep)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
-      )
-    )
-  }
-  if (is.null(keep)) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn,"\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
-    )
-    keep <- FALSE
-  }
-
-  na_matches <- match.arg(na_matches)
   multiple   <- match.arg(
     multiple,
     choices = c(
@@ -117,10 +81,6 @@ left_join <- function(
     )
   )
 
-  if (multiple == "any") {
-    multiple <- "first"
-  }
-
   unmatched  <- match.arg(
     unmatched,
     choices = c(
@@ -129,47 +89,17 @@ left_join <- function(
     )
   )
 
-  if (is.null(relationship)) {relationship <- "one-to-one"}
+  #check args
+  arguments_checks(by            = by,
+                   copy          = copy,
+                   keep          = keep,
+                   suffix        = suffix,
+                   na_matches    = na_matches,
+                   multiple      = multiple,
+                   relationship  = relationship,
+                   reportvar     = reportvar)
 
-  relationship <- switch(
-    relationship,
-    "one-to-one"   = "1:1",
-    "one-to-many"  = "1:m",
-    "many-to-one"  = "m:1",
-    "many-to-many" = "m:m"
-  )
-  if (
-    relationship %in% c("1:m", "m:m") &
-    !multiple == "all"
-  ) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
-      )
-    )
-  }
-  na_matches <- match.arg(
-    na_matches,
-    choices = c(
-      "na",
-      "never"
-    )
-  )
-  if (na_matches == "never") {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "  na_matches = 'na'"
-    )
-  }
-  if (is.null(reportvar) || isFALSE(reportvar)) {
-    dropreport <- TRUE
-    reportvar <- getOption("joyn.reportvar")
-  } else{
-    dropreport <- FALSE
-  }
+
 
   # Column names -----------------------------------
 
@@ -308,50 +238,16 @@ right_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  if (is.null(by)) {
-    by <- intersect(
-      names(x),
-      names(y)
+  # Argument checks ---------------------------------
+  # get args
+  na_matches <- match.arg(
+    na_matches,
+    choices = c(
+      "na",
+      "never"
     )
-  }
-  if (copy == TRUE) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  argument",
-      bolded_pale = "  copy = TRUE",
-      pale        = " is not active in this version of joyn"
-    )
-  }
-  if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `suffix` must be character vector of length 2"
-      )
-    )
+  )
 
-  }
-  if (!is.null(keep) & !is.logical(keep)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
-      )
-    )
-  }
-  if (is.null(keep)) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
-    )
-    keep <- FALSE
-  }
-
-  na_matches <- match.arg(na_matches)
   multiple   <- match.arg(
     multiple,
     choices = c(
@@ -361,9 +257,7 @@ right_join <- function(
       "last"
     )
   )
-  if (multiple == "any") {
-    multiple <- "first"
-  }
+
   unmatched  <- match.arg(
     unmatched,
     choices = c(
@@ -371,46 +265,16 @@ right_join <- function(
       "error"
     )
   )
-  if (is.null(relationship)) {relationship <- "one-to-one"}
-  relationship <- switch(
-    relationship,
-    "one-to-one"   = "1:1",
-    "one-to-many"  = "1:m",
-    "many-to-one"  = "m:1",
-    "many-to-many" = "m:m"
-  )
-  if (
-    relationship %in% c("1:m", "m:m") &
-    !multiple == "all"
-  ) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
-      )
-    )
-  }
-  na_matches <- match.arg(
-    na_matches,
-    choices = c(
-      "na",
-      "never"
-    )
-  )
-  if (na_matches == "never") {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "  na_matches = 'na'"
-    )
-  }
-  if (is.null(reportvar) || isFALSE(reportvar)) {
-    dropreport <- TRUE
-    reportvar <- getOption("joyn.reportvar")
-  } else{
-    dropreport <- FALSE
-  }
+
+  #check args
+  arguments_checks(by            = by,
+                   copy          = copy,
+                   keep          = keep,
+                   suffix        = suffix,
+                   na_matches    = na_matches,
+                   multiple      = multiple,
+                   relationship  = relationship,
+                   reportvar     = reportvar)
 
   # Column names -----------------------------------
   if (keep == TRUE) {
@@ -973,6 +837,118 @@ inner_join <- function(
 
 
 # HELPER FUNCTIONS -------------------------------------------------------------
+## Arguments checks ####
+
+arguments_checks <- function(by, copy, keep, suffix, na_matches, multiple,
+                             relationship, reportvar) {
+  # Check by
+  if (is.null(by)) {
+    by <- intersect(
+      names(x),
+      names(y)
+    )
+  }
+
+  # Check copy
+  if (copy == TRUE) {
+    store_msg(
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "\nargument",
+      bolded_pale = "  copy = TRUE",
+      pale        = "\nis not active in this version of",
+      bolded_pale = "  joyn"
+    )
+  }
+
+  # Check suffix
+  if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
+    cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: argument `suffix` must be character vector of length 2"
+      )
+    )
+
+  }
+
+  # Check keep
+  if (!is.null(keep) & !is.logical(keep)) {
+    cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
+      )
+    )
+  }
+  if (is.null(keep)) {
+    store_msg(
+      type        = "warn",
+      warn        = paste(cli::symbol$warn,"\nWarning:"),
+      pale        = "  joyn does not currently allow inequality joins, so",
+      bolded_pale = "  keep = NULL",
+      pale        = "  will retain only keys in x"
+    )
+    keep <- FALSE
+  }
+
+  # Check multiple
+  if (multiple == "any") {
+    multiple <- "first"
+  }
+
+  # Check relationship
+  if (is.null(relationship)) {relationship <- "one-to-one"}
+
+  relationship <- switch(
+    relationship,
+    "one-to-one"   = "1:1",
+    "one-to-many"  = "1:m",
+    "many-to-one"  = "m:1",
+    "many-to-many" = "m:m"
+  )
+  if (
+    relationship %in% c("1:m", "m:m") &
+    !multiple == "all"
+  ) {
+    cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
+      )
+    )
+  }
+
+  # Check na_matches
+  if (na_matches == "never") {
+    store_msg(
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "  Currently, joyn allows only",
+      bolded_pale = "  na_matches = 'na'"
+    )
+  }
+
+  # Check reportvar
+  if (is.null(reportvar) || isFALSE(reportvar)) {
+    dropreport <- TRUE
+    reportvar <- getOption("joyn.reportvar")
+  } else{
+    dropreport <- FALSE
+  }
+
+  # NOTE (RT): to remove after testing out !!!!!
+  print(by)
+  print(copy)
+  print(suffix)
+  print(keep)
+  print(na_matches)
+  print(multiple)
+  print(relationship)
+  print(reportvar)
+
+
+} # close function
 
 ## Column names ####
 
