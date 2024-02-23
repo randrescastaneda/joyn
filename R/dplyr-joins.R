@@ -90,7 +90,9 @@ left_join <- function(
   )
 
   #check args
-  args_check <- arguments_checks(by            = by,
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
                                  copy          = copy,
                                  keep          = keep,
                                  suffix        = suffix,
@@ -267,7 +269,9 @@ right_join <- function(
   )
 
   #check args
-  args_check <- arguments_checks(by            = by,
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
                                  copy          = copy,
                                  keep          = keep,
                                  suffix        = suffix,
@@ -446,7 +450,9 @@ full_join <- function(
   )
 
   #check args
-  args_check <- arguments_checks(by            = by,
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
                                  copy          = copy,
                                  keep          = keep,
                                  suffix        = suffix,
@@ -623,7 +629,9 @@ inner_join <- function(
   )
 
   #check args
-  args_check <- arguments_checks(by            = by,
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
                                  copy          = copy,
                                  keep          = keep,
                                  suffix        = suffix,
@@ -709,7 +717,7 @@ inner_join <- function(
 # HELPER FUNCTIONS -------------------------------------------------------------
 ## Arguments checks ####
 
-arguments_checks <- function(by, copy, keep, suffix, na_matches, multiple,
+arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
                              relationship, reportvar) {
   # Check by
   if (is.null(by)) {
