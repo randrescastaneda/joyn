@@ -107,11 +107,11 @@ left_join <- function(
   if (args_check$keep == TRUE) {
 
     jn_type = "left"
-    set_col_names(x      = x,
-                  y      = y,
-                  by     = args_check$by,
-                  jn_type= jn_type,
-                  suffix = args_check$suffix)
+    modified_cols <- set_col_names(x      = x,
+                                   y      = y,
+                                   by     = args_check$by,
+                                   jn_type= jn_type,
+                                   suffix = args_check$suffix)
   }
 
 
@@ -120,8 +120,8 @@ left_join <- function(
 
   # Do left join ------------------------------------
   lj <- joyn(
-    x                = x,
-    y                = y,
+    x                = modified_cols$x,
+    y                = modified_cols$y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "left",
@@ -279,11 +279,11 @@ right_join <- function(
   if (args_check$keep == TRUE) {
 
     jn_type = "right"
-    set_col_names(x      = x,
-                  y      = y,
-                  by     = args_check$by,
-                  jn_type= jn_type,
-                  suffix = args_check$suffix)
+    modified_cols <- set_col_names(x      = x,
+                                   y      = y,
+                                   by     = args_check$by,
+                                   jn_type= jn_type,
+                                   suffix = args_check$suffix)
   }
 
 
@@ -292,8 +292,8 @@ right_join <- function(
 
   # Do right join ------------------------------------
   rj <- joyn(
-    x                = x,
-    y                = y,
+    x                = modified_cols$x,
+    y                = modified_cols$y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "right",
@@ -456,18 +456,18 @@ full_join <- function(
   if (args_check$keep == TRUE) {
 
     jn_type = "full"
-    set_col_names(x      = x,
-                  y      = y,
-                  by     = args_check$by,
-                  jn_type= jn_type,
-                  suffix = args_check$suffix)
+    modified_cols <- set_col_names(x      = x,
+                                   y      = y,
+                                   by     = args_check$by,
+                                   jn_type= jn_type,
+                                   suffix = args_check$suffix)
   }
 
 
   # Do full join ------------------------------------
   fj <- joyn(
-    x                = x,
-    y                = y,
+    x                = modified_cols$x,
+    y                = modified_cols$y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "full",
@@ -630,18 +630,18 @@ inner_join <- function(
   if (args_check$keep == TRUE) {
 
     jn_type = "inner"
-    set_col_names(x      = x,
-                  y      = y,
-                  by     = args_check$by,
-                  jn_type= jn_type,
-                  suffix = args_check$suffix)
+    modified_cols <- set_col_names(x      = x,
+                                   y      = y,
+                                   by     = args_check$by,
+                                   jn_type= jn_type,
+                                   suffix = args_check$suffix)
   }
 
 
   # Do inner join ------------------------------------
   fj <- joyn(
-    x                = x,
-    y                = y,
+    x                = modified_cols$x,
+    y                = modified_cols$y,
     by               = args_check$by,
     match_type       = args_check$relationship,
     keep             = "inner",
@@ -855,6 +855,8 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
     )
 
   } #close else
+
+  return(list(x = x, y = y))
 
 } #close function
 
