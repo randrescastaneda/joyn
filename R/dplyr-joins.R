@@ -146,31 +146,20 @@ left_join <- function(
 
   ### unmatched == "error"
   if (unmatched == "error") {
-    if (any(
-      lj[
-        ,
-        get(names(lj)[length(lj)])
-      ] == "x"
-    ) |
-    any(
-      lj[
-        ,
-        get(names(lj)[length(lj)])
-      ] == 1
-    )
-    ) {
 
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
+    if (unmatched_keys(join    = lj,
+                       jn_type = "left"))
+    {cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: some rows in `y` are not matched - this check is due to
            argument `unmatched = 'error'` "
-        )
       )
-
+    )
     }
 
   }
+
   ### if dropreport = T
   if (args_check$dropreport == T) {
     get_vars(lj, args_check$reportvar) <- NULL
@@ -319,34 +308,22 @@ right_join <- function(
 
 
   # Do filter ---------------------------------------
-
   ### unmatched == "error"
   if (unmatched == "error") {
-    if (any(
-      rj[
-        ,
-        get(names(rj)[length(rj)])
-      ] == "y"
-    ) |
-    any(
-      rj[
-        ,
-        get(names(rj)[length(rj)])
-      ] == 2
-    )
-    ) {
 
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
+    if (unmatched_keys(join    = rj,
+                       jn_type = "right"))
+    {cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: some rows in `x` are not matched - this check is due to
            argument `unmatched = 'error'` "
-        )
       )
-
+    )
     }
 
   }
+
   ### if dropreport = T
   if (args_check$dropreport == T) {
     get_vars(rj, args_check$reportvar) <- NULL
@@ -497,34 +474,22 @@ full_join <- function(
 
 
   # Do filter ---------------------------------------
-
   ### unmatched == "error"
   if (unmatched == "error") {
-    if (any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == "x"
-    ) |
-    any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == 1
-    )
-    ) {
 
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
+    if (unmatched_keys(join    = fj,
+                       jn_type = "full"))
+    {cli::cli_abort(
+      paste0(
+        cli::symbol$cross,
+        " Error: some rows in `x` and `y` are not matched - this check is due to
            argument `unmatched = 'error'` "
-        )
       )
-
+    )
     }
 
   }
+
   ### if dropreport = T
   if (args_check$dropreport == T) {
     get_vars(fj, args_check$reportvar) <- NULL
