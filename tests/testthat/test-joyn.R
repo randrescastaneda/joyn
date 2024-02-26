@@ -568,8 +568,8 @@ test_that("different names in key vars are working fine", {
                    ".joyn" = c("x & y", "x & y", "x", "y", "x", "x & y", "y", "y")
                    )
 
-  setorderv(dd, "id1", na.last = TRUE)
-  setattr(dd, 'sorted', "id1")
+  setorderv(dd, c("id1", "id2"), na.last = TRUE)
+  setattr(dd, 'sorted', c("id1", "id2"))
 
   expect_equal(df, dd)
 

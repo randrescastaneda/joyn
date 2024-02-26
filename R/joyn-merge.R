@@ -212,12 +212,8 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
   # copy objects if data.tables
-  if (any(class(x) == "data.table")) {
-    x <- copy(x)
-  }
-  if (any(class(y) == "data.table")) {
-    y <- copy(y)
-  }
+  x <- copy(x)
+  y <- copy(y)
 
   ## X and Y -----------
   check_xy(x,y)
@@ -237,7 +233,6 @@ joyn <- function(x,
     x <- as.data.table(x)
     y <- as.data.table(y)
   }
-
 
   ## Modify BY when is expression ---------
   fixby  <- check_by_vars(by, x, y)
@@ -392,19 +387,6 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  # if (isTRUE(update_values) || isTRUE(update_NAs)) {
-  #   var_use <- sub(
-  #     pattern = "\\.y$",
-  #     replacement = "",
-  #     x = newyvars[
-  #       grepl(
-  #         pattern = "\\.y$",
-  #         x       = newyvars
-  #       )
-  #     ]
-  #   )
-  # }
   var_use <- NULL
   if (isTRUE(update_values) || isTRUE(update_NAs)) {
     var_use <- common_vars
@@ -466,6 +448,11 @@ joyn <- function(x,
                          .yreport = NULL)
 
 
+  if (sort) {
+    setorderv(x, by, na.last = na.last)
+    setattr(x, 'sorted', by)
+  }
+
   ## Rename by variables -----
 
   if (!is.null(fixby$xby)) {
@@ -523,10 +510,6 @@ joyn <- function(x,
     x |> fselect(get(reportvar)) <- NULL
   }
 
-  if (sort) {
-    setorderv(x, by, na.last = na.last)
-    setattr(x, 'sorted', by)
-  }
 
   if (verbose == TRUE) {
     end_joyn <- Sys.time()
