@@ -655,7 +655,7 @@ inner_join <- function(
 
 
   # Do inner join ------------------------------------
-  fj <- joyn(
+  ij <- joyn(
     x                = x,
     y                = y,
     by               = args_check$by,
@@ -678,40 +678,32 @@ inner_join <- function(
 
   ### unmatched == "error"
   if (unmatched == "error") {
-    if (any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == "x"
-    ) |
-    any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == 1
-    )
-    ) {
 
-      cli::cli_abort(
+    if (unmatched_keys(join    = ij,
+                       jn_type = "inner"))
+      {cli::cli_abort(
         paste0(
           cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
+          " Error: some rows in `x` and `y` are not matched - this check is due to
            argument `unmatched = 'error'` "
         )
       )
-
     }
 
   }
+
+
   ### if dropreport = T
   if (args_check$dropreport == T) {
-    get_vars(fj, args_check$reportvar) <- NULL
+    get_vars(ij, args_check$reportvar) <- NULL
   }
 
   # Return
-  fj
+  ij
 
 }
+
+
 
 
 # HELPER FUNCTIONS -------------------------------------------------------------
@@ -877,7 +869,58 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 } #close function
 
 
+## Unmatched error ####
 
+unmatched_keys <- function(join, jn_type) {
+
+  unmatched_keys <- FALSE
+
+  # Check unmatched keys in input
+
+  # If right join - check x
+
+  if (jn_type == "right") {
+
+    if (any(
+      join[, ncol(join)] == "y" |
+      join[, ncol(join)] == 2
+      )
+      )
+
+    {unmatched_keys <- TRUE}
+
+  }
+
+  # If left - check y
+
+  else if (jn_type == "left") {
+
+    if (any(
+      join[, ncol(join)] == "x" |
+      join[, ncol(join)] == 1
+      )
+      )
+
+    {unmatched_keys <- TRUE}
+
+  }
+
+  # If full or inner
+  else {
+    if (any(
+      join[, ncol(join)] == "x" |
+      join[, ncol(join)] == "y" |
+      join[, ncol(join)] == 1 |
+      join[, ncol(join)] == 2
+    )
+    )
+
+    {unmatched_keys <- TRUE}
+
+  }
+
+  return(unmatched_keys)
+}
 
 
 
