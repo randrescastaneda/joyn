@@ -147,15 +147,23 @@ left_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
 
-    if (unmatched_keys(join    = lj,
-                       jn_type = "left"))
-    {cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: some rows in `y` are not matched - this check is due to
+    # Input key
+    y_keys      <- qDT(y[by])
+
+    # Output key
+    jn_key         <- qDT(lj[by])
+
+    # Unmatched keys from y
+    unmatched_keys <- fsetdiff(y_keys, jn_key)
+
+    if(nrow(unmatched_keys) >0) {
+      cli::cli_abort(
+        paste0(
+          cli::symbol$cross,
+          " Error: some rows in `x` and `y` are not matched - this check is due to
            argument `unmatched = 'error'` "
+        )
       )
-    )
     }
 
   }
@@ -644,16 +652,7 @@ inner_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
 
-    if (unmatched_keys(join    = ij,
-                       jn_type = "inner"))
-      {cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `x` and `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-        )
-      )
-    }
+    ##TOCHECK - unmatched keys from both data frames
 
   }
 
@@ -667,7 +666,6 @@ inner_join <- function(
   ij
 
 }
-
 
 
 
@@ -836,56 +834,7 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 
 ## Unmatched error ####
 
-unmatched_keys <- function(join, jn_type) {
 
-  unmatched_keys <- FALSE
-
-  # Check unmatched keys in input
-
-  # If right join - check x
-
-  if (jn_type == "right") {
-
-    if (any(
-      join[, ncol(join)] == "y" |
-      join[, ncol(join)] == 2
-      )
-      )
-
-    {unmatched_keys <- TRUE}
-
-  }
-
-  # If left - check y
-
-  else if (jn_type == "left") {
-
-    if (any(
-      join[, ncol(join)] == "x" |
-      join[, ncol(join)] == 1
-      )
-      )
-
-    {unmatched_keys <- TRUE}
-
-  }
-
-  # If full or inner
-  else {
-    if (any(
-      join[, ncol(join)] == "x" |
-      join[, ncol(join)] == "y" |
-      join[, ncol(join)] == 1 |
-      join[, ncol(join)] == 2
-    )
-    )
-
-    {unmatched_keys <- TRUE}
-
-  }
-
-  return(unmatched_keys)
-}
 
 
 
