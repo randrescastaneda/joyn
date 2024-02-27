@@ -159,12 +159,13 @@ left_join <- function(
     # Unmatched keys
     unmatched_keys <- fsetdiff(y_keys, jn_key)
 
-    } else {unmatched_keys <- data.frame()}
+    }
 
     # If joining by different vars in x and y
+    else {unmatched_keys <- data.frame()}
 
     # If there are unmatched keys that would result in dropped rows in output -> stop
-    if(nrow(unmatched_keys) >0) {
+    if(nrow(unmatched_keys) > 0) {
 
       cli::cli_abort(
         paste0(
@@ -743,7 +744,6 @@ inner_join <- function(
   } # close if unmatched == "error" condition
 
 
-
   ### if dropreport = T
   if (args_check$dropreport == T) {
     get_vars(ij, args_check$reportvar) <- NULL
@@ -755,9 +755,12 @@ inner_join <- function(
 }
 
 
-
 # HELPER FUNCTIONS -------------------------------------------------------------
 ## Arguments checks ####
+
+#' Perform necessary preliminary checks on arguments
+#' @return list of checked arguments to pass on to the main join function
+#' @keywords internal
 
 arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
                              relationship, reportvar) {
@@ -874,6 +877,15 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
 
 ## Column names ####
 
+#' Add x key var and y key var (with suffixes) to x and y - when joining by different variables
+#' @param x data table: left table
+#' @param y data table: right table
+#' @param by character vector of variables to join by
+#' @param suffix character(2) specifying the suffixes to be used for making non-by column names unique
+#' @param jn_type character specifying type of join
+#' @return list containing x and y
+#' @keywords internal
+
 set_col_names <- function(x, y, by, suffix, jn_type) {
 
   x_1 <- copy(x)
@@ -917,9 +929,6 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
   return(list(x = x, y = y))
 
 } #close function
-
-
-## Unmatched error ####
 
 
 

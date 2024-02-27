@@ -378,13 +378,26 @@ test_that("LEFT JOIN - reportvar works", {
 
 test_that("LEFT JOIN - unmatched throws error", {
 
-  expect_error(
-    left_join(x            = x1,
-              y            = y1,
-              relationship = "many-to-one",
-              by           = "id",
-              unmatched    = "error")
-  )
+    left_join(x            = x4,
+              y            = y4,
+              relationship = "many-to-many",
+              by           = "id2",
+              unmatched    = "error") |>
+    expect_no_error()
+
+  left_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id1=id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+  left_join(x            = x1,
+            y            = y1,
+            relationship = "many-to-one",
+            by           = "id",
+            unmatched    = "error") |>
+    expect_error()
 
 })
 
