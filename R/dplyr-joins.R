@@ -535,22 +535,20 @@ full_join <- function(
 
     # If joining by different vars in x and y
 
-    else {
-
-      {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
-
-    }
+    else {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
 
     # If there are unmatched keys that would result in dropped rows in output -> stop
-    if(nrow(unmatched_keys_x) >0 | nrow(unmatched_keys_y) >0) {
 
+    if (nrow(unmatched_keys_y) >0 | nrow(unmatched_keys_x) >0) {
       cli::cli_abort(
         paste0(
           cli::symbol$cross,
-          " Error: some rows in `x` are not matched - this check is due to
+          " Error: some rows in `x` and/or `y` are not matched - this check is due to
            argument `unmatched = 'error'` "))
     }
+
   } # close if unmatched == "error" condition
+
 
 
   ### if dropreport = T
@@ -721,26 +719,22 @@ inner_join <- function(
       unmatched_keys_x <- fsetdiff(x_keys, jn_key)
       unmatched_keys_y <- fsetdiff(x_keys, jn_key)
 
-
     }
 
-    # If joining by different vars in x and y
+    # If joining by different vars in x and y - no unmatched keys
 
-    else {
-
-      {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
-
-    }
+    else {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
 
     # If there are unmatched keys that would result in dropped rows in output -> stop
-    if(nrow(unmatched_keys_x) >0 | nrow(unmatched_keys_y) >0) {
 
+    if (nrow(unmatched_keys_y) >0 | nrow(unmatched_keys_x) >0) {
       cli::cli_abort(
         paste0(
           cli::symbol$cross,
-          " Error: some rows in `x` are not matched - this check is due to
+          " Error: some rows in `x` and/or `y` are not matched - this check is due to
            argument `unmatched = 'error'` "))
     }
+
   } # close if unmatched == "error" condition
 
 

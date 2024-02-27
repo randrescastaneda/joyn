@@ -419,6 +419,7 @@ test_that("LEFT JOIN - NA matches", {
 })
 
 # TEST RIGHT JOINS ------------------------------------------------------
+
 test_that("RIGHT JOIN - Conducts right join", {
   # One way
   jn_joyn <- right_join(
@@ -698,6 +699,31 @@ test_that("RIGHT JOIN - NA matches", {
     expect_contains("warn")
 })
 
+test_that("RIGHT JOIN - unmatched error", {
+
+ right_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+ right_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id1=id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+ right_join(x            = x1,
+            y            = y1,
+            relationship = "many-to-one",
+            by           = "id",
+            unmatched    = "error") |>
+    expect_error()
+
+})
+
 #-------------------------------------------------------------------------------
 # TEST FULL JOINS -------------------------------------------------------------
 #-------------------------------------------------------------------------------
@@ -888,7 +914,7 @@ test_that("FULL JOIN - (correctly) incorrectly specified arguments give (no) err
     )
   )
 
-  expect_error(
+  expect_no_error(
     full_join(
       x = x1,
       y = y1,
@@ -998,7 +1024,7 @@ test_that("FULL JOIN - (correctly) incorrectly specified arguments give (no) err
       )
     )
 
-    expect_error(
+    expect_no_error(
       full_join(
         x            = x2,
         y            = y5,
@@ -1119,6 +1145,31 @@ test_that("FULL JOIN - NA matches", {
 
   rlang::env_get(.joynenv, "joyn_msgs")$type |>
     expect_contains("warn")
+})
+
+test_that("FULL JOIN -unmatched error", {
+
+  full_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+  full_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id1=id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+  full_join(x            = x1,
+            y            = y1,
+            relationship = "many-to-one",
+            by           = "id",
+            unmatched    = "error") |>
+    expect_no_error()
+
 })
 
 
@@ -1527,4 +1578,29 @@ test_that("INNER JOIN - NA matches", {
 
   rlang::env_get(.joynenv, "joyn_msgs")$type |>
     expect_contains("warn")
+})
+
+test_that("INNER JOIN - unmatched error", {
+  inner_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+  inner_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = "id1=id2",
+            unmatched    = "error") |>
+    expect_no_error()
+
+  inner_join(x            = x1,
+            y            = y1,
+            relationship = "many-to-one",
+            by           = "id",
+            unmatched    = "error") |>
+    expect_error()
+
+
 })
