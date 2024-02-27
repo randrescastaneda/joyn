@@ -100,20 +100,26 @@ left_join <- function(
                                  multiple      = multiple,
                                  relationship  = relationship,
                                  reportvar     = reportvar)
-
-
+  #update args
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
 
 
-  if (args_check$keep == TRUE) {
+  if (keep == TRUE) {
 
     jn_type = "left"
     modified_cols <- set_col_names(x      = x,
                                    y      = y,
-                                   by     = args_check$by,
+                                   by     = by,
                                    jn_type= jn_type,
-                                   suffix = args_check$suffix)
+                                   suffix = suffix)
     x = modified_cols$x
     y = modified_cols$y
   }
@@ -126,14 +132,14 @@ left_join <- function(
   lj <- joyn(
     x                = x,
     y                = y,
-    by               = args_check$by,
-    match_type       = args_check$relationship,
+    by               = by,
+    match_type       = relationship,
     keep             = "left",
     y_vars_to_keep   = y_vars_to_keep,
-    suffixes         = args_check$suffix,
+    suffixes         = suffix,
     update_values    = update_values,
     update_NAs       = update_NAs,
-    reportvar        = args_check$reportvar,
+    reportvar        = reportvar,
     reporttype       = reporttype,
     keep_common_vars = T,
     sort             = sort,
@@ -151,20 +157,21 @@ left_join <- function(
     if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
 
     # Input key
-    y_keys      <- qDT(y[args_check$by])
+    y_keys      <- qDT(y[by])
 
     # Output key
-    jn_key      <- qDT(lj[args_check$by])
+    jn_key      <- qDT(lj[by])
 
     # Unmatched keys
     unmatched_keys <- fsetdiff(y_keys, jn_key)
 
     }
 
-    # If joining by different vars in x and y
-    else {unmatched_keys <- data.frame()}
+    # If joining by different vars in x and y - no unmatched keys
+    else {unmatched_keys <- data.table()}
 
-    # If there are unmatched keys that would result in dropped rows in output -> stop
+    # If there are unmatched keys that would result in dropped rows in output -
+    # --> stop
     if(nrow(unmatched_keys) > 0) {
 
       cli::cli_abort(
@@ -176,15 +183,17 @@ left_join <- function(
   } # close if unmatched == "error" condition
 
   ### if dropreport = T
-  if (args_check$dropreport == T) {
-    get_vars(lj, args_check$reportvar) <- NULL
+  if (dropreport == T) {
+    get_vars(lj, reportvar) <- NULL
   }
 
   # return
   lj
 }
 
-
+#-------------------------------------------------------------------------------
+# RIGHT JOIN --------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 #' Right join two data frames
 #'
@@ -245,7 +254,8 @@ right_join <- function(
 
   clear_joynenv()
 
-  # Argument checks ---------------------------------
+  # Argument checks ------------------------------------------------------------
+  # get args
   na_matches <- match.arg(
     na_matches,
     choices = c(
@@ -283,17 +293,24 @@ right_join <- function(
                                  multiple      = multiple,
                                  relationship  = relationship,
                                  reportvar     = reportvar)
-
+  #update args
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  if (args_check$keep == TRUE) {
+  if (keep == TRUE) {
 
     jn_type = "right"
     modified_cols <- set_col_names(x      = x,
                                    y      = y,
-                                   by     = args_check$by,
+                                   by     = by,
                                    jn_type= jn_type,
-                                   suffix = args_check$suffix)
+                                   suffix = suffix)
     x = modified_cols$x
     y = modified_cols$y
   }
@@ -306,14 +323,14 @@ right_join <- function(
   rj <- joyn(
     x                = x,
     y                = y,
-    by               = args_check$by,
-    match_type       = args_check$relationship,
+    by               = by,
+    match_type       = relationship,
     keep             = "right",
     y_vars_to_keep   = y_vars_to_keep,
-    suffixes         = args_check$suffix,
+    suffixes         = suffix,
     update_values    = update_values,
     update_NAs       = update_NAs,
-    reportvar        = args_check$reportvar,
+    reportvar        = reportvar,
     reporttype       = reporttype,
     keep_common_vars = T,
     sort             = sort,
@@ -331,10 +348,10 @@ right_join <- function(
     if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
 
       # Input key
-      x_keys      <- qDT(x[args_check$by])
+      x_keys      <- qDT(x[by])
 
       # Output key
-      jn_key      <- qDT(rj[args_check$by])
+      jn_key      <- qDT(rj[by])
 
       # Unmatched keys
       unmatched_keys <- fsetdiff(x_keys, jn_key)
@@ -343,11 +360,8 @@ right_join <- function(
 
     # If joining by different vars in x and y
 
-    else {
+    else {unmatched_keys <- data.frame()}
 
-      {unmatched_keys <- data.frame()}
-
-    }
 
     # If there are unmatched keys that would result in dropped rows in output -> stop
     if(nrow(unmatched_keys) >0) {
@@ -362,8 +376,8 @@ right_join <- function(
 
 
   ### if dropreport = T
-  if (args_check$dropreport == T) {
-    get_vars(rj, args_check$reportvar) <- NULL
+  if (dropreport == T) {
+    get_vars(rj, reportvar) <- NULL
   }
 
   # Return
@@ -475,16 +489,25 @@ full_join <- function(
                                  relationship  = relationship,
                                  reportvar     = reportvar)
 
+  #update args
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
+
 
   # Column names -----------------------------------
-  if (args_check$keep == TRUE) {
+  if (keep == TRUE) {
 
     jn_type = "full"
     modified_cols <- set_col_names(x      = x,
                                    y      = y,
-                                   by     = args_check$by,
+                                   by     = by,
                                    jn_type= jn_type,
-                                   suffix = args_check$suffix)
+                                   suffix = suffix)
     x = modified_cols$x
     y = modified_cols$y
   }
@@ -494,14 +517,14 @@ full_join <- function(
   fj <- joyn(
     x                = x,
     y                = y,
-    by               = args_check$by,
-    match_type       = args_check$relationship,
+    by               = by,
+    match_type       = relationship,
     keep             = "full",
     y_vars_to_keep   = y_vars_to_keep,
-    suffixes         = args_check$suffix,
+    suffixes         = suffix,
     update_values    = update_values,
     update_NAs       = update_NAs,
-    reportvar        = args_check$reportvar,
+    reportvar        = reportvar,
     reporttype       = reporttype,
     keep_common_vars = T,
     sort             = sort,
@@ -520,11 +543,11 @@ full_join <- function(
     if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
 
       # Input key
-      x_keys <- qDT(x[args_check$by])
-      y_keys <- qDT(y[args_check$by])
+      x_keys <- qDT(x[by])
+      y_keys <- qDT(y[by])
 
       # Output key
-      jn_key <- qDT(fj[args_check$by])
+      jn_key <- qDT(fj[by])
 
       # Unmatched keys
       unmatched_keys_x <- fsetdiff(x_keys, jn_key)
@@ -549,18 +572,15 @@ full_join <- function(
 
   } # close if unmatched == "error" condition
 
-
-
   ### if dropreport = T
-  if (args_check$dropreport == T) {
-    get_vars(fj, args_check$reportvar) <- NULL
+  if (dropreport == T) {
+    get_vars(fj, reportvar) <- NULL
   }
 
   # Return
   fj
 
 }
-
 
 
 #-------------------------------------------------------------------------------
@@ -666,15 +686,24 @@ inner_join <- function(
                                  relationship  = relationship,
                                  reportvar     = reportvar)
 
+  #update args
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
+
   # Column names -----------------------------------
-  if (args_check$keep == TRUE) {
+  if (keep == TRUE) {
 
     jn_type = "inner"
     modified_cols <- set_col_names(x      = x,
                                    y      = y,
-                                   by     = args_check$by,
+                                   by     = by,
                                    jn_type= jn_type,
-                                   suffix = args_check$suffix)
+                                   suffix = suffix)
     x = modified_cols$x
     y = modified_cols$y
   }
@@ -684,14 +713,14 @@ inner_join <- function(
   ij <- joyn(
     x                = x,
     y                = y,
-    by               = args_check$by,
-    match_type       = args_check$relationship,
+    by               = by,
+    match_type       = relationship,
     keep             = "inner",
     y_vars_to_keep   = y_vars_to_keep,
-    suffixes         = args_check$suffix,
+    suffixes         = suffix,
     update_values    = update_values,
     update_NAs       = update_NAs,
-    reportvar        = args_check$reportvar,
+    reportvar        = reportvar,
     reporttype       = reporttype,
     keep_common_vars = T,
     sort             = sort,
@@ -709,16 +738,15 @@ inner_join <- function(
     if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
 
       # Input key
-      x_keys <- qDT(x[args_check$by])
-      y_keys <- qDT(y[args_check$by])
+      x_keys <- qDT(x[by])
+      y_keys <- qDT(y[by])
 
       # Output key
-      jn_key <- qDT(ij[args_check$by])
+      jn_key <- qDT(ij[by])
 
       # Unmatched keys
       unmatched_keys_x <- fsetdiff(x_keys, jn_key)
       unmatched_keys_y <- fsetdiff(x_keys, jn_key)
-
     }
 
     # If joining by different vars in x and y - no unmatched keys
@@ -739,8 +767,8 @@ inner_join <- function(
 
 
   ### if dropreport = T
-  if (args_check$dropreport == T) {
-    get_vars(ij, args_check$reportvar) <- NULL
+  if (dropreport == T) {
+    get_vars(ij, reportvar) <- NULL
   }
 
   # Return
@@ -866,12 +894,12 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
 
   return(out)
 
-
 } # close function
 
 ## Column names ####
 
-#' Add x key var and y key var (with suffixes) to x and y - when joining by different variables
+#' Add x key var and y key var (with suffixes) to x and y
+#' -when joining by different variables and keep is true
 #' @param x data table: left table
 #' @param y data table: right table
 #' @param by character vector of variables to join by
@@ -885,6 +913,7 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
   x_1 <- copy(x)
   y_1 <- copy(y)
 
+  # If joining by different variables
   if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
 
     if (jn_type == "right") {
@@ -895,11 +924,14 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
       by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
     }
 
-  } else {
+  }
+
+  # If joining by common var
+  else {
     by_y_names <- by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
     }
 
-
+  # Add key vars with suffix to x and y
   if (jn_type == "right") {
     xkeys <- x |>
       fselect(by_x_names)
@@ -920,7 +952,8 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 
   } #close else
 
-  return(list(x = x, y = y))
+  return(list(x = x,
+              y = y))
 
 } #close function
 

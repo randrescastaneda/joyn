@@ -2,7 +2,8 @@
 % Please edit documentation in R/dplyr-joins.R
 \name{set_col_names}
 \alias{set_col_names}
-\title{Add x key var and y key var (with suffixes) to x and y - when joining by different variables}
+\title{Add x key var and y key var (with suffixes) to x and y
+-when joining by different variables and keep is true}
 \usage{
 set_col_names(x, y, by, suffix, jn_type)
 }
@@ -21,6 +22,7 @@ set_col_names(x, y, by, suffix, jn_type)
 list containing x and y
 }
 \description{
-Add x key var and y key var (with suffixes) to x and y - when joining by different variables
+Add x key var and y key var (with suffixes) to x and y
+-when joining by different variables and keep is true
 }
 \keyword{internal}
