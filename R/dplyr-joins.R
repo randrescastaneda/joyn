@@ -147,26 +147,49 @@ left_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
 
+    # If joining by same var in x and y
+    if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
+
     # Input key
-    y_keys      <- qDT(y[by])
+    y_keys      <- qDT(y[args_check$by])
 
     # Output key
-    jn_key         <- qDT(lj[by])
+    jn_key      <- qDT(lj[args_check$by])
 
-    # Unmatched keys from y
+    # Unmatched keys
     unmatched_keys <- fsetdiff(y_keys, jn_key)
 
+    }
+
+    # If joining by different vars in x and y
+
+    else {
+
+      # Input key
+      x_1 = copy(x)
+      y_1 = copy(y)
+
+      # Output key
+      y_by <- fix_by_vars(by = by, x_1, y_1)$yby
+      y_keys <-  qDT(y[y_by])
+
+      jn_key  <- qDT(lj[y_by])
+
+      # Unmatched keys
+      unmatched_keys <- fsetdiff(y_keys, jn_key)
+
+    }
+
+    # If there are unmatched keys that would result in dropped rows in output -> stop
     if(nrow(unmatched_keys) >0) {
+
       cli::cli_abort(
         paste0(
           cli::symbol$cross,
-          " Error: some rows in `x` and `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-        )
-      )
+          " Error: some rows in `y` are not matched - this check is due to
+           argument `unmatched = 'error'` "))
     }
-
-  }
+  } # close if unmatched == "error" condition
 
   ### if dropreport = T
   if (args_check$dropreport == T) {
