@@ -170,6 +170,8 @@ left_join <- function(
     # If joining by different vars in x and y - no unmatched keys
     else {unmatched_keys <- data.table()}
 
+    # MEMO: check diff between yby and
+
     # If there are unmatched keys that would result in dropped rows in output -
     # --> stop
     if(nrow(unmatched_keys) > 0) {
@@ -539,36 +541,15 @@ full_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
 
-    # If joining by same var in x and y
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
-
-      # Input key
-      x_keys <- qDT(x[by])
-      y_keys <- qDT(y[by])
-
-      # Output key
-      jn_key <- qDT(fj[by])
-
-      # Unmatched keys
-      unmatched_keys_x <- fsetdiff(x_keys, jn_key)
-      unmatched_keys_y <- fsetdiff(x_keys, jn_key)
-
-
-    }
-
-    # If joining by different vars in x and y
-
-    else {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
-
-    # If there are unmatched keys that would result in dropped rows in output -> stop
-
-    if (nrow(unmatched_keys_y) >0 | nrow(unmatched_keys_x) >0) {
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `x` and/or `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "))
-    }
+    # Store warning message
+    store_msg(
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "\nargument",
+      bolded_pale = "  warning = error",
+      pale        = "\nis not active in this type of",
+      bolded_pale = "  joyn"
+    )
 
   } # close if unmatched == "error" condition
 
@@ -753,6 +734,9 @@ inner_join <- function(
 
     else {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
 
+    # TO ADD: check if yby or xby have values that are dropped in the resulting joined table key,
+    # which is called with xkey name
+
     # If there are unmatched keys that would result in dropped rows in output -> stop
 
     if (nrow(unmatched_keys_y) >0 | nrow(unmatched_keys_x) >0) {
@@ -814,7 +798,6 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
         " Error: argument `suffix` must be character vector of length 2"
       )
     )
-
   }
 
   # Check keep
@@ -958,7 +941,8 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 } #close function
 
 
-
+#MEMO (RT): Add unmatched_keys helper function from improve_dplyr_joyn branch,
+# but check first if it is faster than using collapse (also remove full join, no need to check unmatched keys there)
 
 
 
