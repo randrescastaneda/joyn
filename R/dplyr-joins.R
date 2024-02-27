@@ -339,21 +339,54 @@ right_join <- function(
 
 
   # Do filter ---------------------------------------
+
   ### unmatched == "error"
   if (unmatched == "error") {
 
-    if (unmatched_keys(join    = rj,
-                       jn_type = "right"))
-    {cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: some rows in `x` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-      )
-    )
+    # If joining by same var in x and y
+    if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
+
+      # Input key
+      x_keys      <- qDT(x[args_check$by])
+
+      # Output key
+      jn_key      <- qDT(rj[args_check$by])
+
+      # Unmatched keys
+      unmatched_keys <- fsetdiff(x_keys, jn_key)
+
     }
 
-  }
+    # If joining by different vars in x and y
+
+    else {
+
+      # Input key
+      x_1 = copy(x)
+      y_1 = copy(y)
+
+      # Output key
+      x_by <- fix_by_vars(by = by, x_1, y_1)$xby
+      x_keys <-  qDT(x[x_by])
+
+      jn_key  <- qDT(rj[x_by])
+
+      # Unmatched keys
+      unmatched_keys <- fsetdiff(x_keys, jn_key)
+
+    }
+
+    # If there are unmatched keys that would result in dropped rows in output -> stop
+    if(nrow(unmatched_keys) >0) {
+
+      cli::cli_abort(
+        paste0(
+          cli::symbol$cross,
+          " Error: some rows in `x` are not matched - this check is due to
+           argument `unmatched = 'error'` "))
+    }
+  } # close if unmatched == "error" condition
+
 
   ### if dropreport = T
   if (args_check$dropreport == T) {
