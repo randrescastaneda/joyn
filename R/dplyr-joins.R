@@ -327,36 +327,16 @@ right_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
 
-    # If joining by same var in x and y
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
-
-      # Input key
-      x_keys      <- qDT(x[by])
-
-      # Output key
-      jn_key      <- qDT(rj[by])
-
-      # Unmatched keys
-      unmatched_keys <- fsetdiff(x_keys, jn_key)
-
-    }
-
-    # If joining by different vars in x and y
-
-    else {unmatched_keys <- data.frame()}
-
-
-    # If there are unmatched keys that would result in dropped rows in output -> stop
-    if(nrow(unmatched_keys) >0) {
-
+    if (unmatched_keys(join    = rj,
+                       jn_type = "right")) {
       cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `x` are not matched - this check is due to
-           argument `unmatched = 'error'` "))
+      paste0(
+        cli::symbol$cross,
+        " Error: some rows in `x` are not matched - this check is due to
+           argument `unmatched = 'error'` ")
+      )
     }
-  } # close if unmatched == "error" condition
-
+  }
 
   ### if dropreport = T
   if (dropreport == T) {
@@ -696,7 +676,8 @@ inner_join <- function(
   ### unmatched == "error"
   if (unmatched == "error") {
 
-    # If joining by same var in x and y
+    # 1. Detect unmacthed keys that would result in dropped rows in output
+    # Case a. If joining by same var in x and y
     if (length(grep(pattern = "==?", x = by, value = TRUE)) == 0) {
 
       # Input key
@@ -711,14 +692,79 @@ inner_join <- function(
       unmatched_keys_y <- fsetdiff(x_keys, jn_key)
     }
 
-    # If joining by different vars in x and y - no unmatched keys
+    # Case b. If joining by var of different names in x and y
 
-    else {unmatched_keys_x <- unmatched_keys_y <- data.frame()}
+    else if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0 & length(by) == 1) {
+      x_by <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", by))
+      y_by <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", by))
 
-    # TO ADD: check if yby or xby have values that are dropped in the resulting joined table key,
-    # which is called with xkey name
+      x_keys <- qDT(x[x_by])
+      y_keys <- qDT(y[y_by]) |> setnames(y_by, x_by) #rename key to use fsetdiff
 
-    # If there are unmatched keys that would result in dropped rows in output -> stop
+      jn_key <- qDT(ij[x_by])
+
+      unmatched_keys_x <- fsetdiff(x_keys, jn_key)
+      unmatched_keys_y <- fsetdiff(y_keys, jn_key)
+
+    }
+
+    # Case c. If joining by different vars in x and y
+
+    else if (
+      length(grep(pattern = "==?", x = by, value = TRUE)) == 0 & length(by) == 2) {
+
+      x_by <- by[1]
+      y_by <- by[2]
+
+      x_keys <- qDT(x[x_by])
+      y_keys <- qDT(y[y_by])
+
+      jn_key_x <- qDT(ij[x_by])
+      jn_key_y <- qDT(ij[y_by])
+
+      unmatched_keys_x <- fsetdiff(x_keys, jn_key_x)
+      unmatched_keys_y <- fsetdiff(y_keys, jn_key_y)
+
+      }
+
+    # Case d. If joining by different vars in x and y - using also vars of diff names!!!
+    else {
+
+      #if (length(grep(pattern = "==?", x = by, value = TRUE)) == 1 ) {
+        #ADD
+      #}
+
+      if(length(grep(pattern = "==?", x = by, value = TRUE)) == 2 & length(by) == 2) {
+        x_by_1 <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", by[1]))
+        y_by_1 <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", by[1]))
+
+
+        x_by_2 <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", by[2]))
+        y_by_2 <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", by[2]))
+
+        x_key_1 <- qDT(x[x_by_1])
+        y_key_1 <- qDT(y[y_by_1]) |> setnames(y_by_1, x_by_1)
+        x_key_2 <- qDT(x[x_by_2])
+        y_key_2 <- qDT(y[y_by_2]) |> setnames(y_by_2, x_by_2)
+
+
+        jn_key_1 <- qDT(ij[x_by_1])
+        jn_key_2 <- qDT(ij[x_by_2])
+
+        #add unmatched keys x and y here!
+        unmatched_keys_x <- fsetdiff(x_key_1, jn_key_1)
+        unmatched_keys_y <- fsetdiff(y_key_1, jn_key_1)
+        unmatched_keys_y <- fsetdiff(y_key_2, jn_key_2)
+        unmatched_keys_y <- fsetdiff(y_key_2, jn_key_2)
+
+      }
+
+      else {unmatched_keys_x <- unmatched_keys_y <- data.frame()} #MEMO: to fix
+
+    }
+
+  # 2. If there are unmatched keys that would result in dropped rows in output
+  #    -> stop
 
     if (nrow(unmatched_keys_y) >0 | nrow(unmatched_keys_x) >0) {
       cli::cli_abort(
@@ -921,13 +967,13 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 
 } #close function
 
-
-#MEMO (RT): Add unmatched_keys helper function from improve_dplyr_joyn branch,
-# but check first if it is faster than using collapse (also remove full join, no need to check unmatched keys there)
-
 ## Detect unmatched keys - to be used in left and right joins ####
 
-## Unmatched error ####
+#' Detect unmatched keys
+#' @param join joined data table, output of either a left or a right join
+#' @param jn_type character specifying type of join
+#' @return logical TRUE if unmacthed keys are found, FALSE if no unmacthed keys are found
+#' @keywords internal
 
 unmatched_keys <- function(join, jn_type) {
 
