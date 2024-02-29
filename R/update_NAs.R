@@ -1,9 +1,3 @@
-# Add global variables to avoid NSE notes in R CMD check
-if (getRversion() >= '2.15.1')
-  utils::globalVariables(
-    c('use_util_reportvar')
-  )
-
 #' Update NA values
 #'
 #' @param dt  joined data.table
