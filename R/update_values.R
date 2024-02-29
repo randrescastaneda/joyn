@@ -58,8 +58,5 @@ update_values <- function(dt, var,
   # adjust reportvar
   setrename(dt, use_util_reportvar = reportvar, .nse = FALSE)
 
-  return(dt)
+  dt
 }
-
-
-
