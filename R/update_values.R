@@ -41,8 +41,15 @@ update_values <- function(dt, var,
     !dt$vary_na] <- 6L
 
   # Replace values
-  dt[use_util_reportvar %in% c(4, 5),
-     eval(x.var) := mget(y.var)]
+
+  if (inherits(dt, "data.table")) {
+    dt[use_util_reportvar %in% c(4, 5),
+       eval(x.var) := mget(y.var)]
+  } else {
+    to_replace <- dt$use_util_reportvar %in% c(4, 5)
+    dt[to_replace, x.var] <- dt[to_replace, y.var]
+  }
+
 
   # remove unnecessary columns
   # vars_to_keep <- names(dt)[names(dt) %!in% c("varx_na", "vary_na")]
