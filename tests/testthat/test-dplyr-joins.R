@@ -390,7 +390,7 @@ test_that("LEFT JOIN - unmatched throws error", {
             relationship = "many-to-many",
             by           = "id1=id2",
             unmatched    = "error") |>
-    expect_no_error()
+    expect_error()
 
   left_join(x            = x1,
             y            = y1,
@@ -398,6 +398,23 @@ test_that("LEFT JOIN - unmatched throws error", {
             by           = "id",
             unmatched    = "error") |>
     expect_error()
+
+
+  left_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = c("id2", "x"),
+            unmatched    = "error") |>
+    expect_error()
+
+  left_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
+            by           = c("id1=id2", "id2=id"),
+            unmatched    = "error") |>
+    expect_error()
+
+
 
 })
 
@@ -721,6 +738,21 @@ test_that("RIGHT JOIN - unmatched error", {
             by           = "id",
             unmatched    = "error") |>
     expect_error()
+
+ right_join(x            = x4,
+           y            = y4,
+           relationship = "many-to-many",
+           by           = c("id2", "x"),
+           unmatched    = "error") |>
+   expect_error()
+
+ right_join(x            = x4,
+           y            = y4,
+           relationship = "many-to-many",
+           by           = c("id1=id2", "id2=id"),
+           unmatched    = "error") |>
+   expect_no_error()
+
 
 })
 
@@ -1600,6 +1632,20 @@ test_that("INNER JOIN - unmatched error", {
             relationship = "many-to-one",
             by           = "id",
             unmatched    = "error") |>
+    expect_error()
+
+  inner_join(x            = x4,
+             y            = y4,
+             relationship = "many-to-many",
+             by           = c("id2", "x"),
+             unmatched    = "error") |>
+    expect_error()
+
+  inner_join(x            = x4,
+             y            = y4,
+             relationship = "many-to-many",
+             by           = c("id1=id2", "id2=id"),
+             unmatched    = "error") |>
     expect_error()
 
 
