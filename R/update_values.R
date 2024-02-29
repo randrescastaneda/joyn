@@ -31,12 +31,13 @@ update_values <- function(dt, var,
 
   # let `use_util_reportvar` reflect updates
   # FALSE => is NA and not 2, 4 => NA updated
-  dt$use_util_reportvar[
-    !dt$varx_na & (dt$use_util_reportvar %!in% c(2, 4))] <- 4L
+#  dt$use_util_reportvar[
+#    !dt$varx_na & (dt$use_util_reportvar %!in% c(2, 4))] <- 4L
+
   # both TRUE => neither NA => updated
   dt$use_util_reportvar[
     dt$varx_na & dt$vary_na] <- 5L
-  # FALSE => is NA => not updated
+  # FALSE => y is NA => not updated
   dt$use_util_reportvar[
     !dt$vary_na] <- 6L
 
