@@ -711,8 +711,18 @@ inner_join <- function(
 # HELPER FUNCTIONS -------------------------------------------------------------
 ## Arguments checks ####
 
-#' Perform necessary preliminary checks on arguments
-#' @return list of checked arguments to pass on to the main join function
+#' Perform necessary preliminary checks on arguments that are passed to joyn
+#' @param x data frame: left table
+#' @param y data frame: right table
+#' @param by character vector or variables to join by
+#' @param copy
+#' @param keep
+#' @param suffix
+#' @param na_matches
+#' @param multiple
+#' @param relationship
+#' @param reportvar
+#' @return list of checked arguments to pass on to the main joyn function
 #' @keywords internal
 
 arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,

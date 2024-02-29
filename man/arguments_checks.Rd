@@ -2,7 +2,7 @@
 % Please edit documentation in R/dplyr-joins.R
 \name{arguments_checks}
 \alias{arguments_checks}
-\title{Perform necessary preliminary checks on arguments}
+\title{Perform necessary preliminary checks on arguments that are passed to joyn}
 \usage{
 arguments_checks(
   x,
@@ -17,10 +17,31 @@ arguments_checks(
   reportvar
 )
 }
+\arguments{
+\item{x}{data frame: left table}
+
+\item{y}{data frame: right table}
+
+\item{by}{character vector or variables to join by}
+
+\item{copy}{If x and y are not from the same data source, and copy is TRUE, then y will be copied into the same src as x}
+
+\item{keep}{logical or NULL if join jeys from both x and y should be preserved in the output}
+
+\item{suffix}{if there are non-joined duplicate variables in x and y, these suffixes will be added to the output to disambiguate them.}
+
+\item{na_matches}{should two NA or two NaN values match?}
+
+\item{multiple}{handling of rows in x with multiple matches in y. For each row of x:}
+
+\item{relationship}{relationship between the keys of x and y}
+
+\item{reportvar}{character name of reporting variable. If FALSE or NULL, reportvar will be excluded from the final table}
+}
 \value{
-list of checked arguments to pass on to the main join function
+list of checked arguments to pass on to the main joyn function
 }
 \description{
-Perform necessary preliminary checks on arguments
+Perform necessary preliminary checks on arguments that are passed to joyn
 }
 \keyword{internal}
