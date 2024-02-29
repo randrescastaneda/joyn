@@ -691,7 +691,7 @@ inner_join <- function(
       cli::cli_abort(
         paste0(
           cli::symbol$cross,
-          " Error: some rows in `x` are not matched - this check is due to
+          " Error: some rows in `x` and/or `y` are not matched - this check is due to
            argument `unmatched = 'error'` ")
       )
     }
