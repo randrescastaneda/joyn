@@ -1593,7 +1593,7 @@ test_that("INNER JOIN - unmatched error", {
             relationship = "many-to-many",
             by           = "id1=id2",
             unmatched    = "error") |>
-    expect_no_error()
+    expect_error()
 
   inner_join(x            = x1,
             y            = y1,

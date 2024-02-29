@@ -906,16 +906,19 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
   if (jn_type == "right") {
 
     if (length(grep("==?", by, value = TRUE)) != 0) {
+      x_1 <- copy(x)
+      y_1 <- copy(y)
+      output_1 <- copy(output)
 
       by_vars_names <- fix_by_vars(by = by,
-                                   x = x,
-                                   y = y)
+                                   x = x_1,
+                                   y = y_1)
 
       # Change var name in output - to use fsetdiff
-      setnames(output, by_vars_names$xby, by_vars_names$tempkey)
+      setnames(output_1, by_vars_names$xby, by_vars_names$tempkey)
 
-      x_keys <- qDT(x[, by_vars_names$tempkey])
-      output_keys <- qDT(output[ , by_vars_names$tempkey])
+      x_keys <- qDT(x_1[, by_vars_names$tempkey])
+      output_keys <- qDT(output_1[ , by_vars_names$tempkey])
 
       unmatched_keys <- fsetdiff(x_keys, output_keys)
 
@@ -939,16 +942,19 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
   else if (jn_type == "left") {
 
     if (length(grep("==?", by, value = TRUE)) != 0) {
+      x_1 <- copy(x)
+      y_1 <- copy(y)
+      output_1 <- copy(output)
 
       by_vars_names <- fix_by_vars(by = by,
-                                   x = x,
-                                   y = y)
+                                   x = x_1,
+                                   y = y_1)
 
       # Change var name in output - to use fsetdiff
-      setnames(output, by_vars_names$yby, by_vars_names$tempkey)
+      setnames(output_1, by_vars_names$xby, by_vars_names$tempkey)
 
-      y_keys <- qDT(y[, by_vars_names$tempkey])
-      output_keys <- qDT(output[ , by_vars_names$tempkey])
+      y_keys <- qDT(y_1[, by_vars_names$tempkey])
+      output_keys <- qDT(output_1[ , by_vars_names$tempkey])
 
       unmatched_keys <- fsetdiff(y_keys, output_keys)
 
@@ -972,22 +978,28 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
   else if (jn_type == "inner") {
 
     if (length(grep("==?", by, value = TRUE)) != 0) {
+      x_1 <- copy(x)
+      y_1 <- copy(y)
+      output_1 <- copy(output)
 
       by_vars_names <- fix_by_vars(by = by,
-                                   x = x,
-                                   y = y)
+                                   x = x_1,
+                                   y = y_1)
 
       # Change var name in output - to use fsetdiff
-      setnames(output, by_vars_names$xby, by_vars_names$tempkey)
+      setnames(output_1, by_vars_names$xby, by_vars_names$tempkey)
 
-      x_keys <- qDT(x[, by_vars_names$tempkey])
-      y_keys <- qDT(y[, by_vars_names$tempkey])
+      x_keys <- qDT(x_1[, by_vars_names$tempkey])
+      y_keys <- qDT(y_1[, by_vars_names$tempkey])
 
-      output_keys <- qDT(output[ , by_vars_names$tempkey])
+      output_keys <- qDT(output_1[ , by_vars_names$tempkey])
 
-      unmatched_keys_x <- fsetdiff(x_keys, output_keys)
-      unmatched_keys_y <- fsetdiff(y_keys, output_keys)
-      unmatched_keys   <- rowbind(unmatched_keys_x, unmatched_keys_y)
+      #unmatched_keys_x <- fsetdiff(x_keys, output_keys)
+      #unmatched_keys_y <- fsetdiff(y_keys, output_keys)
+      #unmatched_keys   <- rowbind(unmatched_keys_x, unmatched_keys_y)
+
+      unmatched_keys <- fsetdiff(x_keys, output_keys) |>
+                          rowbind(fsetdiff(y_keys, output_keys))
 
     } else {
 
@@ -995,9 +1007,12 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
       y_keys <- qDT(x[, by])
       output_keys <- qDT(output[ , by])
 
-      unmatched_keys_x <- fsetdiff(x_keys, output_keys)
-      unmatched_keys_y <- fsetdiff(y_keys, output_keys)
-      unmatched_keys   <- rowbind(unmatched_keys_x, unmatched_keys_y)
+      #unmatched_keys_x <- fsetdiff(x_keys, output_keys)
+      #unmatched_keys_y <- fsetdiff(y_keys, output_keys)
+      #unmatched_keys   <- rowbind(unmatched_keys_x, unmatched_keys_y)
+
+      unmatched_keys <- fsetdiff(x_keys, output_keys) |>
+        rowbind(fsetdiff(y_keys, output_keys))
 
     }
 
