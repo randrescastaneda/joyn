@@ -887,10 +887,13 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 
 } #close function
 
-## Detect unmatched keys - to be used in left and right joins ####
+## Detect unmatched keys - to be used in left, right and inner joins ####
 
 #' Detect unmatched keys
-#' @param join joined data table, output of either a left or a right join
+#' @param x data frame: left table
+#' @param y data frame: right table
+#' @param by character vector of variables to join by
+#' @param output joined data table, output of either a left, right or inner join
 #' @param jn_type character specifying type of join
 #' @return logical TRUE if unmatched keys are found, FALSE if no unmacthed keys are found
 #' @keywords internal
