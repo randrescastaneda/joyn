@@ -920,7 +920,11 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
       x_keys <- qDT(x_1[, by_vars_names$tempkey])
       output_keys <- qDT(output_1[ , by_vars_names$tempkey])
 
-      unmatched_keys <- fsetdiff(x_keys, output_keys)
+      common_cols <- intersect(names(x_keys), names(output_keys))
+
+      # Using lapply to make it work when length(by) is greater than 1
+      unmatched_keys <- as.data.table(lapply(common_cols,
+                               function(col) setdiff(x_keys[[col]], output_keys[[col]])))
 
     } else {
 
@@ -970,7 +974,11 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
       y_keys <- qDT(y_1[, by_vars_names$tempkey])
       output_keys <- qDT(output_1[ , by_vars_names$tempkey])
 
-      unmatched_keys <- fsetdiff(y_keys, output_keys)
+      common_cols <- intersect(names(y_keys), names(output_keys))
+
+      # Using lapply to make it work when length(by) is greater than 1
+      unmatched_keys <- as.data.table(lapply(common_cols,
+                                             function(col) setdiff(y_keys[[col]], output_keys[[col]])))
 
 
     } else {
@@ -1024,12 +1032,21 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
       output_keys <- qDT(output_1[ , by_vars_names$tempkey])
 
-      #unmatched_keys_x <- fsetdiff(x_keys, output_keys)
-      #unmatched_keys_y <- fsetdiff(y_keys, output_keys)
-      #unmatched_keys   <- rowbind(unmatched_keys_x, unmatched_keys_y)
+      common_cols_x <- intersect(names(x_keys), names(output_keys))
+      common_cols_y <- intersect(names(y_keys), names(output_keys))
 
-      unmatched_keys <- fsetdiff(x_keys, output_keys) |>
-                          rowbind(fsetdiff(y_keys, output_keys))
+
+      # Using lapply to make it work when length(by) is greater than 1
+      # check x
+      unmatched_keys_x <- as.data.table(lapply(common_cols_x,
+                                             function(col) setdiff(x_keys[[col]], output_keys[[col]])))
+
+      # check y
+      unmatched_keys_y <- as.data.table(lapply(common_cols_y,
+                                               function(col) setdiff(y_keys[[col]], output_keys[[col]])))
+      unmatched_keys <- rowbind(unmatched_keys_x,
+                                unmatched_keys_y,
+                                use.names = FALSE)
 
     } else {
 
