@@ -20,21 +20,17 @@ test_that("update_NAs works as expected", {
             match_type = "m:1",
             keep_common_vars = TRUE)
 
-  colnames(dt)[3] = "x"
-
   # Updating NAs in x with values from x.y
   res <- update_NAs(dt,
                     var       = "x",
                     reportvar = ".joyn")
 
   # Check replaced values
-  any(is.na(res$x)) |>
+  any(is.na(res$x.x)) |>
       expect_equal(FALSE)
 
-  values = dt[4:7, x.y]
-
-  res$x[4:7] |>
-      expect_equal(values)
+  res$x.x[4:7] |>
+      expect_equal(dt[4:7, x.y])
 })
 
 
