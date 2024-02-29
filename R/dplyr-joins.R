@@ -154,11 +154,11 @@ left_join <- function(
 
   if (unmatched == "error") {
 
-    if (unmatched_keys(x = x,
-                       y = y,
-                       by = by,
+    if (unmatched_keys(x         = x,
+                       y         = y,
+                       by        = by,
                        output    = lj,
-                       jn_type = "left")) {
+                       jn_type   = "left")) {
       cli::cli_abort(
       paste0(
         cli::symbol$cross,
@@ -924,10 +924,24 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
     } else {
 
-      x_keys <- qDT(x[, by])
-      output_keys <- qDT(output[ , by])
-      unmatched_keys <- fsetdiff(x_keys, output_keys)
+      # If joining by common var
+      if (length(by) == 1) {
+        x_keys <- qDT(x[, by])
+        output_keys <- qDT(output[ , by])
+        unmatched_keys <- fsetdiff(x_keys, output_keys)
+      }
 
+      # If joining by diff vars
+      else {
+        x_keys_1 <- qDT(x[, by[1]])
+        x_keys_2 <- qDT(x[, by[2]])
+
+        output_keys_1 <- qDT(output[ , by[1]])
+        output_keys_2 <- qDT(output[ , by[2]])
+        unmatched_keys <- fsetdiff(x_keys_1, output_keys_1) |>
+          rowbind(fsetdiff(x_keys_2, output_keys_2), use.names = FALSE)
+
+      }
 
     }
 
@@ -961,9 +975,25 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
     } else {
 
-      y_keys <- qDT(y[, by])
-      output_keys <- qDT(output[ , by])
-      unmatched_keys <- fsetdiff(y_keys, output_keys)
+      if (length(by) == 1){
+        y_keys <- qDT(y[, by])
+        output_keys <- qDT(output[ , by])
+        unmatched_keys <- fsetdiff(y_keys, output_keys)
+
+      }
+
+      # If joining by diff vars
+
+      else {
+        y_keys_1 <- qDT(y[, by[1]])
+        y_keys_2 <- qDT(y[, by[2]])
+
+        output_keys_1 <- qDT(output[ , by[1]])
+        output_keys_2 <- qDT(output[ , by[2]])
+        unmatched_keys <- fsetdiff(y_keys_1, output_keys_1) |>
+          rowbind(fsetdiff(y_keys_2, output_keys_2), use.names = FALSE)
+
+      }
 
     }
 
@@ -1003,16 +1033,34 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
     } else {
 
-      x_keys <- qDT(x[, by])
-      y_keys <- qDT(x[, by])
-      output_keys <- qDT(output[ , by])
+      if (length(by) == 1) {
+        x_keys <- qDT(x[, by])
+        y_keys <- qDT(x[, by])
+        output_keys <- qDT(output[ , by])
 
-      #unmatched_keys_x <- fsetdiff(x_keys, output_keys)
-      #unmatched_keys_y <- fsetdiff(y_keys, output_keys)
-      #unmatched_keys   <- rowbind(unmatched_keys_x, unmatched_keys_y)
+        unmatched_keys <- fsetdiff(x_keys, output_keys) |>
+          rowbind(fsetdiff(y_keys, output_keys), use.names = FALSE)
 
-      unmatched_keys <- fsetdiff(x_keys, output_keys) |>
-        rowbind(fsetdiff(y_keys, output_keys))
+      }
+
+      # If joining by diff vars
+      else {
+
+        y_keys_1 <- qDT(y[, by[1]])
+        y_keys_2 <- qDT(y[, by[2]])
+
+        x_keys_1 <- qDT(x[, by[1]])
+        x_keys_2 <- qDT(x[, by[2]])
+
+        output_keys_1 <- qDT(output[ , by[1]])
+        output_keys_2 <- qDT(output[ , by[2]])
+
+        unmatched_keys <- fsetdiff(y_keys_1, output_keys_1) |>
+          rowbind(fsetdiff(y_keys_2, output_keys_2), use.names = FALSE) |>
+          rowbind(fsetdiff(x_keys_1, output_keys_1), use.names = FALSE) |>
+          rowbind(fsetdiff(x_keys_2, output_keys_2), use.names = FALSE)
+
+      }
 
     }
 
