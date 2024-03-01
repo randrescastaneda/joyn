@@ -4,39 +4,39 @@ withr::local_options(joyn.verbose = FALSE)
 # TEST DATA --------------------------------------------------------------------
 #-------------------------------------------------------------------------------
 # options(joyn.verbose = FALSE)
-x1 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = 11:15)
-y1 = data.frame(id = c(1,2, 4),
+y1 = data.table(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
 
-x2 = data.frame(id = c(1, 4, 2, 3, NA),
+x2 = data.table(id = c(1, 4, 2, 3, NA),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
                 x  = c(16, 12, NA, NA, 15))
 
-y2 = data.frame(id = c(1, 2, 5, 6, 3),
+y2 = data.table(id = c(1, 2, 5, 6, 3),
                 yd = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:20))
 
-y3 <- data.frame(id = c("c","b", "c", "a"),
+y3 <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
-x3 <- data.frame(id  = c("c","b", "d"),
+x3 <- data.table(id  = c("c","b", "d"),
                  v   = 8:10,
                  foo = c(4,2, 7))
-x4 = data.frame(id1 = c(1, 1, 2, 3, 3),
+x4 = data.table(id1 = c(1, 1, 2, 3, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
                 x   = c(16, 12, NA, NA, 15))
 
-y4 = data.frame(id  = c(1, 2, 5, 6, 3),
+y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
-x5 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
+x5 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_, 4L),
                 x  = 11:16)
-y5 = data.frame(id = c(1,2, 4, NA_integer_, NA_integer_),
+y5 = data.table(id = c(1,2, 4, NA_integer_, NA_integer_),
                 y  = c(11L, 15L, 16, 17L, 18L))
 reportvar = getOption("joyn.reportvar")
 #-------------------------------------------------------------------------------
@@ -141,13 +141,14 @@ test_that("LEFT JOIN - Conducts left join", {
   )
 
   attr(jn_dplyr, "sorted") <- "id"
+  attr(jn, "sorted") <- "id"
   jn_dplyr <- roworder(jn_dplyr, "id", na.last = FALSE)
 
   rownames(jn) <- c(1:length(x1$id))
 
   expect_equal(
-    jn |> fselect(-get(reportvar)),
-    jn_dplyr,
+    jn |> fselect(-get(reportvar)) |> as.data.frame(),
+    jn_dplyr |> as.data.frame(),
     ignore_attr = ".internal.selfref"
   )
 
@@ -242,6 +243,7 @@ test_that("LEFT JOIN - incorrectly specified arguments give errors", {
     left_join(
       x = x1,
       y = y1,
+      by = "id",
       relationship = "many-to-one",
       unmatched = "error"
     )
@@ -741,17 +743,17 @@ test_that("RIGHT JOIN - unmatched error", {
 
  right_join(x            = x4,
            y            = y4,
-           relationship = "many-to-many",
+           relationship = "one-to-one",
            by           = c("id2", "x"),
            unmatched    = "error") |>
    expect_error()
 
  right_join(x            = x4,
            y            = y4,
-           relationship = "many-to-many",
+           relationship = "many-to-one",
            by           = c("id1=id2", "id2=id"),
            unmatched    = "error") |>
-   expect_no_error()
+   expect_error()
 
 
 })
@@ -1636,17 +1638,18 @@ test_that("INNER JOIN - unmatched error", {
 
   inner_join(x            = x4,
              y            = y4,
-             relationship = "many-to-many",
+             relationship = "one-to-one",
              by           = c("id2", "x"),
              unmatched    = "error") |>
     expect_error()
 
   inner_join(x            = x4,
              y            = y4,
-             relationship = "many-to-many",
+             relationship = "many-to-one",
              by           = c("id1=id2", "id2=id"),
              unmatched    = "error") |>
     expect_error()
 
 
 })
+
