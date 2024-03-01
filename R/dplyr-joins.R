@@ -60,7 +60,8 @@ left_join <- function(
     ...
 ) {
   clear_joynenv()
-
+x <- copy(x)
+y <- copy(y)
   # Argument checks ---------------------------------
   # get args
   na_matches <- match.arg(
@@ -114,14 +115,14 @@ left_join <- function(
 
   if (keep == TRUE) {
 
-    jn_type = "left"
-    modified_cols <- set_col_names(x      = x,
-                                   y      = y,
-                                   by     = by,
-                                   jn_type= jn_type,
-                                   suffix = suffix)
-    x = modified_cols$x
-    y = modified_cols$y
+    jn_type <- "left"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
 
@@ -151,22 +152,39 @@ left_join <- function(
   # Do filter ---------------------------------------
 
   ### unmatched == "error"
-
+  use_y_input <- process_by_vector(by = by, input = "right")
+  use_y_out   <- process_by_vector(by = by, input = "left")
+  data.table::setnames(y, new = use_y_out, old = use_y_input)
+  #return(list(y, use_y_out, lj))
   if (unmatched == "error") {
 
-    if (unmatched_keys(x         = x,
-                       y         = y,
-                       by        = by,
-                       output    = lj,
-                       jn_type   = "left")) {
+    if (new_unmatched_keys(x         = y,
+                           by        = use_y_out,
+                           out       = lj)) {
       cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: some rows in `y` are not matched - this check is due to
+        paste0(
+          cli::symbol$cross,
+          " Error: some rows in `y` are not matched - this check is due to
            argument `unmatched = 'error'` ")
       )
-      }
     }
+  }
+
+  # if (unmatched == "error") {
+  #
+  #   if (unmatched_keys(x         = x,
+  #                      y         = y,
+  #                      by        = by,
+  #                      output    = lj,
+  #                      jn_type   = "left")) {
+  #     cli::cli_abort(
+  #     paste0(
+  #       cli::symbol$cross,
+  #       " Error: some rows in `y` are not matched - this check is due to
+  #          argument `unmatched = 'error'` ")
+  #     )
+  #     }
+  #   }
 
   ### if dropreport = T
   if (dropreport == T) {
@@ -237,7 +255,8 @@ right_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
-
+  x <- copy(x)
+  y <- copy(y)
   clear_joynenv()
 
   # Argument checks ------------------------------------------------------------
@@ -291,14 +310,14 @@ right_join <- function(
   # Column names -----------------------------------
   if (keep == TRUE) {
 
-    jn_type = "right"
-    modified_cols <- set_col_names(x      = x,
-                                   y      = y,
-                                   by     = by,
-                                   jn_type= jn_type,
-                                   suffix = suffix)
-    x = modified_cols$x
-    y = modified_cols$y
+    jn_type <- "right"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
 
@@ -325,16 +344,14 @@ right_join <- function(
   )
 
 
-  # Do filter ---------------------------------------
+  # Unmatched keys ---------------------------------------
+  use_x_input <- process_by_vector(by = by, input = "left")
 
-  ### unmatched == "error"
   if (unmatched == "error") {
 
-    if (unmatched_keys(x = x,
-                       y = y,
-                       by = by,
-                       output    = rj,
-                       jn_type = "right")) {
+    if (new_unmatched_keys(x         = x,
+                           by        = use_x_input,
+                           out       = rj)) {
       cli::cli_abort(
         paste0(
           cli::symbol$cross,
@@ -343,6 +360,25 @@ right_join <- function(
       )
     }
   }
+
+
+
+  # ### unmatched == "error"
+  # if (unmatched == "error") {
+  #
+  #   if (unmatched_keys(x = x,
+  #                      y = y,
+  #                      by = by,
+  #                      output    = rj,
+  #                      jn_type = "right")) {
+  #     cli::cli_abort(
+  #       paste0(
+  #         cli::symbol$cross,
+  #         " Error: some rows in `x` are not matched - this check is due to
+  #          argument `unmatched = 'error'` ")
+  #     )
+  #   }
+  # }
 
   ### if dropreport = T
   if (dropreport == T) {
@@ -417,7 +453,8 @@ full_join <- function(
     ...
 ) {
   clear_joynenv()
-
+  x <- copy(x)
+  y <- copy(y)
   # Argument checks ---------------------------------
   # get args
   na_matches <- match.arg(
@@ -471,14 +508,14 @@ full_join <- function(
   # Column names -----------------------------------
   if (keep == TRUE) {
 
-    jn_type = "full"
-    modified_cols <- set_col_names(x      = x,
-                                   y      = y,
-                                   by     = by,
-                                   jn_type= jn_type,
-                                   suffix = suffix)
-    x = modified_cols$x
-    y = modified_cols$y
+    jn_type <- "full"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
 
@@ -593,7 +630,8 @@ inner_join <- function(
     ...
 ) {
   clear_joynenv()
-
+  x <- copy(x)
+  y <- copy(y)
   # Argument checks ---------------------------------
   # get args
   na_matches <- match.arg(
@@ -646,14 +684,14 @@ inner_join <- function(
   # Column names -----------------------------------
   if (keep == TRUE) {
 
-    jn_type = "inner"
-    modified_cols <- set_col_names(x      = x,
-                                   y      = y,
-                                   by     = by,
-                                   jn_type= jn_type,
-                                   suffix = suffix)
-    x = modified_cols$x
-    y = modified_cols$y
+    jn_type <- "inner"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
 
@@ -677,25 +715,66 @@ inner_join <- function(
   )
 
 
-  # Do filter ---------------------------------------
-
-  ### unmatched == "error"
-
+  # Unmatched keys ---------------------------------------
+  ### Left
+  use_y_input <- process_by_vector(by = by, input = "right")
+  use_y_out   <- process_by_vector(by = by, input = "left")
+  data.table::setnames(y, new = use_y_out, old = use_y_input)
+  #return(list(y, use_y_out, lj))
   if (unmatched == "error") {
 
-    if (unmatched_keys(x = x,
-                       y = y,
-                       by = by,
-                       output    = ij,
-                       jn_type = "inner")) {
+    if (new_unmatched_keys(x         = y,
+                           by        = use_y_out,
+                           out       = ij)) {
       cli::cli_abort(
         paste0(
           cli::symbol$cross,
-          " Error: some rows in `x` and/or `y` are not matched - this check is due to
+          " Error: some rows in `y` are not matched - this check is due to
            argument `unmatched = 'error'` ")
       )
     }
   }
+
+  ### Right
+  use_x_input <- process_by_vector(by = by, input = "left")
+
+  if (unmatched == "error") {
+
+    if (new_unmatched_keys(x         = x,
+                           by        = use_x_input,
+                           out       = ij)) {
+      cli::cli_abort(
+        paste0(
+          cli::symbol$cross,
+          " Error: some rows in `x` are not matched - this check is due to
+           argument `unmatched = 'error'` ")
+      )
+    }
+  }
+
+
+
+
+  #
+  #
+  #
+  # ### unmatched == "error"
+  #
+  # if (unmatched == "error") {
+  #
+  #   if (unmatched_keys(x = x,
+  #                      y = y,
+  #                      by = by,
+  #                      output    = ij,
+  #                      jn_type = "inner")) {
+  #     cli::cli_abort(
+  #       paste0(
+  #         cli::symbol$cross,
+  #         " Error: some rows in `x` and/or `y` are not matched - this check is due to
+  #          argument `unmatched = 'error'` ")
+  #     )
+  #   }
+  # }
 
   ### if dropreport = T
   if (dropreport == T) {
@@ -715,16 +794,9 @@ inner_join <- function(
 #' @param x data frame: left table
 #' @param y data frame: right table
 #' @param by character vector or variables to join by
-#' @param copy
-#' @param keep
-#' @param suffix
-#' @param na_matches
-#' @param multiple
-#' @param relationship
-#' @param reportvar
+#' @inheritParams left_join
 #' @return list of checked arguments to pass on to the main joyn function
 #' @keywords internal
-
 arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
                              relationship, reportvar) {
   # Check by
@@ -847,7 +919,6 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
 #' @param jn_type character specifying type of join
 #' @return list containing x and y
 #' @keywords internal
-
 set_col_names <- function(x, y, by, suffix, jn_type) {
 
   x_1 <- copy(x)
@@ -907,7 +978,6 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
 #' @param jn_type character specifying type of join
 #' @return logical TRUE if unmatched keys are found, FALSE if no unmacthed keys are found
 #' @keywords internal
-
 unmatched_keys <- function(x, y, by, output, jn_type) {
 
   unmatched <- FALSE
@@ -943,18 +1013,18 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
       # If joining by common var
       if (length(by) == 1) {
-        x_keys <- qDT(x[, by])
-        output_keys <- qDT(output[ , by])
+        x_keys <- qDT(x[, mget(by)])
+        output_keys <- qDT(output[ , mget(by)])
         unmatched_keys <- fsetdiff(x_keys, output_keys)
       }
 
       # If joining by diff vars
       else {
-        x_keys_1 <- qDT(x[, by[1]])
-        x_keys_2 <- qDT(x[, by[2]])
+        x_keys_1 <- qDT(x[, mget(by)[1]])
+        x_keys_2 <- qDT(x[, mget(by)[2]])
 
-        output_keys_1 <- qDT(output[ , by[1]])
-        output_keys_2 <- qDT(output[ , by[2]])
+        output_keys_1 <- qDT(output[ , mget(by)[1]])
+        output_keys_2 <- qDT(output[ , mget(by)[2]])
         unmatched_keys <- fsetdiff(x_keys_1, output_keys_1) |>
           rowbind(fsetdiff(x_keys_2, output_keys_2), use.names = FALSE)
 
@@ -962,7 +1032,7 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
     }
 
-    if(nrow(unmatched_keys) >0) {
+    if(nrow(unmatched_keys) > 0) {
       unmatched <- TRUE
       }
 
@@ -997,8 +1067,8 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
     } else {
 
       if (length(by) == 1){
-        y_keys <- qDT(y[, by])
-        output_keys <- qDT(output[ , by])
+        y_keys <- qDT(y[, mget(by)])
+        output_keys <- qDT(output[ , mget(by)])
         unmatched_keys <- fsetdiff(y_keys, output_keys)
 
       }
@@ -1006,11 +1076,11 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
       # If joining by diff vars
 
       else {
-        y_keys_1 <- qDT(y[, by[1]])
-        y_keys_2 <- qDT(y[, by[2]])
+        y_keys_1 <- qDT(y[, mget(by)[1]])
+        y_keys_2 <- qDT(y[, mget(by)[2]])
 
-        output_keys_1 <- qDT(output[ , by[1]])
-        output_keys_2 <- qDT(output[ , by[2]])
+        output_keys_1 <- qDT(output[ , mget(by)[1]])
+        output_keys_2 <- qDT(output[ , mget(by)[2]])
         unmatched_keys <- fsetdiff(y_keys_1, output_keys_1) |>
           rowbind(fsetdiff(y_keys_2, output_keys_2), use.names = FALSE)
 
@@ -1018,7 +1088,7 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
     }
 
-    if(nrow(unmatched_keys) >0) {
+    if (nrow(unmatched_keys) > 0) {
       unmatched <- TRUE
     }
 
@@ -1064,9 +1134,9 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
     } else {
 
       if (length(by) == 1) {
-        x_keys <- qDT(x[, by])
-        y_keys <- qDT(x[, by])
-        output_keys <- qDT(output[ , by])
+        x_keys <- qDT(x |> fselect(by))
+        y_keys <- qDT(x |> fselect(by))
+        output_keys <- qDT(output |> fselect(by))
 
         unmatched_keys <- fsetdiff(x_keys, output_keys) |>
           rowbind(fsetdiff(y_keys, output_keys), use.names = FALSE)
@@ -1076,14 +1146,14 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
       # If joining by diff vars
       else {
 
-        y_keys_1 <- qDT(y[, by[1]])
-        y_keys_2 <- qDT(y[, by[2]])
+        y_keys_1 <- qDT(y[, mget(by)[1]])
+        y_keys_2 <- qDT(y[, mget(by)[2]])
 
-        x_keys_1 <- qDT(x[, by[1]])
-        x_keys_2 <- qDT(x[, by[2]])
+        x_keys_1 <- qDT(x[, mget(by)[1]])
+        x_keys_2 <- qDT(x[, mget(by)[2]])
 
-        output_keys_1 <- qDT(output[ , by[1]])
-        output_keys_2 <- qDT(output[ , by[2]])
+        output_keys_1 <- qDT(output[ , mget(by)[1]])
+        output_keys_2 <- qDT(output[ , mget(by)[2]])
 
         unmatched_keys <- fsetdiff(y_keys_1, output_keys_1) |>
           rowbind(fsetdiff(y_keys_2, output_keys_2), use.names = FALSE) |>
@@ -1094,7 +1164,7 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
     }
 
-    if(nrow(unmatched_keys) >0) {
+    if (nrow(unmatched_keys) > 0) {
       unmatched <- TRUE
     }
 
@@ -1109,11 +1179,85 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
 
 
+#' Check for unmatched keys
+#'
+#' Gives TRUE if unmatched keys, FALSE if not.
+#' To replace [unmatched_keys]
+#'
+#' @param x input table to join
+#' @param out output of join
+#' @param by by argument, giving keys for join
+#'
+#' @return logical
+#' @keywords internal
+new_unmatched_keys <- function(x, out, by) {
+
+  check <- NULL
+
+  # Get all keys from `x`
+  x_keys <- x |>
+    fselect(by) |>
+    funique() |>
+    stats::na.omit() |>
+    as.data.table()
+
+  # get all unique key combos from `out`
+  out_keys <- out |>
+    fselect(by) |>
+    funique() |>
+    stats::na.omit() |>
+    as.data.table()
+
+  # check that unique key combos are equal
+  check <- (data.table::fsetdiff(x_keys,
+                                 out_keys) |>
+              nrow()) > 0  # if true  => more unique combos in x
+  #    false => same unique combos of keys
+  # same number unique keys =>
+  #     all matched keys
+  #     because output is result
+  #     of join
+  check
+}
 
 
 
-
-
+#' Process the `by` vector
+#'
+#' Gives as output a vector of names to be used for the specified
+#' table that correspond to the `by` argument for that table
+#'
+#' @param by character vector: by argument for join
+#' @param input character: either "left" or "right", indicating
+#' whether to give the left or right side of the equals ("=") if
+#' the equals is part of the `by` vector
+#'
+#' @return character vector
+#' @keywords internal
+#'
+#' @examples
+#' process_by_vector(by = c("An = foo", "example"), input = "left")
+process_by_vector <- function(by, input = c("left", "right")) {
+  input <- match.arg(input)
+  if (input == "left") {
+    out <- sapply(by, function(x) {
+      if (grepl("=", x)) {
+        trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", x))
+      } else {
+        x
+      }
+    })
+  } else if (input == "right") {
+    out <- sapply(by, function(x) {
+      if (grepl("=", x)) {
+        trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", x))
+      } else {
+        x
+      }
+    })
+  }
+  out |> unname()
+}
 
 
 
