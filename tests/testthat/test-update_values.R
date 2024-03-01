@@ -1,5 +1,12 @@
 # Test update_values function ####
 
+
+x1 <- data.table(id = c(1, 2, 5, 6),
+                 x = c(NA, NA, NA, NA))
+
+y1 <- data.table(id = c(1, 2, 3, 4),
+                 x = c(10, 20, 30, 40))
+
 x2 = data.table(id = c(1, 1, 2, 3, NA),
                  t = c(1L, 2L, 1L, 2L, NA_integer_),
                  x = c(16, 12, 10, NA, 15),
@@ -9,7 +16,21 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
                 yd = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(NA, 17:20))
-  # Joined data frame with values in x2 vars not updated
+
+df1 <- data.frame(
+  id = c(2, 3, 4, 5, 6, 7),
+  x = c(100, 200, NA, 400, NA, NA),
+  flag = c(TRUE, TRUE, FALSE, NA, TRUE, FALSE)
+)
+
+df2 <- data.frame(
+  id = c(1, 2, 3, 4, 6, 3),
+  x = c(10, 20, 30, 40, 50, 60),
+  category = c("A", "B", "C", "D", "E", "F")
+)
+
+
+# Testing the function when data tables are used
 dt = joyn(x2,
             y2,
             by               = "id",
@@ -32,11 +53,15 @@ test_that("update_values of one variable", {
   which(res$.joyn == 5) |>
     expect_equal(which( !is.na(dt$x.x) & dt$.joyn == 3 & !is.na(dt$x.y)))
 
+  # Check replaced values
+  res$x.x |>
+    fsubset(which(res$.joyn == 5)) |>
+    expect_equal(res$x.y |> fsubset(which(res$.joyn == 5))
+                   )
+
   # Check not updated values
   dt[is.na(x.x) | is.na(x.y) | !.joyn == 3] |> fselect((id:x.y)) |>
     expect_equal(res[!.joyn == 5,] |> fselect((id:x.y)))
-  #dt[!is.na(x.x) & .joyn == 4, x.x] |>
-    #expect_equal(dt[!is.na(x.y) & .joyn == 4, x.y])
 
   # Check x is not updated with NA values in x.y
   rows_y_na <- which(is.na(dt$x.y))
