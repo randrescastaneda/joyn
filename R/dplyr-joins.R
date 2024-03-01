@@ -1177,7 +1177,7 @@ unmatched_keys <- function(x, y, by, output, jn_type) {
 
 
 
-
+## New function for unmatched keys ####
 
 #' Check for unmatched keys
 #'
@@ -1197,15 +1197,11 @@ new_unmatched_keys <- function(x, out, by) {
   # Get all keys from `x`
   x_keys <- x |>
     fselect(by) |>
-    funique() |>
-    stats::na.omit() |>
     as.data.table()
 
   # get all unique key combos from `out`
   out_keys <- out |>
     fselect(by) |>
-    funique() |>
-    stats::na.omit() |>
     as.data.table()
 
   # check that unique key combos are equal
