@@ -212,12 +212,12 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
   # copy objects if data.tables
-  if (any(class(x) == "data.table")) {
+  #if (inherits(x, "data.table")) {
     x <- copy(x)
-  }
-  if (any(class(y) == "data.table")) {
+  #}
+  #if (inherits(4, "data.table")) {
     y <- copy(y)
-  }
+  #}
 
   ## X and Y -----------
   check_xy(x,y)
