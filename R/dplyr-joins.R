@@ -154,11 +154,23 @@ y <- copy(y)
   ### unmatched == "error"
   use_y_input <- process_by_vector(by = by, input = "right")
   use_y_out   <- process_by_vector(by = by, input = "left")
-  data.table::setnames(y, new = use_y_out, old = use_y_input)
   #return(list(y, use_y_out, lj))
   if (unmatched == "error") {
 
-    if (new_unmatched_keys(x         = y,
+    if (use_y_out %in% colnames(y)) {
+
+      store_msg(
+        type         = "warn",
+        warn         = paste(cli::symbol$warn, "\nWarning:"),
+        pale         = "\nUnmatched = error not active for this joyn -unmatched keys are not detected"
+      )
+
+    }
+
+    else {
+      data.table::setnames(y, new = use_y_out, old = use_y_input)
+
+      if (new_unmatched_keys(x         = y,
                            by        = use_y_out,
                            out       = lj)) {
       cli::cli_abort(
@@ -167,7 +179,10 @@ y <- copy(y)
           " Error: some rows in `y` are not matched - this check is due to
            argument `unmatched = 'error'` ")
       )
-    }
+      }
+      }
+
+
   }
 
   # if (unmatched == "error") {
@@ -723,34 +738,44 @@ inner_join <- function(
   #return(list(y, use_y_out, lj))
   if (unmatched == "error") {
 
-    if (new_unmatched_keys(x         = y,
-                           by        = use_y_out,
-                           out       = ij)) {
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
-           argument `unmatched = 'error'` ")
+    if (use_y_out %in% colnames(y)) {
+
+      store_msg(
+        type         = "warn",
+        warn         = paste(cli::symbol$warn, "\nWarning:"),
+        pale         = "\nUnmatched = error not active for this joyn -unmatched keys are not detected"
       )
-    }
-  }
 
-  ### Right
-  use_x_input <- process_by_vector(by = by, input = "left")
+    } else {
 
-  if (unmatched == "error") {
+      data.table::setnames(y, new = use_y_out, old = use_y_input)
+      use_x_input <- process_by_vector(by = by, input = "left")
 
-    if (new_unmatched_keys(x         = x,
-                           by        = use_x_input,
-                           out       = ij)) {
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `x` are not matched - this check is due to
+      if (new_unmatched_keys(x         = y,
+                             by        = use_y_out,
+                             out       = ij)) {
+        cli::cli_abort(
+          paste0(
+            cli::symbol$cross,
+            " Error: some rows in `y` are not matched - this check is due to
            argument `unmatched = 'error'` ")
-      )
+        )
+      }
+
+      if (new_unmatched_keys(x         = x,
+                             by        = use_x_input,
+                             out       = ij)) {
+        cli::cli_abort(
+          paste0(
+            cli::symbol$cross,
+            " Error: some rows in `x` are not matched - this check is due to
+           argument `unmatched = 'error'` ")
+        )
+      }
+
+    } # close else
+
     }
-  }
 
 
 
@@ -1199,12 +1224,12 @@ new_unmatched_keys <- function(x, out, by) {
     fselect(by) |>
     as.data.table()
 
-  # get all unique key combos from `out`
+  # get all key combos from `out`
   out_keys <- out |>
     fselect(by) |>
     as.data.table()
 
-  # check that unique key combos are equal
+  # check that key combos are equal
   check <- (data.table::fsetdiff(x_keys,
                                  out_keys) |>
               nrow()) > 0  # if true  => more unique combos in x
