@@ -21,6 +21,6 @@ Gives as output a vector of names to be used for the specified
 table that correspond to the \code{by} argument for that table
 }
 \examples{
-process_by_vector(by = c("An = foo", "example"), input = "left")
+joyn:::process_by_vector(by = c("An = foo", "example"), input = "left")
 }
 \keyword{internal}

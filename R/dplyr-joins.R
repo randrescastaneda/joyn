@@ -1282,7 +1282,7 @@ new_unmatched_keys <- function(x, out, by) {
 #' @keywords internal
 #'
 #' @examples
-#' process_by_vector(by = c("An = foo", "example"), input = "left")
+#' joyn:::process_by_vector(by = c("An = foo", "example"), input = "left")
 process_by_vector <- function(by, input = c("left", "right")) {
   input <- match.arg(input)
   if (input == "left") {
