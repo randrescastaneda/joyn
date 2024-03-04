@@ -413,7 +413,7 @@ test_that("LEFT JOIN - unmatched throws error", {
             relationship = "many-to-many",
             by           = c("id1=id2", "id2=id"),
             unmatched    = "error") |>
-    expect_error()
+    expect_no_error()
 
 
 
@@ -1648,7 +1648,6 @@ test_that("INNER JOIN - unmatched error", {
              by           = c("id1=id2", "id2=id"),
              unmatched    = "error") |>
     expect_error()
-
 
 })
 
