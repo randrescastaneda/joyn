@@ -2,25 +2,21 @@
 % Please edit documentation in R/dplyr-joins.R
 \name{unmatched_keys}
 \alias{unmatched_keys}
-\title{Detect unmatched keys}
+\title{Check for unmatched keys}
 \usage{
-unmatched_keys(x, y, by, output, jn_type)
+unmatched_keys(x, out, by)
 }
 \arguments{
-\item{x}{data frame: left table}
+\item{x}{input table to join}
 
-\item{y}{data frame: right table}
+\item{out}{output of join}
 
-\item{by}{character vector of variables to join by}
-
-\item{output}{joined data table, output of either a left, right or inner join}
-
-\item{jn_type}{character specifying type of join}
+\item{by}{by argument, giving keys for join}
 }
 \value{
-logical TRUE if unmatched keys are found, FALSE if no unmacthed keys are found
+logical
 }
 \description{
-Detect unmatched keys
+Gives TRUE if unmatched keys, FALSE if not.
 }
 \keyword{internal}
