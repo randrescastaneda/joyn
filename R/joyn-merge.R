@@ -211,13 +211,8 @@ joyn <- function(x,
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
-  # copy objects if data.tables
-  #if (inherits(x, "data.table")) {
     x <- copy(x)
-  #}
-  #if (inherits(4, "data.table")) {
     y <- copy(y)
-  #}
 
   ## X and Y -----------
   check_xy(x,y)
