@@ -411,6 +411,13 @@ test_that("LEFT JOIN - unmatched throws error", {
   left_join(x            = x4,
             y            = y4,
             relationship = "many-to-many",
+            by           = c("id2=id"),
+            unmatched    = "error") |>
+    expect_no_error()
+
+  left_join(x            = x4,
+            y            = y4,
+            relationship = "many-to-many",
             by           = c("id1=id2", "id2=id"),
             unmatched    = "error") |>
     expect_no_error()
