@@ -25,7 +25,8 @@ update_na_values <- function(dt,
   is_data_table <- inherits(dt, "data.table")
 
   # Add util vars ####
-  dt <- dt |>
+  dt_1 <- copy(dt)
+  dt_1 <- dt_1 |>
     ftransform(#use_util_reportvar = get(reportvar),
                # create variable for var.x and var.y is NA
                # TRUE if NOT NA
@@ -36,38 +37,38 @@ update_na_values <- function(dt,
 
   # reportvar = 4 >> update NA in x
   if (rep_NAs) {
-    dt[[reportvar]][
-      !dt$varx_na & dt$vary_na] <- 4L
+    dt_1[[reportvar]][
+      !dt_1$varx_na & dt_1$vary_na] <- 4L
   }
 
   # reportvar = 5 >> update value in x with value from y
   if (rep_values) {
-    dt[[reportvar]][
-      dt$varx_na & dt$vary_na] <- 5L
+    dt_1[[reportvar]][
+      dt_1$varx_na & dt_1$vary_na] <- 5L
     # FALSE => y is NA => not updated
-    dt[[reportvar]][
-      !dt$vary_na] <- 6L
+    dt_1[[reportvar]][
+      !dt_1$vary_na] <- 6L
   }
 
   # Replace values ####
 
     if (is_data_table) {
 
-      dt[get(reportvar) == 4,
+      dt_1[get(reportvar) == 4,
          (x.var) := mget(y.var)]
 
-      dt[get(reportvar) == 5,
+      dt_1[get(reportvar) == 5,
          eval(x.var) := mget(y.var)]
     } else {
 
-      to_replace <- which(dt[[reportvar]] %in% c(4, 5))
-      dt[to_replace, x.var] <- dt[to_replace, y.var]
+      to_replace <- which(dt_1[[reportvar]] %in% c(4, 5))
+      dt_1[to_replace, x.var] <- dt_1[to_replace, y.var]
     }
 
   # Remove util vars ####
-  get_vars(dt, c("varx_na", "vary_na")) <- NULL
+  get_vars(dt_1, c("varx_na", "vary_na")) <- NULL
 
   # Return
-  dt
+  dt_1
 
 }

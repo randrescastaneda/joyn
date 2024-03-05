@@ -393,29 +393,19 @@ joyn <- function(x,
   }
 
   #return(list(reportvar))
-  if (isTRUE(update_values) & length(var_use) > 0) {
+  if (isTRUE(update_values | update_NAs) & length(var_use) > 0 ) {
 
-    x <- update_values(
-      dt        = x,
-      var       = var_use,
-      reportvar = reportvar,
-      suffix    = suffixes
+    x <- update_na_values(
+                          dt         = x,
+                          var        = var_use,
+                          reportvar  = reportvar,
+                          suffix     = suffixes,
+                          rep_NAs    = update_NAs,
+                          rep_values = update_values
     )
 
   }
 
-
-  # update NAs
-  if (isTRUE(update_NAs) & length(var_use) > 0) {
-
-    x <- update_NAs(
-      dt        = x,
-      var       = var_use,
-      reportvar = reportvar,
-      suffix    = suffixes
-    )
-
-  }
 
   ### common vars ----------
 
