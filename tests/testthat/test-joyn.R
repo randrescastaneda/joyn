@@ -408,7 +408,7 @@ test_that("match types work", {
 
 test_that("Update NAs", {
   # update NAs in x variable form x
-  jn <- joyn(x2, # ZP: THIS GIVES ERROR
+  jn <- joyn(x2,
               y2,
               by = "id",
               update_NAs = TRUE,

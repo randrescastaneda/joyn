@@ -51,9 +51,7 @@
 #'   `TRUE`
 #' @param update_values logical: If TRUE, it will update all values of variables
 #'   in x with the actual of variables in y with the same name as the ones in x.
-#'   **NAs from y won't be used to update actual values in x**. Yet, by default,
-#'   NAs in x will be updated with values in y. To avoid this, make sure to set
-#'   `update_NAs = FALSE`
+#'   **NAs from y won't be used to update actual values in x**.
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
 #' @param keep_common_vars logical: If TRUE, it will keep the original variable
@@ -400,7 +398,7 @@ joyn <- function(x,
                           var        = var_use,
                           reportvar  = reportvar,
                           suffix     = suffixes,
-                          rep_NAs    = update_NAs,
+                          rep_NAs   = update_NAs,
                           rep_values = update_values
     )
 

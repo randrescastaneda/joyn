@@ -1,26 +1,33 @@
 #' Update NA and/or values
 #'
+#' The function updates NAs and/or values in the following way:
+#' * If only update_NAs is TRUE: update NAs of var in x with values of var y of the same name
+#' * If only update_values = TRUE: update all values, but NOT NAs, of var in x with values of var y of the same name.
+#' NAs from y are not used to update values in x . (e.g., if x.var = 10 and y.var = NA, x.var remains 10)
+#' * If both update_NAs and update_values are TRUE, both NAs and values in x are updated as described above
+#' * If both update_NAs and update_values are FALSE, no update
+#'
 #' @param dt  joined data.table
-#' @param var variable to be updated
-#' @param reportvar variable in `dt` that stores joyn's report
-#' @param update_NA
-#' @param update_values
+#' @param var variable(s) to be updated
+#' @inheritParams joyn
+#' @param rep_NAs inherited from joyn update_NAs
+#' @param rep_values inherited from joyn update_values
 #'
 #' @return data.table
-#' @noRd
+#' @keywords internal
 
 update_na_values <- function(dt,
                              var,
-                             reportvar = getOption("joyn.reportvar"),
-                             suffix    = getOption("joyn.suffixes"),
-                             rep_NAs = FALSE,
+                             reportvar  = getOption("joyn.reportvar"),
+                             suffixes     = getOption("joyn.suffixes"),
+                             rep_NAs    = FALSE,
                              rep_values = FALSE) {
 
-  if (is.null(suffix)) {
+  if (is.null(suffixes)) {
     suffix <- getOption("joyn.suffixes")
   }
-  x.var <- paste0(var, suffix[1])
-  y.var <- paste0(var, suffix[2])
+  x.var <- paste0(var, suffixes[1])
+  y.var <- paste0(var, suffixes[2])
 
   is_data_table <- inherits(dt, "data.table")
 
@@ -45,7 +52,7 @@ update_na_values <- function(dt,
   if (rep_values) {
     dt_1[[reportvar]][
       dt_1$varx_na & dt_1$vary_na] <- 5L
-    # FALSE => y is NA => not updated
+    # reportvar = 5 >> y is NA => do not update
     dt_1[[reportvar]][
       !dt_1$vary_na] <- 6L
   }
@@ -59,6 +66,7 @@ update_na_values <- function(dt,
 
       dt_1[get(reportvar) == 5,
          eval(x.var) := mget(y.var)]
+
     } else {
 
       to_replace <- which(dt_1[[reportvar]] %in% c(4, 5))

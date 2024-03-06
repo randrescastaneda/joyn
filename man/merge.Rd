@@ -86,9 +86,7 @@ ones in x. If FALSE, NA values won't be updated, even if \code{update_values} is
 \code{TRUE}}
     \item{\code{update_values}}{logical: If TRUE, it will update all values of variables
 in x with the actual of variables in y with the same name as the ones in x.
-\strong{NAs from y won't be used to update actual values in x}. Yet, by default,
-NAs in x will be updated with values in y. To avoid this, make sure to set
-\code{update_NAs = FALSE}}
+\strong{NAs from y won't be used to update actual values in x}.}
     \item{\code{verbose}}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
   }}

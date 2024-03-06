@@ -62,12 +62,14 @@ test_that("update_na_values -no update", {
 
 })
 
+
+
 test_that("update_na_values -update NAs only", {
 
-  res <- update_na_values(dt = dt,
-                          var       = "x",
-                          reportvar = ".joyn",
-                          rep_NAs = TRUE,
+  res <- update_na_values(dt         = dt,
+                          var        = "x",
+                          reportvar  = ".joyn",
+                          rep_NAs    = TRUE,
                           rep_values = FALSE)
 
   # check update of reportvar
@@ -86,10 +88,10 @@ test_that("update_na_values -update NAs only", {
 
 test_that("update_na_vals -update values of one var", {
 
-  res <- update_na_values(dt = dt,
-                          var       = "x",
-                          reportvar = ".joyn",
-                          rep_NAs = FALSE,
+  res <- update_na_values(dt         = dt,
+                          var        = "x",
+                          reportvar  = ".joyn",
+                          rep_NAs    = FALSE,
                           rep_values = TRUE)
 
   # check update_values
@@ -115,9 +117,9 @@ test_that("update_na_vals -update values of one var", {
 })
 
 test_that("update_na_values -update values of more than one var", {
-  res <- update_na_values(dt = dt,
-                          var       = c("x", "y"),
-                          reportvar = ".joyn",
+  res <- update_na_values(dt         = dt,
+                          var        = c("x", "y"),
+                          reportvar  = ".joyn",
                           rep_values = TRUE)
 
   # Check X
@@ -160,10 +162,10 @@ test_that("update_na_values -update values of more than one var", {
 })
 
 test_that("update_na_values -update both NAs and values", {
-  res <- update_na_values(dt = dt,
-                          var       = "x",
-                          reportvar = ".joyn",
-                          rep_NAs = TRUE,
+  res <- update_na_values(dt         = dt,
+                          var        = "x",
+                          reportvar  = ".joyn",
+                          rep_NAs    = TRUE,
                           rep_values = TRUE)
   res$x.x |>
     fsubset(which(res$.joyn == 5)) |>
@@ -180,6 +182,47 @@ test_that("update_na_values -update both NAs and values", {
     expect_equal(TRUE)
 })
 
+test_that("update_na_values -suffix input", {
+
+  dt = joyn(x2,
+            y2,
+            by               = "id",
+            match_type       = "m:1",
+            update_NAs       = FALSE,
+            update_values    = FALSE,
+            keep_common_vars = TRUE,
+            reporttype       = "numeric",
+            verbose          = FALSE,
+            suffixes = c("l", "r"))
+
+  update_na_values(dt        = dt,
+                   var       = "x",
+                   reportvar = ".joyn",
+                   rep_NAs   = TRUE) |> expect_error()
+
+})
+
+test_that("update_na_values -no reportvar in input", {
+
+  dt = joyn(x2,
+            y2,
+            by               = "id",
+            match_type       = "m:1",
+            update_NAs       = FALSE,
+            update_values    = FALSE,
+            keep_common_vars = TRUE,
+            verbose          = FALSE,
+            reportvar        = FALSE)
+
+  update_na_values(dt        = dt,
+                   var       = "x",
+                   reportvar = ".joyn",
+                   rep_NAs   = TRUE) |> expect_no_error()
+
+})
+
+
+
 # Testing the function with non data table input ####
 test_that("update_na_values -(df)no update", {
 
@@ -194,8 +237,9 @@ test_that("update_na_values -(df)no update", {
 test_that("update_na_values -(df) update NAs only", {
 
   res <- update_na_values(df,
-                          var       = "x",
-                          rep_NAs = TRUE)
+                          var        = "x",
+                          rep_NAs    = TRUE,
+                          rep_values = FALSE)
 
   # Check all NAs are replaced -with values from y
   to_replace <- res[which(!is.na(df$x.y)), "x.x"] #rows that are NAs in x.x but not NA in x.y
@@ -217,7 +261,7 @@ test_that("update_na_values -(df) update NAs only", {
 test_that("update_na_values -(df)update values only", {
 
   res <- update_na_values(df,
-                          var       = "x",
+                          var        = "x",
                           rep_values = TRUE)
 
   # Check all values are replaced -with values (and not NAs) from y
@@ -232,8 +276,8 @@ test_that("update_na_values -(df)update values only", {
 test_that("update_na_values -(df)update NAs and values", {
 
   res <- update_na_values(df,
-                          var       = "x",
-                          rep_NAs = TRUE,
+                          var        = "x",
+                          rep_NAs    = TRUE,
                           rep_values = TRUE)
   res[1:5, "x.x"] |>
     expect_equal(res[1:5, "x.y"])
@@ -250,8 +294,8 @@ test_that("update_na_values -(df)update NAs and values", {
 test_that("update_na_values -(df) update values only of multiple vars", {
 
   res <- update_na_values(df,
-                          var       = c("x", "t"),
-                          rep_NAs = FALSE,
+                          var        = c("x", "t"),
+                          rep_NAs    = FALSE,
                           rep_values = TRUE)
 
   # check NAs are not replaced
