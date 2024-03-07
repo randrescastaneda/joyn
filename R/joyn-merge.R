@@ -51,7 +51,9 @@
 #'   `TRUE`
 #' @param update_values logical: If TRUE, it will update all values of variables
 #'   in x with the actual of variables in y with the same name as the ones in x.
-#'   **NAs from y won't be used to update actual values in x**.
+#'   **NAs from y won't be used to update actual values in x**. Yet, by default,
+#'   NAs in x will be updated with values in y. To avoid this, make sure to set
+#'   `update_NAs = FALSE`
 #' @param verbose logical: if FALSE, it won't display any message (programmer's
 #'   option). Default is TRUE.
 #' @param keep_common_vars logical: If TRUE, it will keep the original variable
@@ -157,7 +159,7 @@ joyn <- function(x,
                                        "right", "using", "inner"),
                   y_vars_to_keep   = TRUE,
                   update_values    = FALSE,
-                  update_NAs       = FALSE,
+                  update_NAs       = update_values,
                   reportvar        = getOption("joyn.reportvar"),
                   reporttype       = c("character", "numeric"),
                   roll             = NULL,
@@ -254,6 +256,8 @@ joyn <- function(x,
   common_vars <- intersect(names(x), names(y))
   if (!(is.null(fixby$yby))) {
     common_vars <- common_vars[!(common_vars %in% fixby$yby)]
+    common_vars <- common_vars[!(common_vars %in% fixby$tempkey)]
+
   } else {
     common_vars <- common_vars[!(common_vars %in% fixby$by)]
   }
@@ -386,12 +390,12 @@ joyn <- function(x,
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var_use <- NULL
-  if (isTRUE(update_values) || isTRUE(update_NAs)) {
+  if (isTRUE(update_NAs) || isTRUE(update_values)) {
     var_use <- common_vars
   }
 
   #return(list(reportvar))
-  if (isTRUE(update_values | update_NAs) & length(var_use) > 0 ) {
+  if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
     x <- update_na_values(dt           = x,
                           var          = var_use,

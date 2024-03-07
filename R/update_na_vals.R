@@ -52,7 +52,7 @@ update_na_values <- function(dt,
   if (rep_values) {
     dt_1[[reportvar]][
       dt_1$varx_na & dt_1$vary_na] <- 5L
-    # reportvar = 5 >> y is NA => do not update
+    # reportvar = 6 >> y is NA => do not update
     dt_1[[reportvar]][
       !dt_1$vary_na] <- 6L
   }
