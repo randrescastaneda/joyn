@@ -157,7 +157,7 @@ joyn <- function(x,
                                        "right", "using", "inner"),
                   y_vars_to_keep   = TRUE,
                   update_values    = FALSE,
-                  update_NAs       = update_values,
+                  update_NAs       = FALSE,
                   reportvar        = getOption("joyn.reportvar"),
                   reporttype       = c("character", "numeric"),
                   roll             = NULL,
@@ -393,15 +393,13 @@ joyn <- function(x,
   #return(list(reportvar))
   if (isTRUE(update_values | update_NAs) & length(var_use) > 0 ) {
 
-    x <- update_na_values(
-                          dt         = x,
-                          var        = var_use,
-                          reportvar  = reportvar,
-                          suffix     = suffixes,
-                          rep_NAs   = update_NAs,
-                          rep_values = update_values
+    x <- update_na_values(dt           = x,
+                          var          = var_use,
+                          reportvar    = reportvar,
+                          suffixes     = suffixes,
+                          rep_NAs      = update_NAs,
+                          rep_values   = update_values
     )
-
   }
 
 
@@ -449,8 +447,6 @@ joyn <- function(x,
     # not necessary
     # setnames(y, fixby$tempkey, fixby$yby)
   }
-
-
 
 
   ## convert to characters if chosen -------

@@ -19,7 +19,7 @@
 update_na_values <- function(dt,
                              var,
                              reportvar  = getOption("joyn.reportvar"),
-                             suffixes     = getOption("joyn.suffixes"),
+                             suffixes   = getOption("joyn.suffixes"),
                              rep_NAs    = FALSE,
                              rep_values = FALSE) {
 
