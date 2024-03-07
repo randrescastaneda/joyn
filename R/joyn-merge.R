@@ -253,9 +253,9 @@ joyn <- function(x,
 
   common_vars <- intersect(names(x), names(y))
   if (!is.null(fixby$yby)) {
-    common_vars <- common_vars[!common_vars %in% fixby$yby]
+    common_vars <- common_vars[!(common_vars %in% fixby$yby)]
   } else {
-    common_vars <- common_vars[!common_vars %in% fixby$by]
+    common_vars <- common_vars[!(common_vars %in% fixby$by)]
   }
   ## treatment of y_vars_to_keep ------
   y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
