@@ -17,7 +17,7 @@
     options(op.joyn[toset])
   }
 
-  get_joyn_options()
+  #get_joyn_options()
 
   invisible()
 }
@@ -40,7 +40,9 @@ get_joyn_options_v0 <- function() {
   #cat(sprintf, c("%s: Default=%s, Current=%s\n", defaults, current_values))
 }
 
+# Display all possible option in joyn -their default values and current values
 get_joyn_options <- function(env = .joynenv) {
+
   # joyn options
   op.joyn <- env_get(env, "op.joyn")
 
@@ -48,15 +50,17 @@ get_joyn_options <- function(env = .joynenv) {
 
     default_value <- op.joyn[[opt]]
     current_value <- getOption(opt)
-    sprintf("%-20s default = %-20s current = %s",
+    sprintf("%-20s default = %-20s > current = %s",
             opt,
             toString(default_value),
             toString(current_value))
   },
   USE.NAMES = FALSE)
 
+
+  # print and display options
   cat("\nJoyn Options:\n")
-  cat("--------------------------------------------------\n")
+  cat("---------------------------------------------------------------------\n")
   cat(paste(options_info, collapse = "\n"), "\n")
-  cat("--------------------------------------------------\n")
+  cat("---------------------------------------------------------------------\n")
 }
