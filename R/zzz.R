@@ -23,6 +23,7 @@
 }
 
 get_joyn_options <- function() {
+  op.joyn <- env_get(.joynenv, "op.joyn")
 
   # Show default values of all possible options
   defaults <- lapply(names(op.joyn), function(opt) {
@@ -36,5 +37,18 @@ get_joyn_options <- function() {
 
   # See and print
   cat("Joyn Options:\n")
-  cat(do.call(sprintf, c("%s: Default=%s, Current=%s\n", defaults, current_values)))
+  #cat(sprintf, c("%s: Default=%s, Current=%s\n", defaults, current_values))
 }
+
+get_joyn_options_1 <- function() {
+  op.joyn <- env_get(.joynenv, "op.joyn")
+
+  options_info <- sapply(names(op.joyn), function(opt) {
+    default_value <- op.joyn[[opt]]
+    current_value <- getOption(opt)
+    sprintf("%s: default = %s, current = %s", opt, toString(default_value), toString(current_value))
+  }, USE.NAMES = FALSE)
+
+  cat("Joyn Options:\n", paste(options_info, collapse = "\n"), "\n")
+}
+
