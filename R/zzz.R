@@ -129,48 +129,12 @@ set_joyn_options <- function(...,
   withr::local_options(new_options)
 
   # Return new options invisibly as a list
+  if(length(new_options) == 0) {
+    new_options <- op.joyn
+  }
+
   invisible(new_options)
-  print(new_options)
+  #print(new_options)
 
   }
 
-
-
-
-
-
-##############################################
-# library(withr)
-#
-# set_options <- function(..., env = .joynenv) {
-#   options_list <- list(...)
-#
-#   if (length(options_list) %% 2 != 0) {
-#     stop("Each option must have a corresponding value.")
-#   }
-#
-#   option_names <- options_list[seq(1, length(options_list), by = 2)]
-#   option_values <- options_list[seq(2, length(options_list), by = 2)]
-#
-#   if (length(option_names) == 0) {
-#     stop("No options provided.")
-#   }
-#
-#   options_to_set <- setNames(option_values, option_names)
-#
-#   withr::local_options(
-#     rlang::env_poke(env, "op.joyn", options_to_set),
-#     expr = {
-#       cat("\nSetting Joyn Options:\n")
-#       cat("---------------------------------------------------------------------\n")
-#       cat(paste(names(options_to_set), "=", options_to_set, "\n"), "\n")
-#       cat("---------------------------------------------------------------------\n")
-#     }
-#   )
-# }
-#
-# # Example usage:
-# set_options(verbose = FALSE)
-#
-#
-#
