@@ -23,7 +23,18 @@
 }
 
 
-# MEMO (RT): ADD DESCRIPTION
+#' Get joyn options
+#'
+#' This function aims to display and store info on joyn options
+#'
+#' @param env environment, which is joyn environment by default
+#' @param display logical, if TRUE displays(print) info on joyn option name(s) and
+#'    corresponding default and current values
+#' @param option character or NULL. If character, name of a specific joyn option.
+#'    If NULL, all joyn options
+#' @return invisibly as a list
+#'
+#' @keywords internal
 get_joyn_options <- function(env = .joynenv,
                              display = TRUE,
                              option = NULL) {
