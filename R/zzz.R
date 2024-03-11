@@ -10,7 +10,7 @@
   )
   toset <- !(names(op.joyn) %in% names(op))
 
-  #store it in .joynenv
+  #store them in .joynenv
   rlang::env_bind(.joynenv, op.joyn = op.joyn)
 
   if(any(toset)) {
@@ -41,26 +41,40 @@ get_joyn_options_v0 <- function() {
 }
 
 # Display all possible option in joyn -their default values and current values
-get_joyn_options <- function(env = .joynenv) {
+get_joyn_options <- function(env = .joynenv,
+                             display = TRUE) {
 
   # joyn options
-  op.joyn <- env_get(env, "op.joyn")
+  op.joyn <- rlang::env_get(env, "op.joyn")
 
-  options_info <- sapply(names(op.joyn), function(opt) {
+  if (display == TRUE) {
+    options_info <- sapply(names(op.joyn), function(opt) {
 
-    default_value <- op.joyn[[opt]]
-    current_value <- getOption(opt)
-    sprintf("%-20s default = %-20s > current = %s",
-            opt,
-            toString(default_value),
-            toString(current_value))
-  },
-  USE.NAMES = FALSE)
+      default_value <- op.joyn[[opt]]
+      current_value <- getOption(opt)
+      sprintf("%-20s default = %-20s > current = %s",
+              opt,
+              toString(default_value),
+              toString(current_value))
+    },
+    USE.NAMES = FALSE)
 
 
-  # print and display options
-  cat("\nJoyn Options:\n")
-  cat("---------------------------------------------------------------------\n")
-  cat(paste(options_info, collapse = "\n"), "\n")
-  cat("---------------------------------------------------------------------\n")
+    # print and display options
+    cat("\nJoyn Options:\n")
+    cat("---------------------------------------------------------------------\n")
+    cat(paste(options_info, collapse = "\n"), "\n")
+    cat("---------------------------------------------------------------------\n")
+
+  }
+
+  invisible(op.joyn)
+}
+
+# Set joyn options localy
+set_joyn_options <- function(option,
+                             value) {
+  # check option name
+
+  # set value
 }
