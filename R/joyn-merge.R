@@ -255,9 +255,7 @@ joyn <- function(x,
 
   common_vars <- intersect(names(x), names(y))
   if (!(is.null(fixby$yby))) {
-    common_vars <- common_vars[!(common_vars %in% fixby$yby)]
-    common_vars <- common_vars[!(common_vars %in% fixby$tempkey)]
-
+    common_vars <- common_vars[!(common_vars %in% c(fixby$yby, fixby$tempkey))]
   } else {
     common_vars <- common_vars[!(common_vars %in% fixby$by)]
   }
@@ -383,9 +381,6 @@ joyn <- function(x,
       fsubset(get(reportvar)  >= 3)
   }
 
-
-
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -394,7 +389,6 @@ joyn <- function(x,
     var_use <- common_vars
   }
 
-  #return(list(reportvar))
   if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
     x <- update_na_values(dt           = x,
