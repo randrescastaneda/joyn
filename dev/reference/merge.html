@@ -107,10 +107,11 @@ If <code>y</code> has no key columns, this defaults to the key of <code>x</code>
 
 
 <dt>all.x</dt>
-<dd><p>logical; if <code>TRUE</code>, rows from <code>x</code> which have no matching row
-in <code>y</code> are included. These rows will have 'NA's in the columns that are usually
-filled with values from <code>y</code>. The default is <code>FALSE</code> so that only rows with
-data from both <code>x</code> and <code>y</code> are included in the output.</p></dd>
+<dd><p>logical; if <code>TRUE</code>, then extra rows will be added to the
+output, one for each row in <code>x</code> that has no matching row in <code>y</code>.
+These rows will have 'NA's in those columns that are usually filled with values
+from <code>y</code>.  The default is <code>FALSE</code>, so that only rows with data from both
+<code>x</code> and <code>y</code> are included in the output.</p></dd>
 
 
 <dt>all.y</dt>
@@ -118,12 +119,9 @@ data from both <code>x</code> and <code>y</code> are included in the output.</p>
 
 
 <dt>sort</dt>
-<dd><p>logical. If <code>TRUE</code> (default), the rows of the merged
-<code>data.table</code> are sorted by setting the key to the <code>by / by.x</code> columns. If
-<code>FALSE</code>, unlike base R's <code>merge</code> for which row order is unspecified, the
-row order in <code>x</code> is retained (including retaining the position of missings when
-<code>all.x=TRUE</code>), followed by <code>y</code> rows that don't match <code>x</code> (when <code>all.y=TRUE</code>)
-retaining the order those appear in <code>y</code>.</p></dd>
+<dd><p>logical. If <code>TRUE</code> (default), the merged <code>data.table</code> is
+sorted by setting the key to the <code>by / by.x</code> columns. If <code>FALSE</code>, the
+result is not sorted.</p></dd>
 
 
 <dt>suffixes</dt>
@@ -218,8 +216,8 @@ option). Default is TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> m:1</span><span style="color: #9E9E9E;"> join is</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">executed.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.003696</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.055369</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.00349</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.056409</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id t  x  y .joyn</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 1 11 11 x &amp; y</span>
@@ -251,8 +249,8 @@ option). Default is TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Supplied both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.002013</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.046515</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.00199</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.044822</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 <span class="r-in"><span><span class="co"># example with all = TRUE</span></span></span>
 <span class="r-in"><span><span class="va">jn</span> <span class="op">&lt;-</span> <span class="fu">joyn</span><span class="fu">::</span><span class="fu">merge</span><span class="op">(</span><span class="va">x2</span>,</span></span>
@@ -273,8 +271,8 @@ option). Default is TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Supplied both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.001977</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.051584</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.002088</span><span style="color: #9E9E9E;"> seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.043152</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 </code></pre></div>
     </div>

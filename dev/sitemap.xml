@@ -37,6 +37,9 @@
     <loc>https://randrescastaneda.github.io/joyn/dev/news/index.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/arguments_checks.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/check_by_vars.html</loc>
   </url>
   <url>
@@ -53,6 +56,9 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/check_reportvar.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/check_unmatched_keys.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/check_xy.html</loc>
@@ -115,10 +121,16 @@
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/possible_ids.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/process_by_vector.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/rename_to_valid.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/right_join.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/set_col_names.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/split_match_type.html</loc>
@@ -128,6 +140,9 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/style.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/unmatched_keys.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/update_na_values.html</loc>
