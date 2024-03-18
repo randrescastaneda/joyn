@@ -59,146 +59,54 @@ left_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  if (is.null(by)) {
-    by <- intersect(
-      names(x),
-      names(y)
-    )
-  }
-  if (copy == TRUE) {
-    store_msg(
-     type        = "warn",
-     warn        = paste(cli::symbol$warn, "\nWarning:"),
-     pale        = "\nargument",
-     bolded_pale = "  copy = TRUE",
-     pale        = "\nis not active in this version of",
-     bolded_pale = "  joyn"
- )
-  }
-  if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `suffix` must be character vector of length 2"
-      )
-    )
+  x <- copy(x)
+  y <- copy(y)
+  na_matches <- match.arg(na_matches,
+                          choices = c("na","never"))
+  multiple   <- match.arg(multiple,
+                          choices = c("all",
+                                      "any",
+                                      "first",
+                                      "last"))
+  unmatched  <- match.arg(unmatched,
+                          choices = c("drop",
+                                      "error"))
 
-  }
-  if (!is.null(keep) & !is.logical(keep)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
-      )
-    )
-  }
-  if (is.null(keep)) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn,"\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
-    )
-    keep <- FALSE
-  }
-
-  na_matches <- match.arg(na_matches)
-  multiple   <- match.arg(
-    multiple,
-    choices = c(
-      "all",
-      "any",
-      "first",
-      "last"
-    )
-  )
-
-  if (multiple == "any") {
-    multiple <- "first"
-  }
-
-  unmatched  <- match.arg(
-    unmatched,
-    choices = c(
-      "drop",
-      "error"
-    )
-  )
-
-  if (is.null(relationship)) {relationship <- "one-to-one"}
-
-  relationship <- switch(
-    relationship,
-    "one-to-one"   = "1:1",
-    "one-to-many"  = "1:m",
-    "many-to-one"  = "m:1",
-    "many-to-many" = "m:m"
-  )
-  if (
-    relationship %in% c("1:m", "m:m") &
-    !multiple == "all"
-  ) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
-      )
-    )
-  }
-  na_matches <- match.arg(
-    na_matches,
-    choices = c(
-      "na",
-      "never"
-    )
-  )
-  if (na_matches == "never") {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "  na_matches = 'na'"
-    )
-  }
-  if (is.null(reportvar) || isFALSE(reportvar)) {
-    dropreport <- TRUE
-    reportvar <- getOption("joyn.reportvar")
-  } else{
-    dropreport <- FALSE
-  }
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
+                                 copy          = copy,
+                                 keep          = keep,
+                                 suffix        = suffix,
+                                 na_matches    = na_matches,
+                                 multiple      = multiple,
+                                 relationship  = relationship,
+                                 reportvar     = reportvar)
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  #xnames <- names(x)
-  #ynames <- names(y)
   if (keep == TRUE) {
-
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
-    } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    ykeys <- y |>
-      fselect(by_y_names)
-    names(ykeys) <- paste0(names(ykeys), suffix[2])
-    y <- cbind(
-      ykeys,
-      y
-    )
+    jn_type <- "left"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
-
-  # left join checks --------------------------------
-
-
-  # Do left join ------------------------------------
+  # Execute left join------------------------------------
   lj <- joyn(
     x                = x,
     y                = y,
@@ -211,43 +119,21 @@ left_join <- function(
     update_NAs       = update_NAs,
     reportvar        = reportvar,
     reporttype       = reporttype,
-    keep_common_vars = T,
+    keep_common_vars = TRUE,
     sort             = sort,
     verbose          = verbose,
     ...
   )
 
-
-  # Do filter ---------------------------------------
-
-  ### unmatched == "error"
+  # Unmatched Keys ---------------------------------------
   if (unmatched == "error") {
-    if (any(
-      lj[
-        ,
-        get(names(lj)[length(lj)])
-      ] == "x"
-    ) |
-    any(
-      lj[
-        ,
-        get(names(lj)[length(lj)])
-      ] == 1
-    )
-    ) {
-
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-        )
-      )
-
-    }
-
+    check_unmatched_keys(x       = x,
+                         y       = y,
+                         out     = lj,
+                         by      = by,
+                         jn_type = "left")
   }
-  ### if dropreport = T
+  # Should report be kept---------------------------------
   if (dropreport == T) {
     get_vars(lj, reportvar) <- NULL
   }
@@ -256,7 +142,9 @@ left_join <- function(
   lj
 }
 
-
+#-------------------------------------------------------------------------------
+# RIGHT JOIN --------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 #' Right join two data frames
 #'
@@ -318,136 +206,50 @@ right_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  if (is.null(by)) {
-    by <- intersect(
-      names(x),
-      names(y)
-    )
-  }
-  if (copy == TRUE) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  argument",
-      bolded_pale = "  copy = TRUE",
-      pale        = " is not active in this version of joyn"
-    )
-  }
-  if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `suffix` must be character vector of length 2"
-      )
-    )
+  x <- copy(x)
+  y <- copy(y)
+  na_matches <- match.arg(na_matches,
+                          choices = c("na","never"))
+  multiple   <- match.arg(multiple,
+                          choices = c("all",
+                                      "any",
+                                      "first",
+                                      "last"))
+  unmatched  <- match.arg(unmatched,
+                          choices = c("drop",
+                                      "error"))
 
-  }
-  if (!is.null(keep) & !is.logical(keep)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
-      )
-    )
-  }
-  if (is.null(keep)) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
-    )
-    keep <- FALSE
-  }
-
-  na_matches <- match.arg(na_matches)
-  multiple   <- match.arg(
-    multiple,
-    choices = c(
-      "all",
-      "any",
-      "first",
-      "last"
-    )
-  )
-  if (multiple == "any") {
-    multiple <- "first"
-  }
-  unmatched  <- match.arg(
-    unmatched,
-    choices = c(
-      "drop",
-      "error"
-    )
-  )
-  if (is.null(relationship)) {relationship <- "one-to-one"}
-  relationship <- switch(
-    relationship,
-    "one-to-one"   = "1:1",
-    "one-to-many"  = "1:m",
-    "many-to-one"  = "m:1",
-    "many-to-many" = "m:m"
-  )
-  if (
-    relationship %in% c("1:m", "m:m") &
-    !multiple == "all"
-  ) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
-      )
-    )
-  }
-  na_matches <- match.arg(
-    na_matches,
-    choices = c(
-      "na",
-      "never"
-    )
-  )
-  if (na_matches == "never") {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "  na_matches = 'na'"
-    )
-  }
-  if (is.null(reportvar) || isFALSE(reportvar)) {
-    dropreport <- TRUE
-    reportvar <- getOption("joyn.reportvar")
-  } else{
-    dropreport <- FALSE
-  }
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
+                                 copy          = copy,
+                                 keep          = keep,
+                                 suffix        = suffix,
+                                 na_matches    = na_matches,
+                                 multiple      = multiple,
+                                 relationship  = relationship,
+                                 reportvar     = reportvar)
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
   if (keep == TRUE) {
-
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_x_names <- fix_by_vars(by = by, x_1, y_1)$xby
-    } else {
-      by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    xkeys <- x |>
-      fselect(by_x_names)
-    names(xkeys) <- paste0(names(xkeys), suffix[1])
-    x <- cbind(
-      xkeys,
-      x
-    )
+    jn_type <- "right"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
-
-  # right join checks --------------------------------
-
-
-  # Do right join ------------------------------------
+  # Execute right join ------------------------------------
   rj <- joyn(
     x                = x,
     y                = y,
@@ -460,43 +262,22 @@ right_join <- function(
     update_NAs       = update_NAs,
     reportvar        = reportvar,
     reporttype       = reporttype,
-    keep_common_vars = T,
+    keep_common_vars = TRUE,
     sort             = sort,
     verbose          = verbose,
     ...
   )
 
-
-  # Do filter ---------------------------------------
-
-  ### unmatched == "error"
+  # Unmatched Keys ---------------------------------------
   if (unmatched == "error") {
-    if (any(
-      rj[
-        ,
-        get(names(rj)[length(rj)])
-      ] == "y"
-    ) |
-    any(
-      rj[
-        ,
-        get(names(rj)[length(rj)])
-      ] == 2
-    )
-    ) {
-
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-        )
-      )
-
-    }
-
+    check_unmatched_keys(x       = x,
+                         y       = y,
+                         out     = rj,
+                         by      = by,
+                         jn_type = "right")
   }
-  ### if dropreport = T
+
+  # Should reportvar be kept
   if (dropreport == T) {
     get_vars(rj, reportvar) <- NULL
   }
@@ -507,16 +288,9 @@ right_join <- function(
 }
 
 
-
-
-
-
 #-------------------------------------------------------------------------------
 # FULL JOIN --------------------------------------------------------------------
 #-------------------------------------------------------------------------------
-
-
-
 
 
 #' Full join two data frames
@@ -575,136 +349,55 @@ full_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  if (is.null(by)) {
-    by <- intersect(
-      names(x),
-      names(y)
-    )
-  }
-  if (copy == TRUE) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn,  "\nWarning:"),
-      pale        = "  argument",
-      bolded_pale = "  copy = TRUE",
-      pale        =  " is not active in this version of joyn"
-    )
-  }
-  if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `suffix` must be character vector of length 2"
-      )
-    )
+  x <- copy(x)
+  y <- copy(y)
+  na_matches <- match.arg(na_matches,
+                          choices = c("na","never"))
+  multiple   <- match.arg(multiple,
+                          choices = c("all",
+                                      "any",
+                                      "first",
+                                      "last"))
+  unmatched  <- match.arg(unmatched,
+                          choices = c("drop",
+                                      "error"))
 
-  }
-  if (!is.null(keep) & !is.logical(keep)) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: argument `keep` should be one of NULL, TRUE, or FALSE"
-      )
-    )
-  }
-  if (is.null(keep)) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x. Equivalent to `keep = FALSE`"
-    )
-    keep <- FALSE
-  }
-
-  na_matches <- match.arg(na_matches)
-  multiple   <- match.arg(
-    multiple,
-    choices = c(
-      "all",
-      "any",
-      "first",
-      "last"
-    )
-  )
-  if (multiple == "any") {
-    multiple <- "first"
-  }
-  unmatched  <- match.arg(
-    unmatched,
-    choices = c(
-      "drop",
-      "error"
-    )
-  )
-  if (is.null(relationship)) {relationship <- "one-to-one"}
-  relationship <- switch(
-    relationship,
-    "one-to-one"   = "1:1",
-    "one-to-many"  = "1:m",
-    "many-to-one"  = "m:1",
-    "many-to-many" = "m:m"
-  )
-  if (
-    relationship %in% c("1:m", "m:m") &
-    !multiple == "all"
-  ) {
-    cli::cli_abort(
-      paste0(
-        cli::symbol$cross,
-        " Error: if `relationship` is 1:m or m:m then `multiple` should be 'all' "
-      )
-    )
-  }
-  na_matches <- match.arg(
-    na_matches,
-    choices = c(
-      "na",
-      "never"
-    )
-  )
-  if (na_matches == "never") {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "na_matches = 'na'"
-    )
-  }
-  if (is.null(reportvar) || isFALSE(reportvar)) {
-    dropreport <- TRUE
-    reportvar <- getOption("joyn.reportvar")
-  } else{
-    dropreport <- FALSE
-  }
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
+                                 copy          = copy,
+                                 keep          = keep,
+                                 suffix        = suffix,
+                                 na_matches    = na_matches,
+                                 multiple      = multiple,
+                                 relationship  = relationship,
+                                 reportvar     = reportvar)
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
   if (keep == TRUE) {
-
-    x_1 <- copy(x)
-    y_1 <- copy(y)
-
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
-    } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
-    }
-
-    ykeys <- y |>
-      fselect(by_y_names)
-    names(ykeys) <- paste0(names(ykeys), suffix[2])
-    y <- cbind(
-      ykeys,
-      y
-    )
+    jn_type <- "full"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
   }
 
 
-  # Do full join ------------------------------------
+  # Execute full join ------------------------------------
   fj <- joyn(
     x                = x,
     y                = y,
@@ -717,43 +410,28 @@ full_join <- function(
     update_NAs       = update_NAs,
     reportvar        = reportvar,
     reporttype       = reporttype,
-    keep_common_vars = T,
+    keep_common_vars = TRUE,
     sort             = sort,
     verbose          = verbose,
     ...
   )
 
-
-  # Do filter ---------------------------------------
-
-  ### unmatched == "error"
+  # Unmatched Keys----------------------------------------
   if (unmatched == "error") {
-    if (any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == "x"
-    ) |
-    any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == 1
+
+    # Store warning message
+    store_msg(
+      type        = "warn",
+      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      pale        = "\nargument",
+      bolded_pale = "  warning = error",
+      pale        = "\nis not active in this type of",
+      bolded_pale = "  joyn"
     )
-    ) {
-
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-        )
-      )
-
-    }
 
   }
-  ### if dropreport = T
+
+  # Should reportvar be kept
   if (dropreport == T) {
     get_vars(fj, reportvar) <- NULL
   }
@@ -764,7 +442,9 @@ full_join <- function(
 }
 
 
-
+#-------------------------------------------------------------------------------
+# INNER JOIN --------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 
 #' Inner join two data frames
@@ -823,24 +503,125 @@ inner_join <- function(
     verbose          = getOption("joyn.verbose"),
     ...
 ) {
+
   clear_joynenv()
 
   # Argument checks ---------------------------------
+  x <- copy(x)
+  y <- copy(y)
+  na_matches <- match.arg(na_matches,
+                          choices = c("na","never"))
+  multiple   <- match.arg(multiple,
+                          choices = c("all",
+                                      "any",
+                                      "first",
+                                      "last"))
+  unmatched  <- match.arg(unmatched,
+                          choices = c("drop",
+                                      "error"))
+
+  args_check <- arguments_checks(x             = x,
+                                 y             = y,
+                                 by            = by,
+                                 copy          = copy,
+                                 keep          = keep,
+                                 suffix        = suffix,
+                                 na_matches    = na_matches,
+                                 multiple      = multiple,
+                                 relationship  = relationship,
+                                 reportvar     = reportvar)
+  by           <- args_check$by
+  keep         <- args_check$keep
+  na_matches   <- args_check$na_matches
+  multiple     <- args_check$multiple
+  relationship <- args_check$relationship
+  reportvar    <- args_check$reportvar
+  dropreport   <- args_check$dropreport
+
+  # Column names -----------------------------------
+  if (keep == TRUE) {
+    jn_type <- "inner"
+    modified_cols <- set_col_names(x       = x,
+                                   y       = y,
+                                   by      = by,
+                                   jn_type = jn_type,
+                                   suffix  = suffix)
+    x <- modified_cols$x
+    y <- modified_cols$y
+  }
+
+  # Execute inner join ------------------------------------
+  ij <- joyn(
+    x                = x,
+    y                = y,
+    by               = by,
+    match_type       = relationship,
+    keep             = "inner",
+    y_vars_to_keep   = y_vars_to_keep,
+    suffixes         = suffix,
+    update_values    = update_values,
+    update_NAs       = update_NAs,
+    reportvar        = reportvar,
+    reporttype       = reporttype,
+    keep_common_vars = TRUE,
+    sort             = sort,
+    verbose          = verbose,
+    ...
+  )
+
+  # Unmatched Keys ---------------------------------------
+  if (unmatched == "error") {
+    check_unmatched_keys(x       = x,
+                         y       = y,
+                         out     = ij,
+                         by      = by,
+                         jn_type = "inner")
+  }
+
+  ### if dropreport = T
+  if (dropreport == T) {
+    get_vars(ij, reportvar) <- NULL
+  }
+
+  # Return
+  ij
+
+}
+
+
+# HELPER FUNCTIONS -------------------------------------------------------------
+## Arguments checks ####
+
+#' Perform necessary preliminary checks on arguments that are passed to joyn
+#' @param x data frame: left table
+#' @param y data frame: right table
+#' @param by character vector or variables to join by
+#' @inheritParams left_join
+#' @return list of checked arguments to pass on to the main joyn function
+#' @keywords internal
+arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
+                             relationship, reportvar) {
+  # Check by
   if (is.null(by)) {
     by <- intersect(
       names(x),
       names(y)
     )
   }
+
+  # Check copy
   if (copy == TRUE) {
     store_msg(
       type        = "warn",
       warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  argument",
+      pale        = "\nargument",
       bolded_pale = "  copy = TRUE",
-      pale        = " is not active in this version of joyn"
+      pale        = "\nis not active in this version of",
+      bolded_pale = "  joyn"
     )
   }
+
+  # Check suffix
   if (is.null(suffix) || !length(suffix) == 2 || !is.character(suffix)) {
     cli::cli_abort(
       paste0(
@@ -848,8 +629,9 @@ inner_join <- function(
         " Error: argument `suffix` must be character vector of length 2"
       )
     )
-
   }
+
+  # Check keep
   if (!is.null(keep) & !is.logical(keep)) {
     cli::cli_abort(
       paste0(
@@ -861,7 +643,7 @@ inner_join <- function(
   if (is.null(keep)) {
     store_msg(
       type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
+      warn        = paste(cli::symbol$warn,"\nWarning:"),
       pale        = "  joyn does not currently allow inequality joins, so",
       bolded_pale = "  keep = NULL",
       pale        = "  will retain only keys in x"
@@ -869,27 +651,14 @@ inner_join <- function(
     keep <- FALSE
   }
 
-  na_matches <- match.arg(na_matches)
-  multiple   <- match.arg(
-    multiple,
-    choices = c(
-      "all",
-      "any",
-      "first",
-      "last"
-    )
-  )
+  # Check multiple
   if (multiple == "any") {
     multiple <- "first"
   }
-  unmatched  <- match.arg(
-    unmatched,
-    choices = c(
-      "drop",
-      "error"
-    )
-  )
+
+  # Check relationship
   if (is.null(relationship)) {relationship <- "one-to-one"}
+
   relationship <- switch(
     relationship,
     "one-to-one"   = "1:1",
@@ -908,13 +677,8 @@ inner_join <- function(
       )
     )
   }
-  na_matches <- match.arg(
-    na_matches,
-    choices = c(
-      "na",
-      "never"
-    )
-  )
+
+  # Check na_matches
   if (na_matches == "never") {
     store_msg(
       type        = "warn",
@@ -923,6 +687,8 @@ inner_join <- function(
       bolded_pale = "  na_matches = 'na'"
     )
   }
+
+  # Check reportvar
   if (is.null(reportvar) || isFALSE(reportvar)) {
     dropreport <- TRUE
     reportvar <- getOption("joyn.reportvar")
@@ -930,17 +696,63 @@ inner_join <- function(
     dropreport <- FALSE
   }
 
-  # Column names -----------------------------------
-  if (keep == TRUE) {
+  out <- list(by           = by,
+              copy         = copy,
+              suffix       = suffix,
+              keep         = keep,
+              na_matches   = na_matches,
+              multiple     = multiple,
+              relationship = relationship,
+              reportvar    = reportvar,
+              dropreport   = dropreport)
 
-    x_1 <- copy(x)
-    y_1 <- copy(y)
+  return(out)
 
-    if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
-    } else {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$by
+}
+
+
+#' Add x key var and y key var (with suffixes) to x and y
+#' -when joining by different variables and keep is true
+#' @param x data table: left table
+#' @param y data table: right table
+#' @param by character vector of variables to join by
+#' @param suffix character(2) specifying the suffixes to be used for making non-by column names unique
+#' @param jn_type character specifying type of join
+#' @return list containing x and y
+#' @keywords internal
+set_col_names <- function(x, y, by, suffix, jn_type) {
+
+  x_1 <- copy(x)
+  y_1 <- copy(y)
+
+  # If joining by different variables
+  if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
+
+    if (jn_type == "right") {
+      by_x_names <- fix_by_vars(by = by, x_1, y_1)$xby
     }
+
+    else if (jn_type == "left" | jn_type == "full" | jn_type == "inner") {
+      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
+    }
+
+  }
+
+  # If joining by common var
+  else {
+    by_y_names <- by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
+    }
+
+  # Add key vars with suffix to x and y
+  if (jn_type == "right") {
+    xkeys <- x |>
+      fselect(by_x_names)
+    names(xkeys) <- paste0(names(xkeys), suffix[1])
+    x <- cbind(
+      xkeys,
+      x
+    )
+  } else if (jn_type == "left" | jn_type == "full" | jn_type == "inner")  {
 
     ykeys <- y |>
       fselect(by_y_names)
@@ -949,84 +761,173 @@ inner_join <- function(
       ykeys,
       y
     )
-  }
 
+  } #close else
 
-  # Do inner join ------------------------------------
-  fj <- joyn(
-    x                = x,
-    y                = y,
-    by               = by,
-    match_type       = relationship,
-    keep             = "inner",
-    y_vars_to_keep   = y_vars_to_keep,
-    suffixes         = suffix,
-    update_values    = update_values,
-    update_NAs       = update_NAs,
-    reportvar        = reportvar,
-    reporttype       = reporttype,
-    keep_common_vars = T,
-    sort             = sort,
-    verbose          = verbose,
-    ...
-  )
-
-
-  # Do filter ---------------------------------------
-
-  ### unmatched == "error"
-  if (unmatched == "error") {
-    if (any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == "x"
-    ) |
-    any(
-      fj[
-        ,
-        get(names(fj)[length(fj)])
-      ] == 1
-    )
-    ) {
-
-      cli::cli_abort(
-        paste0(
-          cli::symbol$cross,
-          " Error: some rows in `y` are not matched - this check is due to
-           argument `unmatched = 'error'` "
-        )
-      )
-
-    }
-
-  }
-  ### if dropreport = T
-  if (dropreport == T) {
-    get_vars(fj, reportvar) <- NULL
-  }
-
-  # Return
-  fj
+  return(list(x = x,
+              y = y))
 
 }
 
 
 
+#' Conduct all unmatched keys checks and return error if necessary
+#'
+#' @param x left table
+#' @param y right table
+#' @param out output from join
+#' @param by character vector of keys that x and y are joined by
+#' @param jn_type character: "left", "right", or "inner"
+#'
+#' @return error message
+#' @keywords internal
+check_unmatched_keys <- function(x, y, out, by, jn_type) {
+
+  # Left table --------------------------------------------------------
+  if (jn_type == "left" | jn_type == "inner") {
+
+    use_y_input <- process_by_vector(by = by, input = "right")
+    use_y_out   <- process_by_vector(by = by, input = "left")
+
+      if (length(grep("==?", by, value = TRUE)) != 0) {
+
+        if (any(use_y_out %in% colnames(y))) {
+
+          store_msg(
+            type         = "warn",
+            warn         = paste(cli::symbol$warn, "\nWarning:"),
+            pale         = "\nUnmatched = error not active for this joyn -unmatched keys are not detected"
+          )
+        }
+
+        else {
+          data.table::setnames(y, new = use_y_out, old = use_y_input)
+
+          if (unmatched_keys(x         = y,
+                                 by        = use_y_out,
+                                 out       = out)) {
+            cli::cli_abort(
+              paste0(
+                cli::symbol$cross,
+                " Error: some rows in `y` are not matched - this check is due to
+           argument `unmatched = 'error'` ")
+            )
+          }
+        }
+      }
+
+      else {
+        if (unmatched_keys(x         = y,
+                               by        = use_y_out,
+                               out       = out)) {
+          cli::cli_abort(
+            paste0(
+              cli::symbol$cross,
+              " Error: some rows in `y` are not matched - this check is due to
+           argument `unmatched = 'error'` ")
+          )
+        }
+      }
+
+    }
+
+
+  # Right Join --------------------------------------------------------
+  if (jn_type == "right" | jn_type == "inner") {
+
+    use_x_input <- process_by_vector(by = by, input = "left")
+
+      if (unmatched_keys(x         = x,
+                             by        = use_x_input,
+                             out       = out)) {
+        cli::cli_abort(
+          paste0(
+            cli::symbol$cross,
+            " Error: some rows in `x` are not matched - this check is due to
+           argument `unmatched = 'error'`. To drop these rows, set `unmatched = 'drop'` ")
+        )
+      }
+  }
+
+  invisible(x)
+
+}
+
+
+#' Check for unmatched keys
+#'
+#' Gives TRUE if unmatched keys, FALSE if not.
+#'
+#' @param x input table to join
+#' @param out output of join
+#' @param by by argument, giving keys for join
+#'
+#' @return logical
+#' @keywords internal
+unmatched_keys <- function(x, out, by) {
+
+  check <- NULL
+
+  # Get all keys from `x`
+  x_keys <- x |>
+    fselect(by) |>
+    as.data.table()
+
+  # get all key combos from `out`
+  out_keys <- out |>
+    fselect(by) |>
+    as.data.table()
+
+  # check that key combos are equal
+  check <- (data.table::fsetdiff(x_keys,
+                                 out_keys) |>
+              nrow()) > 0  # if true  => more unique combos in x
+  #    false => same unique combos of keys
+  # same number unique keys =>
+  #     all matched keys
+  #     because output is result
+  #     of join
+  check
+}
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+#' Process the `by` vector
+#'
+#' Gives as output a vector of names to be used for the specified
+#' table that correspond to the `by` argument for that table
+#'
+#' @param by character vector: by argument for join
+#' @param input character: either "left" or "right", indicating
+#' whether to give the left or right side of the equals ("=") if
+#' the equals is part of the `by` vector
+#'
+#' @return character vector
+#' @keywords internal
+#'
+#' @examples
+#' joyn:::process_by_vector(by = c("An = foo", "example"), input = "left")
+process_by_vector <- function(by, input = c("left", "right")) {
+  input <- match.arg(input)
+  if (input == "left") {
+    out <- sapply(by, function(x) {
+      if (grepl("=", x)) {
+        trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", x))
+      } else {
+        x
+      }
+    })
+  } else if (input == "right") {
+    out <- sapply(by, function(x) {
+      if (grepl("=", x)) {
+        trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", x))
+      } else {
+        x
+      }
+    })
+  }
+  out |> unname()
+}
 
 
 
