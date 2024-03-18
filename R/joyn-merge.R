@@ -254,10 +254,10 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   common_vars <- intersect(names(x), names(y))
-  if (!is.null(fixby$yby)) {
-    common_vars <- common_vars[!common_vars %in% fixby$yby]
+  if (!(is.null(fixby$yby))) {
+    common_vars <- common_vars[!(common_vars %in% c(fixby$yby, fixby$tempkey))]
   } else {
-    common_vars <- common_vars[!common_vars %in% fixby$by]
+    common_vars <- common_vars[!(common_vars %in% fixby$by)]
   }
   ## treatment of y_vars_to_keep ------
   y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
@@ -381,41 +381,25 @@ joyn <- function(x,
       fsubset(get(reportvar)  >= 3)
   }
 
-
-
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var_use <- NULL
-  if (isTRUE(update_values) || isTRUE(update_NAs)) {
+  if (isTRUE(update_NAs) || isTRUE(update_values)) {
     var_use <- common_vars
   }
 
-  #return(list(reportvar))
-  if (isTRUE(update_values) & length(var_use) > 0) {
+  if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
-    x <- update_values(
-      dt        = x,
-      var       = var_use,
-      reportvar = reportvar,
-      suffix    = suffixes
+    x <- update_na_values(dt           = x,
+                          var          = var_use,
+                          reportvar    = reportvar,
+                          suffixes     = suffixes,
+                          rep_NAs      = update_NAs,
+                          rep_values   = update_values
     )
-
   }
 
-
-  # update NAs
-  if (isTRUE(update_NAs) & length(var_use) > 0) {
-
-    x <- update_NAs(
-      dt        = x,
-      var       = var_use,
-      reportvar = reportvar,
-      suffix    = suffixes
-    )
-
-  }
 
   ### common vars ----------
 
@@ -461,8 +445,6 @@ joyn <- function(x,
     # not necessary
     # setnames(y, fixby$tempkey, fixby$yby)
   }
-
-
 
 
   ## convert to characters if chosen -------

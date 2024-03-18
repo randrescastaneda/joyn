@@ -475,18 +475,18 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
     y.upvars <- paste0(upvars, ".y")
     y_vars_to_keep[y_vars_to_keep %in% upvars] <- y.upvars
 
-    if (isFALSE(update_NAs) && isFALSE(update_values)) {
-      store_msg(
-        "note",
-        ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
-        pale        = "variable{?s} ",
-        bolded_pale = "{upvars}",
-        pale        = "  in table",
-        bolded_pale = "  {y}",
-        pale        = "  {?is/are} ignored because arguments",
-        bolded_pale = "  update_NAs and update_values",
-        pale        = "  are FALSE.")
-    }
+ #   if (isFALSE(update_NAs) && isFALSE(update_values)) {
+#      store_msg(
+#        "note",
+#        ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
+#        pale        = "variable{?s} ",
+#        bolded_pale = "{upvars}",
+#        pale        = "  in table",
+#        bolded_pale = "  {y}",
+#        pale        = "  {?is/are} ignored because arguments",
+#        bolded_pale = "  update_NAs and update_values",
+#        pale        = "  are FALSE.")
+#    }
 
   } # end of update vars
 
