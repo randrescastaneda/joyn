@@ -15,7 +15,6 @@
 #'
 #' @return data.table
 #' @keywords internal
-
 update_na_values <- function(dt,
                              var,
                              reportvar  = getOption("joyn.reportvar"),
@@ -24,7 +23,7 @@ update_na_values <- function(dt,
                              rep_values = FALSE) {
 
   if (is.null(suffixes)) {
-    suffix <- getOption("joyn.suffixes")
+    suffixes <- getOption("joyn.suffixes")
   }
   x.var <- paste0(var, suffixes[1])
   y.var <- paste0(var, suffixes[2])
