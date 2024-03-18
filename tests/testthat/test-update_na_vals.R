@@ -17,6 +17,7 @@ y2 = data.table(id = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(NA, 17:20))
 
+
 dt = joyn(x2,
           y2,
           by               = "id",
@@ -26,6 +27,7 @@ dt = joyn(x2,
           keep_common_vars = TRUE,
           reporttype       = "numeric",
           verbose          = FALSE)
+
 
 df1 <- data.frame(
   id = c(2, 3, 4, 5, 6, 7),
@@ -50,6 +52,10 @@ df <- joyn(df1,
            update_values    = FALSE,
            reporttype       = "numeric")
 
+#-------------------------------------------------------------------------------
+# TESTS
+#-------------------------------------------------------------------------------
+
 # Testing output function when input is data table ####
 test_that("update_na_values -no update", {
 
@@ -73,6 +79,7 @@ test_that("update_na_values -update NAs only", {
                           rep_values = FALSE)
 
   # check update of reportvar
+  expect_true(any(4 %in% res$.joyn))
   which(res$.joyn == 4) |>
     expect_equal(which( is.na(dt$x.x) & !is.na(dt$x.y)))
 
@@ -83,6 +90,10 @@ test_that("update_na_values -update NAs only", {
   # check output class
   inherits(res, "data.table") |>
     expect_equal(TRUE)
+
+  # check values are not updated
+  expect_true(!any(5 %in% res$.joyn))
+  expect_true(!any(6 %in% res$.joyn))
 
 })
 
@@ -103,6 +114,7 @@ test_that("update_na_vals -update values of one var", {
   # Check not updated values
   dt[is.na(x.x) | is.na(x.y) | !.joyn == 3] |> fselect((id:x.y)) |>
     expect_equal(res[!.joyn == 5,] |> fselect((id:x.y)))
+  expect_true(!any(4 %in% res$.joyn))
 
   # Check x is not updated with NA values in x.y
   rows_y_na <- which(is.na(dt$x.y))
