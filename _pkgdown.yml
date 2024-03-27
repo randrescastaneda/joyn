@@ -27,11 +27,16 @@ navbar:
     - reference
     - articles
     - news
-    right: github
+    right:
+    - Dev version
+    - github
   components:
     reference:
       text: Reference
       href: reference/index.html
+    dev version:
+      text: dev version
+      href: dev/
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/randrescastaneda/joyn/

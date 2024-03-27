@@ -38,6 +38,12 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
 
+x5 = data.table(id = c(1, 2, 5, 6, 3),
+                yd = c(1, 2, 5, 6, 3),
+                y  = c(11L, 15L, 20L, 13L, 10L),
+                x  = c(16:18, NA, NA))
+
+
 
 test_that(
   "select `by` vars when non specified", {
@@ -57,6 +63,34 @@ test_that(
   }
 
 )
+
+test_that("all types of by argument raise no error", {
+
+  joyn(x          = x4,
+       y          = y4,
+       by         = "id1=id2",
+       match_type = "m:m") |>
+    expect_no_error()
+
+  joyn(x          = x4,
+       y          = y4,
+       by         = c("id1 = id", "id2"),
+       match_type = "m:1") |>
+    expect_no_error()
+
+  joyn(x          = x4,
+       y          = y4,
+       by         = c("id1 = id2", "id2 = id"),
+       match_type = "m:1") |>
+    expect_no_error()
+
+  joyn(x          = x4,
+       y          = y4,
+       by         = c("id2", "x"),
+       match_type = "1:1") |>
+    expect_no_error()
+
+})
 
 test_that("Errors if no common variables", {
   xf <- copy(x1)
@@ -188,8 +222,8 @@ test_that("FULL- Compare with base::merge", {
   jn <- joyn(
     x1,
     y1,
-    by = "id",
-    reportvar = FALSE,
+    by         = "id",
+    reportvar  = FALSE,
     match_type = "m:1"
   )
 
@@ -202,10 +236,10 @@ test_that("FULL- Compare with base::merge", {
   expect_equal(jn, br, ignore_attr = 'row.names')
 
   jn <- joyn(x2,
-          y2,
-          by = "id",
-          reportvar = FALSE,
-          keep_common_vars = TRUE)
+             y2,
+             by= "id",
+              reportvar = FALSE,
+              keep_common_vars = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
@@ -284,10 +318,10 @@ test_that("RIGHT - Compare with base::merge", {
     joyn(
       x2,
       y2,
-      by = "id",
-      reportvar = FALSE,
-      keep = "right",
-      match_type = "1:1",
+      by               = "id",
+      reportvar        = FALSE,
+      keep             = "right",
+      match_type       = "1:1",
       keep_common_vars = TRUE
     )
 
@@ -309,9 +343,9 @@ test_that("INNER - Compare with base::merge", {
     joyn(
       x1,
       y1,
-      by = "id",
-      reportvar = FALSE,
-      keep = "inner",
+      by         = "id",
+      reportvar  = FALSE,
+      keep       = "inner",
       match_type = "m:1"
     )
   br <- base::merge(x1, y1, by = "id")
@@ -326,10 +360,10 @@ test_that("INNER - Compare with base::merge", {
     joyn(
       x2,
       y2,
-      by        = "id",
-      reportvar = FALSE,
-      keep      = "inner",
-      match_type = "1:1",
+      by               = "id",
+      reportvar        = FALSE,
+      keep             = "inner",
+      match_type       = "1:1",
       keep_common_vars = TRUE
     )
   br <- base::merge(x2, y2, by = "id")
@@ -408,29 +442,63 @@ test_that("match types work", {
 
 test_that("Update NAs", {
   # update NAs in x variable form x
-  jn <- joyn(x2, # ZP: THIS GIVES ERROR
-              y2,
-              by = "id",
-              update_NAs = TRUE,
+  jn <- joyn(x2,
+             y2,
+             by               = "id",
+             update_NAs       = TRUE,
              keep_common_vars = TRUE)
 
   idx <- x2[is.na(x), "id"]
 
   expect_equal(jn[idx, on = "id"][, x.x], y2[idx, on = "id"][, x])
 
+  jn_1 <- joyn(x2,
+               y2,
+               by               = "id = yd",
+               update_NAs       = TRUE,
+               keep_common_vars = TRUE)
+
+
+  expect_equal(jn_1[idx, on = "id"][, x.x], y2[idx, on = "id"][, x])
+
+  jn_2 <- joyn(x5,
+               y4,
+               by               = c("id", "y"),
+               update_NAs       = TRUE,
+               keep_common_vars = TRUE)
+
+  to_replace <- x5[is.na(x), "id"]
+
+  expect_equal(jn_2[to_replace, on = "id"][, x.x], y4[to_replace, on = "id"][, x])
+
+  out <- joyn(x5,
+               y4,
+               by               = c("id = id2", "yd = id"),
+               update_NAs       = FALSE,
+               keep_common_vars = TRUE)
+
+  to_replace <- out[(is.na(x.x) & !is.na(x.y)) | (is.na(y.x) & !is.na(y.y) ), c("id", "yd")]
+
+  jn_3 <- joyn(x5,
+               y4,
+               by               = c("id = id2", "yd = id"),
+               update_NAs       = TRUE,
+               keep_common_vars = TRUE)
+
+  any(jn_3[to_replace, ".joyn"] != "NA updated") |>
+    expect_equal(FALSE)
 
 })
 
 
 test_that("Update actual values", {
 
-  jn <-
-    joyn(x2,
-          y2,
-          by = "id",
-          update_values = TRUE,
-         update_NAs = TRUE,
-         keep_common_vars = TRUE)
+  jn <-joyn(x                = x2,
+            y                = y2,
+            by               = "id",
+            update_values    = TRUE,
+            update_NAs       = TRUE,
+            keep_common_vars = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
@@ -449,6 +517,28 @@ test_that("Update actual values", {
                  fselect(x.x),
                ignore_attr = 'row.names')
 
+  joyn(x2,
+       y2,
+       by               = "id = yd",
+       update_values    = TRUE,
+       update_NAs       = FALSE,
+       keep_common_vars = TRUE) |>
+    expect_no_error()
+
+  joyn(x5,
+       y4,
+       by               = c("id", "y"),
+       update_values    = TRUE,
+       keep_common_vars = TRUE) |>
+    expect_no_error()
+
+
+  joyn(x5,
+       y4,
+       by               = c("id = id2", "yd = id"),
+       update_values    = TRUE,
+       keep_common_vars = TRUE) |>
+    expect_no_error()
 
 })
 
@@ -518,10 +608,10 @@ test_that("selection of reportvar", {
   expect_equal(unique(c(names(x2), names(y2))), names(jn))
 
 
-  jn <- joyn(x2,
-              y2,
-              by = "id",
-              reportvar = "t")
+  jn <- joyn(x         = x2,
+             y         = y2,
+             by        = "id",
+             reportvar = "t")
 
   allnames <- unique(c(names(x2), names(y2)))
 
@@ -531,6 +621,16 @@ test_that("selection of reportvar", {
 
 })
 
+test_that("reporttype works", {
+  jn <- joyn(x          = x2,
+             y          = y2,
+             by         = "id",
+             reporttype = "numeric")
+
+  class(jn$.joyn) |>
+    expect_equal("numeric")
+
+})
 
 
 test_that("Keep Y vars works", {
@@ -568,8 +668,8 @@ test_that("different names in key vars are working fine", {
                    ".joyn" = c("x & y", "x & y", "x", "y", "x", "x & y", "y", "y")
                    )
 
-  setorderv(dd, "id1", na.last = TRUE)
-  setattr(dd, 'sorted', "id1")
+  setorderv(dd, c("id1", "id2"), na.last = TRUE)
+  setattr(dd, 'sorted', c("id1", "id2"))
 
   expect_equal(df, dd)
 
@@ -592,16 +692,6 @@ test_that("convert to data.table when dataframe", {
 
 })
 
-
-# test_that("no matching obs", {
-#
-#   xx2 <- x2[1, x := 23]
-#
-#   dd <- joyn(x2, y2, verbose = F)
-#   dw <- dd[, unique(`.joyn`)]
-#   expect_equal(dw, c("y", "x"))
-#
-# })
 
 test_that("do not convert to data.table", {
   xx1 <- as.data.frame(x1)

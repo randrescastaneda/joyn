@@ -7,8 +7,8 @@
 msg_type_dt(type, ...)
 }
 \arguments{
-\item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err" or \code{all}}
+\item{type}{character: one or more of the following: info, note, warn, timing, err
+cli::format_inline("{.or {.val {type_choices()}}}")\code{or}all`}
 }
 \value{
 data frame with two variables, type and msg

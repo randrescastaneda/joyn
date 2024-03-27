@@ -2,7 +2,7 @@
 title: "dplyr joins wrappers"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{dplyr-joins}
+  %\VignetteIndexEntry{dplyr joins wrappers}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

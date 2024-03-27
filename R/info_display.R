@@ -1,7 +1,9 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of the following:
-#' `r cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
+#' @param type character: one or more of the following: `r joyn:::type_choices()`
+#'   cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
+#' @param msg character vector to be parsed to [cli::cli_abort()]. Default is
+#'   NULL. It only works if `"err" %in% type`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
@@ -19,7 +21,8 @@
 #'
 #' joyn_msg("all")
 
-joyn_msg <- function(type = c("all", type_choices())) {
+joyn_msg <- function(type = c("all", type_choices()),
+                     msg  = NULL) {
 
   # Check ---------
   type_to_use <- match.arg(type, several.ok = TRUE)
@@ -39,6 +42,9 @@ joyn_msg <- function(type = c("all", type_choices())) {
     cli::cli_text(.)
   })
 
+  if ("err" %in% type_to_use & is.character(msg)) {
+    cli::cli_abort(msg)
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
