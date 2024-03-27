@@ -51,8 +51,6 @@
 #' joyn:::get_joyn_options(option = c("joyn.verbose", "joyn.reportvar"))
 #'
 #' }
-
-
 get_joyn_options <- function(env     = .joynenv,
                              display = TRUE,
                              option  = NULL) {
@@ -60,7 +58,7 @@ get_joyn_options <- function(env     = .joynenv,
   # joyn options
   op.joyn <- rlang::env_get(env, "op.joyn")
 
-  if(is.null(option)) {
+  if (is.null(option)) {
     # get all possible options
     op.joyn <- rlang::env_get(env, "op.joyn")
 
@@ -103,14 +101,8 @@ get_joyn_options <- function(env     = .joynenv,
 #'
 #' @keywords internal
 #' @examples
-#' \donotrun{
-#'
 #' joyn:::set_joyn_options(joyn.verbose = FALSE, joyn.reportvar = "joyn_status")
-#'
-#'
-#' }
-#'
-
+#' joyn:::set_joyn_options() # return to default options
 set_joyn_options <- function(...,
                              env = .joynenv
                              ) {
@@ -118,23 +110,20 @@ set_joyn_options <- function(...,
   op.joyn <- rlang::env_get(env, "op.joyn")
 
   new_options <- list(...)
-
   if (any(!(names(new_options) %in% names(op.joyn)))) {
     cli::cli_abort("invalid option")
   }
 
-  #TODO: Add checks on input names and values
-
-  # Set new options
-  withr::local_options(new_options)
+  # TO DO: Add checks on input names and values
 
   # Return new options invisibly as a list
-  if(length(new_options) == 0) {
+  if (length(new_options) == 0) {
     new_options <- op.joyn
   }
+  # Set new options
+  options(new_options)
 
   invisible(new_options)
-  #print(new_options)
 
-  }
+}
 
