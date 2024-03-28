@@ -29,7 +29,8 @@ joyn_msg <- function(type = c("all", type_choices()),
   joyn_msgs_exist()
 
   # get msgs ---------
-  dt <- rlang::env_get(.joynenv, "joyn_msgs")
+  dt <- rlang::env_get(.joynenv, "joyn_msgs") |>
+    roworder(type)
 
   if ("all" %!in% type_to_use) {
     dt <- dt |>
