@@ -34,7 +34,7 @@
 #'    If NULL, all joyn options
 #' @return joyn options and values invisibly as a list
 #'
-#' @keywords internal
+#' @export
 #' @examples
 #' \dontrun{
 #'
@@ -91,7 +91,7 @@ get_joyn_options <- function(env     = .joynenv,
     # print and display options
     cli::boxx(ops_info,
               border_style = "single",
-              padding = 0,
+              padding = 1,
               header = cli::col_cyan("Joyn options: "),
               border_col = "white") |>
       print()
@@ -108,7 +108,7 @@ get_joyn_options <- function(env     = .joynenv,
 #' @param ... pairs of option = value
 #' @return joyn new options and values invisibly as a list
 #'
-#' @keywords internal
+#' @export
 #' @examples
 #' joyn:::set_joyn_options(joyn.verbose = FALSE, joyn.reportvar = "joyn_status")
 #' joyn:::set_joyn_options() # return to default options
