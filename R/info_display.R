@@ -252,3 +252,38 @@ clear_joynenv <- \(){
   invisible(.joyn_source)
 }
 
+
+
+
+
+#' Print JOYn report table
+#'
+#' @inheritParams joyn
+#'
+#' @return invisible table of frequencies
+#' @export
+#'
+#' @examples
+#' library(data.table)
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#' t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#' x  = 11:15)
+#'
+#' y1 = data.table(id = 1:2,
+#'                 y  = c(11L, 15L))
+#'
+#' d <- joyn(x1, y1, match_type = "m:1")
+#' joyn_report(verbose = TRUE)
+joyn_report <- function(verbose = getOption("joyn.verbose")) {
+  if (!rlang::env_has(.joynenv, "freq_joyn")) {
+    cli::cli_abort(c("no frequencies table stored in {.field .joynenv}",
+                     "i" = "make sure that joyn has been
+                     executed at least once"))
+  }
+
+  freq <- rlang::env_get(.joynenv, "freq_joyn")
+  if (verbose) {
+    print(freq)
+  }
+  return(invisible(freq))
+}

@@ -465,16 +465,15 @@ joyn <- function(x,
   }
 
   ## Display results------
+  # freq table
+  d <- freq_table(x, reportvar)
+  rlang::env_poke(.joynenv, "freq_joyn", d)
   if (verbose) {
 
     # Display results in screen
 
     cli::cli_h2("JOYn Report")
-
-    d <- freq_table(x, reportvar)
-
-    print(d[])
-
+    joyn_report()
     cli::cli_rule(right = "End of {.field JOYn} report")
 
     if (all(x[[reportvar]] %in% c("x", "y")) ||
