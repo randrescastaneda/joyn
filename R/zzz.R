@@ -36,7 +36,7 @@
 #'
 #' @keywords internal
 #' @examples
-#' \donotrun{
+#' \dontrun{
 #'
 #' # display all joyn options, their default and current values
 #' joyn:::get_joyn_options()
