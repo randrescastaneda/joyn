@@ -68,24 +68,33 @@ get_joyn_options <- function(env     = .joynenv,
   }
 
   if (display == TRUE) {
-    options_info <- sapply(names(op.joyn), function(opt) {
 
-      default_value <- op.joyn[[opt]]
-      current_value <- getOption(opt)
-      sprintf("%-20s default = %-20s > current = %s",
-              opt,
-              toString(default_value),
-              toString(current_value))
-    },
-    USE.NAMES = FALSE)
+    names_ops     <- names(op.joyn)
+    default_value <- sapply(op.joyn, toString, USE.NAMES = FALSE, simplify = TRUE)
+    current_value <- sapply(names(op.joyn),
+                            \(x) {
+                              x |>
+                                getOption() |>
+                                toString()
+                            },
+                            USE.NAMES = FALSE)
+
+    ops_info <-
+      paste0(
+        cli::col_green(cli::symbol$bullet), " ", cli::col_blue(format(names_ops)),
+        " ", format("default:"), " ", cli::col_cyan(format(default_value)),
+        " ", format("current:"), " ", cli::col_cyan(format(current_value))
+      ) |>
+      cli::ansi_columns()
 
 
     # print and display options
-    cat("\nJoyn Options:\n")
-    cat("---------------------------------------------------------------------\n")
-    cat(paste(options_info, collapse = "\n"), "\n")
-    cat("---------------------------------------------------------------------\n")
-
+    cli::boxx(ops_info,
+              border_style = "single",
+              padding = 0,
+              header = cli::col_cyan("Joyn options: "),
+              border_col = "white") |>
+      print()
   }
 
   invisible(op.joyn)
