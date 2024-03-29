@@ -1,7 +1,7 @@
 Package: joyn
 Type: Package
 Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
-Version: 0.1.6.9003
+Version: 0.1.6.9004
 Authors@R: c(person(given = "R.Andres", 
                     family = "Castaneda", 
                     email = "acastanedaa@worldbank.org",
@@ -12,7 +12,7 @@ Authors@R: c(person(given = "R.Andres",
                     email = "zprinsloo@worldbank.org"),
               person(given = "Rossana",
                     family = "Tatulli",
-                    role = "ctb",
+                    role = "aut",
                     email = "rtatulli@worldbank.org")      
                     )
 Description: Tool for diagnosing table joins. It combines the speed of `collapse`
