@@ -1,3 +1,15 @@
+# version 0.2.0
+
+When I run `devtools::check()` I get no errors, warnings, or notes. 
+0 errors | 0 warnings | 0 notes
+
+Yet, when I run `devtools::check(remote = TRUE, manual = TRUE)` I get one note. 
+0 errors ✔ | 0 warnings ✔ | 1 note ✖
+
+The note reads as follows: 
+
+
+
 ## Resubmission
 This is a resubmission. In this version I have:
 
