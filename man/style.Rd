@@ -19,4 +19,15 @@ formatted text
 This is an adaptation from
 https://github.com/r-lib/pkgbuild/blob/3ba537ab8a6ac07d3fe11c17543677d2a0786be6/R/styles.R
 }
+\seealso{
+Messages functions
+\code{\link{clear_joynenv}()},
+\code{\link{joyn_msg}()},
+\code{\link{joyn_msgs_exist}()},
+\code{\link{joyn_report}()},
+\code{\link{msg_type_dt}()},
+\code{\link{store_msg}()},
+\code{\link{type_choices}()}
+}
+\concept{messages}
 \keyword{internal}

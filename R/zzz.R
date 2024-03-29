@@ -34,6 +34,7 @@
 #' @param option character or NULL. If character, name of a specific joyn option.
 #'    If NULL, all joyn options
 #' @return joyn options and values invisibly as a list
+#' @family options
 #'
 #' @export
 #' @examples
@@ -108,6 +109,7 @@ get_joyn_options <- function(env     = .joynenv,
 #' @param env environment, which is joyn environment by default
 #' @param ... pairs of option = value
 #' @return joyn new options and values invisibly as a list
+#' @family options
 #'
 #' @export
 #' @examples

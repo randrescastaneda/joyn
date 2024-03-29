@@ -21,3 +21,8 @@ This function is used to change the value of one or more joyn options
 joyn:::set_joyn_options(joyn.verbose = FALSE, joyn.reportvar = "joyn_status")
 joyn:::set_joyn_options() # return to default options
 }
+\seealso{
+JOYn options functions
+\code{\link{get_joyn_options}()}
+}
+\concept{options}

@@ -38,3 +38,8 @@ joyn:::get_joyn_options(option = c("joyn.verbose", "joyn.reportvar"))
 
 }
 }
+\seealso{
+JOYn options functions
+\code{\link{set_joyn_options}()}
+}
+\concept{options}

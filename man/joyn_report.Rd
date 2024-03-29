@@ -28,3 +28,14 @@ y1 = data.table(id = 1:2,
 d <- joyn(x1, y1, match_type = "m:1")
 joyn_report(verbose = TRUE)
 }
+\seealso{
+Messages functions
+\code{\link{clear_joynenv}()},
+\code{\link{joyn_msg}()},
+\code{\link{joyn_msgs_exist}()},
+\code{\link{msg_type_dt}()},
+\code{\link{store_msg}()},
+\code{\link{style}()},
+\code{\link{type_choices}()}
+}
+\concept{messages}

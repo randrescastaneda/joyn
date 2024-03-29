@@ -69,6 +69,13 @@ reference:
   contents:
   - merge
 - title: "Auxiliary functions"
+- subtitle: Information
+  contents:
+  - has_concept("messages")
+- subtitle: JOYn options
+  contents:
+  - has_concept("options")
+- subtitle: MISC
   contents:
   - is_id
   - freq_table

@@ -15,4 +15,15 @@ current message data frame invisibly
 \description{
 Store joyn message to .joynenv environment
 }
+\seealso{
+Messages functions
+\code{\link{clear_joynenv}()},
+\code{\link{joyn_msg}()},
+\code{\link{joyn_msgs_exist}()},
+\code{\link{joyn_report}()},
+\code{\link{msg_type_dt}()},
+\code{\link{style}()},
+\code{\link{type_choices}()}
+}
+\concept{messages}
 \keyword{internal}

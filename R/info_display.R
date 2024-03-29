@@ -5,6 +5,8 @@
 #' @param msg character vector to be parsed to [cli::cli_abort()]. Default is
 #'   NULL. It only works if `"err" %in% msg_type`
 #'
+#' @family messages
+#'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
@@ -69,6 +71,8 @@ joyn_msg <- function(msg_type = getOption("joyn.msg_type"),
 #' @param ... combination of type and text in the form `style1 = text1, style2 =
 #'   text2`, etc.
 #'
+#' @family messages
+#'
 #' @return current message data frame invisibly
 #' @keywords internal
 store_msg <- function(type, ...) {
@@ -116,6 +120,11 @@ check_style <- \(...) {
   invisible(TRUE)
 }
 
+#' Choice of messages
+#'
+#' @return character vector with choices of types
+#' @family messages
+#' @keywords internal
 type_choices <- \(){
   rlang::env_get(.joynenv, "msg_type_choices")
 }
@@ -124,6 +133,7 @@ type_choices <- \(){
 #' convert style of joyn message to data frame containing type and message
 #'
 #' @inheritParams joyn_msg
+#' @family messages
 #'
 #' @return data frame with two variables, type and msg
 #' @keywords internal
@@ -141,6 +151,7 @@ msg_type_dt <- \(type, ...) {
 #' @param ... combination of type and text in the form
 #' `type1 = text1, type2 = text2`
 #' @param sep a character string to separate the terms to [paste]
+#' @family messages
 #'
 #' @return formatted text
 #' @keywords internal
@@ -214,6 +225,7 @@ style <- function(..., sep = "") {
 #' Checks the presence of joyn messages stored in joyn environment
 #'
 #' @return invisible TRUE
+#' @family messages
 #' @keywords internal
 #' @examples
 #' \dontrun{
@@ -233,6 +245,7 @@ joyn_msgs_exist <- \() {
 
 #' Clearing joyn environment
 #' @keywords internal
+#' @family messages
 #' @examples
 #' \dontrun{
 #' # Storing a message
@@ -269,7 +282,7 @@ clear_joynenv <- \(){
 #' Print JOYn report table
 #'
 #' @inheritParams joyn
-#'
+#' @family messages
 #' @return invisible table of frequencies
 #' @export
 #'
