@@ -176,11 +176,30 @@ option). Default is TRUE.}
 \item{...}{
   Arguments passed on to \code{\link[=joyn]{joyn}}
   \describe{
-    \item{\code{}}{}
+    \item{\code{match_type}}{character: one of \emph{"m:m"}, \emph{"m:1"}, \emph{"1:m"}, \emph{"1:1"}.
+Default is \emph{"1:1"} since this the most restrictive. However, following
+Stata's recommendation, it is better to be explicit and use any of the
+other three match types (See details in \emph{match types sections}).}
+    \item{\code{allow.cartesian}}{logical: Check documentation in official \href{https://rdatatable.gitlab.io/data.table/reference/merge.html/}{web site}.
+Default is \code{NULL}, which implies that if the join is "1:1" it will be
+\code{FALSE}, but if the join has any "m" on it, it will be converted to \code{TRUE}.
+By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
+    \item{\code{suffixes}}{A character(2) specifying the suffixes to be used for making
+non-by column names unique. The suffix behaviour works in a similar fashion
+as the \link[base:merge]{base::merge} method does.}
+    \item{\code{yvars}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now \code{y_vars_to_keep}}
+    \item{\code{keep_y_in_x}}{\ifelse{html}{\href{https://lifecycle.r-lib.org/articles/stages.html#superseded}{\figure{lifecycle-superseded.svg}{options: alt='[Superseded]'}}}{\strong{[Superseded]}}: use now
+\code{keep_common_vars}}
+    \item{\code{msg_type}}{character: type of messages to display by default}
+    \item{\code{na.last}}{ \code{logical}. If \code{TRUE}, missing values in the data are placed last; if \code{FALSE}, they are placed first; if \code{NA} they are removed.
+\code{na.last=NA} is valid only for \code{x[order(., na.last)]} and its
+default is \code{TRUE}. \code{setorder} and \code{setorderv} only accept
+\code{TRUE}/\code{FALSE} with default \code{FALSE}. }
   }}
 }
 \value{
-data frame
+An data frame of the same class as \code{x}. The properties of the output
+are as close as possible to the ones returned by the dplyr alternative.
 }
 \description{
 This is a \code{joyn} wrapper that works in a similar
@@ -197,3 +216,10 @@ y1 = data.table(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
 left_join(x1, y1, relationship = "many-to-one")
 }
+\seealso{
+Other dplyr alternatives: 
+\code{\link{full_join}()},
+\code{\link{inner_join}()},
+\code{\link{right_join}()}
+}
+\concept{dplyr alternatives}
