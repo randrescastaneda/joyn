@@ -10,7 +10,7 @@
 
 * New function `joyn::merge()` works as a mask for the `base::merge()` or `data.table::merge.data.table()`. `joyn::merge()` has the same features as the previous two, but includes the features of `joyn::joyn()`.
 
-* Messages style have been improved and categorize. See [message vignette](https://randrescastaneda.github.io/joyn/articles/messages.html) for more information.
+* Messages style have been improved and categorized. See [message vignette](https://randrescastaneda.github.io/joyn/articles/messages.html) for more information.
 
 * New functions to mimic [dplyr joins](https://dplyr.tidyverse.org/reference/mutate-joins.html). The `joyn` variants have all the features for `joyn::joyn()` but lack some of the most advance features of `dplyr` joins like [`joyn::join_by()`](https://dplyr.tidyverse.org/reference/join_by.html)
 
