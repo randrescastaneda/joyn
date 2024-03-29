@@ -19,14 +19,12 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 
 <!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg/)](https://github.com/randrescastaneda/joyn/actions/) -->
-`r badger::badge_cran_checks("joyn")`
-`r badger::badge_cran_release("joyn", "orange")`
-`r badger::badge_devel("randrescastaneda/joyn", "blue")`
+`r badger::badge_cran_checks("joyn")` `r badger::badge_cran_release("joyn", "orange")` `r badger::badge_devel("randrescastaneda/joyn", "blue")` `r badger::badge_codecov("randrescastaneda/joyn")` `r badger::badge_lifecycle("maturing", "green")`
 <!-- [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing) -->
-[![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn?branch=master)
+<!-- [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn?branch=master) -->
+
 <!-- `r badger::badge_cran_release("joyn", "orange")` -->
 <!-- `r badger::badge_devel("randrescastaneda/joyn", "blue")` -->
-`r badger::badge_lifecycle("maturing", "green")`
 <!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml) -->
 
 <!-- badges: end -->
