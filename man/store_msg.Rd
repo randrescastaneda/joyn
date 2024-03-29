@@ -15,6 +15,17 @@ current message data frame invisibly
 \description{
 Store joyn message to .joynenv environment
 }
+\examples{
+# Storing msg with msg_type "info"
+joyn:::store_msg("info",
+  ok = cli::symbol$tick, "  ",
+  pale = "This is an info message")
+
+# Storing msg with msg_type "warn"
+joyn:::store_msg("warn",
+  err = cli::symbol$cross, "  ",
+  note = "This is a warning message")
+}
 \seealso{
 Messages functions
 \code{\link{clear_joynenv}()},
