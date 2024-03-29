@@ -1,24 +1,25 @@
 # version 0.2.0
 
-When I run `devtools::check()` I get no errors, warnings, or notes. 
 0 errors | 0 warnings | 0 notes
 
-Yet, when I run `devtools::check(remote = TRUE, manual = TRUE)` I get one note. 
-0 errors ✔ | 0 warnings ✔ | 1 note ✖
+## revdepcheck results
 
-The note reads as follows: 
+We checked 0 reverse dependencies, comparing R CMD check results across CRAN and dev versions of this package.
 
-
+ * We saw 0 new problems
+ * We failed to check 0 packages
 
 ## Resubmission
-This is a resubmission. In this version I have:
+This is a resubmission. In this version We have fixed the following notes:
+Found the following HTML validation problems:
+full_join.html:303:1 (full_join.Rd:179): Warning: trimming empty <dt>
+inner_join.html:303:1 (inner_join.Rd:179): Warning: trimming empty <dt>
+left_join.html:303:1 (left_join.Rd:179): Warning: trimming empty <dt>
+right_join.html:303:1 (right_join.Rd:179): Warning: trimming empty <dt>
 
-* Added trailing slashes to the URLs that I think are failing. I apologize, but 
-I don't understand the problem with the URL. According to the CRAN email, there 
-is a problem with the codecov url in one of the badges of the readme file. I 
-am using the very same url structure of very-well known packages like dplyr or
-tidyr. In case it fails again, could you please expand on the details of 
-the problem? Thanks. 
+These notes were created because there was a typo in our roxigen comments. They has been fixed. All check are still passing:
+
+0 errors ✔ | 0 warnings ✔ | 0 notes ✔
 
 
 # version 0.1.4

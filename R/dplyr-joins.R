@@ -1,8 +1,3 @@
-#-------------------------------------------------------------------------------
-# LEFT JOIN --------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
 #' Left join two data frames
 #'
 #' This is a `joyn` wrapper that works in a similar
@@ -21,10 +16,11 @@
 #'   in `y`, and "z" in both tables.
 #' @inheritParams dplyr::left_join
 #' @inheritParams joyn
-#' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
-#'   reporttype keep_common_vars verbose
+#' @inheritDotParams joyn
 #'
-#' @return data frame
+#' @family dplyr alternatives
+#' @return An data frame of the same class as `x`. The properties of the output
+#' are as close as possible to the ones returned by the dplyr alternative.
 #' @export
 #'
 #' @examples
@@ -142,10 +138,6 @@ left_join <- function(
   lj
 }
 
-#-------------------------------------------------------------------------------
-# RIGHT JOIN --------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
 #' Right join two data frames
 #'
 #' This is a `joyn` wrapper that works in a similar
@@ -164,10 +156,10 @@ left_join <- function(
 #'   in `y`, and "z" in both tables.
 #' @inheritParams dplyr::right_join
 #' @inheritParams joyn
-#' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
-#'   reporttype keep_common_vars verbose
+#' @inheritDotParams joyn
 #'
-#' @return data frame
+#' @family dplyr alternatives
+#' @inherit left_join return
 #' @export
 #'
 #' @examples
@@ -287,12 +279,6 @@ right_join <- function(
 
 }
 
-
-#-------------------------------------------------------------------------------
-# FULL JOIN --------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
 #' Full join two data frames
 #'
 #' This is a `joyn` wrapper that works in a similar
@@ -311,10 +297,11 @@ right_join <- function(
 #'   in `y`, and "z" in both tables.
 #' @inheritParams dplyr::full_join
 #' @inheritParams joyn
-#' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
-#'   reporttype keep_common_vars verbose
+#' @inheritDotParams joyn
 #'
-#' @return data frame
+#' @family dplyr alternatives
+#'
+#' @inherit left_join return
 #' @export
 #'
 #' @examples
@@ -442,15 +429,10 @@ full_join <- function(
 }
 
 
-#-------------------------------------------------------------------------------
-# INNER JOIN --------------------------------------------------------------------
-#-------------------------------------------------------------------------------
-
-
 #' Inner join two data frames
 #'
-#' This is a `joyn` wrapper that works in a similar
-#' fashion to [dplyr::inner_join]
+#' This is a `joyn` wrapper that works in a similar fashion to
+#' [dplyr::inner_join]
 #'
 #' @param x data frame: referred to as *left* in R terminology, or *master* in
 #'   Stata terminology.
@@ -461,16 +443,15 @@ full_join <- function(
 #'   the two tables. A message lists the variables so that you can check they're
 #'   correct (to suppress the message, simply explicitly list the variables that
 #'   you want to join). To join by different variables on x and y use a vector
-#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in `x`, "b"
-#'   in `y`, and "z" in both tables.
+#'   of expressions. For example, `by = c("a = b", "z")` will use "a" in `x`,
+#'   "b" in `y`, and "z" in both tables.
 #' @inheritParams dplyr::inner_join
 #' @inheritParams joyn
-#' @inheritDotParams joyn y_vars_to_keep update_values update_NAs reportvar
-#'   reporttype keep_common_vars verbose
+#' @inheritDotParams joyn
 #'
-#' @return data frame
+#' @family dplyr alternatives
 #' @export
-#'
+#' @inherit left_join return
 #' @examples
 #' # Simple full join
 #' library(data.table)
