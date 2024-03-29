@@ -74,6 +74,7 @@
 #' @param yvars `r lifecycle::badge("superseded")`: use now `y_vars_to_keep`
 #' @param keep_y_in_x `r lifecycle::badge("superseded")`: use now
 #'   `keep_common_vars`
+#' @param msg_type character: type of messages to display by default
 #' @inheritParams data.table::setorderv
 #'
 #' @return a data.table joining x and y.
@@ -152,25 +153,26 @@
 #' joyn(x2, y2, by = "id", update_values = TRUE, match_type = "m:1")
 #'
 joyn <- function(x,
-                  y,
-                  by               = intersect(names(x), names(y)),
-                  match_type       = c("1:1", "1:m", "m:1", "m:m"),
-                  keep             = c("full", "left", "master",
+                 y,
+                 by               = intersect(names(x), names(y)),
+                 match_type       = c("1:1", "1:m", "m:1", "m:m"),
+                 keep             = c("full", "left", "master",
                                        "right", "using", "inner"),
-                  y_vars_to_keep   = TRUE,
-                  update_values    = FALSE,
-                  update_NAs       = update_values,
-                  reportvar        = getOption("joyn.reportvar"),
-                  reporttype       = c("character", "numeric"),
-                  roll             = NULL,
-                  keep_common_vars = FALSE,
-                  sort             = TRUE,
-                  verbose          = getOption("joyn.verbose"),
-                  suffixes         = getOption("joyn.suffixes"),
-                  allow.cartesian  = deprecated(),
-                  yvars            = deprecated(),
-                  keep_y_in_x      = deprecated(),
-                  na.last          = getOption("joyn.na.last")) {
+                 y_vars_to_keep   = TRUE,
+                 update_values    = FALSE,
+                 update_NAs       = update_values,
+                 reportvar        = getOption("joyn.reportvar"),
+                 reporttype       = c("character", "numeric"),
+                 roll             = NULL,
+                 keep_common_vars = FALSE,
+                 sort             = TRUE,
+                 verbose          = getOption("joyn.verbose"),
+                 suffixes         = getOption("joyn.suffixes"),
+                 allow.cartesian  = deprecated(),
+                 yvars            = deprecated(),
+                 keep_y_in_x      = deprecated(),
+                 na.last          = getOption("joyn.na.last"),
+                 msg_type         = getOption("joyn.msg_type")) {
 
   clear_joynenv()
 
@@ -211,13 +213,9 @@ joyn <- function(x,
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
-  # copy objects if data.tables
-  if (any(class(x) == "data.table")) {
     x <- copy(x)
-  }
-  if (any(class(y) == "data.table")) {
     y <- copy(y)
-  }
+
 
   ## X and Y -----------
   check_xy(x,y)
@@ -237,7 +235,6 @@ joyn <- function(x,
     x <- as.data.table(x)
     y <- as.data.table(y)
   }
-
 
   ## Modify BY when is expression ---------
   fixby  <- check_by_vars(by, x, y)
@@ -259,10 +256,10 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   common_vars <- intersect(names(x), names(y))
-  if (!is.null(fixby$yby)) {
-    common_vars <- common_vars[!common_vars %in% fixby$yby]
+  if (!(is.null(fixby$yby))) {
+    common_vars <- common_vars[!(common_vars %in% c(fixby$yby, fixby$tempkey))]
   } else {
-    common_vars <- common_vars[!common_vars %in% fixby$by]
+    common_vars <- common_vars[!(common_vars %in% fixby$by)]
   }
   ## treatment of y_vars_to_keep ------
   y_vars_to_keep <- check_y_vars_to_keep(y_vars_to_keep, y, by)
@@ -271,18 +268,6 @@ joyn <- function(x,
   filter_y_vars <-  c(by, y_vars_to_keep)
   y <- y |>
     fselect(filter_y_vars)
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # new names in Y for same-name variables in X   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #newyvars <- check_new_y_vars(x, by, y_vars_to_keep) - ZP-------------------------------
-
-
-  # rename variables in Y
-  # if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
-  #   setnames(y, old = y_vars_to_keep, new = newyvars)
-  # }
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
@@ -386,54 +371,25 @@ joyn <- function(x,
       fsubset(get(reportvar)  >= 3)
   }
 
-
-
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Update x   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  # if (isTRUE(update_values) || isTRUE(update_NAs)) {
-  #   var_use <- sub(
-  #     pattern = "\\.y$",
-  #     replacement = "",
-  #     x = newyvars[
-  #       grepl(
-  #         pattern = "\\.y$",
-  #         x       = newyvars
-  #       )
-  #     ]
-  #   )
-  # }
   var_use <- NULL
-  if (isTRUE(update_values) || isTRUE(update_NAs)) {
+  if (isTRUE(update_NAs) || isTRUE(update_values)) {
     var_use <- common_vars
   }
 
-  #return(list(reportvar))
-  if (isTRUE(update_values) & length(var_use) > 0) {
+  if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
-    x <- update_values(
-      dt        = x,
-      var       = var_use,
-      reportvar = reportvar,
-      suffix    = suffixes
+    x <- update_na_values(dt           = x,
+                          var          = var_use,
+                          reportvar    = reportvar,
+                          suffixes     = suffixes,
+                          rep_NAs      = update_NAs,
+                          rep_values   = update_values
     )
-
   }
 
-
-  # update NAs
-  if (isTRUE(update_NAs) & length(var_use) > 0) {
-
-    x <- update_NAs(
-      dt        = x,
-      var       = var_use,
-      reportvar = reportvar,
-      suffix    = suffixes
-    )
-
-  }
 
   ### common vars ----------
 
@@ -466,6 +422,11 @@ joyn <- function(x,
                          .yreport = NULL)
 
 
+  if (sort) {
+    setorderv(x, by, na.last = na.last)
+    setattr(x, 'sorted', by)
+  }
+
   ## Rename by variables -----
 
   if (!is.null(fixby$xby)) {
@@ -474,8 +435,6 @@ joyn <- function(x,
     # not necessary
     # setnames(y, fixby$tempkey, fixby$yby)
   }
-
-
 
 
   ## convert to characters if chosen -------
@@ -495,53 +454,46 @@ joyn <- function(x,
 
   }
 
-  ## Display results------
-  if (verbose) {
+  # no matching obs
+  if (all(x[[reportvar]] %in% c("x", "y")) ||
+      all(x[[reportvar]] %in% c(1, 2))) {
 
-    # Display results in screen
-
-    cli::cli_h2("JOYn Report")
-
-    d <- freq_table(x, reportvar)
-
-    print(d[])
-
-    cli::cli_rule(right = "End of {.field JOYn} report")
-
-    if (all(x[[reportvar]] %in% c("x", "y")) ||
-        all(x[[reportvar]] %in% c(1, 2))) {
-      cli::cli_alert_warning(
-        cli::col_red("you have no matchig obs. Make sure argument
+    store_msg("warn",
+              warn = paste(cli::symbol$warning, "  Warning:"),
+              pale = " you have no matchig obs. Make sure argument
                      `by` is correct. Right now, `joyn` is joining by
-                     {.code {by}}"),
-        wrap = TRUE)
-    }
-  } # end of reporting joyn
+                     {.code {by}}")
+  }
+
+  ## Display results------
+  # freq table
+  d <- freq_table(x, reportvar)
+  rlang::env_poke(.joynenv, "freq_joyn", d)
 
   # Report var
   if (dropreport) {
-    x |> fselect(get(reportvar)) <- NULL
+    get_vars(x, reportvar) <- NULL
   }
 
-  if (sort) {
-    setorderv(x, by, na.last = na.last)
-    setattr(x, 'sorted', by)
-  }
+  # store timing
+  end_joyn <- Sys.time()
+  time_taken_joyn <- end_joyn - start_joyn
+  store_msg(
+    type    = "timing",
+    timing  = paste(cli::symbol$record, "  Timing:"),
+    pale    = "  The entire joyn function, including checks,
+    is executed in  ",
+    timing  = round(time_taken_joyn, 6),
+    pale    = "  seconds"
+  )
 
+
+  # return messages
   if (verbose == TRUE) {
-    end_joyn <- Sys.time()
-    time_taken_joyn <- end_joyn - start_joyn
-    store_msg(
-      type    = "timing",
-      timing  = paste(cli::symbol$record, "  Timing:"),
-      pale    = "  The entire joyn function, including checks, is executed in  ",
-      timing  = round(time_taken_joyn, 6),
-      pale    = "  seconds"
-    )
-
-    # return messages
-    joyn_msg()
-
+    cli::cli_h2("JOYn Report")
+    joyn_report()
+    cli::cli_rule(right = "End of {.field JOYn} report")
+    joyn_msg(msg_type)
   }
 
   setattr(x, "class", class_x)

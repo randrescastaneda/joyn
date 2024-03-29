@@ -69,33 +69,92 @@ joyn_workhorse <- function(
   # Do a full join -------------------------------------------------------------
 
   # if not 1:1 => use merge.data.table
-  if (match_type == "m:m") {
 
-    dt_result <- data.table::merge.data.table(
-      x               = x,
-      y               = y,
-      by              = by,
-      all             = TRUE,
-      sort            = FALSE,
-      suffixes        = suffixes,
-      allow.cartesian = TRUE
-    )
+  # not m:m => use collapse::join()
+    dt_result <- tryCatch(
+      expr = {
+        source_pkg <- if (match_type == "m:m") "data.table::merge" else "collapse::join"
+        if (match_type == "m:m") {
+          data.table::merge.data.table(
+            x               = x,
+            y               = y,
+            by              = by,
+            all             = TRUE,
+            sort            = FALSE,
+            suffixes        = suffixes,
+            allow.cartesian = TRUE
+          )
 
-  } else {
+        } else {
+          collapse::join( x              = x,
+                          y              = y,
+                          how            = "full",
+                          on             = by,
+                          multiple       = TRUE,     # matches row in x with m in y
+                          validate       = "m:m",    # no checks performed
+                          suffix         = suffixes,   # data.table suffixes
+                          keep.col.order = TRUE,
+                          verbose        = 0,
+                          column         = NULL)
+      }
+      }, # end of expr section
 
-    # not m:m => use collapse::join()
-    dt_result <- collapse::join( x              = x,
-                                 y              = y,
-                                 how            = "full",
-                                 on             = by,
-                                 multiple       = TRUE,     # matches row in x with m in y
-                                 validate       = "m:m",    # no checks performed
-                                 suffix         = suffixes,   # data.table suffixes
-                                 keep.col.order = TRUE,
-                                 verbose        = 0,
-                                 column         = NULL
-    )
-  }
+      error = function(e) {
+
+
+        joyn_msg("err", c("{.pkg {source_pkg}} returned the following:",
+                          x = e$message))
+      }, # end of error section
+
+      warning = function(w) {
+        if (grepl("[Oo]veridentified", w$message)) {
+          store_msg(
+            type  = "warn",
+            ok    = paste(cli::symbol$warning, "\nWarning: "),
+            pale  = "Your data is overidentified. Below the original message from {.pkg {source_pkg}}:",
+            bolded_pale  = "\n{w$message}"
+          )
+        } else {
+          store_msg(
+            type  = "warn",
+            ok    = paste(cli::symbol$warning, "\nWarning: "),
+            pale  = "{.pkg {source_pkg}} returned the following warning:",
+            bolded_pale  = "\n{w$message}"
+          )
+        }
+
+        # This is inefficient but it is the only way to return the table when
+        # there is a warning
+
+        if (match_type == "m:m") {
+          data.table::merge.data.table(
+            x               = x,
+            y               = y,
+            by              = by,
+            all             = TRUE,
+            sort            = FALSE,
+            suffixes        = suffixes,
+            allow.cartesian = TRUE
+          ) |>
+            suppressWarnings()
+
+        } else {
+          collapse::join( x              = x,
+                          y              = y,
+                          how            = "full",
+                          on             = by,
+                          multiple       = TRUE,     # matches row in x with m in y
+                          validate       = "m:m",    # no checks performed
+                          suffix         = suffixes,   # data.table suffixes
+                          keep.col.order = TRUE,
+                          verbose        = 0,
+                          column         = NULL)  |>
+            suppressWarnings()
+        }
+
+      }
+
+    ) # End of trycatch
 
   # Calculate the time taken
   end_time <- Sys.time()

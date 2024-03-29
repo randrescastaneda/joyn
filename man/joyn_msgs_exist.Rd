@@ -20,4 +20,15 @@ Checking if it exists in the environment
 print(joyn:::joyn_msgs_exist())
 }
 }
+\seealso{
+Messages functions
+\code{\link{clear_joynenv}()},
+\code{\link{joyn_msg}()},
+\code{\link{joyn_report}()},
+\code{\link{msg_type_dt}()},
+\code{\link{store_msg}()},
+\code{\link{style}()},
+\code{\link{type_choices}()}
+}
+\concept{messages}
 \keyword{internal}

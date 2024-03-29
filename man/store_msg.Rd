@@ -7,9 +7,6 @@
 store_msg(type, ...)
 }
 \arguments{
-\item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err" or \code{all}}
-
 \item{...}{combination of type and text in the form \verb{style1 = text1, style2 = text2}, etc.}
 }
 \value{
@@ -18,4 +15,26 @@ current message data frame invisibly
 \description{
 Store joyn message to .joynenv environment
 }
+\examples{
+# Storing msg with msg_type "info"
+joyn:::store_msg("info",
+  ok = cli::symbol$tick, "  ",
+  pale = "This is an info message")
+
+# Storing msg with msg_type "warn"
+joyn:::store_msg("warn",
+  err = cli::symbol$cross, "  ",
+  note = "This is a warning message")
+}
+\seealso{
+Messages functions
+\code{\link{clear_joynenv}()},
+\code{\link{joyn_msg}()},
+\code{\link{joyn_msgs_exist}()},
+\code{\link{joyn_report}()},
+\code{\link{msg_type_dt}()},
+\code{\link{style}()},
+\code{\link{type_choices}()}
+}
+\concept{messages}
 \keyword{internal}

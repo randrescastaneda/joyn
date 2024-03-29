@@ -2,7 +2,7 @@
 title: "`data.table::merge()` wrapper"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Merging data tables}
+  %\VignetteIndexEntry{`data.table::merge()` wrapper}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 

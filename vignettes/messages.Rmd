@@ -104,7 +104,7 @@ joyn(x              = x2,
      y_vars_to_keep = FALSE)
 
 # Printing the info message
-joyn_msg(type = "info")
+joyn_msg(msg_type = "info")
 
 # ---------------- Info about change in reporting variable name ----------------
 joyn(x              = x2,
@@ -113,7 +113,7 @@ joyn(x              = x2,
      reportvar      = "x",
      y_vars_to_keep = FALSE)
 
-joyn_msg(type = "info")
+joyn_msg(msg_type = "info")
 
 # ------------- Informing that reporting variable is not returned -------------
 joyn(x              = x2,
@@ -122,7 +122,7 @@ joyn(x              = x2,
      reportvar      = FALSE,
      y_vars_to_keep = FALSE)
 
-joyn_msg(type = "info")
+joyn_msg(msg_type = "info")
 
 ```
 
@@ -135,7 +135,7 @@ joyn(x              = x2,
      by             = "id", 
      y_vars_to_keep = TRUE)
 
-joyn_msg(type = "info")
+joyn_msg(msg_type = "info")
 
 ```
 
@@ -268,7 +268,7 @@ joyn_msg("err")
 
 `joyn` stores the messages in the `joyn` environment.
 
-In order to print them, you can use the `joyn_msg()` function. The `type` argument allows you to specify a certain type of message you would like to visualize, or, if you want all of them to be displayed, you can just set `type = 'all'`
+In order to print them, you can use the `joyn_msg()` function. The `msg_type` argument allows you to specify a certain type of message you would like to visualize, or, if you want all of them to be displayed, you can just set `type = 'all'`
 
 ```{r joyn-msg-ex}
 
@@ -279,10 +279,10 @@ joyn(x = x1,
      match_type = "m:1")
 
 # Print all messages stored
-joyn_msg(type = "all")
+joyn_msg(msg_type = "all")
 
 # Print info messages only 
-joyn_msg(type = "info")
+joyn_msg(msg_type = "info")
 
 
 ```

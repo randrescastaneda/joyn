@@ -4,11 +4,14 @@
 \alias{joyn_msg}
 \title{display type of joyn message}
 \usage{
-joyn_msg(type = c("all", type_choices()))
+joyn_msg(msg_type = getOption("joyn.msg_type"), msg = NULL)
 }
 \arguments{
-\item{type}{character: one or more of the following:
-"info", "note", "warn", "timing", or "err" or \code{all}}
+\item{msg_type}{character: one or more of the following:
+all, basic, info, note, warn, timing, or err}
+
+\item{msg}{character vector to be parsed to \code{\link[cli:cli_abort]{cli::cli_abort()}}. Default is
+NULL. It only works if \code{"err" \%in\% msg_type}. This is an internal argument.}
 }
 \value{
 returns data frame with message invisibly. print message in console
@@ -17,15 +20,25 @@ returns data frame with message invisibly. print message in console
 display type of joyn message
 }
 \examples{
-# Storing msg with type "info"
-joyn:::store_msg("info",
-  ok = cli::symbol$tick, "  ",
-  pale = "This is an info message")
+library(data.table)
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+t  = c(1L, 2L, 1L, 2L, NA_integer_),
+x  = 11:15)
 
-# Storing msg with type "warn"
-joyn:::store_msg("warn",
-  err = cli::symbol$cross, "  ",
-  note = "This is a warning message")
-
+y1 = data.table(id = 1:2,
+                y  = c(11L, 15L))
+df <- joyn(x1, y1, match_type = "m:1")
+joyn_msg("basic")
 joyn_msg("all")
 }
+\seealso{
+Messages functions
+\code{\link{clear_joynenv}()},
+\code{\link{joyn_msgs_exist}()},
+\code{\link{joyn_report}()},
+\code{\link{msg_type_dt}()},
+\code{\link{store_msg}()},
+\code{\link{style}()},
+\code{\link{type_choices}()}
+}
+\concept{messages}

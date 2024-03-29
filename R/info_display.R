@@ -1,37 +1,50 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of the following:
-#' `r cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
+#' @param msg_type character: one or more of the following:
+#' `r cli::format_inline("{.or {c('all', 'basic', type_choices())}}")`
+#' @param msg character vector to be parsed to [cli::cli_abort()]. Default is
+#'   NULL. It only works if `"err" %in% msg_type`. This is an internal argument.
+#'
+#' @family messages
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
 #' @examples
-#' # Storing msg with type "info"
-#' joyn:::store_msg("info",
-#'   ok = cli::symbol$tick, "  ",
-#'   pale = "This is an info message")
+#' library(data.table)
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#' t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#' x  = 11:15)
 #'
-#' # Storing msg with type "warn"
-#' joyn:::store_msg("warn",
-#'   err = cli::symbol$cross, "  ",
-#'   note = "This is a warning message")
-#'
+#' y1 = data.table(id = 1:2,
+#'                 y  = c(11L, 15L))
+#' df <- joyn(x1, y1, match_type = "m:1")
+#' joyn_msg("basic")
 #' joyn_msg("all")
-
-joyn_msg <- function(type = c("all", type_choices())) {
+joyn_msg <- function(msg_type = getOption("joyn.msg_type"),
+                     msg  = NULL) {
 
   # Check ---------
-  type_to_use <- match.arg(type, several.ok = TRUE)
+  type_to_use <- match.arg(arg = msg_type,
+                           choices = c("all", "basic", type_choices()),
+                           several.ok = TRUE)
   joyn_msgs_exist()
 
   # get msgs ---------
-  dt <- rlang::env_get(.joynenv, "joyn_msgs")
+  dt <- rlang::env_get(.joynenv, "joyn_msgs") |>
+    roworder(type)
 
-  if ("all" %!in% type_to_use) {
-    dt <- dt |>
-      fsubset(type %in% type_to_use)
-  }
+  dt <-
+    if (!any(c("all", "basic") %in% type_to_use)) {
+      dt |>
+        fsubset(type %in% type_to_use)
+    } else if ("basic" %in% type_to_use) {
+      dt |>
+        fsubset(type %in% c("info", "note", "warn"))
+    } else {
+      dt
+    }
+
 
   # display results --------
   # cat(dt[["msg"]], "\n", sep = "\n")
@@ -39,6 +52,9 @@ joyn_msg <- function(type = c("all", type_choices())) {
     cli::cli_text(.)
   })
 
+  if ("err" %in% type_to_use & is.character(msg)) {
+    cli::cli_abort(msg)
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
@@ -53,8 +69,20 @@ joyn_msg <- function(type = c("all", type_choices())) {
 #' @param ... combination of type and text in the form `style1 = text1, style2 =
 #'   text2`, etc.
 #'
+#' @family messages
+#'
 #' @return current message data frame invisibly
 #' @keywords internal
+#' @examples
+#' # Storing msg with msg_type "info"
+#' joyn:::store_msg("info",
+#'   ok = cli::symbol$tick, "  ",
+#'   pale = "This is an info message")
+#'
+#' # Storing msg with msg_type "warn"
+#' joyn:::store_msg("warn",
+#'   err = cli::symbol$cross, "  ",
+#'   note = "This is a warning message")
 store_msg <- function(type, ...) {
 
   # check input ----------
@@ -100,6 +128,11 @@ check_style <- \(...) {
   invisible(TRUE)
 }
 
+#' Choice of messages
+#'
+#' @return character vector with choices of types
+#' @family messages
+#' @keywords internal
 type_choices <- \(){
   rlang::env_get(.joynenv, "msg_type_choices")
 }
@@ -108,6 +141,7 @@ type_choices <- \(){
 #' convert style of joyn message to data frame containing type and message
 #'
 #' @inheritParams joyn_msg
+#' @family messages
 #'
 #' @return data frame with two variables, type and msg
 #' @keywords internal
@@ -125,6 +159,7 @@ msg_type_dt <- \(type, ...) {
 #' @param ... combination of type and text in the form
 #' `type1 = text1, type2 = text2`
 #' @param sep a character string to separate the terms to [paste]
+#' @family messages
 #'
 #' @return formatted text
 #' @keywords internal
@@ -198,6 +233,7 @@ style <- function(..., sep = "") {
 #' Checks the presence of joyn messages stored in joyn environment
 #'
 #' @return invisible TRUE
+#' @family messages
 #' @keywords internal
 #' @examples
 #' \dontrun{
@@ -217,6 +253,7 @@ joyn_msgs_exist <- \() {
 
 #' Clearing joyn environment
 #' @keywords internal
+#' @family messages
 #' @examples
 #' \dontrun{
 #' # Storing a message
@@ -246,3 +283,38 @@ clear_joynenv <- \(){
   invisible(.joyn_source)
 }
 
+
+
+
+
+#' Print JOYn report table
+#'
+#' @inheritParams joyn
+#' @family messages
+#' @return invisible table of frequencies
+#' @export
+#'
+#' @examples
+#' library(data.table)
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#' t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#' x  = 11:15)
+#'
+#' y1 = data.table(id = 1:2,
+#'                 y  = c(11L, 15L))
+#'
+#' d <- joyn(x1, y1, match_type = "m:1")
+#' joyn_report(verbose = TRUE)
+joyn_report <- function(verbose = getOption("joyn.verbose")) {
+  if (!rlang::env_has(.joynenv, "freq_joyn")) {
+    cli::cli_abort(c("no frequencies table stored in {.field .joynenv}",
+                     "i" = "make sure that joyn has been
+                     executed at least once"))
+  }
+
+  freq <- rlang::env_get(.joynenv, "freq_joyn")
+  if (verbose) {
+    print(freq)
+  }
+  return(invisible(freq))
+}

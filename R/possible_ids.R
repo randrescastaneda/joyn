@@ -117,15 +117,13 @@ possible_ids <- function(dt,
     dvars <- vars[dup_var]
 
     msg     <- "column names must be unique"
-    hint    <- "try changing the names using `make.names()`"
-    problem <- glue::glue("{dvars} is/are duplicated")
-    rlang::abort(c(
+    hint    <- "try changing the names using {.fun make.names}"
+    problem <- "{.var {dvars}}  {?is/are}  duplicated"
+    cli::cli_abort(c(
                   msg,
                   i = hint,
                   x = problem
-                  ),
-                  class = "error_class"
-                  )
+                  ))
 
   }
 

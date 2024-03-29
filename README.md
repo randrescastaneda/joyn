@@ -9,7 +9,7 @@
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn?branch=master)
 <!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
-<!-- [![](https://img.shields.io/badge/devel%20version-0.1.5-blue.svg)](https://github.com/randrescastaneda/joyn) -->
+<!-- [![](https://img.shields.io/badge/devel%20version-0.1.6.9004-blue.svg)](https://github.com/randrescastaneda/joyn) -->
 <!-- [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing) -->
 [![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml)
 
@@ -206,9 +206,6 @@ joyn(x = x1,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id and y
-#> ● Timing: The full joyn is executed in 0.000718 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.048331
-#> seconds
 #> Key: <id>
 #>       id     t     x     y  .joyn
 #>    <num> <int> <int> <num> <char>
@@ -234,9 +231,6 @@ joyn(x = x1,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id and y
-#> ● Timing: The full joyn is executed in 7.4e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.041525
-#> seconds
 #> Key: <id>
 #>       id     t     x     y  .joyn
 #>    <num> <int> <int> <num> <char>
@@ -260,9 +254,6 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id and x from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.1e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.033808
-#> seconds
 #> Key: <id, x>
 #>       id     t     x    yd     y  .joyn
 #>    <num> <int> <num> <num> <int> <char>
@@ -293,9 +284,6 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.5e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.035442
-#> seconds
 #> Key: <id>
 #>       id     t     x    yd     y  .joyn
 #>    <num> <int> <num> <num> <int> <char>
@@ -324,9 +312,6 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.2e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.038231
-#> seconds
 #> Key: <id>
 #>       id     t     x    yd     y      .joyn
 #>    <num> <int> <num> <num> <int>     <char>
@@ -355,9 +340,6 @@ joyn(x = x2,
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
 #> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> ● Timing: The full joyn is executed in 8.1e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.033889
-#> seconds
 #> Key: <id>
 #>       id     t     x    yd     y         .joyn
 #>    <num> <int> <num> <num> <int>        <char>
@@ -386,9 +368,6 @@ joyn(x = x2,
 #> 4:  total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ ❯ Joyn's report available in variable .joyn
-#> ● Timing: The full joyn is executed in 7.7e-05 seconds
-#> ● Timing: The entire joyn function, including checks, is executed in 0.025583
-#> seconds
 #> Key: <id>
 #>       id     t     x  .joyn
 #>    <num> <int> <num> <char>
