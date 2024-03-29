@@ -1,5 +1,7 @@
 # joyn 0.2.0
 
+`joyn` has gained two new authors: Zander Prinsloo and Rossana Tatulli. 
+
 ## Breaking changes
 
 * Function `joyn::merge()` was replaced by `joyn::joyn()`. This is now the main function of the `joyn` package.
