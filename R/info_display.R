@@ -1,41 +1,50 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of the following: `r joyn:::type_choices()`
-#'   cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
+#' @param msg_type character: one or more of the following:
+#' `r cli::format_inline("{.or {c('all', 'basic', type_choices())}}")`
 #' @param msg character vector to be parsed to [cli::cli_abort()]. Default is
-#'   NULL. It only works if `"err" %in% type`
+#'   NULL. It only works if `"err" %in% msg_type`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
 #' @examples
-#' # Storing msg with type "info"
+#' # Storing msg with msg_type "info"
 #' joyn:::store_msg("info",
 #'   ok = cli::symbol$tick, "  ",
 #'   pale = "This is an info message")
 #'
-#' # Storing msg with type "warn"
+#' # Storing msg with msg_type "warn"
 #' joyn:::store_msg("warn",
 #'   err = cli::symbol$cross, "  ",
 #'   note = "This is a warning message")
 #'
 #' joyn_msg("all")
 
-joyn_msg <- function(type = c("all", type_choices()),
+joyn_msg <- function(msg_type = getOption("joyn.msg_type"),
                      msg  = NULL) {
 
   # Check ---------
-  type_to_use <- match.arg(type, several.ok = TRUE)
+  type_to_use <- match.arg(arg = msg_type,
+                           choices = c("all", "basic", type_choices()),
+                           several.ok = TRUE)
   joyn_msgs_exist()
 
   # get msgs ---------
   dt <- rlang::env_get(.joynenv, "joyn_msgs") |>
     roworder(type)
 
-  if ("all" %!in% type_to_use) {
-    dt <- dt |>
-      fsubset(type %in% type_to_use)
-  }
+  dt <-
+    if (!any(c("all", "basic") %in% type_to_use)) {
+      dt |>
+        fsubset(type %in% type_to_use)
+    } else if ("basic" %in% type_to_use) {
+      dt |>
+        fsubset(type %in% c("info", "note", "warn"))
+    } else {
+      dt
+    }
+
 
   # display results --------
   # cat(dt[["msg"]], "\n", sep = "\n")

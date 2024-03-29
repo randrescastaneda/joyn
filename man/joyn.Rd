@@ -23,7 +23,8 @@ joyn(
   allow.cartesian = deprecated(),
   yvars = deprecated(),
   keep_y_in_x = deprecated(),
-  na.last = getOption("joyn.na.last")
+  na.last = getOption("joyn.na.last"),
+  msg_type = getOption("joyn.msg_type")
 )
 }
 \arguments{
@@ -118,6 +119,8 @@ By specifying \code{TRUE} of \code{FALSE} you force the behavior of the join.}
 \code{na.last=NA} is valid only for \code{x[order(., na.last)]} and its
 default is \code{TRUE}. \code{setorder} and \code{setorderv} only accept
 \code{TRUE}/\code{FALSE} with default \code{FALSE}. }
+
+\item{msg_type}{character: type of messages to display by default}
 }
 \value{
 a data.table joining x and y.

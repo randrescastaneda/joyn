@@ -4,14 +4,14 @@
 \alias{joyn_msg}
 \title{display type of joyn message}
 \usage{
-joyn_msg(type = c("all", type_choices()), msg = NULL)
+joyn_msg(msg_type = getOption("joyn.msg_type"), msg = NULL)
 }
 \arguments{
-\item{type}{character: one or more of the following: info, note, warn, timing, err
-cli::format_inline("{.or {.val {type_choices()}}}")\code{or}all`}
+\item{msg_type}{character: one or more of the following:
+all, basic, info, note, warn, timing, or err}
 
 \item{msg}{character vector to be parsed to \code{\link[cli:cli_abort]{cli::cli_abort()}}. Default is
-NULL. It only works if \code{"err" \%in\% type}}
+NULL. It only works if \code{"err" \%in\% msg_type}}
 }
 \value{
 returns data frame with message invisibly. print message in console
@@ -20,12 +20,12 @@ returns data frame with message invisibly. print message in console
 display type of joyn message
 }
 \examples{
-# Storing msg with type "info"
+# Storing msg with msg_type "info"
 joyn:::store_msg("info",
   ok = cli::symbol$tick, "  ",
   pale = "This is an info message")
 
-# Storing msg with type "warn"
+# Storing msg with msg_type "warn"
 joyn:::store_msg("warn",
   err = cli::symbol$cross, "  ",
   note = "This is a warning message")

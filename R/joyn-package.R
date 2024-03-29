@@ -25,7 +25,8 @@ if (getRversion() >= "2.15.1") {
       ".xreport",
       ".yreport",
       'use_util_reportvar',
-      'varx_na'
+      'varx_na',
+      'type'
     ),
     package = utils::packageName()
   )

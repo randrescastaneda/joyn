@@ -74,6 +74,7 @@
 #' @param yvars `r lifecycle::badge("superseded")`: use now `y_vars_to_keep`
 #' @param keep_y_in_x `r lifecycle::badge("superseded")`: use now
 #'   `keep_common_vars`
+#' @param msg_type character: type of messages to display by default
 #' @inheritParams data.table::setorderv
 #'
 #' @return a data.table joining x and y.
@@ -152,25 +153,26 @@
 #' joyn(x2, y2, by = "id", update_values = TRUE, match_type = "m:1")
 #'
 joyn <- function(x,
-                  y,
-                  by               = intersect(names(x), names(y)),
-                  match_type       = c("1:1", "1:m", "m:1", "m:m"),
-                  keep             = c("full", "left", "master",
+                 y,
+                 by               = intersect(names(x), names(y)),
+                 match_type       = c("1:1", "1:m", "m:1", "m:m"),
+                 keep             = c("full", "left", "master",
                                        "right", "using", "inner"),
-                  y_vars_to_keep   = TRUE,
-                  update_values    = FALSE,
-                  update_NAs       = update_values,
-                  reportvar        = getOption("joyn.reportvar"),
-                  reporttype       = c("character", "numeric"),
-                  roll             = NULL,
-                  keep_common_vars = FALSE,
-                  sort             = TRUE,
-                  verbose          = getOption("joyn.verbose"),
-                  suffixes         = getOption("joyn.suffixes"),
-                  allow.cartesian  = deprecated(),
-                  yvars            = deprecated(),
-                  keep_y_in_x      = deprecated(),
-                  na.last          = getOption("joyn.na.last")) {
+                 y_vars_to_keep   = TRUE,
+                 update_values    = FALSE,
+                 update_NAs       = update_values,
+                 reportvar        = getOption("joyn.reportvar"),
+                 reporttype       = c("character", "numeric"),
+                 roll             = NULL,
+                 keep_common_vars = FALSE,
+                 sort             = TRUE,
+                 verbose          = getOption("joyn.verbose"),
+                 suffixes         = getOption("joyn.suffixes"),
+                 allow.cartesian  = deprecated(),
+                 yvars            = deprecated(),
+                 keep_y_in_x      = deprecated(),
+                 na.last          = getOption("joyn.na.last"),
+                 msg_type         = getOption("joyn.msg_type")) {
 
   clear_joynenv()
 
@@ -266,18 +268,6 @@ joyn <- function(x,
   filter_y_vars <-  c(by, y_vars_to_keep)
   y <- y |>
     fselect(filter_y_vars)
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # new names in Y for same-name variables in X   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #newyvars <- check_new_y_vars(x, by, y_vars_to_keep) - ZP-------------------------------
-
-
-  # rename variables in Y
-  # if (!is.null(y_vars_to_keep) & !is.null(newyvars)) {
-  #   setnames(y, old = y_vars_to_keep, new = newyvars)
-  # }
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #             include report variable   ---------
@@ -464,48 +454,46 @@ joyn <- function(x,
 
   }
 
+  # no matching obs
+  if (all(x[[reportvar]] %in% c("x", "y")) ||
+      all(x[[reportvar]] %in% c(1, 2))) {
+
+    store_msg("warn",
+              warn = paste(cli::symbol$warning, "  Warning:"),
+              pale = " you have no matchig obs. Make sure argument
+                     `by` is correct. Right now, `joyn` is joining by
+                     {.code {by}}")
+  }
+
   ## Display results------
   # freq table
   d <- freq_table(x, reportvar)
   rlang::env_poke(.joynenv, "freq_joyn", d)
-  if (verbose) {
-
-    # Display results in screen
-
-    cli::cli_h2("JOYn Report")
-    joyn_report()
-    cli::cli_rule(right = "End of {.field JOYn} report")
-
-    if (all(x[[reportvar]] %in% c("x", "y")) ||
-        all(x[[reportvar]] %in% c(1, 2))) {
-      cli::cli_alert_warning(
-        cli::col_red("you have no matchig obs. Make sure argument
-                     `by` is correct. Right now, `joyn` is joining by
-                     {.code {by}}"),
-        wrap = TRUE)
-    }
-  } # end of reporting joyn
 
   # Report var
   if (dropreport) {
-    x |> fselect(get(reportvar)) <- NULL
+    get_vars(x, reportvar) <- NULL
   }
 
+  # store timing
+  end_joyn <- Sys.time()
+  time_taken_joyn <- end_joyn - start_joyn
+  store_msg(
+    type    = "timing",
+    timing  = paste(cli::symbol$record, "  Timing:"),
+    pale    = "  The entire joyn function, including checks,
+    is executed in  ",
+    timing  = round(time_taken_joyn, 6),
+    pale    = "  seconds"
+  )
 
+
+  # return messages
   if (verbose == TRUE) {
-    end_joyn <- Sys.time()
-    time_taken_joyn <- end_joyn - start_joyn
-    store_msg(
-      type    = "timing",
-      timing  = paste(cli::symbol$record, "  Timing:"),
-      pale    = "  The entire joyn function, including checks, is executed in  ",
-      timing  = round(time_taken_joyn, 6),
-      pale    = "  seconds"
-    )
-
-    # return messages
-    joyn_msg()
-
+    cli::cli_h2("JOYn Report")
+    joyn_report()
+    cli::cli_rule(right = "End of {.field JOYn} report")
+    joyn_msg(msg_type)
   }
 
   setattr(x, "class", class_x)

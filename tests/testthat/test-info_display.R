@@ -25,7 +25,7 @@ df1 |>
 
 # Test that joyn_msg works as expected ####
 test_that("joyn_msg works as expected", {
-  types <- c("info", "note", "warn", "timing", "err")
+  types <- type_choices()
   # store some msg
   store_msg("info",
     ok = cli::symbol$tick, "  ",
@@ -47,10 +47,10 @@ test_that("joyn_msg works as expected", {
   #print(out_warn)$type |>
   #  expect_equal("warn")
 
-  type = "err"
+  msg_type = "err"
 
-  if (type %in% types) {
-      expect_no_error(joyn_msg(type))
+  if (msg_type %in% types) {
+      expect_no_error(joyn_msg(msg_type))
     } else expect_error()
 
 })

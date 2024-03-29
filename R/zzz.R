@@ -6,7 +6,8 @@
     joyn.reportvar       = ".joyn",
     joyn.suffixes        = c(".x", ".y"),
     joyn.match_type      = c("1:1", "1:m", "m:1", "m:m"),
-    joyn.na.last         = FALSE
+    joyn.na.last         = FALSE,
+    joyn.msg_type        = "basic"
   )
   toset <- !(names(op.joyn) %in% names(op))
 
@@ -85,7 +86,7 @@ get_joyn_options <- function(env     = .joynenv,
         " ", format("default:"), " ", cli::col_cyan(format(default_value)),
         " ", format("current:"), " ", cli::col_cyan(format(current_value))
       ) |>
-      cli::ansi_columns()
+      cli::ansi_columns(width = 80)
 
 
     # print and display options
