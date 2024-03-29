@@ -1,40 +1,50 @@
 #' display type of joyn message
 #'
-#' @param type character: one or more of the following: `r joyn:::type_choices()`
-#'   cli::format_inline("{.or {.val {type_choices()}}}")` or `all`
+#' @param msg_type character: one or more of the following:
+#' `r cli::format_inline("{.or {c('all', 'basic', type_choices())}}")`
 #' @param msg character vector to be parsed to [cli::cli_abort()]. Default is
-#'   NULL. It only works if `"err" %in% type`
+#'   NULL. It only works if `"err" %in% msg_type`
 #'
 #' @return returns data frame with message invisibly. print message in console
 #' @export
 #'
 #' @examples
-#' # Storing msg with type "info"
+#' # Storing msg with msg_type "info"
 #' joyn:::store_msg("info",
 #'   ok = cli::symbol$tick, "  ",
 #'   pale = "This is an info message")
 #'
-#' # Storing msg with type "warn"
+#' # Storing msg with msg_type "warn"
 #' joyn:::store_msg("warn",
 #'   err = cli::symbol$cross, "  ",
 #'   note = "This is a warning message")
 #'
 #' joyn_msg("all")
 
-joyn_msg <- function(type = c("all", type_choices()),
+joyn_msg <- function(msg_type = getOption("joyn.msg_type"),
                      msg  = NULL) {
 
   # Check ---------
-  type_to_use <- match.arg(type, several.ok = TRUE)
+  type_to_use <- match.arg(arg = msg_type,
+                           choices = c("all", "basic", type_choices()),
+                           several.ok = TRUE)
   joyn_msgs_exist()
 
   # get msgs ---------
-  dt <- rlang::env_get(.joynenv, "joyn_msgs")
+  dt <- rlang::env_get(.joynenv, "joyn_msgs") |>
+    roworder(type)
 
-  if ("all" %!in% type_to_use) {
-    dt <- dt |>
-      fsubset(type %in% type_to_use)
-  }
+  dt <-
+    if (!any(c("all", "basic") %in% type_to_use)) {
+      dt |>
+        fsubset(type %in% type_to_use)
+    } else if ("basic" %in% type_to_use) {
+      dt |>
+        fsubset(type %in% c("info", "note", "warn"))
+    } else {
+      dt
+    }
+
 
   # display results --------
   # cat(dt[["msg"]], "\n", sep = "\n")
@@ -252,3 +262,38 @@ clear_joynenv <- \(){
   invisible(.joyn_source)
 }
 
+
+
+
+
+#' Print JOYn report table
+#'
+#' @inheritParams joyn
+#'
+#' @return invisible table of frequencies
+#' @export
+#'
+#' @examples
+#' library(data.table)
+#' x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+#' t  = c(1L, 2L, 1L, 2L, NA_integer_),
+#' x  = 11:15)
+#'
+#' y1 = data.table(id = 1:2,
+#'                 y  = c(11L, 15L))
+#'
+#' d <- joyn(x1, y1, match_type = "m:1")
+#' joyn_report(verbose = TRUE)
+joyn_report <- function(verbose = getOption("joyn.verbose")) {
+  if (!rlang::env_has(.joynenv, "freq_joyn")) {
+    cli::cli_abort(c("no frequencies table stored in {.field .joynenv}",
+                     "i" = "make sure that joyn has been
+                     executed at least once"))
+  }
+
+  freq <- rlang::env_get(.joynenv, "freq_joyn")
+  if (verbose) {
+    print(freq)
+  }
+  return(invisible(freq))
+}

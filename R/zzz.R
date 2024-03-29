@@ -6,7 +6,8 @@
     joyn.reportvar       = ".joyn",
     joyn.suffixes        = c(".x", ".y"),
     joyn.match_type      = c("1:1", "1:m", "m:1", "m:m"),
-    joyn.na.last         = FALSE
+    joyn.na.last         = FALSE,
+    joyn.msg_type        = "basic"
   )
   toset <- !(names(op.joyn) %in% names(op))
 
@@ -34,9 +35,9 @@
 #'    If NULL, all joyn options
 #' @return joyn options and values invisibly as a list
 #'
-#' @keywords internal
+#' @export
 #' @examples
-#' \donotrun{
+#' \dontrun{
 #'
 #' # display all joyn options, their default and current values
 #' joyn:::get_joyn_options()
@@ -68,24 +69,33 @@ get_joyn_options <- function(env     = .joynenv,
   }
 
   if (display == TRUE) {
-    options_info <- sapply(names(op.joyn), function(opt) {
 
-      default_value <- op.joyn[[opt]]
-      current_value <- getOption(opt)
-      sprintf("%-20s default = %-20s > current = %s",
-              opt,
-              toString(default_value),
-              toString(current_value))
-    },
-    USE.NAMES = FALSE)
+    names_ops     <- names(op.joyn)
+    default_value <- sapply(op.joyn, toString, USE.NAMES = FALSE, simplify = TRUE)
+    current_value <- sapply(names(op.joyn),
+                            \(x) {
+                              x |>
+                                getOption() |>
+                                toString()
+                            },
+                            USE.NAMES = FALSE)
+
+    ops_info <-
+      paste0(
+        cli::col_green(cli::symbol$bullet), " ", cli::col_blue(format(names_ops)),
+        " ", format("default:"), " ", cli::col_cyan(format(default_value)),
+        " ", format("current:"), " ", cli::col_cyan(format(current_value))
+      ) |>
+      cli::ansi_columns(width = 80)
 
 
     # print and display options
-    cat("\nJoyn Options:\n")
-    cat("---------------------------------------------------------------------\n")
-    cat(paste(options_info, collapse = "\n"), "\n")
-    cat("---------------------------------------------------------------------\n")
-
+    cli::boxx(ops_info,
+              border_style = "single",
+              padding = 1,
+              header = cli::col_cyan("Joyn options: "),
+              border_col = "white") |>
+      print()
   }
 
   invisible(op.joyn)
@@ -99,7 +109,7 @@ get_joyn_options <- function(env     = .joynenv,
 #' @param ... pairs of option = value
 #' @return joyn new options and values invisibly as a list
 #'
-#' @keywords internal
+#' @export
 #' @examples
 #' joyn:::set_joyn_options(joyn.verbose = FALSE, joyn.reportvar = "joyn_status")
 #' joyn:::set_joyn_options() # return to default options
