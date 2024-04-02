@@ -12,6 +12,7 @@ Useful links:
 \itemize{
   \item \url{https://github.com/randrescastaneda/joyn}
   \item \url{https://rossanatat.github.io/joyn/}
+  \item \url{https://randrescastaneda.github.io/joyn/}
   \item Report bugs at \url{https://github.com/randrescastaneda/joyn/issues}
 }
 
