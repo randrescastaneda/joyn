@@ -3,7 +3,8 @@ template:
   bootstrap: 5
   bottswatch: cosmo
   bslib:
-    primary: '#87CEFA'
+    primary: "#87CEFA"
+
 development:
   mode: auto
 home:
@@ -12,8 +13,8 @@ home:
 authors:
   R.Andres Castaneda:
     href: https://randrescastaneda.rbind.io/
-  Zander Prinsloo: ~
-  Rossana Tatulli: ~
+  Zander Prinsloo
+
 navbar:
   bg: primary
   structure:
@@ -46,4 +47,3 @@ articles:
   - merge-wrapper
   - messages
   - aux-functions
-
