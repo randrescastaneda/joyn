@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -65,9 +65,6 @@
      
   </a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="dev/">dev version</a>
-</li>
       </ul>
 </div>
 
@@ -79,7 +76,11 @@
 <div class="page-header"><h1 id="joyn">joyn<a class="anchor" aria-label="anchor" href="#joyn"></a>
 </h1></div>
 <!-- badges: start -->
+<!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg/)](https://github.com/randrescastaneda/joyn/actions/) -->
 
+<!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
+<!-- [![](https://img.shields.io/badge/devel%20version-0.2.0-blue.svg)](https://github.com/randrescastaneda/joyn) -->
+<!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml) -->
 <!-- badges: end -->
 <p><code>joyn</code> empowers you to assess the results of joining data frames, making it easier and more efficient to combine your tables. Similar in philosophy to the <code>merge</code> command in <code>Stata</code>, <code>joyn</code> offers matching key variables and detailed join reports to ensure accurate and insightful results.</p>
 <div class="section level2">
@@ -222,9 +223,6 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id and y</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 0.000718 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.048331</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
@@ -250,9 +248,6 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id and y</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 7.4e-05 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.041525</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
@@ -276,9 +271,6 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id and x from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.1e-05 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.033808</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id, x&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
@@ -309,9 +301,6 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.5e-05 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.035442</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
@@ -340,9 +329,6 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.2e-05 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.038231</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y      .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span></span>
@@ -371,9 +357,6 @@
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 8.1e-05 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.033889</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y         .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;        &lt;char&gt;</span></span>
@@ -402,9 +385,6 @@
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ● Timing: The full joyn is executed in 7.7e-05 seconds</span></span>
-<span><span class="co">#&gt; ● Timing: The entire joyn function, including checks, is executed in 0.025583</span></span>
-<span><span class="co">#&gt; seconds</span></span>
 <span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
@@ -448,19 +428,18 @@
 <li>
 <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a> <br><small class="roles"> Author, maintainer </small>  </li>
 <li>Zander Prinsloo <br><small class="roles"> Author </small>  </li>
-<li><a href="authors.html">More about authors...</a></li>
+<li>Rossana Tatulli <br><small class="roles"> Author </small>  </li>
 </ul>
 </div>
 
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/randrescastaneda/joyn/actions/" class="external-link"><img src="https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg/" alt="R-CMD-check"></a></li>
-<li><a href="https://cran.r-project.org/package=joyn/" class="external-link"><img src="https://www.r-pkg.org/badges/version/joyn?color=orange"></a></li>
-<li><a href="https://github.com/randrescastaneda/joyn" class="external-link"><img src="https://img.shields.io/badge/devel%20version-0.1.4-blue.svg"></a></li>
+<li><a href="https://cran.r-project.org/web/checks/check_results_joyn.html" class="external-link"><img src="https://badges.cranchecks.info/summary/joyn.svg" alt="CRAN checks"></a></li>
+<li><a href="https://cran.r-project.org/package=joyn" class="external-link"><img src="https://www.r-pkg.org/badges/version/joyn?color=orange"></a></li>
+<li><a href="https://github.com/randrescastaneda/joyn" class="external-link"><img src="https://img.shields.io/badge/devel%20version-0.2.0-blue.svg"></a></li>
+<li><a href="https://codecov.io/gh/randrescastaneda/joyn" class="external-link"><img src="https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#maturing" class="external-link"><img src="https://img.shields.io/badge/lifecycle-maturing-green.svg"></a></li>
-<li><a href="https://app.codecov.io/gh/randrescastaneda/joyn?branch=master" class="external-link"><img src="https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg" alt="codecov"></a></li>
-<li><a href="https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 
@@ -470,7 +449,7 @@
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+<p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">

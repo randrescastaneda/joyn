@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.1.6.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,9 +44,6 @@
      
   </a>
 </li>
-<li class="nav-item">
-  <a class="nav-link" href="../dev/">dev version</a>
-</li>
       </ul></div>
 
     
@@ -62,10 +59,23 @@
 <h2 class="pkg-version" data-toc-text="development version" id="joyn-development-version">joyn (development version)<a class="anchor" aria-label="anchor" href="#joyn-development-version"></a></h2>
 </div>
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.6" id="joyn-016">joyn 0.1.6<a class="anchor" aria-label="anchor" href="#joyn-016"></a></h2>
-</div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.5" id="joyn-015">joyn 0.1.5<a class="anchor" aria-label="anchor" href="#joyn-015"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.2.0" id="joyn-020">joyn 0.2.0<a class="anchor" aria-label="anchor" href="#joyn-020"></a></h2><p class="text-muted">CRAN release: 2024-03-29</p>
+<p><code>joyn</code> has gained two new authors: Zander Prinsloo and Rossana Tatulli.</p>
+<div class="section level3">
+<h3 id="breaking-changes-0-2-0">Breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-0-2-0"></a></h3>
+<ul><li><p>Function <code><a href="../reference/merge.html">joyn::merge()</a></code> was replaced by <code><a href="../reference/joyn.html">joyn::joyn()</a></code>. This is now the main function of the <code>joyn</code> package.</p></li>
+<li><p>Arguments <code>allow.cartesian</code>, <code>yvars</code>, and <code>keep_y_in_x</code> have been deprecated. The latter two have been replaced by <code>y_vars_to_keep</code> and <code>keep_common_vars</code>, respectively. The new argument names bring more clarity about what they arguments do.</p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
+<ul><li><p>New function <code><a href="../reference/merge.html">joyn::merge()</a></code> works as a mask for the <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">base::merge()</a></code> or <code><a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge.data.table()</a></code>. <code><a href="../reference/merge.html">joyn::merge()</a></code> has the same features as the previous two, but includes the features of <code><a href="../reference/joyn.html">joyn::joyn()</a></code>.</p></li>
+<li><p>Messages style have been improved and categorized. See <a href="https://randrescastaneda.github.io/joyn/articles/messages.html">message vignette</a> for more information.</p></li>
+<li><p>New functions to mimic <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr joins</a>. The <code>joyn</code> variants have all the features for <code><a href="../reference/joyn.html">joyn::joyn()</a></code> but lack some of the most advance features of <code>dplyr</code> joins like <a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link"><code>joyn::join_by()</code></a></p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-improvements-and-fixes-0-2-0">Minor improvements and fixes<a class="anchor" aria-label="anchor" href="#minor-improvements-and-fixes-0-2-0"></a></h3>
+<ul><li>Minor inconsistency bugs were fixed.</li>
+</ul></div>
 </div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.4" id="joyn-014">joyn 0.1.4<a class="anchor" aria-label="anchor" href="#joyn-014"></a></h2><p class="text-muted">CRAN release: 2021-12-14</p>
@@ -101,7 +111,7 @@
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">
