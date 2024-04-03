@@ -3,13 +3,16 @@ template:
   bootstrap: 5
   bottswatch: cosmo
   bslib:
-    primary: "#CCCCFF"
+    primary: "#87CEFA"
+
 
 development:
   mode: auto
+
 home:
   title: An R package for joining tables
   description: It is a joy to join tables in R with `joyn`
+
 authors:
   R.Andres Castaneda:
     href: https://randrescastaneda.rbind.io/
@@ -38,6 +41,7 @@ navbar:
     github:
       icon: fab fa-github fa-lg
       href: https://github.com/randrescastaneda/joyn/
+
 articles:
 - title: Usage
   navbar: ~
@@ -48,6 +52,7 @@ articles:
   - merge-wrapper
   - messages
   - aux-functions
+
 reference:
 - title: "Main function"
   desc: >
