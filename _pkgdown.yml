@@ -5,7 +5,7 @@ template:
   bslib:
     primary: '#87CEFA'
 development:
-  mode: auto
+  mode: release
 home:
   title: An R package for joining tables
   description: It is a joy to join tables in R with `joyn`
