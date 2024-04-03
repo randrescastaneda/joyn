@@ -48,3 +48,35 @@ articles:
   - merge-wrapper
   - messages
   - aux-functions
+reference:
+- title: "Main function"
+  desc: >
+    Since the objective of joyn is to join tables with joy, there is only one
+    main function in this package
+  contents:
+  - joyn
+- title: "Dplyr-joins"
+  contents:
+  - full_join
+  - right_join
+  - left_join
+  - inner_join
+- title: "Merge data tables"
+  contents:
+  - merge
+- title: "Auxiliary functions"
+- subtitle: Information
+  contents:
+  - has_concept("messages")
+- subtitle: JOYn options
+  contents:
+  - has_concept("options")
+- subtitle: MISC
+  contents:
+  - is_id
+  - freq_table
+  - possible_ids
+  - is_balanced
+  - rename_to_valid
+  - joyn_msg
+
