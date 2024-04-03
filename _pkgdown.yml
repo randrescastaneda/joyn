@@ -3,7 +3,7 @@ template:
   bootstrap: 5
   bottswatch: cosmo
   bslib:
-    primary: "#87CEFA"
+    primary: "#CCCCFF"
 
 development:
   mode: auto
