@@ -1,165 +1,165 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/404.html</loc>
+    <loc>/404.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/adv-functionalities.html</loc>
+    <loc>/articles/adv-functionalities.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/aux-functions.html</loc>
+    <loc>/articles/aux-functions.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/dplyr-joins.html</loc>
+    <loc>/articles/dplyr-joins.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/index.html</loc>
+    <loc>/articles/index.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/main-functionalities.html</loc>
+    <loc>/articles/main-functionalities.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/merge-wrapper.html</loc>
+    <loc>/articles/merge-wrapper.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/articles/messages.html</loc>
+    <loc>/articles/messages.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/authors.html</loc>
+    <loc>/authors.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/index.html</loc>
+    <loc>/index.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/LICENSE-text.html</loc>
+    <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/LICENSE.html</loc>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/news/index.html</loc>
+    <loc>/news/index.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/arguments_checks.html</loc>
+    <loc>/reference/arguments_checks.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_by_vars.html</loc>
+    <loc>/reference/check_by_vars.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_dt_by.html</loc>
+    <loc>/reference/check_dt_by.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_duplicate_names.html</loc>
+    <loc>/reference/check_duplicate_names.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_match_type.html</loc>
+    <loc>/reference/check_match_type.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_new_y_vars.html</loc>
+    <loc>/reference/check_new_y_vars.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_reportvar.html</loc>
+    <loc>/reference/check_reportvar.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_unmatched_keys.html</loc>
+    <loc>/reference/check_unmatched_keys.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_xy.html</loc>
+    <loc>/reference/check_xy.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/check_y_vars_to_keep.html</loc>
+    <loc>/reference/check_y_vars_to_keep.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/clear_joynenv.html</loc>
+    <loc>/reference/clear_joynenv.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/freq_table.html</loc>
+    <loc>/reference/freq_table.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/full_join.html</loc>
+    <loc>/reference/full_join.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/get_joyn_options.html</loc>
+    <loc>/reference/get_joyn_options.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/index.html</loc>
+    <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/inner_join.html</loc>
+    <loc>/reference/inner_join.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/is_balanced.html</loc>
+    <loc>/reference/is_balanced.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/is_id.html</loc>
+    <loc>/reference/is_id.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/is_match_type_error.html</loc>
+    <loc>/reference/is_match_type_error.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/is_valid_m_key.html</loc>
+    <loc>/reference/is_valid_m_key.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/joyn-package.html</loc>
+    <loc>/reference/joyn-package.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/joyn.html</loc>
+    <loc>/reference/joyn.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/joyn_msg.html</loc>
+    <loc>/reference/joyn_msg.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/joyn_msgs_exist.html</loc>
+    <loc>/reference/joyn_msgs_exist.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/joyn_report.html</loc>
+    <loc>/reference/joyn_report.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/joyn_workhorse.html</loc>
+    <loc>/reference/joyn_workhorse.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/left_join.html</loc>
+    <loc>/reference/left_join.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/merge.html</loc>
+    <loc>/reference/merge.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/msg_type_dt.html</loc>
+    <loc>/reference/msg_type_dt.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/possible_ids.html</loc>
+    <loc>/reference/possible_ids.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/process_by_vector.html</loc>
+    <loc>/reference/process_by_vector.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/rename_to_valid.html</loc>
+    <loc>/reference/rename_to_valid.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/right_join.html</loc>
+    <loc>/reference/right_join.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/set_col_names.html</loc>
+    <loc>/reference/set_col_names.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/set_joyn_options.html</loc>
+    <loc>/reference/set_joyn_options.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/split_match_type.html</loc>
+    <loc>/reference/split_match_type.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/store_msg.html</loc>
+    <loc>/reference/store_msg.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/style.html</loc>
+    <loc>/reference/style.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/type_choices.html</loc>
+    <loc>/reference/type_choices.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/unmatched_keys.html</loc>
+    <loc>/reference/unmatched_keys.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/reference/update_na_values.html</loc>
+    <loc>/reference/update_na_values.html</loc>
   </url>
 </urlset>
