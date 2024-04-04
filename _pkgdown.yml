@@ -1,0 +1,86 @@
+url: https://randrescastaneda.github.io/joyn/
+template:
+  bootstrap: 5
+  bottswatch: cosmo
+  bslib:
+    primary: "#87CEFA"
+
+
+development:
+  mode: auto
+
+home:
+  title: An R package for joining tables
+  description: It is a joy to join tables in R with `joyn`
+
+authors:
+  R.Andres Castaneda:
+    href: https://randrescastaneda.rbind.io/
+  Zander Prinsloo:
+  Rossana Tatulli:
+
+navbar:
+  bg: primary
+  structure:
+    left:
+    - home
+    - start here
+    - reference
+    - articles
+    - news
+    right:
+    - Dev version
+    - github
+  components:
+    reference:
+      text: Reference
+      href: reference/index.html
+    dev version:
+      text: dev version
+      href: dev/
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/randrescastaneda/joyn/
+
+articles:
+- title: Usage
+  navbar: ~
+  contents:
+  - main-functionalities
+  - adv-functionalities
+  - dplyr-joins
+  - merge-wrapper
+  - messages
+  - aux-functions
+
+reference:
+- title: "Main function"
+  desc: >
+    Since the objective of joyn is to join tables with joy, there is only one
+    main function in this package
+  contents:
+  - joyn
+- title: "Dplyr-joins"
+  contents:
+  - full_join
+  - right_join
+  - left_join
+  - inner_join
+- title: "Merge data tables"
+  contents:
+  - merge
+- title: "Auxiliary functions"
+- subtitle: Information
+  contents:
+  - has_concept("messages")
+- subtitle: JOYn options
+  contents:
+  - has_concept("options")
+- subtitle: MISC
+  contents:
+  - is_id
+  - freq_table
+  - possible_ids
+  - is_balanced
+  - rename_to_valid
+  - joyn_msg
