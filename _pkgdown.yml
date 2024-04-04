@@ -4,8 +4,10 @@ template:
   bottswatch: cosmo
   bslib:
     primary: '#87CEFA'
+
 development:
   mode: auto
+
 home:
   title: An R package for joining tables
   description: It is a joy to join tables in R with `joyn`
@@ -14,6 +16,7 @@ authors:
     href: https://randrescastaneda.rbind.io/
   Zander Prinsloo: ~
   Rossana Tatulli: ~
+
 navbar:
   bg: primary
   structure:
