@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
-    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
+    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr joins wrappers</a>
+    <a class="dropdown-item" href="../articles/merge-wrapper.html">`data.table::merge()` wrapper</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -58,7 +59,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="nav-link" href="https://rossanatat.github.io/joyn/">
+  <a class="external-link nav-link" href="https://github.com/randrescastaneda/joyn/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -87,7 +88,13 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn" class="external-link">joyn</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'joyn'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     merge</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'data.table' was built under R version 4.3.3</span></span>
 <span></span>
 <span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>                t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
@@ -121,27 +128,27 @@ given that they are common between <code>x</code> and
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:     x 4   44.4%</span></span>
-<span><span class="co">#&gt; 2: x &amp; y 1   11.1%</span></span>
-<span><span class="co">#&gt; 3:     y 4   44.4%</span></span>
-<span><span class="co">#&gt; 4: total 9    100%</span></span>
+<span><span class="co">#&gt;     .joyn     n percent</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      x     4   44.4%</span></span>
+<span><span class="co">#&gt; 2:  x &amp; y     1   11.1%</span></span>
+<span><span class="co">#&gt; 3:      y     4   44.4%</span></span>
+<span><span class="co">#&gt; 4:  total     9    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and country</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, gdp, and country</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.001157</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.1411</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country gdp .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA      15  NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1      16  11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1       3  NA     x</span></span>
-<span><span class="co">#&gt; 4:  2 NA      17  15     y</span></span>
-<span><span class="co">#&gt; 5:  3  2      NA  NA     x</span></span>
-<span><span class="co">#&gt; 6:  3 NA      20  10     y</span></span>
-<span><span class="co">#&gt; 7:  4  2      12  NA     x</span></span>
-<span><span class="co">#&gt; 8:  5 NA      18  20     y</span></span>
-<span><span class="co">#&gt; 9:  6 NA      19  13     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id, country&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA      15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1      16    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1       3    NA      x</span></span>
+<span><span class="co">#&gt; 4:     2    NA      17    15      y</span></span>
+<span><span class="co">#&gt; 5:     3     2      NA    NA      x</span></span>
+<span><span class="co">#&gt; 6:     3    NA      20    10      y</span></span>
+<span><span class="co">#&gt; 7:     4     2      12    NA      x</span></span>
+<span><span class="co">#&gt; 8:     5    NA      18    20      y</span></span>
+<span><span class="co">#&gt; 9:     6    NA      19    13      y</span></span></code></pre></div>
 <p>Alternatively, you can specify to join by <em>country</em></p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
@@ -153,27 +160,27 @@ given that they are common between <code>x</code> and
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:     x 4   44.4%</span></span>
-<span><span class="co">#&gt; 2: x &amp; y 1   11.1%</span></span>
-<span><span class="co">#&gt; 3:     y 4   44.4%</span></span>
-<span><span class="co">#&gt; 4: total 9    100%</span></span>
+<span><span class="co">#&gt;     .joyn     n percent</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      x     4   44.4%</span></span>
+<span><span class="co">#&gt; 2:  x &amp; y     1   11.1%</span></span>
+<span><span class="co">#&gt; 3:      y     4   44.4%</span></span>
+<span><span class="co">#&gt; 4:  total     9    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> country</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, gdp, and country</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000159</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.087384</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country gdp .joyn</span></span>
-<span><span class="co">#&gt; 1:  3  2      NA  NA     x</span></span>
-<span><span class="co">#&gt; 2:  2  1       3  NA     x</span></span>
-<span><span class="co">#&gt; 3:  4  2      12  NA     x</span></span>
-<span><span class="co">#&gt; 4: NA NA      15  NA     x</span></span>
-<span><span class="co">#&gt; 5:  1  1      16  11 x &amp; y</span></span>
-<span><span class="co">#&gt; 6: NA NA      17  15     y</span></span>
-<span><span class="co">#&gt; 7: NA NA      18  20     y</span></span>
-<span><span class="co">#&gt; 8: NA NA      19  13     y</span></span>
-<span><span class="co">#&gt; 9: NA NA      20  10     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;country&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:     3     2      NA    NA      x</span></span>
+<span><span class="co">#&gt; 2:     2     1       3    NA      x</span></span>
+<span><span class="co">#&gt; 3:     4     2      12    NA      x</span></span>
+<span><span class="co">#&gt; 4:    NA    NA      15    NA      x</span></span>
+<span><span class="co">#&gt; 5:     1     1      16    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 6:    NA    NA      17    15      y</span></span>
+<span><span class="co">#&gt; 7:    NA    NA      18    20      y</span></span>
+<span><span class="co">#&gt; 8:    NA    NA      19    13      y</span></span>
+<span><span class="co">#&gt; 9:    NA    NA      20    10      y</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="ignore-the-values-of-country-from-y-and-dont-bring-it-into-the-resulting-table">2. Ignore the values of <em>country</em> from <code>y</code> and
@@ -189,25 +196,25 @@ the key variables in argument <code>by</code>.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:     x 2   28.6%</span></span>
-<span><span class="co">#&gt; 2: x &amp; y 3   42.9%</span></span>
-<span><span class="co">#&gt; 3:     y 2   28.6%</span></span>
-<span><span class="co">#&gt; 4: total 7    100%</span></span>
+<span><span class="co">#&gt;     .joyn     n percent</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      x     2   28.6%</span></span>
+<span><span class="co">#&gt; 2:  x &amp; y     3   42.9%</span></span>
+<span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
+<span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, gdp, and country</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000117</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.052201</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country gdp .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA      15  NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1      16  11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1       3  15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  3  2      NA  10 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  4  2      12  NA     x</span></span>
-<span><span class="co">#&gt; 6:  5 NA      NA  20     y</span></span>
-<span><span class="co">#&gt; 7:  6 NA      NA  13     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA      15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1      16    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1       3    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2      NA    10  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     4     2      12    NA      x</span></span>
+<span><span class="co">#&gt; 6:     5    NA      NA    20      y</span></span>
+<span><span class="co">#&gt; 7:     6    NA      NA    13      y</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="update-only-nas-in-table-x">3. Update only NAs in table x<a class="anchor" aria-label="anchor" href="#update-only-nas-in-table-x"></a>
@@ -227,25 +234,25 @@ will remain unchanged.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;         .joyn n percent</span></span>
-<span><span class="co">#&gt; 1: NA updated 3   42.9%</span></span>
-<span><span class="co">#&gt; 2:          x 2   28.6%</span></span>
-<span><span class="co">#&gt; 3:      x &amp; y 2   28.6%</span></span>
-<span><span class="co">#&gt; 4:      total 7    100%</span></span>
+<span><span class="co">#&gt;         .joyn     n percent</span></span>
+<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1: NA updated     3   42.9%</span></span>
+<span><span class="co">#&gt; 2:          x     2   28.6%</span></span>
+<span><span class="co">#&gt; 3:      x &amp; y     2   28.6%</span></span>
+<span><span class="co">#&gt; 4:      total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, gdp, and country</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000121</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.057492</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country gdp      .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA      15  NA          x</span></span>
-<span><span class="co">#&gt; 2:  1  1      16  11      x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1       3  15      x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  3  2      20  10 NA updated</span></span>
-<span><span class="co">#&gt; 5:  4  2      12  NA          x</span></span>
-<span><span class="co">#&gt; 6:  5 NA      18  20 NA updated</span></span>
-<span><span class="co">#&gt; 7:  6 NA      19  13 NA updated</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp      .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA      15    NA          x</span></span>
+<span><span class="co">#&gt; 2:     1     1      16    11      x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1       3    15      x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2      20    10 NA updated</span></span>
+<span><span class="co">#&gt; 5:     4     2      12    NA          x</span></span>
+<span><span class="co">#&gt; 6:     5    NA      18    20 NA updated</span></span>
+<span><span class="co">#&gt; 7:     6    NA      19    13 NA updated</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="update-actual-values-in-table-x">4. Update actual values in table x<a class="anchor" aria-label="anchor" href="#update-actual-values-in-table-x"></a>
@@ -282,25 +289,25 @@ notice there is another way for you to bring <em>country</em> from
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:    NA updated 3   42.9%</span></span>
-<span><span class="co">#&gt; 2:   not updated 2   28.6%</span></span>
-<span><span class="co">#&gt; 3: value updated 2   28.6%</span></span>
-<span><span class="co">#&gt; 4:         total 7    100%</span></span>
+<span><span class="co">#&gt;            .joyn     n percent</span></span>
+<span><span class="co">#&gt;           &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA updated     3   42.9%</span></span>
+<span><span class="co">#&gt; 2:   not updated     2   28.6%</span></span>
+<span><span class="co">#&gt; 3: value updated     2   28.6%</span></span>
+<span><span class="co">#&gt; 4:         total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, gdp, and country</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000123</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.056375</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country gdp         .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA      15  NA   not updated</span></span>
-<span><span class="co">#&gt; 2:  1  1      16  11 value updated</span></span>
-<span><span class="co">#&gt; 3:  2  1      17  15 value updated</span></span>
-<span><span class="co">#&gt; 4:  3  2      20  10    NA updated</span></span>
-<span><span class="co">#&gt; 5:  4  2      12  NA   not updated</span></span>
-<span><span class="co">#&gt; 6:  5 NA      18  20    NA updated</span></span>
-<span><span class="co">#&gt; 7:  6 NA      19  13    NA updated</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp         .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt;        &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA      15    NA   not updated</span></span>
+<span><span class="co">#&gt; 2:     1     1      16    11 value updated</span></span>
+<span><span class="co">#&gt; 3:     2     1      17    15 value updated</span></span>
+<span><span class="co">#&gt; 4:     3     2      20    10    NA updated</span></span>
+<span><span class="co">#&gt; 5:     4     2      12    NA   not updated</span></span>
+<span><span class="co">#&gt; 6:     5    NA      18    20    NA updated</span></span>
+<span><span class="co">#&gt; 7:     6    NA      19    13    NA updated</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="keep-original-country-variable-from-y-into-returning-table">5. Keep original <em>country</em> variable from y into returning
@@ -327,25 +334,25 @@ All of this can be done specifying
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:     x 2   28.6%</span></span>
-<span><span class="co">#&gt; 2: x &amp; y 3   42.9%</span></span>
-<span><span class="co">#&gt; 3:     y 2   28.6%</span></span>
-<span><span class="co">#&gt; 4: total 7    100%</span></span>
+<span><span class="co">#&gt;     .joyn     n percent</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      x     2   28.6%</span></span>
+<span><span class="co">#&gt; 2:  x &amp; y     3   42.9%</span></span>
+<span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
+<span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, gdp, and country</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000124</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.070297</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country.x gdp country.y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA        15  NA        NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1        16  11        16 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1         3  15        17 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  3  2        NA  10        20 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  4  2        12  NA        NA     x</span></span>
-<span><span class="co">#&gt; 6:  5 NA        NA  20        18     y</span></span>
-<span><span class="co">#&gt; 7:  6 NA        NA  13        19     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t country.x   gdp country.y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;     &lt;num&gt; &lt;int&gt;     &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA        15    NA        NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1        16    11        16  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1         3    15        17  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2        NA    10        20  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     4     2        12    NA        NA      x</span></span>
+<span><span class="co">#&gt; 6:     5    NA        NA    20        18      y</span></span>
+<span><span class="co">#&gt; 7:     6    NA        NA    13        19      y</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -365,24 +372,24 @@ All of this can be done specifying
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:     x 2   28.6%</span></span>
-<span><span class="co">#&gt; 2: x &amp; y 3   42.9%</span></span>
-<span><span class="co">#&gt; 3:     y 2   28.6%</span></span>
-<span><span class="co">#&gt; 4: total 7    100%</span></span>
+<span><span class="co">#&gt;     .joyn     n percent</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      x     2   28.6%</span></span>
+<span><span class="co">#&gt; 2:  x &amp; y     3   42.9%</span></span>
+<span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
+<span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000154</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.047815</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  t country gdp .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA      15  NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1      16  11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1       3  15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  3  2      NA  10 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  4  2      12  NA     x</span></span>
-<span><span class="co">#&gt; 6:  5 NA      NA  20     y</span></span>
-<span><span class="co">#&gt; 7:  6 NA      NA  13     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA      15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1      16    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1       3    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2      NA    10  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     4     2      12    NA      x</span></span>
+<span><span class="co">#&gt; 6:     5    NA      NA    20      y</span></span>
+<span><span class="co">#&gt; 7:     6    NA      NA    13      y</span></span></code></pre></div>
 <p>Notice that if you set <code>y_vars_to_keep = FALSE</code> or
 <code>y_vars_to_keep = NULL</code>, then <code>joyn</code> won’t bring
 any variable into the returning table.</p>
@@ -396,7 +403,7 @@ any variable into the returning table.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+<p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">

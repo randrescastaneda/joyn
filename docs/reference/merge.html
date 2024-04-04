@@ -12,7 +12,7 @@ data.table::merge, which is why merge masks the other two."><!-- mathjax --><scr
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,8 +28,8 @@ data.table::merge, which is why merge masks the other two."><!-- mathjax --><scr
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
-    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
-    <a class="dropdown-item" href="../articles/merge-wrapper.html">Merging data tables</a>
+    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr joins wrappers</a>
+    <a class="dropdown-item" href="../articles/merge-wrapper.html">`data.table::merge()` wrapper</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -41,7 +41,7 @@ data.table::merge, which is why merge masks the other two."><!-- mathjax --><scr
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="nav-link" href="https://rossanatat.github.io/joyn/">
+  <a class="external-link nav-link" href="https://github.com/randrescastaneda/joyn/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -107,11 +107,10 @@ If <code>y</code> has no key columns, this defaults to the key of <code>x</code>
 
 
 <dt>all.x</dt>
-<dd><p>logical; if <code>TRUE</code>, then extra rows will be added to the
-output, one for each row in <code>x</code> that has no matching row in <code>y</code>.
-These rows will have 'NA's in those columns that are usually filled with values
-from <code>y</code>.  The default is <code>FALSE</code>, so that only rows with data from both
-<code>x</code> and <code>y</code> are included in the output.</p></dd>
+<dd><p>logical; if <code>TRUE</code>, rows from <code>x</code> which have no matching row
+in <code>y</code> are included. These rows will have 'NA's in the columns that are usually
+filled with values from <code>y</code>. The default is <code>FALSE</code> so that only rows with
+data from both <code>x</code> and <code>y</code> are included in the output.</p></dd>
 
 
 <dt>all.y</dt>
@@ -119,9 +118,12 @@ from <code>y</code>.  The default is <code>FALSE</code>, so that only rows with 
 
 
 <dt>sort</dt>
-<dd><p>logical. If <code>TRUE</code> (default), the merged <code>data.table</code> is
-sorted by setting the key to the <code>by / by.x</code> columns. If <code>FALSE</code>, the
-result is not sorted.</p></dd>
+<dd><p>logical. If <code>TRUE</code> (default), the rows of the merged
+<code>data.table</code> are sorted by setting the key to the <code>by / by.x</code> columns. If
+<code>FALSE</code>, unlike base R's <code>merge</code> for which row order is unspecified, the
+row order in <code>x</code> is retained (including retaining the position of missings when
+<code>all.x=TRUE</code>), followed by <code>y</code> rows that don't match <code>x</code> (when <code>all.y=TRUE</code>)
+retaining the order those appear in <code>y</code>.</p></dd>
 
 
 <dt>suffixes</dt>
@@ -202,21 +204,20 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span>                x  <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="fu">merge</span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="fu">joyn</span><span class="fu">::</span><span class="fu">merge</span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 3    100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: total 3    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  x &amp; y     3    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  total     3    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Supplied both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> m:1</span><span style="color: #9E9E9E;"> join is</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">executed.</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.00407</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.061649</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>   id t  x  y .joyn</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1  1 1 11 11 x &amp; y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 2 12 11 x &amp; y</span>
@@ -230,7 +231,7 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span>                id2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                y   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">20L</span>, <span class="fl">13L</span>, <span class="fl">10L</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                x   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">jn</span> <span class="op">&lt;-</span> <span class="fu">merge</span><span class="op">(</span><span class="va">x2</span>,</span></span>
+<span class="r-in"><span><span class="va">jn</span> <span class="op">&lt;-</span> <span class="fu">joyn</span><span class="fu">::</span><span class="fu">merge</span><span class="op">(</span><span class="va">x2</span>,</span></span>
 <span class="r-in"><span>            <span class="va">y2</span>,</span></span>
 <span class="r-in"><span>            match_type <span class="op">=</span> <span class="st">"m:m"</span>,</span></span>
 <span class="r-in"><span>            all.x <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
@@ -239,17 +240,16 @@ option). Default is TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 7    100%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: total 7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  x &amp; y     7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  total     7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.002363</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.035644</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Supplied both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-in"><span><span class="co"># example with all = TRUE</span></span></span>
-<span class="r-in"><span><span class="va">jn</span> <span class="op">&lt;-</span> <span class="fu">merge</span><span class="op">(</span><span class="va">x2</span>,</span></span>
+<span class="r-in"><span><span class="va">jn</span> <span class="op">&lt;-</span> <span class="fu">joyn</span><span class="fu">::</span><span class="fu">merge</span><span class="op">(</span><span class="va">x2</span>,</span></span>
 <span class="r-in"><span>            <span class="va">y2</span>,</span></span>
 <span class="r-in"><span>            match_type <span class="op">=</span> <span class="st">"m:m"</span>,</span></span>
 <span class="r-in"><span>            by.x <span class="op">=</span> <span class="st">"id1"</span>,</span></span>
@@ -258,16 +258,15 @@ option). Default is TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 7   87.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     y 1   12.5%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: total 8    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  x &amp; y     7   87.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      y     1   12.5%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  total     8    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.003108</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.043978</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Supplied both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -275,7 +274,7 @@ option). Default is TRUE.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">

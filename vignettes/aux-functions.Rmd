@@ -113,6 +113,3 @@ freq_table(x     = x1,
 
 
 ```
-
-## Renaming variables
-TODO: Check why rename_to_valid is exported 

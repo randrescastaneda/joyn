@@ -17,6 +17,7 @@ authors:
   R.Andres Castaneda:
     href: https://randrescastaneda.rbind.io/
   Zander Prinsloo:
+  Rossana Tatulli:
 
 navbar:
   bg: primary
@@ -83,4 +84,3 @@ reference:
   - is_balanced
   - rename_to_valid
   - joyn_msg
-
