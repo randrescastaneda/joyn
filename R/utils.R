@@ -128,3 +128,26 @@ is_balanced <- function(df,
 
 }
 
+#' Unmask functions that joyn masks
+#'
+#' @param fun_name character vector of function(s) to unmask
+#' @param pkg_name character specifying package from which function(s) is masked
+#' @export
+unmask_joyn_fun <- function(fun_name,
+                            pkg_name) {
+
+  clear_joynenv()
+
+  lapply(fun_name,
+         conflicted::conflict_prefer,
+         winner = pkg_name,
+         loser = "joyn",
+         quiet = TRUE)
+
+  store_msg(type        = "info",
+                   ok          = paste(cli::symbol$info, " Note:  "),
+                   pale        = "function",
+                   bolded_pale = "  {fun_name}",
+                   pale        = "  unmasked")
+  joyn_msg()
+}
