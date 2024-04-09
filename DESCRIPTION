@@ -29,12 +29,12 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     withr,
-    dplyr,
     tibble
 Config/testthat/edition: 3
 Imports: 
     rlang,
     data.table,
+    dplyr,
     cli,
     utils,
     collapse (>= 2.0.9),

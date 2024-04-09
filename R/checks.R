@@ -252,14 +252,42 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
   # Error if user chooses "1" but actually "m" ----
   if (match_type_error) {
+
     msg     <- "match type inconsistency"
     hint    <-
-      "you could use `return_report = TRUE` in `joyn::is_id()`
-    to see where the problem is"
+      "refer to the duplicate counts in the table above
+       to identify where the issue occurred."
     joyn_msg("err")
+
+    display_id_x <- display_id_y <- NULL
+
+    # if x is not id (i.e., if xm = TRUE and user chooses 1:..)
+    if (x_m & tx == 1) {
+      display_id_x <- is_id(x, by, return_report = TRUE) |>
+        fsubset(copies > 1)
+    }
+
+    # if y is not id (i.e., if ym = TRUE and user chooses ...:1)
+    if (y_m & ty == 1) {
+      display_id_y <- is_id(y, by, return_report = TRUE) |>
+        fsubset(copies > 1)
+    }
+
+    # show where not uniquely identified
+    if(!is.null(display_id_x)) {
+      cat("Duplicate counts in x:\n")
+      print(display_id_x)
+    }
+
+    if(!is.null(display_id_y)) {
+      cat("Duplicate counts in y:\n")
+      print(display_id_x)
+      }
+
     cli::cli_abort(c(msg,
                      i = hint),
-                   class = "joyn_error")
+                     class = "joyn_error")
+
 
   }
 
