@@ -128,6 +128,3 @@ is_balanced <- function(df,
 
 }
 
-# Give the user the option to unmask data table and dplyr
-# memo: check unlockBinding, or reload(inst(...))
-

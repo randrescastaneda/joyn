@@ -256,7 +256,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
     msg     <- "match type inconsistency"
     hint    <-
       "refer to the duplicate counts in the table(s) above
-       to identify where the issue occurred."
+       to identify where the issue occurred"
     joyn_msg("err")
 
     display_id_x <- display_id_y <- NULL
