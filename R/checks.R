@@ -255,7 +255,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
     msg     <- "match type inconsistency"
     hint    <-
-      "refer to the duplicate counts in the table above
+      "refer to the duplicate counts in the table(s) above
        to identify where the issue occurred."
     joyn_msg("err")
 
@@ -263,13 +263,13 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
     # if x is not id (i.e., if xm = TRUE and user chooses 1:..)
     if (x_m & tx == 1) {
-      display_id_x <- is_id(x, by, return_report = TRUE) |>
+      display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
         fsubset(copies > 1)
     }
 
     # if y is not id (i.e., if ym = TRUE and user chooses ...:1)
     if (y_m & ty == 1) {
-      display_id_y <- is_id(y, by, return_report = TRUE) |>
+      display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
         fsubset(copies > 1)
     }
 
@@ -287,7 +287,6 @@ check_match_type <- function(x, y, by, match_type, verbose) {
     cli::cli_abort(c(msg,
                      i = hint),
                      class = "joyn_error")
-
 
   }
 
