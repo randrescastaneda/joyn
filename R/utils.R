@@ -128,15 +128,24 @@ is_balanced <- function(df,
 
 }
 
-#' Unmask functions that joyn masks
+#' Unmask objects that joyn masks
 #'
-#' @param fun_name character vector of function(s) to unmask
-#' @param pkg_name character specifying package from which function(s) is masked
+#'
+#' @param fun_name character vector of one or more functions to unmask
+#' @param pkg_name character specifying package from which function(s) are masked by joyn
 #' @export
+#'
+#' @examples
+#' unmask_joyn_fun(fun_name = c("left_join", "right_join", "full_join"),
+#'                 pkg_name = "dplyr")
+#'
+#' unmask_joyn_fun(fun_name = "inner_join",
+#'                 pkg_name = "dplyr")
+#'
 unmask_joyn_fun <- function(fun_name,
                             pkg_name) {
 
-  clear_joynenv()
+  joyn:::clear_joynenv()
 
   lapply(fun_name,
          conflicted::conflict_prefer,
@@ -144,10 +153,12 @@ unmask_joyn_fun <- function(fun_name,
          loser = "joyn",
          quiet = TRUE)
 
-  store_msg(type        = "info",
-                   ok          = paste(cli::symbol$info, " Note:  "),
-                   pale        = "function",
-                   bolded_pale = "  {fun_name}",
-                   pale        = "  unmasked")
-  joyn_msg()
+  joyn:::store_msg(type        = "info",
+            ok          = paste(cli::symbol$info, " Note:  "),
+            pale        = "function",
+            bolded_pale = "  {fun_name}",
+            pale        = "  unmasked")
+  joyn:::joyn_msg()
+
+  invisible(TRUE)
 }
