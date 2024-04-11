@@ -128,11 +128,12 @@ is_balanced <- function(df,
 
 }
 
-#' Unmask objects that joyn masks
+#' Unmask joyn's functions
 #'
 #'
 #' @param fun_name character vector of one or more functions to unmask
-#' @param pkg_name character specifying package from which function(s) are masked by joyn
+#' @param pkg_name character specifying package from which joyn masks the function(s)
+#' @return invisible TRUE
 #' @export
 #'
 #' @examples
