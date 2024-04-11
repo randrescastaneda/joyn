@@ -155,10 +155,12 @@ unmask_joyn_fun <- function(fun_name,
          quiet = TRUE)
 
   joyn:::store_msg(type        = "info",
-            ok          = paste(cli::symbol$info, " Note:  "),
-            pale        = "function",
-            bolded_pale = "  {fun_name}",
-            pale        = "  unmasked")
+                  ok          = paste(cli::symbol$info, " Note:  "),
+                  pale        = "function",
+                  bolded_pale = "  {fun_name}",
+                  pale        = "  unmasked.",
+                  bolded_pale = " {pkg_name}::{fun_name}",
+                  pale        = " preferred")
   joyn:::joyn_msg()
 
   invisible(TRUE)

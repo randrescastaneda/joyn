@@ -29,6 +29,7 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     withr,
+    dplyr,
     tibble
 Config/testthat/edition: 3
 Imports: 
@@ -36,7 +37,6 @@ Imports:
     data.table,
     cli,
     conflicted,
-    dplyr,
     utils,
     collapse (>= 2.0.9),
     lifecycle
