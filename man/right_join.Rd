@@ -218,6 +218,7 @@ right_join(x1, y1, relationship = "many-to-one")
 }
 \seealso{
 Other dplyr alternatives: 
+\code{\link{anti_join}()},
 \code{\link{full_join}()},
 \code{\link{inner_join}()},
 \code{\link{left_join}()}
