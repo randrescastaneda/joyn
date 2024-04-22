@@ -259,8 +259,6 @@ check_match_type <- function(x, y, by, match_type, verbose) {
        to identify where the issue occurred"
     joyn_msg("err")
 
-    display_id_x <- display_id_y <- NULL
-
     # if x is not id (i.e., if xm = TRUE and user chooses 1:..)
     if (x_m & tx == 1) {
       display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
@@ -274,14 +272,14 @@ check_match_type <- function(x, y, by, match_type, verbose) {
     }
 
     # show where not uniquely identified
-    if(!is.null(display_id_x)) {
+    if(nrow(display_id_x) >0 ) {
       cat("Duplicate counts in x:\n")
       print(display_id_x)
     }
 
-    if(!is.null(display_id_y)) {
+    if(nrow(display_id_y) >0 ) {
       cat("Duplicate counts in y:\n")
-      print(display_id_x)
+      print(display_id_y)
       }
 
     cli::cli_abort(c(msg,
@@ -290,7 +288,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
   }
 
-  # Warning if user choses "m" but actually "1" ----
+  # Warning if user chooses "m" but actually "1" ----
   m_m <- data.table::fcase(
     isTRUE(x_m)  & isTRUE(y_m),  "none",
     isTRUE(x_m)  & isFALSE(y_m), "warn_y",
