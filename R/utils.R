@@ -165,3 +165,55 @@ unmask_joyn_fun <- function(fun_name,
 
   invisible(TRUE)
 }
+
+# Trying out functions to avoid conflicted
+# (!): the function used by set_collapse removes objs from the namespace,
+#      thus I am following the same reasoning here
+
+rm_from_namespace <- function(fun_name) {
+
+  # get namespace exports
+  exported_obj <- getNamespaceExports("joyn")
+
+  # functions to remove -those specified by the user that are exported in joyn
+  rmfun <- fun_name[fun_name %in% exported_obj]
+  # get namespace of package
+  nm_env <- rlang::ns_env("joyn")
+
+  # MEMO: cannot remove bindings from a locked environment
+  #       namespace environments are locked by R when loaded in a session:
+  #       Once an environment is locked it cannot be unlocked ->
+  #       --> cannot remove bindings BUT can modify existing bindings
+
+  rlang::env_unlock(env = nm_env)
+
+  #remove(rmfun, envir = asNamespace("joyn"))
+  remove(rmfun,
+         envir = nm_env)
+
+}
+
+# Another option: unlock a binding and modify it
+
+unmask_aux_fun <- function(fun_name) {
+
+  # get namespace exports
+  exported_obj <- getNamespaceExports("joyn")
+
+  # get functions to remove -those specified by the user that are exported in joyn
+  remove_fun <- fun_name[fun_name %in% exported_obj]
+
+  # Get the namespace environment of joyn
+  joyn_ns <- rlang::ns_env("joyn")
+
+  # unlock binding
+  unlockBinding(fun_name, joyn_ns)
+
+  # modify binding
+
+  # Reassign 'left_join' to 'dplyr::join'
+  #rlang::env_bind(lhs = left_join, rhs = dplyr::left_join, .env = joyn_ns)
+  assign(left_join, dplyr::left_join, joyn_ns)
+
+}
+
