@@ -66,6 +66,7 @@ reference:
   - right_join
   - left_join
   - inner_join
+  - anti_join
 - title: "Merge data tables"
   contents:
   - merge
