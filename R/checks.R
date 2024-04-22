@@ -259,14 +259,19 @@ check_match_type <- function(x, y, by, match_type, verbose) {
        to identify where the issue occurred"
     joyn_msg("err")
 
+    # display_id_x <- display_id_y <- NULL
+
     # if x is not id (i.e., if xm = TRUE and user chooses 1:..)
-    if (x_m & tx == 1) {
+
+    #if (x_m & tx == 1) {
+    if (tx == 1 & match_type_error == TRUE) {
       display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
         fsubset(copies > 1)
     }
 
     # if y is not id (i.e., if ym = TRUE and user chooses ...:1)
-    if (y_m & ty == 1) {
+    #if (y_m & ty == 1) {
+    if (ty == 1 & match_type_error == TRUE) {
       display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
         fsubset(copies > 1)
     }
@@ -279,6 +284,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
     if(nrow(display_id_y) >0 ) {
       cat("Duplicate counts in y:\n")
+      # I had a typo here -was displaying display_id_x
       print(display_id_y)
       }
 
