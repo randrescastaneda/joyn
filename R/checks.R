@@ -259,7 +259,7 @@ check_match_type <- function(x, y, by, match_type, verbose) {
        to identify where the issue occurred"
     joyn_msg("err")
 
-    # display_id_x <- display_id_y <- NULL
+    display_id_x <- display_id_y <- NULL
 
     # if x is not id (i.e., if xm = TRUE and user chooses 1:..)
 
@@ -277,14 +277,14 @@ check_match_type <- function(x, y, by, match_type, verbose) {
     }
 
     # show where not uniquely identified
-    if(nrow(display_id_x) >0 ) {
+    if(!is.null(display_id_x)) {
       cat("Duplicate counts in x:\n")
       print(display_id_x)
     }
 
-    if(nrow(display_id_y) >0 ) {
+    if(!is.null(display_id_y)) {
       cat("Duplicate counts in y:\n")
-      # I had a typo here -was displaying display_id_x
+      # I had a typo here -was displaying *display_id_x*
       print(display_id_y)
       }
 
