@@ -222,7 +222,7 @@ check_by_vars <- function(by, x, y) {
 #' # Inconsistent match type
 #' joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 #' }
-check_match_type <- function(x, y, by, match_type, verbose) {
+check_match_type <- function(x, y, by, match_type, verbose = FALSE) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # computations   ---------
@@ -233,24 +233,26 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
   # Check which messages to return
   match_type_error <- FALSE
-  x_m <-  y_m   <- TRUE
-  mte_x <- mte_y <- FALSE
-  if (tx == "1") {
+  x_m    <-  y_m   <- TRUE
+  mte_x  <- mte_y  <- FALSE
 
+  if (tx == "1") {
       mte_x <- is_match_type_error(x, "x", by, verbose, match_type_error)
   } else {
     x_m <- is_valid_m_key(x, by)
   }
 
   if (ty == "1") {
-
       mte_y <- is_match_type_error(y, "y", by, verbose, match_type_error)
   } else {
       y_m <- is_valid_m_key(y, by)
     }
-  if (TRUE %in% c(mte_x, mte_y)) match_type_error <-TRUE
 
-    # Error if user chooses "1" but actually "m" ----
+  if (TRUE %in% c(mte_x, mte_y)) {
+    match_type_error <-TRUE
+    }
+
+  # Error if user chooses "1" but actually "m" ----
   if (match_type_error) {
 
     msg     <- "match type inconsistency"
@@ -259,51 +261,25 @@ check_match_type <- function(x, y, by, match_type, verbose) {
        to identify where the issue occurred"
     joyn_msg("err")
 
-    # display_id_x <- display_id_y <- NULL
-
-    # if x is not id (i.e., if xm = TRUE and user chooses 1:..)
-
-    #if (x_m & tx == 1) {
-    # if (tx == 1 & match_type_error == TRUE) {
-    #   display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
-    #     fsubset(copies > 1)
-    # }
-
-    # if y is not id (i.e., if ym = TRUE and user chooses ...:1)
-    #if (y_m & ty == 1) {
     if (verbose == TRUE) {
+
       if (mte_x == TRUE) {
-        display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
+        display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
           fsubset(copies > 1)
-        if(fnrow(display_id_x) > 0) {
-          cat("Duplicate counts in x:\n")
-          print(display_id_x)
-        }
+
+        cat("Duplicate counts in x:\n")
+        print(display_id_x)
       }
-      # fix or y
-      if (mte_x == TRUE) {
+
+      if (mte_y == TRUE) {
         display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
           fsubset(copies > 1)
-        if(fnrow(display_id_x) > 0) {
-          cat("Duplicate counts in x:\n")
-          print(display_id_x)
-        }
+
+        cat("Duplicate counts in x:\n")
+        print(display_id_x)
       }
 
     }
-
-
-    # show where not uniquely identified
-    if(!is.null(display_id_x)) {
-      cat("Duplicate counts in x:\n")
-      print(display_id_x)
-    }
-
-    if(!is.null(display_id_y)) {
-      cat("Duplicate counts in y:\n")
-      # I had a typo here -was displaying *display_id_x*
-      print(display_id_y)
-      }
 
     cli::cli_abort(c(msg,
                      i = hint),
