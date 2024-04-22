@@ -1658,3 +1658,375 @@ test_that("INNER JOIN - unmatched error", {
 
 })
 
+
+
+
+#-------------------------------------------------------------------------------
+# TEST ANTI JOINS -------------------------------------------------------------
+#-------------------------------------------------------------------------------
+
+
+test_that("ANTI JOIN - Conducts ANTI join", {
+  # One way
+  jn_joyn_m1 <- anti_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    by = "id"
+  )
+  jn_joyn <- anti_join(
+    x = x1,
+    y = y1,
+    by = "id"
+  )
+
+  jn_dplyr <- dplyr::anti_join(
+    x1, y1, by = "id"
+  )
+  setorder(jn_dplyr, na.last = F)
+  attr(
+    jn_dplyr,
+    "sorted"
+  ) <- "id"
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dplyr
+  )
+  expect_equal(
+    jn_joyn,
+    jn_joyn_m1
+  )
+  expect_true(
+    all(c("x") %in% jn_joyn$.joyn)
+  )
+  expect_true(
+    all(
+      c(jn_joyn$id) %in% x1$id))
+
+  # One to many relationship
+  jn_joyn <- anti_join(
+    x = x2,
+    y = y5,
+    relationship = "one-to-many",
+    by = "id"
+  )
+
+  jn_dplyr <- dplyr::anti_join(
+    x2,
+    y5,
+    by = "id"
+  )
+
+  setorder(jn_dplyr, id, na.last = T)
+  setorder(jn_joyn, id, na.last = T)
+  attr(jn_dplyr,
+       "sorted") <- "id"
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dplyr,
+    ignore_attr = 'row.names'
+  )
+
+  # Second set of tables ----------------------
+  jn_joyn <- anti_join(
+    x = x2,
+    y = y2,
+    relationship = "one-to-one",
+    by = "id"
+  )
+  jn_dplyr <- dplyr::anti_join(
+    x2,
+    y2,
+    by = "id"
+  )
+  setorder(jn_dplyr, id, na.last = T)
+  setorder(jn_joyn, id, na.last = T)
+  attr(
+    jn_dplyr,
+    "sorted"
+  ) <- "id"
+  expect_equal(
+    jn_joyn |> fselect(-get(reportvar)),
+    jn_dplyr
+  )
+
+  jn <- anti_join(
+    x4,
+    y4,
+    by = c("id1 = id2"),
+    relationship = "many-to-many"
+  )
+  #dplyr::anti_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
+  jn_dplyr <- dplyr::anti_join(
+    x4,
+    y4,
+    by = dplyr::join_by(id1 == id2)
+  )
+  attr(jn_dplyr, "sorted") <- "id1"
+  expect_equal(
+    jn |> fselect(-get(reportvar)) |> dim(),
+    c(0, 6)
+  )
+})
+
+test_that("ANTI JOIN - no id given", {
+  jn <- anti_join(
+    x2,
+    y2,
+    by = NULL
+  )
+
+  jn1 <- anti_join(
+    x2,
+    y2
+  )
+  jn2 <- anti_join(
+    x2,
+    y2,
+    by = c("id", "x")
+  )
+
+  expect_equal(jn, jn2)
+  expect_equal(jn1, jn2)
+})
+
+test_that("ANTI JOIN - incorrectly(correctly) specified arguments give (no)errors", {
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = NULL
+    )
+  )
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c("a", "b", "c")
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      suffix = c(1, 2)
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y1,
+      relationship = "many-to-one",
+      unmatched = "error"
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = y1,
+      y = x1,
+      relationship = "one-to-many",
+      multiple = "any"
+    )
+  )
+
+  anti_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    unmatched = "error"
+  ) |>
+    expect_error()
+
+  expect_no_error(
+    anti_join(
+      x2,
+      y2,
+      by = c("id", "x"),
+      copy = TRUE,
+      keep = TRUE)
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+
+
+  expect_error(
+    anti_join(
+      x2,
+      y2,
+      by = c("id", "x"),
+      keep = "invalid keep")
+  )
+
+  expect_no_error(
+    anti_join(
+      x = x2,
+      y = y1,
+      by = "id"
+    )
+  )
+
+  # Error when relationship 1:m or m:m and multiple is not "all"
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y5,
+      relationship = "many-to-many",
+      by = "id",
+      multiple = "any"
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y5,
+      relationship = "many-to-many",
+      by = "id",
+      multiple = "first"
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = x1,
+      y = y5,
+      relationship = "many-to-many",
+      by = "id",
+      multiple = "last"
+    )
+  )
+
+
+  expect_error(
+    anti_join(
+      x = x2,
+      y = y5,
+      relationship = "one-to-many",
+      by = "id",
+      multiple = "any"
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = x2,
+      y = y5,
+      relationship = "one-to-many",
+      by = "id",
+      multiple = "first"
+    )
+  )
+
+  expect_error(
+    anti_join(
+      x = x2,
+      y = y5,
+      relationship = "one-to-many",
+      by = "id",
+      multiple = "last"
+    )
+  )
+
+})
+
+test_that("ANTI JOIN - argument `keep` preserves keys in output", {
+  jn <- anti_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = T,
+    by = "id",
+    y_vars_to_keep = TRUE
+  )
+  expect_true(
+    "id.y" %in% names(jn)
+  )
+  expect_equal(
+    jn$id.y |>
+      funique(),
+    NA_real_
+  )
+
+  # When keep is NULL
+  joyn::anti_join(
+    x = x1,
+    y = y1,
+    relationship = "many-to-one",
+    keep = NULL,
+    by = "id"
+  )
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+
+})
+
+
+
+test_that("ANTI JOIN - reportvar works", {
+  jn <- anti_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = "report"
+  )
+  expect_true(
+    "report" %in% names(jn)
+  )
+
+  anti_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = FALSE
+  ) |>
+    expect_no_error()
+
+  anti_join(
+    x1,
+    y1,
+    relationship = "many-to-one",
+    by = "id",
+    reportvar = NULL
+  ) |>
+    expect_no_error()
+
+
+
+})
+
+test_that("ANTI JOIN - NA matches", {
+
+  jn <- anti_join(
+    x5,
+    y5,
+    relationship = "many-to-many"
+  )
+  expect_equal(
+    jn |>
+      fsubset(is.na(id)) |>
+      fnrow(),
+    0
+  )
+
+  # Warning when na_matches is never
+  joyn::anti_join(x            = x5,
+                   y            = y5,
+                   relationship = "many-to-many",
+                   keep         = TRUE,
+                   na_matches   = "never")
+
+  rlang::env_get(.joynenv, "joyn_msgs")$type |>
+    expect_contains("warn")
+})
+
+
