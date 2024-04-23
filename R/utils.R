@@ -143,7 +143,7 @@ is_balanced <- function(df,
 #' unmask_joyn_fun(fun_name = "inner_join",
 #'                 pkg_name = "dplyr")
 #'
-unmask_joyn_fun <- function(fun_name,
+unmask_joyn_fun_old <- function(fun_name,
                             pkg_name) {
 
   joyn:::clear_joynenv()
@@ -216,4 +216,102 @@ unmask_aux_fun <- function(fun_name) {
   assign(left_join, dplyr::left_join, joyn_ns)
 
 }
+
+### experimenting here ####
+
+# ns <- getNamespace("joyn")
+# unlockBinding("left_join", ns)
+#
+# left_join <- dplyr::left_join
+# lockBinding("left_join", ns)
+
+
+unmask_joyn_fun <- function(fun_name) {
+
+  # get joyn namespace
+  joyn_ns <- getNamespace("joyn")
+
+  # unlock binding
+  unlockBinding(fun_name, env = joyn_ns)
+
+  #lapply(fun_names, function(fn) unlockBinding(fn, env = joyn_ns))
+
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Unmask functions ----
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  # get namespace exports
+  joyn_ns_exports_names <- getNamespaceExports(joyn_ns)
+
+  # get functions to unmask -filter those those that are in joyn_ns exports
+  funs_to_unmask <- fun_name[fun_name %in% joyn_ns_exports_names]
+
+  # joyn ns exports env
+  joyn_ns_exports <- .getNamespaceInfo(joyn_ns,
+                                       "exports")
+
+  # remove functions from exports
+  remove(list = funs_to_unmask, envir = joyn_ns_exports)
+
+
+  # lapply(funs_to_unmask,
+  #        remove,
+  #        envir = joyn_ns_exports)
+
+  # option 1: remove from exports only
+
+  # option 2: remove from namespace -
+  # - we can later on add two arguments, exports and namespace -as in collapse-
+  #   for now, i think it makes sense to work on exported functions only and not to affect the whole namespace
+  #
+  # remove(list = fun_unmask, envir = joyn_ns)
+
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  # Apply the new mask ----
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  new_mask <- get(paste0(pkg_name, "::", fun_name)) # does not work
+  my_function <- get(paste(pkg_name, "::", fun_name, sep = ""))
+  assign(x = fun_name,
+         value = new_mask,
+         envir = joyn_ns_exports)
+
+  # lapply(funs_to_unmask, function(fn) {
+  #
+  #   new_mask <- get(paste0(pkg_name, "::", fn))
+  #   assign(fn, new_mask, envir = joyn_ns_exports)
+  #
+  # })
+
+  # Lock the binding again
+  lockEnvironment(joyn_ns,
+                  bindings = TRUE)
+
+
+  # Detach and reattach "joyn" if currently loaded
+
+  if(anyv(search(), "package:joyn")) {   #anyv is the collapse version of any
+    detach("package:joyn")
+    suppressPackageStartupMessages(attachNamespace(joyn_ns))
+  }
+
+
+  # Inform the user
+  clear_joynenv()
+
+  joyn:::store_msg(type        = "info",
+                   ok          = paste(cli::symbol$info, " Note:  "),
+                   pale        = "function",
+                   bolded_pale = "  {fun_name}",
+                   pale        = "  unmasked.",
+                   bolded_pale = " {pkg_name}::{fun_name}",
+                   pale        = " preferred")
+
+  joyn:::joyn_msg()
+
+  # return
+  invisible(TRUE)
+
+}
+
 
