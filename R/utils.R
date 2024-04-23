@@ -295,7 +295,8 @@ unmask_joyn_fun <- function(fun_name,
 
 # same process but here modifications are done in whole namespace env and not exports env only
 
-unmask_joyn_fun_ns <- function(fun_name) {
+unmask_joyn_fun_ns <- function(fun_name,
+                               pkg_name) {
 
   stopifnot(exprs =
               {pkg_name %in% tolower(.packages())})
