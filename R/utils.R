@@ -246,7 +246,8 @@ unmask_joyn_fun <- function(fun_name,
                                        "exports")
 
   # remove binding
-  remove(list = funs_to_unmask, envir = joyn_ns_exports)
+  remove(list = funs_to_unmask,
+         envir = joyn_ns_exports)
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Apply the new mask ----
@@ -293,7 +294,7 @@ unmask_joyn_fun <- function(fun_name,
 
 }
 
-# same process but here modifications are done in whole namespace env and not exports env only
+# same process as above but here modifications are done in whole namespace env and not exports env only
 
 unmask_joyn_fun_ns <- function(fun_name,
                                pkg_name) {
@@ -317,11 +318,12 @@ unmask_joyn_fun_ns <- function(fun_name,
   # get functions to unmask -filter those those that are in joyn_ns exports
   funs_to_unmask <- fun_name[fun_name %in% joyn_ns_exports_names]
 
+  remove(list = funs_to_unmask,
+         envir = joyn_ns)
+
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Apply the new mask ----
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  #new_mask <- get(paste0(pkg_name, "::", fun_name)) # does not work
 
   new_mask <- getExportedValue(ns = getNamespace(pkg_name), name = fun_name)
 
