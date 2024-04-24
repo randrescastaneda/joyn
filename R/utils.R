@@ -160,7 +160,6 @@ is_balanced <- function(df,
 #   invisible(TRUE)
 # }
 
-# Trying out functions to avoid conflicted
 
 #' Unmask joyn's function(s) in current environment
 #'
@@ -172,9 +171,18 @@ is_balanced <- function(df,
 unmask_function_curr_env <- function(fun_name,
                                      pkg_name) {
 
-  # check ig pkg_name is loaded
-  stopifnot(exprs =
-              {pkg_name %in% tolower(.packages())})
+  # if package {pkg_name} is not loaded, stop and inform user
+
+  if (!pkg_name %in% tolower(.packages())) {
+
+    store_msg(type = "err",
+              err  = paste(cli::symbol$cross, "Error:"),
+              pale = "   {pkg_name} must be loaded."
+              )
+
+      joyn_msg("err")
+      cli::cli_abort("{pkg_name} is not loaded")
+    }
 
   # get joyn namespace
   joyn_ns <- getNamespace("joyn")
