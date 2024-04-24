@@ -19,6 +19,7 @@ invisible TRUE
 \description{
 Unmask joyn's functions
 }
+\keyword{-this}
 \keyword{-to}
 \keyword{Unmask}
 \keyword{be}
@@ -31,3 +32,4 @@ Unmask joyn's functions
 \keyword{once}
 \keyword{replaced}
 \keyword{with}
+\keyword{works}
