@@ -137,16 +137,16 @@ is_balanced <- function(df,
 #'
 #'
 #' @examples
-#' unmask_joyn_fun(fun_name = c("left_join", "right_join", "full_join"),
+#' unmask_joyn_fun_old(fun_name = c("left_join", "right_join", "full_join"),
 #'                 pkg_name = "dplyr")
 #'
-#' unmask_joyn_fun(fun_name = "inner_join",
+#' unmask_joyn_fun_old(fun_name = "inner_join",
 #'                 pkg_name = "dplyr")
 #'
 unmask_joyn_fun_old <- function(fun_name,
                             pkg_name) {
 
-  joyn:::clear_joynenv()
+  clear_joynenv()
 
   lapply(fun_name,
          conflicted::conflict_prefer,
@@ -154,14 +154,14 @@ unmask_joyn_fun_old <- function(fun_name,
          loser = "joyn",
          quiet = TRUE)
 
-  joyn:::store_msg(type        = "info",
+  store_msg(type        = "info",
                   ok          = paste(cli::symbol$info, " Note:  "),
                   pale        = "function",
                   bolded_pale = "  {fun_name}",
                   pale        = "  unmasked.",
                   bolded_pale = " {pkg_name}::{fun_name}",
                   pale        = " preferred")
-  joyn:::joyn_msg()
+  joyn_msg()
 
   invisible(TRUE)
 }
