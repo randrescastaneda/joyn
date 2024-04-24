@@ -161,15 +161,15 @@ is_balanced <- function(df,
 # }
 
 
-#' Unmask joyn's function(s) in current environment
+#' Unmask joyn's function(s) locally
 #'
 #'
 #' @param fun_name character vector of one or more functions to unmask
 #' @param pkg_name character specifying package from which joyn masks the function(s)
 #' @return invisible TRUE
 #' @keywords internal -to be replaced with export once done
-unmask_function_curr_env <- function(fun_name,
-                                     pkg_name) {
+unmask_joyn_fun <- function(fun_name,
+                            pkg_name) {
 
   # if package {pkg_name} is not loaded, stop and inform user
 
@@ -177,18 +177,27 @@ unmask_function_curr_env <- function(fun_name,
 
     store_msg(type = "err",
               err  = paste(cli::symbol$cross, "Error:"),
-              pale = "   {pkg_name} must be loaded."
+              pale = "   package {pkg_name} must be loaded."
               )
 
       joyn_msg("err")
       cli::cli_abort("{pkg_name} is not loaded")
-    }
+  }
 
-  # get joyn namespace
-  joyn_ns <- getNamespace("joyn")
+  # if function {fun_name} is not an exported object of {pkg_name}, stop and inform user
+  if (!any(fun_name %in% getNamespaceExports(pkg_name))) {
+
+    store_msg(type = "err",
+              err  = paste(cli::symbol$cross, "Error:"),
+              pale = "   {fun_name} must be exported object(s) of {pkg_name}."
+    )
+
+    joyn_msg("err")
+    cli::cli_abort("{fun_name} not exported from {pkg_name}")
+  }
 
   # get namespace exports
-  joyn_ns_exports <- getNamespaceExports(joyn_ns)
+  joyn_ns_exports <- getNamespaceExports("joyn")
 
   # get functions to unmask -filter those those that are in joyn_ns exports
   fun_name <- fun_name[fun_name %in% joyn_ns_exports]
@@ -199,10 +208,10 @@ unmask_function_curr_env <- function(fun_name,
 
   lapply(fun_name, function(fn) {
 
-    new_mask <- getExportedValue(ns = getNamespace(pkg_name),
+    new_mask <- getExportedValue(ns   = getNamespace(pkg_name),
                                  name = fn)
 
-    assign(x = fn,
+    assign(x     = fn,
            value = new_mask,
            envir = .GlobalEnv)
   })
