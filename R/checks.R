@@ -257,11 +257,15 @@ check_match_type <- function(x, y, by, match_type, verbose = FALSE) {
 
     msg     <- "match type inconsistency"
     hint    <-
-      "refer to the duplicate counts in the table(s) above
-       to identify where the issue occurred"
+      "set verbose to TRUE to see where the issue is"
     joyn_msg("err")
 
     if (verbose == TRUE) {
+
+      msg     <- "match type inconsistency"
+      hint    <-
+        "refer to the duplicate counts in the table(s) above
+       to identify where the issue occurred"
 
       if (mte_x == TRUE) {
         display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
