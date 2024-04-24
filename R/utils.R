@@ -356,6 +356,7 @@ unmask_joyn_fun_old <- function(fun_name,
 unmask_function_globenv <- function(fun_name,
                                     pkg_name) {
 
+
   stopifnot(exprs =
               {pkg_name %in% tolower(.packages())})
 
@@ -367,13 +368,14 @@ unmask_function_globenv <- function(fun_name,
   joyn_ns_exports_names <- getNamespaceExports(joyn_ns)
 
   # get functions to unmask -filter those those that are in joyn_ns exports
-  funs_to_unmask <- fun_name[fun_name %in% joyn_ns_exports_names]
+  fun_name <- fun_name[fun_name %in% joyn_ns_exports_names]
 
   new_mask <- getExportedValue(ns = getNamespace(pkg_name), name = fun_name)
 
-  fun_name <- new_mask
+  #left_join <- new_mask
+  assign(x = fun_name, value = new_mask)
 
-  # Inform the user
+  #Inform the user
   clear_joynenv()
 
   joyn:::store_msg(type        = "info",
@@ -384,7 +386,7 @@ unmask_function_globenv <- function(fun_name,
                    bolded_pale = " {pkg_name}::{fun_name}",
                    pale        = " preferred")
 
-  joyn:::joyn_msg()
+  joyn:::joyn_msg("info")
 
   invisible(TRUE)
 }
