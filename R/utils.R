@@ -210,10 +210,10 @@ unmask_joyn_fun_ns <- function(fun_name,
 
   # Detach and reattach "joyn" if currently loaded
 
-  if(anyv(search(), "package:joyn")) {   #anyv is the collapse version of any()
-    detach_package("joyn")
-    suppressPackageStartupMessages(attachNamespace(joyn_ns))
-  }
+  # if(anyv(search(), "package:joyn")) {   #anyv is the collapse version of any()
+  #   detach_package("joyn")
+  #   suppressPackageStartupMessages(attachNamespace(joyn_ns))
+  # }
 
   # return
   invisible(TRUE)
@@ -230,9 +230,9 @@ unmask_joyn_fun_ns <- function(fun_name,
 unmask_joyn <- \(fun_name,
                  pkg_name = "dplyr") {
 
-  fun <- match.arg(arg        = fun_name,
-                   choices    = c("right_join", "left_join", "inner_join", "full_join"),
-                   several.ok = TRUE)
+  fun_name <- match.arg(arg        = fun_name,
+                       choices     = c("right_join", "left_join", "inner_join", "full_join"),
+                       several.ok  = TRUE)
 
   l <- lapply(fun_name, \(.) {
 
@@ -253,6 +253,13 @@ unmask_joyn <- \(fun_name,
     ) # End of tryCatch
   }
   )
+
+  joyn_ns <- getNamespace("joyn")
+
+  if(anyv(search(), "package:joyn")) {   #anyv is the collapse version of any()
+    detach_package("joyn")
+    suppressPackageStartupMessages(attachNamespace(joyn_ns))
+  }
 
   names(l) <- fun_name
 
