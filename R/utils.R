@@ -263,6 +263,8 @@ unmask_joyn <- \(fun_name,
 
   names(l) <- fun_name
 
+  clear_joynenv()
+
   # Inform the user
   store_msg(type        = "info",
             ok          = paste(cli::symbol$info, " Note:  "),
