@@ -128,7 +128,7 @@ is_balanced <- function(df,
 
 }
 
-#' Unmask joyn's functions
+#' Unmask joyn's functions ({conflicted} version)
 #'
 #'
 #' @param fun_name character vector of one or more functions to unmask
@@ -137,7 +137,7 @@ is_balanced <- function(df,
 #' @keywords internal
 #'
 #'
-# unmask_joyn_fun_old <- function(fun_name,
+# unmask_joyn_fun_conflicted <- function(fun_name,
 #                                 pkg_name) {
 #
 #   clear_joynenv()
@@ -161,7 +161,7 @@ is_balanced <- function(df,
 # }
 
 
-#' Unmask joyn's function(s) locally
+#' Unmask joyn's function(s) (local version, vectorized)
 #'
 #'
 #' @param fun_name character vector of one or more functions to unmask
@@ -185,6 +185,7 @@ unmask_joyn_fun <- function(fun_name,
   }
 
   # if function {fun_name} is not an exported object of {pkg_name}, stop and inform user
+
   if (!any(fun_name %in% getNamespaceExports(pkg_name))) {
 
     store_msg(type = "err",
@@ -233,16 +234,20 @@ unmask_joyn_fun <- function(fun_name,
   invisible(TRUE)
 }
 
-# Experimenting here ######################################################
 
-# Unmask joyn functions (in namespace)
-# The functions below follows the same reasoning as {collapse},
-# which goes as far as allowing the user to interactively modify the namespace
+#' Unmask joyn function (namespace version, NOT vectorized)
+#'
+#' @param fun_name character of function to unmask
+#' @param pkg_name character specifying package from which joyn masks the function
+#'
+#' @return invisibly unmask function that joyn masks from another package
+#' @keywords internal
+unmask_joyn_fun_ns <- function(fun_name,
+                               pkg_name) {
 
-unmask_joyn_in_ns <- function(fun_name,
-                              pkg_name) {
+  # Checks ####
 
-  # Checks
+  # if package {pkg_name} is not loaded, stop and inform user
   if (!pkg_name %in% tolower(.packages())) {
 
     store_msg(type = "err",
@@ -255,6 +260,7 @@ unmask_joyn_in_ns <- function(fun_name,
   }
 
   # if function {fun_name} is not an exported object of {pkg_name}, stop and inform user
+
   if (!any(fun_name %in% getNamespaceExports(pkg_name))) {
 
     store_msg(type = "err",
@@ -287,7 +293,7 @@ unmask_joyn_in_ns <- function(fun_name,
                                        "exports")
 
   # debug lines to be removed ----
-  print("BEFORE REMOVING")
+  print("EXPORTS BEFORE")
   print(getNamespaceExports(joyn_ns))
 
   # remove binding from joyn's namespace exports' environment
@@ -297,18 +303,18 @@ unmask_joyn_in_ns <- function(fun_name,
   joyn_ns <- getNamespace("joyn")
 
   # debug lines to be removed ----
-  print("AFTER REMOVING")
+  print("EXPORTS AFTER `remove`")
   print(getNamespaceExports(joyn_ns))
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Apply the new mask in joyn's exports' env ----
+  # Apply the new mask ----
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   new_mask <- getExportedValue(ns = getNamespace(pkg_name), name = fun_name)
 
-  rlang::env_poke(env = joyn_ns,
-                  nm = fun_name,
-                  value = new_mask,
+  rlang::env_poke(env    = joyn_ns,
+                  nm     = fun_name,
+                  value  = new_mask,
                   create = TRUE)
 
 
@@ -316,12 +322,10 @@ unmask_joyn_in_ns <- function(fun_name,
   lockEnvironment(joyn_ns,
                   bindings = TRUE)
 
-
   # Detach and reattach "joyn" if currently loaded
 
-  if(collapse::anyv(search(), "package:joyn")) {   #anyv is the collapse version of any
+  if(anyv(search(), "package:joyn")) {   #anyv is the collapse version of any()
     detach_package(joyn)
-
     suppressPackageStartupMessages(attachNamespace(joyn_ns))
   }
 
@@ -344,22 +348,25 @@ unmask_joyn_in_ns <- function(fun_name,
 }
 
 
-# Auxiliary function to avoid error when detaching a package -e.g., when multiple versions loaded at the same time
-# Example:
-# detach_package(joyn)
-# detach_package("joyn", TRUE)
+#' Detach a package from search list
+#'
+#' This is an auxiliary function to avoid errors when detaching a package
+#' -e.g., when multiple versions are loaded at the same time
+#'
+#' @param pkg name of the package to detach
+#' @param character logical. TRUE when pkg_name provided as a character string, FALSE otherwise; Default to FALSE
+#' @return invisibly detach package from search list
+#' @keywords internal
+#'
+detach_package <- function(pkg_name) {
 
-detach_package <- function(pkg, character.only = FALSE)
-{
-  if(!character.only)
-  {
-    pkg <- deparse(substitute(pkg))
-  }
   search_item <- paste("package", pkg, sep = ":")
-  while(search_item %in% search())
-  {
-    detach(search_item, unload = TRUE, character.only = TRUE)
+
+  if(search_item %in% search()) {
+
+    detach(search_item,
+           unload = TRUE,
+           character = TRUE)
+
   }
 }
-
-

@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{unmask_joyn_fun}
 \alias{unmask_joyn_fun}
-\title{Unmask joyn's functions}
+\title{Unmask joyn's functions ({conflicted} version)}
 \usage{
 unmask_joyn_fun(fun_name, pkg_name)
 }
@@ -17,9 +17,9 @@ invisible TRUE
 invisible TRUE
 }
 \description{
-Unmask joyn's functions
+Unmask joyn's functions ({conflicted} version)
 }
-\keyword{-this}
+\keyword{(local}
 \keyword{-to}
 \keyword{Unmask}
 \keyword{be}
@@ -28,8 +28,8 @@ Unmask joyn's functions
 \keyword{function(s)}
 \keyword{internal}
 \keyword{joyn's}
-\keyword{locally}
 \keyword{once}
 \keyword{replaced}
+\keyword{vectorized)}
+\keyword{version,}
 \keyword{with}
-\keyword{works}
