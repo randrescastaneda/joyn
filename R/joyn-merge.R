@@ -157,8 +157,9 @@ joyn <- function(x,
                  by               = intersect(names(x), names(y)),
                  match_type       = c("1:1", "1:m", "m:1", "m:m"),
                  keep             = c("full", "left", "master",
-                                       "right", "using", "inner"),
-                 y_vars_to_keep   = TRUE,
+                                      "right", "using", "inner",
+                                      "anti"),
+                 y_vars_to_keep   = ifelse(keep == "anti", FALSE, TRUE),
                  update_values    = FALSE,
                  update_NAs       = update_values,
                  reportvar        = getOption("joyn.reportvar"),
@@ -243,6 +244,16 @@ joyn <- function(x,
   ## Check suffixes -------------
   check_suffixes(suffixes)
 
+  if (keep == "anti" &
+      (isTRUE(update_values) || isTRUE(update_NAs))) {
+    store_msg("warn",
+              warn = paste(cli::symbol$warning, "  Warning:"),
+              pale = " cannot use arguments {.code update_values = TRUE}
+                         and/or {.code update_NAs = TRUE} for anti join")
+    update_values <- FALSE
+    update_NAs    <- FALSE
+  }
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #           Consistency of join   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -290,13 +301,6 @@ joyn <- function(x,
   # keep relevant variables in y
   y <- y |> fselect(
     by, yvars_w
-  )
-
-  if (
-    (keep == "anti" | keep == "semi") &
-    match_type == "m:m"
-  ) stop(
-    "Anti and semi joins cannot be performed on m:m joins at this stage"
   )
 
   # Perform workhorse join
@@ -369,6 +373,9 @@ joyn <- function(x,
 
     x <- x |>
       fsubset(get(reportvar)  >= 3)
+  } else if (keep == "anti") {
+    x <- x |>
+      fsubset(get(reportvar) == 1)
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -381,13 +388,14 @@ joyn <- function(x,
 
   if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
-    x <- update_na_values(dt           = x,
-                          var          = var_use,
-                          reportvar    = reportvar,
-                          suffixes     = suffixes,
-                          rep_NAs      = update_NAs,
-                          rep_values   = update_values
-    )
+      x <- update_na_values(dt           = x,
+                            var          = var_use,
+                            reportvar    = reportvar,
+                            suffixes     = suffixes,
+                            rep_NAs      = update_NAs,
+                            rep_values   = update_values
+      )
+
   }
 
 
@@ -455,12 +463,13 @@ joyn <- function(x,
   }
 
   # no matching obs
-  if (all(x[[reportvar]] %in% c("x", "y")) ||
-      all(x[[reportvar]] %in% c(1, 2))) {
+  if ((all(x[[reportvar]] %in% c("x", "y")) ||
+      all(x[[reportvar]] %in% c(1, 2))) &&
+      !keep == "anti") {
 
     store_msg("warn",
               warn = paste(cli::symbol$warning, "  Warning:"),
-              pale = " you have no matchig obs. Make sure argument
+              pale = " you have no matching obs. Make sure argument
                      `by` is correct. Right now, `joyn` is joining by
                      {.code {by}}")
   }

@@ -552,7 +552,6 @@ test_that("y vars are extracted correctly", {
 
   expect_equal(names(jn), c(names(x2), yvars, ".joyn"))
 
-
   jn <-
     joyn(
       x2,
@@ -705,6 +704,71 @@ test_that("output table class", {
   class(out) |>
     expect_equal(class(x2))
 })
+
+# Test anti-join
+#_________________________________
+test_that("joyn's how = anti works as expected", {
+
+  r <- joyn(x          = x1,
+            y          = y1,
+            match_type = "m:1",
+            by         = "id",
+            keep       = "anti")
+
+  expect_true(funique(r$`.joyn`) == "x")
+  expect_equal(names(r),
+               c(names(x1), ".joyn"))
+  expect_equal(r$id,
+               c(NA_real_, 3))
+  rn <- names(joyn(x              = x1,
+                   y              = y1,
+                   match_type     = "m:1",
+                   by             = "id",
+                   keep           = "anti",
+                   y_vars_to_keep = TRUE))
+  expect_false(all(names(r) == rn[1:length(names(r))]))
+
+  # m:m anti joins
+  r <- joyn(x              = x4,
+            y              = y4[!id2 == 3,],
+            match_type     = "m:m",
+            by             = c("id1 = id2"),
+            keep           = "anti",
+            y_vars_to_keep = TRUE)
+
+  expect_true(allNA(r$y))
+  expect_true(all(r$id1 == 3))
+  expect_true(all(r$.joyn == "x"))
+
+
+})
+
+test_that("anti join warning for update values", {
+
+  expect_message(
+    r <- joyn(x          = x1,
+              y          = y1,
+              match_type = "m:1",
+              by         = "id",
+              keep       = "anti",
+              update_values = TRUE,
+              verbose = TRUE))
+
+  r2 <- joyn(x          = x1,
+             y          = y1,
+             match_type = "m:1",
+             by         = "id",
+             keep       = "anti",
+             update_values = FALSE)
+
+  expect_equal(r,
+               r2)
+
+
+
+
+})
+
 
 
 
