@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{unmask_joyn_fun_ns}
 \alias{unmask_joyn_fun_ns}
-\title{Unmask joyn function (namespace version, NOT vectorized)}
+\title{Unmask joyn function (namespace version)}
 \usage{
 unmask_joyn_fun_ns(fun_name, pkg_name)
 }
@@ -12,9 +12,9 @@ unmask_joyn_fun_ns(fun_name, pkg_name)
 \item{pkg_name}{character specifying package from which joyn masks the function}
 }
 \value{
-invisibly unmask function that joyn masks from another package
+invisibly unmask function that joyn masks
 }
 \description{
-Unmask joyn function (namespace version, NOT vectorized)
+Unmask joyn function (namespace version)
 }
 \keyword{internal}

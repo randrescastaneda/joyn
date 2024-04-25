@@ -128,119 +128,13 @@ is_balanced <- function(df,
 
 }
 
-#' Unmask joyn's functions ({conflicted} version)
-#'
-#'
-#' @param fun_name character vector of one or more functions to unmask
-#' @param pkg_name character specifying package from which joyn masks the function(s)
-#' @return invisible TRUE
-#' @keywords internal
-#'
-#'
-# unmask_joyn_fun_conflicted <- function(fun_name,
-#                                 pkg_name) {
-#
-#   clear_joynenv()
-#
-#   lapply(fun_name,
-#          conflicted::conflict_prefer,
-#          winner = pkg_name,
-#          loser = "joyn",
-#          quiet = TRUE)
-#
-#   store_msg(type        = "info",
-#                   ok          = paste(cli::symbol$info, " Note:  "),
-#                   pale        = "function",
-#                   bolded_pale = "  {fun_name}",
-#                   pale        = "  unmasked.",
-#                   bolded_pale = " {pkg_name}::{fun_name}",
-#                   pale        = " preferred")
-#   joyn_msg()
-#
-#   invisible(TRUE)
-# }
 
-
-#' Unmask joyn's function(s) (local version, vectorized)
-#'
-#'
-#' @param fun_name character vector of one or more functions to unmask
-#' @param pkg_name character specifying package from which joyn masks the function(s)
-#' @return invisible TRUE
-#' @keywords internal -to be replaced with export once done
-unmask_joyn_fun <- function(fun_name,
-                            pkg_name) {
-
-  # if package {pkg_name} is not loaded, stop and inform user
-
-  if (!pkg_name %in% tolower(.packages())) {
-
-    store_msg(type = "err",
-              err  = paste(cli::symbol$cross, "Error:"),
-              pale = "   package {pkg_name} must be loaded."
-              )
-
-      joyn_msg("err")
-      cli::cli_abort("{pkg_name} is not loaded")
-  }
-
-  # if function {fun_name} is not an exported object of {pkg_name}, stop and inform user
-
-  if (!any(fun_name %in% getNamespaceExports(pkg_name))) {
-
-    store_msg(type = "err",
-              err  = paste(cli::symbol$cross, "Error:"),
-              pale = "   {fun_name} must be exported object(s) of {pkg_name}."
-    )
-
-    joyn_msg("err")
-    cli::cli_abort("{fun_name} not exported from {pkg_name}")
-  }
-
-  # get namespace exports
-  joyn_ns_exports <- getNamespaceExports("joyn")
-
-  # get functions to unmask -filter those that are in joyn_ns exports
-  fun_name <- fun_name[fun_name %in% joyn_ns_exports]
-
-  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # apply the new mask ----
-  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  lapply(fun_name, function(fn) {
-
-    new_mask <- getExportedValue(ns   = getNamespace(pkg_name),
-                                 name = fn)
-
-    assign(x     = fn,
-           value = new_mask,
-           envir = .GlobalEnv)
-
-  })
-
-  #Inform the user
-  clear_joynenv()
-
-  store_msg(type        = "info",
-            ok          = paste(cli::symbol$info, " Note:  "),
-            pale        = "function",
-            bolded_pale = "  {fun_name}",
-            pale        = "  unmasked.",
-            bolded_pale = " {pkg_name}::{fun_name}",
-            pale        = " preferred")
-
-  joyn_msg("info")
-
-  invisible(TRUE)
-}
-
-
-#' Unmask joyn function (namespace version, NOT vectorized)
+#' Unmask joyn function (namespace version)
 #'
 #' @param fun_name character of function to unmask
 #' @param pkg_name character specifying package from which joyn masks the function
 #'
-#' @return invisibly unmask function that joyn masks from another package
+#' @return invisibly unmask function that joyn masks
 #' @keywords internal
 unmask_joyn_fun_ns <- function(fun_name,
                                pkg_name) {
@@ -292,19 +186,11 @@ unmask_joyn_fun_ns <- function(fun_name,
   joyn_ns_exports <- .getNamespaceInfo(joyn_ns,
                                        "exports")
 
-  # debug lines to be removed ----
-  # print("EXPORTS BEFORE")
-  # print(getNamespaceExports(joyn_ns))
-
   # remove binding from joyn's namespace exports' environment
   remove(list = fun_name,
          envir = joyn_ns_exports)
 
   joyn_ns <- getNamespace("joyn")
-
-  # debug lines to be removed ----
-  # print("EXPORTS AFTER `remove`")
-  # print(getNamespaceExports(joyn_ns))
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Apply the new mask ----
@@ -329,9 +215,48 @@ unmask_joyn_fun_ns <- function(fun_name,
     suppressPackageStartupMessages(attachNamespace(joyn_ns))
   }
 
-  # Inform the user
-  clear_joynenv()
+  # return
+  invisible(TRUE)
 
+}
+
+#' Unmask joyn functions
+#'
+#' @param fun_name character vector of one or more functions to unmask
+#' @param pkg_name character specifying package from which joyn masks the function(s)
+#'
+#' @return invisible list
+#' @export
+unmask_joyn <- \(fun_name,
+                 pkg_name = "dplyr") {
+
+  fun <- match.arg(arg        = fun_name,
+                   choices    = c("right_join", "left_join", "inner_join", "full_join"),
+                   several.ok = TRUE)
+
+  l <- lapply(fun_name, \(.) {
+
+    tryCatch(
+      expr = {
+        # unmask joyn function
+        unmask_joyn_fun_ns(., pkg_name)
+        "unmasked"
+      },
+
+      error = function(e) {
+        paste("Error:", e$message)
+      }, # end of error section
+
+      warning = function(w) {
+        paste("Warning:",w$message)
+      }
+    ) # End of tryCatch
+  }
+  )
+
+  names(l) <- fun_name
+
+  # Inform the user
   store_msg(type        = "info",
             ok          = paste(cli::symbol$info, " Note:  "),
             pale        = "function",
@@ -342,8 +267,7 @@ unmask_joyn_fun_ns <- function(fun_name,
 
   joyn_msg()
 
-  # return
-  invisible(TRUE)
+  return(invisible(l))
 
 }
 
@@ -353,8 +277,7 @@ unmask_joyn_fun_ns <- function(fun_name,
 #' This is an auxiliary function to avoid errors when detaching a package
 #' -e.g., when multiple versions are loaded at the same time
 #'
-#' @param pkg name of the package to detach
-#' @param character logical. TRUE when pkg_name provided as a character string, FALSE otherwise; Default to FALSE
+#' @param pkg_name name of the package to detach
 #' @return invisibly detach package from search list
 #' @keywords internal
 #'

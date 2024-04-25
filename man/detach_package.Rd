@@ -7,9 +7,7 @@
 detach_package(pkg_name)
 }
 \arguments{
-\item{pkg}{name of the package to detach}
-
-\item{character}{logical. TRUE when pkg_name provided as a character string, FALSE otherwise; Default to FALSE}
+\item{pkg_name}{name of the package to detach}
 }
 \value{
 invisibly detach package from search list
