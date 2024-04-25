@@ -728,6 +728,18 @@ test_that("joyn's how = anti works as expected", {
                    y_vars_to_keep = TRUE))
   expect_false(all(names(r) == rn[1:length(names(r))]))
 
+  # m:m anti joins
+  r <- joyn(x              = x4,
+            y              = y4[!id2 == 3,],
+            match_type     = "m:m",
+            by             = c("id1 = id2"),
+            keep           = "anti",
+            y_vars_to_keep = TRUE)
+
+  expect_true(allNA(r$y))
+  expect_true(all(r$id1 == 3))
+  expect_true(all(r$.joyn == "x"))
+
 
 })
 
