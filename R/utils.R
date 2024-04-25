@@ -293,8 +293,8 @@ unmask_joyn_fun_ns <- function(fun_name,
                                        "exports")
 
   # debug lines to be removed ----
-  print("EXPORTS BEFORE")
-  print(getNamespaceExports(joyn_ns))
+  # print("EXPORTS BEFORE")
+  # print(getNamespaceExports(joyn_ns))
 
   # remove binding from joyn's namespace exports' environment
   remove(list = fun_name,
@@ -303,8 +303,8 @@ unmask_joyn_fun_ns <- function(fun_name,
   joyn_ns <- getNamespace("joyn")
 
   # debug lines to be removed ----
-  print("EXPORTS AFTER `remove`")
-  print(getNamespaceExports(joyn_ns))
+  # print("EXPORTS AFTER `remove`")
+  # print(getNamespaceExports(joyn_ns))
 
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Apply the new mask ----
@@ -325,7 +325,7 @@ unmask_joyn_fun_ns <- function(fun_name,
   # Detach and reattach "joyn" if currently loaded
 
   if(anyv(search(), "package:joyn")) {   #anyv is the collapse version of any()
-    detach_package(joyn)
+    detach_package("joyn")
     suppressPackageStartupMessages(attachNamespace(joyn_ns))
   }
 
@@ -360,7 +360,7 @@ unmask_joyn_fun_ns <- function(fun_name,
 #'
 detach_package <- function(pkg_name) {
 
-  search_item <- paste("package", pkg, sep = ":")
+  search_item <- paste("package", pkg_name, sep = ":")
 
   if(search_item %in% search()) {
 
