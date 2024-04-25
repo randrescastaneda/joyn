@@ -303,11 +303,6 @@ joyn <- function(x,
     by, yvars_w
   )
 
-  if (keep == "semi" &
-      match_type == "m:m") stop(
-    "Anti and semi joins cannot be performed on m:m joins at this stage"
-  )
-
   # Perform workhorse join
   x <- joyn_workhorse(
     x          = x,
