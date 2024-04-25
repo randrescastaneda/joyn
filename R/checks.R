@@ -279,8 +279,8 @@ check_match_type <- function(x, y, by, match_type, verbose = FALSE) {
         display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
           fsubset(copies > 1)
 
-        cat("Duplicate counts in x:\n")
-        print(display_id_x)
+        cat("Duplicate counts in y:\n")
+        print(display_id_y)
       }
 
     }
