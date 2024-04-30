@@ -16,6 +16,12 @@ fix_by_vars <- function(by, x, y) {
     yby <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", byexp))
     newkeys <- paste0("keyby", 1:length(xby))
 
+    # x <- frename(x,
+    #              newkeys,
+    #              cols = which(names(x) %in% xby))
+    # y <- frename(y,
+    #              newkeys,
+    #              cols = which(names(y) %in% yby))
     setnames(x, xby, newkeys)
     setnames(y, yby, newkeys)
 

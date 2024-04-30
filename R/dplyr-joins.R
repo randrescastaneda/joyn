@@ -59,8 +59,8 @@ left_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  x <- copy(x)
-  y <- copy(y)
+  # x <- copy(x)
+  # y <- copy(y)
   na_matches <- match.arg(na_matches,
                           choices = c("na","never"))
   multiple   <- match.arg(multiple,
@@ -198,8 +198,8 @@ right_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  x <- copy(x)
-  y <- copy(y)
+  # x <- copy(x)
+  # y <- copy(y)
   na_matches <- match.arg(na_matches,
                           choices = c("na","never"))
   multiple   <- match.arg(multiple,
@@ -340,8 +340,8 @@ full_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  x <- copy(x)
-  y <- copy(y)
+  # x <- copy(x)
+  # y <- copy(y)
   na_matches <- match.arg(na_matches,
                           choices = c("na","never"))
   multiple   <- match.arg(multiple,
@@ -488,8 +488,8 @@ inner_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  x <- copy(x)
-  y <- copy(y)
+  # x <- copy(x)
+  # y <- copy(y)
   na_matches <- match.arg(na_matches,
                           choices = c("na","never"))
   multiple   <- match.arg(multiple,
@@ -629,8 +629,8 @@ anti_join <- function(
   clear_joynenv()
 
   # Argument checks ---------------------------------
-  x <- copy(x)
-  y <- copy(y)
+  # x <- copy(x)
+  # y <- copy(y)
   na_matches <- match.arg(na_matches,
                           choices = c("na","never"))
   multiple   <- match.arg(multiple,
@@ -838,25 +838,25 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
 #' @keywords internal
 set_col_names <- function(x, y, by, suffix, jn_type) {
 
-  x_1 <- copy(x)
-  y_1 <- copy(y)
+  #x_1 <- copy(x)
+  #y_1 <- copy(y)
 
   # If joining by different variables
   if (length(grep(pattern = "==?", x = by, value = TRUE)) != 0) {
 
     if (jn_type == "right") {
-      by_x_names <- fix_by_vars(by = by, x_1, y_1)$xby
+      by_x_names <- fix_by_vars(by = by, x, y)$xby
     }
 
     else if (jn_type == "left" | jn_type == "full" | jn_type == "inner") {
-      by_y_names <- fix_by_vars(by = by, x_1, y_1)$yby
+      by_y_names <- fix_by_vars(by = by, x, y)$yby
     }
 
   }
 
   # If joining by common var
   else {
-    by_y_names <- by_x_names <- fix_by_vars(by = by, x_1, y_1)$by
+    by_y_names <- by_x_names <- fix_by_vars(by = by, x, y)$by
     }
 
   # Add key vars with suffix to x and y

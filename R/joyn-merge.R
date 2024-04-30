@@ -214,9 +214,6 @@ joyn <- function(x,
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
-    x <- copy(x)
-    y <- copy(y)
-
 
   ## X and Y -----------
   check_xy(x,y)
@@ -260,7 +257,6 @@ joyn <- function(x,
   mts <- check_match_type(x, y, by, match_type, verbose)
   tx  <- mts[1]
   ty  <- mts[2]
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Variables to keep in y   ---------
