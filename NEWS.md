@@ -1,8 +1,15 @@
 # joyn (development version)
 
+* Add `anti_join()` function.
+
+* Add `unmask_joyn()` function to unmask `joyn` functions that mask `dplyr` equivalents.
+
+
 # joyn 0.2.0
 
-`joyn` has gained two new authors: Zander Prinsloo and Rossana Tatulli. 
+* `joyn` has gained two new authors: Zander Prinsloo and Rossana Tatulli.
+
+* Official [blog](https://blogs.worldbank.org/en/opendata/from-frustration-to-joyn--introducing-joyn-for-r--a-tool-for-sma) release
 
 ## Breaking changes
 
