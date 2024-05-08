@@ -424,8 +424,7 @@ that the match type is not as expected.</p>
 <span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_match_type()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> match type inconsistency</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> you could use `return_report = TRUE` in `joyn::is_id()` to see where the</span></span>
-<span><span class="co">#&gt;   problem is</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> set verbose to TRUE to see where the issue is</span></span>
 <span></span>
 <span><span class="co"># Merging wrongly but getting NO errors because you did not use match_type</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x3</span>, <span class="va">y3</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
@@ -433,8 +432,7 @@ that the match type is not as expected.</p>
 <span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_match_type()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> match type inconsistency</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> you could use `return_report = TRUE` in `joyn::is_id()` to see where the</span></span>
-<span><span class="co">#&gt;   problem is</span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> set verbose to TRUE to see where the issue is</span></span></code></pre></div>
 <p>If instead you don’t care about match types or you don’t think it is
 necessary to use them for your particular needs, you might be fine
 without <code>joyn</code>.</p>

@@ -368,8 +368,8 @@ checks</em>
 <span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.00012</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.034486</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000129</span><span style="color: #9E9E9E;"> seconds</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.036835</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
 <span></span>
 <span></span>
@@ -398,8 +398,8 @@ checks</em>
 <span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000116</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.033627</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000136</span><span style="color: #9E9E9E;"> seconds</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.036434</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -611,10 +611,14 @@ relationship between the variables being used for merging.
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>, y<span class="op">=</span><span class="va">y1</span>, by<span class="op">=</span><span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
+<span><span class="co">#&gt; Duplicate counts in <span style="color: #00BB00;">x</span>:</span></span>
+<span><span class="co">#&gt;       id copies</span></span>
+<span><span class="co">#&gt;    &lt;int&gt;  &lt;int&gt;</span></span>
+<span><span class="co">#&gt; 1:     1      2</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_match_type()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> match type inconsistency</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> you could use `return_report = TRUE` in `joyn::is_id()` to see where the</span></span>
-<span><span class="co">#&gt;   problem is</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> refer to the duplicate counts in the table(s) above to identify where the</span></span>
+<span><span class="co">#&gt;   issue occurred</span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"err"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span></code></pre></div>
 </div>
@@ -661,8 +665,8 @@ of them to be displayed, you can just set <code>type = 'all'</code></p>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000124</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.031836</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000137</span><span style="color: #9E9E9E;"> seconds</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.03799</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
 <span></span>
 <span><span class="co"># Print info messages only </span></span>
