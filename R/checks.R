@@ -222,7 +222,9 @@ check_by_vars <- function(by, x, y) {
 #' # Inconsistent match type
 #' joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 #' }
-check_match_type <- function(x, y, by, match_type, verbose) {
+check_match_type <- function(x, y, by,
+                             match_type,
+                             verbose = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # computations   ---------
@@ -233,37 +235,72 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
   # Check which messages to return
   match_type_error <- FALSE
-  x_m              <- TRUE
-  y_m              <- TRUE
+  x_m    <-  y_m   <- TRUE
+  mte_x  <- mte_y  <- FALSE
 
   if (tx == "1") {
-    match_type_error <-
-      is_match_type_error(x, "x", by, verbose, match_type_error)
+      mte_x <- is_match_type_error(x, "x", by, verbose, match_type_error)
   } else {
     x_m <- is_valid_m_key(x, by)
   }
 
   if (ty == "1") {
-    match_type_error <-
-      is_match_type_error(y, "y", by, verbose, match_type_error)
+      mte_y <- is_match_type_error(y, "y", by, verbose, match_type_error)
   } else {
       y_m <- is_valid_m_key(y, by)
     }
 
+  if (TRUE %in% c(mte_x, mte_y)) {
+    match_type_error <-TRUE
+    }
+
   # Error if user chooses "1" but actually "m" ----
   if (match_type_error) {
+
     msg     <- "match type inconsistency"
     hint    <-
-      "you could use `return_report = TRUE` in `joyn::is_id()`
-    to see where the problem is"
+      "set verbose to TRUE to see where the issue is"
     joyn_msg("err")
+
+    if (verbose == TRUE) {
+
+      msg     <- "match type inconsistency"
+      hint    <-
+        "refer to the duplicate counts in the table(s) above
+       to identify where the issue occurred"
+
+      if (mte_x == TRUE) {
+        display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
+          fsubset(copies > 1)
+
+        cli::cli_inform("Duplicate counts in {.field x}:")
+        print(display_id_x)
+        # I would like to show the table with the duplicated values.
+        # Something like this:
+        #      dt <- collapse::join(x, display_id_x,
+        #      on = by,
+        #      how = "inner",
+        #      verbose = FALSE)
+        #      dt[]
+      }
+
+      if (mte_y == TRUE) {
+        display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
+          fsubset(copies > 1)
+
+        cli::cli_inform("Duplicate counts in {.field y}:")
+        print(display_id_y)
+      }
+
+    }
+
     cli::cli_abort(c(msg,
                      i = hint),
-                   class = "joyn_error")
+                     class = "joyn_error")
 
   }
 
-  # Warning if user choses "m" but actually "1" ----
+  # Warning if user chooses "m" but actually "1" ----
   m_m <- data.table::fcase(
     isTRUE(x_m)  & isTRUE(y_m),  "none",
     isTRUE(x_m)  & isFALSE(y_m), "warn_y",
