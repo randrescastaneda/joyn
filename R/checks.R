@@ -275,6 +275,13 @@ check_match_type <- function(x, y, by,
 
         cli::cli_inform("Duplicate counts in {.field x}:")
         print(display_id_x)
+        # I would like to show the table with the duplicated values.
+        # Something like this:
+        #      dt <- collapse::join(x, display_id_x,
+        #      on = by,
+        #      how = "inner",
+        #      verbose = FALSE)
+        #      dt[]
       }
 
       if (mte_y == TRUE) {
