@@ -73,6 +73,9 @@
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/clear_joynenv.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/detach_package.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/freq_table.html</loc>
   </url>
   <url>
@@ -155,6 +158,12 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/type_choices.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/unmask_joyn.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/dev/reference/unmask_joyn_fun_ns.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/dev/reference/unmatched_keys.html</loc>
