@@ -17,3 +17,22 @@ invisible list
 \description{
 Unmask joyn functions
 }
+\examples{
+\dontrun{
+library(dplyr)
+library(joyn)
+
+left_join(
+  data.frame(x = 1:3, y = 1:3),
+  data.frame(x = 1:2, z = 1:2),
+  by = "x"
+)
+unmask_joyn("left_join")
+
+left_join(
+  data.frame(x = 1:3, y = 1:3),
+  data.frame(x = 1:2, z = 1:2),
+  by = "x"
+)
+}
+}

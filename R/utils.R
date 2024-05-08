@@ -227,6 +227,24 @@ unmask_joyn_fun_ns <- function(fun_name,
 #'
 #' @return invisible list
 #' @export
+#' @examples
+#' \dontrun{
+#' library(dplyr)
+#' library(joyn)
+#'
+#' left_join(
+#'   data.frame(x = 1:3, y = 1:3),
+#'   data.frame(x = 1:2, z = 1:2),
+#'   by = "x"
+#' )
+#' unmask_joyn("left_join")
+#'
+#' left_join(
+#'   data.frame(x = 1:3, y = 1:3),
+#'   data.frame(x = 1:2, z = 1:2),
+#'   by = "x"
+#' )
+#' }
 unmask_joyn <- \(fun_name,
                  pkg_name = "dplyr") {
 
