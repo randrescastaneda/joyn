@@ -316,7 +316,7 @@ detach_package <- function(pkg_name) {
 
     detach(search_item,
            unload = TRUE,
-           character = TRUE)
+           character.only = TRUE)
 
   }
 }
