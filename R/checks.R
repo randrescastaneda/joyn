@@ -222,7 +222,9 @@ check_by_vars <- function(by, x, y) {
 #' # Inconsistent match type
 #' joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 #' }
-check_match_type <- function(x, y, by, match_type, verbose = FALSE) {
+check_match_type <- function(x, y, by,
+                             match_type,
+                             verbose = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # computations   ---------
@@ -271,7 +273,7 @@ check_match_type <- function(x, y, by, match_type, verbose = FALSE) {
         display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
           fsubset(copies > 1)
 
-        cat("Duplicate counts in x:\n")
+        cli::cli_inform("Duplicate counts in {.field x}:")
         print(display_id_x)
       }
 
@@ -279,7 +281,7 @@ check_match_type <- function(x, y, by, match_type, verbose = FALSE) {
         display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
           fsubset(copies > 1)
 
-        cat("Duplicate counts in y:\n")
+        cli::cli_inform("Duplicate counts in {.field y}:")
         print(display_id_y)
       }
 
