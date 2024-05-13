@@ -4,7 +4,7 @@
 \alias{check_match_type}
 \title{Check match type consistency}
 \usage{
-check_match_type(x, y, by, match_type, verbose)
+check_match_type(x, y, by, match_type, verbose = getOption("joyn.verbose"))
 }
 \arguments{
 \item{x, y}{\code{data table}s. \code{y} is coerced to a \code{data.table} if
