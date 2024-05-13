@@ -57,10 +57,7 @@ that matched in both tables and the ones that did not match in x. The ones
 in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the
 observations that matched in both tables and the ones that did not match in
 y. The ones in x will be discarded. If \emph{"inner"}, it only keeps the
-observations that matched both tables. Note that if, for example, a \code{keep = "left"}, the \code{joyn()} function still executes a full join under the hood
-and then filters so that only rows the output table is a left join. This
-behaviour, while inefficient, allows all the diagnostics and checks
-conducted by \code{joyn}.}
+observations that matched both tables. Note that if, for example, a \verb{keep = "left", the }joyn()\verb{function still executes a full join under the hood and then filters so that only rows the output table is a left join. This behaviour, while inefficient, allows all the diagnostics and checks conducted by}joyn`.}
 
 \item{y_vars_to_keep}{character: Vector of variable names in \code{y} that will be
 kept after the merge. If TRUE (the default), it keeps all the brings all
