@@ -1,8 +1,11 @@
 # joyn (development version)
 
+
 * Add `anti_join()` function.
 
 * Add `unmask_joyn()` function to unmask `joyn` functions that mask `dplyr` equivalents.
+
+* Add information about duplicated obs in `by` variable when match type is `1` rathern than `m`. 
 
 
 # joyn 0.2.0
