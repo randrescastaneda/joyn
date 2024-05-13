@@ -227,7 +227,22 @@ joyn <- function(x,
 
   # the resulting table should have the same class as the x table.
   class_x <- class(x)
+
+  # ensure input names can be restored
+  byexp <- grep(pattern = "==?",
+                x       = by,
+                value   = TRUE)
+  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
+                          "\\1",
+                          byexp))
+  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
+                          "\\3",
+                          byexp))
   ynames  <- copy(names(y))
+
+  # maintain name that is bound to original inputs
+  x_original <- x
+  y_original <- y
 
   # If match type is m:m we need to convert to data.table
   if (match_type == "m:m") {
@@ -281,8 +296,7 @@ joyn <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars ZP -------------------------------------
-  #yvars_w <- c(newyvars, ".yreport") # working yvars
+  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars
   x <- x |>
     ftransform(.xreport = 1)
   y <- y |>
@@ -416,7 +430,6 @@ joyn <- function(x,
 
   }
 
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -433,18 +446,39 @@ joyn <- function(x,
 
   ## Rename by variables -----
 
-  if (any(fixby$tempkey %in% names(x))) {
+  # in output
+  if (any(grepl(pattern = "keyby", x = names(x)))) {
     data.table::setnames(x,
-                         old = fixby$tempkey,
-                         new = fixby$xby)
+                         old = names(x)[grepl(pattern = "keyby",
+                                              x       = names(x))],
+                         new = xbynames)
   }
-  if (any(fixby$tempkey %in% names(y))) {
-    data.table::setnames(y,
-                         old = fixby$tempkey,
-                         new = fixby$yby)
 
-    if (all(names(y) %in% ynames)) {
-      colorderv(y,
+
+  # Change names back for inputs------------------------------
+  if (any(grepl(pattern = "keyby", x = names(x_original)))) {
+
+    knames <- names(x_original)[grepl(pattern = "keyby",
+                                      x       = names(x_original))]
+    knames <- knames[order(knames)]
+
+    data.table::setnames(x_original,
+                         old = knames,
+                         new = xbynames)
+  }
+
+  if (any(grepl(pattern = "keyby", x = names(y_original)))) {
+
+    knames <- names(y_original)[grepl(pattern = "keyby",
+                                      x       = names(y_original))]
+    knames <- knames[order(knames)]
+
+    data.table::setnames(y_original,
+                         old = knames,
+                         new = ybynames)
+
+    if (all(names(y_original) %in% ynames)) {
+      colorderv(y_original,
                 neworder = ynames)
     }
   }
