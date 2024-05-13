@@ -227,6 +227,7 @@ joyn <- function(x,
 
   # the resulting table should have the same class as the x table.
   class_x <- class(x)
+  ynames  <- copy(names(y))
 
   # If match type is m:m we need to convert to data.table
   if (match_type == "m:m") {
@@ -425,7 +426,6 @@ joyn <- function(x,
                          .xreport = NULL,
                          .yreport = NULL)
 
-
   if (sort) {
     setorderv(x, by, na.last = na.last)
     setattr(x, 'sorted', by)
@@ -433,13 +433,21 @@ joyn <- function(x,
 
   ## Rename by variables -----
 
-  if (!is.null(fixby$xby)) {
-    data.table::setnames(x, fixby$tempkey, fixby$xby)
-    by <- fixby$xby
-    # not necessary
-    # setnames(y, fixby$tempkey, fixby$yby)
+  if (any(fixby$tempkey %in% names(x))) {
+    data.table::setnames(x,
+                         old = fixby$tempkey,
+                         new = fixby$xby)
   }
+  if (any(fixby$tempkey %in% names(y))) {
+    data.table::setnames(y,
+                         old = fixby$tempkey,
+                         new = fixby$yby)
 
+    if (all(names(y) %in% ynames)) {
+      colorderv(y,
+                neworder = ynames)
+    }
+  }
 
   ## convert to characters if chosen -------
   if (reporttype == "character") {
@@ -502,6 +510,7 @@ joyn <- function(x,
   }
 
   setattr(x, "class", class_x)
+
   x
 
 }
