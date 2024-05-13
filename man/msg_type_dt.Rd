@@ -15,8 +15,8 @@ convert style of joyn message to data frame containing type and message
 \seealso{
 Messages functions
 \code{\link{clear_joynenv}()},
-\code{\link{joyn_msgs_exist}()},
 \code{\link{joyn_msg}()},
+\code{\link{joyn_msgs_exist}()},
 \code{\link{joyn_report}()},
 \code{\link{store_msg}()},
 \code{\link{style}()},
