@@ -7,6 +7,9 @@
 
 * Add information about duplicated obs in `by` variable when match type is `1` rathern than `m`. 
 
+* improve ineffciencies in deep copies with `m:m` joins
+
+* Replace `m:m` joins from `data.table::merge.data.table` to `collapse::join`. Thanks to @SebKrantz for the suggestion (#58).
 
 # joyn 0.2.0
 
