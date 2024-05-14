@@ -57,22 +57,19 @@ update_na_values <- function(dt,
   }
 
   # Replace values ####
-
     if (is_data_table) {
 
-      dt_1[dt_1[[reportvar]] == 4,
-           x.var] <- dt_1[dt_1[[reportvar]] == 4,
-                          y.var,
-                          with = FALSE]
-#
-      dt_1[dt_1[[reportvar]] == 5,
-           x.var] <- dt_1[dt_1[[reportvar]] == 5,
-                          y.var,
-                          with = FALSE]
+      gv(dt_1[get(reportvar) == 4],
+              x.var) <- gv(dt_1[get(reportvar) == 4],
+                                y.var)
+
+      gv(dt_1[get(reportvar) == 5],
+         x.var) <- gv(dt_1[get(reportvar) == 5],
+                      y.var)
 
     } else {
-      to_replace <- which(dt_1[[reportvar]] %in% c(4, 5))
-      dt_1[to_replace, x.var] <- dt_1[to_replace, y.var]
+    to_replace <- which(dt_1[[reportvar]] %in% c(4, 5))
+    dt_1[to_replace, x.var] <- dt_1[to_replace, y.var]
     }
 
   # Remove util vars ####
