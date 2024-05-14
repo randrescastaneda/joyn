@@ -31,8 +31,8 @@ update_na_values <- function(dt,
   is_data_table <- inherits(dt, "data.table")
 
   # Add util vars ####
-  dt_1 <- dt
-  dt_1 <- dt_1 |>
+
+  dt_1 <- dt |>
     ftransform(#use_util_reportvar = get(reportvar),
                # create variable for var.x and var.y is NA
                # TRUE if NOT NA
