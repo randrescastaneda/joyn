@@ -112,7 +112,8 @@ test_that("update_na_vals -update values of one var", {
     )
 
   # Check not updated values
-  dt[is.na(x.x) | is.na(x.y) | !.joyn == 3] |> fselect((id:x.y)) |>
+  dt |>
+    fsubset(is.na(x.x) | is.na(x.y) | !.joyn == 3) |> fselect((id:x.y)) |>
     expect_equal(res[!.joyn == 5,] |> fselect((id:x.y)))
   expect_true(!any(4 %in% res$.joyn))
 
