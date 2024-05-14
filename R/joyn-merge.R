@@ -244,12 +244,6 @@ joyn <- function(x,
   x_original <- x
   y_original <- y
 
-  # If match type is m:m we need to convert to data.table
-  if (match_type == "m:m") {
-    x <- as.data.table(x)
-    y <- as.data.table(y)
-  }
-
   ## Modify BY when is expression ---------
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
