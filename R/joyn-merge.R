@@ -254,6 +254,40 @@ joyn <- function(x,
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
+  # Change names back on exit
+  # Change names back for inputs------------------------------
+  on.exit(
+    expr = {
+      if (any(grepl(pattern = "keyby", x = names(x_original)))) {
+
+        knames <- names(x_original)[grepl(pattern = "keyby",
+                                          x       = names(x_original))]
+        knames <- knames[order(knames)]
+
+        data.table::setnames(x_original,
+                             old = knames,
+                             new = xbynames)
+      }
+
+      if (any(grepl(pattern = "keyby", x = names(y_original)))) {
+
+        knames <- names(y_original)[grepl(pattern = "keyby",
+                                          x       = names(y_original))]
+        knames <- knames[order(knames)]
+
+        data.table::setnames(y_original,
+                             old = knames,
+                             new = ybynames)
+
+        if (all(names(y_original) %in% ynames)) {
+          colorderv(y_original,
+                    neworder = ynames)
+        }
+      }
+    },
+    add = TRUE
+  )
+
   ## Check suffixes -------------
   check_suffixes(suffixes)
 
@@ -455,33 +489,6 @@ joyn <- function(x,
   }
 
 
-  # Change names back for inputs------------------------------
-  if (any(grepl(pattern = "keyby", x = names(x_original)))) {
-
-    knames <- names(x_original)[grepl(pattern = "keyby",
-                                      x       = names(x_original))]
-    knames <- knames[order(knames)]
-
-    data.table::setnames(x_original,
-                         old = knames,
-                         new = xbynames)
-  }
-
-  if (any(grepl(pattern = "keyby", x = names(y_original)))) {
-
-    knames <- names(y_original)[grepl(pattern = "keyby",
-                                      x       = names(y_original))]
-    knames <- knames[order(knames)]
-
-    data.table::setnames(y_original,
-                         old = knames,
-                         new = ybynames)
-
-    if (all(names(y_original) %in% ynames)) {
-      colorderv(y_original,
-                neworder = ynames)
-    }
-  }
 
   ## convert to characters if chosen -------
   if (reporttype == "character") {
