@@ -9,6 +9,7 @@ joyn_workhorse(
   y,
   by = intersect(names(x), names(y)),
   match_type = c("1:1"),
+  sort = FALSE,
   suffixes = getOption("joyn.suffixes")
 )
 }

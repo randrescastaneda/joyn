@@ -17,7 +17,7 @@ joyn(
   reporttype = c("character", "numeric"),
   roll = NULL,
   keep_common_vars = FALSE,
-  sort = TRUE,
+  sort = FALSE,
   verbose = getOption("joyn.verbose"),
   suffixes = getOption("joyn.suffixes"),
   allow.cartesian = deprecated(),

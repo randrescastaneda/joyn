@@ -166,7 +166,7 @@ joyn <- function(x,
                  reporttype       = c("character", "numeric"),
                  roll             = NULL,
                  keep_common_vars = FALSE,
-                 sort             = TRUE,
+                 sort             = FALSE,
                  verbose          = getOption("joyn.verbose"),
                  suffixes         = getOption("joyn.suffixes"),
                  allow.cartesian  = deprecated(),
@@ -309,7 +309,8 @@ joyn <- function(x,
     y          = y,
     by         = by,
     match_type = match_type,
-    suffixes   = suffixes
+    suffixes   = suffixes,
+    sort       = sort
   )
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -430,10 +431,10 @@ joyn <- function(x,
                          .yreport = NULL)
 
 
-  if (sort) {
-    setorderv(x, by, na.last = na.last)
-    setattr(x, 'sorted', by)
-  }
+  # if (sort) {
+  #   #setorderv(x, by, na.last = na.last)
+  #   setattr(x, 'sorted', by)
+  # }
 
   ## Rename by variables -----
 
