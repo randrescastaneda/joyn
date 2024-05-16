@@ -1713,12 +1713,7 @@ test_that("ANTI JOIN - Conducts ANTI join", {
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
-  # expect_equal(
-  #   jn_joyn,
-  #   jn_joyn_m1
-  # )
 
-  # TODO: TO CHECK HERE
   expect_true(
     all(c("x") %in% jn_joyn$.joyn)
   )

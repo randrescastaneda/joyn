@@ -430,12 +430,6 @@ joyn <- function(x,
                          .xreport = NULL,
                          .yreport = NULL)
 
-
-  # if (sort) {
-  #   #setorderv(x, by, na.last = na.last)
-  #   setattr(x, 'sorted', by)
-  # }
-
   ## Rename by variables -----
 
   if (!is.null(fixby$xby)) {
