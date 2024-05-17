@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9001</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9003</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -59,7 +59,12 @@
 <h2 class="pkg-version" data-toc-text="development version" id="joyn-development-version">joyn (development version)<a class="anchor" aria-label="anchor" href="#joyn-development-version"></a></h2>
 <ul><li><p>Add <code><a href="../reference/anti_join.html">anti_join()</a></code> function.</p></li>
 <li><p>Add <code><a href="../reference/unmask_joyn.html">unmask_joyn()</a></code> function to unmask <code>joyn</code> functions that mask <code>dplyr</code> equivalents.</p></li>
+<li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rather than <code>m</code>.</p></li>
+</ul><div class="section level3">
+<h3 id="breaking-changes-development-version">breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
+<ul><li>Now, by default, <code>joyn</code> will not sort the data. This is to avoid unnecessary computational time that most of the time is not needed. If the user wants to sort the data, they can use the <code>sort</code> argument, which triggers the sorting mechanism of <code>collapse</code> package.</li>
 </ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.0" id="joyn-020">joyn 0.2.0<a class="anchor" aria-label="anchor" href="#joyn-020"></a></h2><p class="text-muted">CRAN release: 2024-03-29</p>
 <ul><li><p><code>joyn</code> has gained two new authors: Zander Prinsloo and Rossana Tatulli.</p></li>
