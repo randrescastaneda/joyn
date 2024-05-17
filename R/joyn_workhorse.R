@@ -10,6 +10,7 @@
 #'   "1:m", "m:1", or "m:m". If "m:m" then executes `data.table::merge.data.table`
 #'   in the backend, otherwise uses `collapse::join()`
 #' @param suffixes atomic character vector: give suffixes to columns common to both
+#' @param sort logical: sort the result by the columns in `by`
 #'   `x` and `y`
 #' @return data object of same class as `x`
 #' @keywords internal
@@ -30,6 +31,7 @@ joyn_workhorse <- function(
     y,
     by         = intersect(names(x), names(y)),
     match_type = c("1:1"),
+    sort       = FALSE,
     suffixes     = getOption("joyn.suffixes") # data.table suffixes
 ) {
 
@@ -80,7 +82,7 @@ joyn_workhorse <- function(
             y               = y,
             by              = by,
             all             = TRUE,
-            sort            = FALSE,
+            sort            = sort,
             suffixes        = suffixes,
             allow.cartesian = TRUE
           )
@@ -94,6 +96,7 @@ joyn_workhorse <- function(
                           validate       = "m:m",    # no checks performed
                           suffix         = suffixes,   # data.table suffixes
                           keep.col.order = TRUE,
+                          sort           = sort,
                           verbose        = 0,
                           column         = NULL)
       }
@@ -132,7 +135,7 @@ joyn_workhorse <- function(
             y               = y,
             by              = by,
             all             = TRUE,
-            sort            = FALSE,
+            sort            = sort,
             suffixes        = suffixes,
             allow.cartesian = TRUE
           ) |>
@@ -147,6 +150,7 @@ joyn_workhorse <- function(
                           validate       = "m:m",    # no checks performed
                           suffix         = suffixes,   # data.table suffixes
                           keep.col.order = TRUE,
+                          sort           = sort,
                           verbose        = 0,
                           column         = NULL)  |>
             suppressWarnings()
