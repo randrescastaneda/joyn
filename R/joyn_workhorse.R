@@ -10,6 +10,7 @@
 #'   "1:m", "m:1", or "m:m". If "m:m" then executes `data.table::merge.data.table`
 #'   in the backend, otherwise uses `collapse::join()`
 #' @param suffixes atomic character vector: give suffixes to columns common to both
+#' @param sort logical: sort the result by the columns in `by`
 #'   `x` and `y`
 #' @return data object of same class as `x`
 #' @keywords internal

@@ -24,8 +24,10 @@ joyn_workhorse(
 "1:m", "m:1", or "m:m". If "m:m" then executes \code{data.table::merge.data.table}
 in the backend, otherwise uses \code{collapse::join()}}
 
-\item{suffixes}{atomic character vector: give suffixes to columns common to both
+\item{sort}{logical: sort the result by the columns in \code{by}
 \code{x} and \code{y}}
+
+\item{suffixes}{atomic character vector: give suffixes to columns common to both}
 }
 \value{
 data object of same class as \code{x}
