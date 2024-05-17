@@ -4,7 +4,14 @@
 
 * Add `unmask_joyn()` function to unmask `joyn` functions that mask `dplyr` equivalents.
 
-* Add information about duplicated obs in `by` variable when match type is `1` rathern than `m`. 
+* Add information about duplicated obs in `by` variable when match type is `1` rather than `m`.
+
+## breaking changes
+
+* Now, by default, `joyn` will not sort the data. This is to avoid unnecessary 
+computational time that most of the time is not needed. 
+If the user wants to sort the data, they can use the `sort` argument, which triggers 
+the sorting mechanism of `collapse` package.
 
 # joyn 0.2.0
 
