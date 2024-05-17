@@ -67,6 +67,7 @@
 <span>  <span class="va">y</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  match_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1:1"</span><span class="op">)</span>,</span>
+<span>  sort <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  suffixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.suffixes"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -91,9 +92,13 @@
 in the backend, otherwise uses <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join()</a></code></p></dd>
 
 
-<dt>suffixes</dt>
-<dd><p>atomic character vector: give suffixes to columns common to both
+<dt>sort</dt>
+<dd><p>logical: sort the result by the columns in <code>by</code>
 <code>x</code> and <code>y</code></p></dd>
+
+
+<dt>suffixes</dt>
+<dd><p>atomic character vector: give suffixes to columns common to both</p></dd>
 
 </dl></div>
     <div class="section level2">
