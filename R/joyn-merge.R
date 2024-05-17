@@ -61,7 +61,7 @@
 #'   will be added to the original name to distinguish from the resulting
 #'   variable in the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
-#'   TRUE.
+#'   FALSE.
 #' @param allow.cartesian logical: Check documentation in official [web
 #'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html/).
 #'   Default is `NULL`, which implies that if the join is "1:1" it will be
@@ -166,7 +166,7 @@ joyn <- function(x,
                  reporttype       = c("character", "numeric"),
                  roll             = NULL,
                  keep_common_vars = FALSE,
-                 sort             = TRUE,
+                 sort             = FALSE,
                  verbose          = getOption("joyn.verbose"),
                  suffixes         = getOption("joyn.suffixes"),
                  allow.cartesian  = deprecated(),
@@ -309,7 +309,8 @@ joyn <- function(x,
     y          = y,
     by         = by,
     match_type = match_type,
-    suffixes   = suffixes
+    suffixes   = suffixes,
+    sort       = sort
   )
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -428,12 +429,6 @@ joyn <- function(x,
   collapse::settransform(x,
                          .xreport = NULL,
                          .yreport = NULL)
-
-
-  if (sort) {
-    setorderv(x, by, na.last = na.last)
-    setattr(x, 'sorted', by)
-  }
 
   ## Rename by variables -----
 
