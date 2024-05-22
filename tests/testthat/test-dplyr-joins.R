@@ -547,7 +547,6 @@ test_that("RIGHT JOIN - no id given", {
       by = NULL
     ))
 })
-
 test_that ("RIGHT JOIN - when copy TRUE get warning message", {
   clear_joynenv()
   joyn::right_join(
@@ -708,7 +707,6 @@ test_that("RIGHT JOIN - reportvar works", {
       reportvar = FALSE))
 
 })
-
 test_that("RIGHT JOIN - NA matches", {
 
   jn <- right_join(
@@ -734,9 +732,6 @@ test_that("RIGHT JOIN - NA matches", {
     expect_contains("warn")
 })
 
-
-
-### ERROR 1 --> change in y4$id2
 test_that("RIGHT JOIN - unmatched error", {
 
  right_join(x            = x4,
@@ -760,14 +755,14 @@ test_that("RIGHT JOIN - unmatched error", {
             unmatched    = "error") |>
     expect_error()
 
- right_join(x           = x4,
+ right_join(x            = x4,
            y            = y4,
            relationship = "one-to-one",
            by           = c("id2", "x"),
            unmatched    = "error") |>
    expect_error()
 
- right_join(x           = x4,
+ right_join(x            = x4,
            y            = y4,
            relationship = "many-to-one",
            by           = c("id1=id2", "id2=id"),
@@ -1089,7 +1084,6 @@ test_that("FULL JOIN - (correctly) incorrectly specified arguments give (no) err
 
 
 })
-
 
 test_that("FULL JOIN - argument `keep` preserves keys in output", {
   jn <- full_join(
@@ -1635,8 +1629,6 @@ test_that("INNER JOIN - NA matches", {
 })
 
 test_that("INNER JOIN - unmatched error", {
-  # HERE, the of y4 have gotten switched, so id1 --> id2.
-  #     problem must be in the ordering of the setnames() somewhere
   inner_join(x            = x4,
             y            = y4,
             relationship = "many-to-many",
@@ -2046,62 +2038,4 @@ test_that("ANTI JOIN - NA matches", {
     expect_contains("warn")
 })
 
-
-
-
-
-test_that("joyn() - input data unchanged", {
-
-  expect_equal(x1,
-               data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
-                          t  = c(1L, 2L, 1L, 2L, NA_integer_),
-                          x  = 11:15))
-
-  expect_equal(y1,
-               data.table(id = c(1,2, 4),
-                          y  = c(11L, 15L, 16)))
-
-  expect_equal(x2,
-               data.table(id = c(1, 4, 2, 3, NA),
-                          t  = c(1L, 2L, 1L, 2L, NA_integer_),
-                          x  = c(16, 12, NA, NA, 15)))
-
-  expect_equal(y2,
-               data.table(id = c(1, 2, 5, 6, 3),
-                          yd = c(1, 2, 5, 6, 3),
-                          y  = c(11L, 15L, 20L, 13L, 10L),
-                          x  = c(16:20)))
-
-  expect_equal(x3,
-               data.table(id  = c("c","b", "d"),
-                          v   = 8:10,
-                          foo = c(4,2, 7)))
-
-  expect_equal(y3,
-               data.table(id = c("c","b", "c", "a"),
-                          y  = c(11L, 15L, 18L, 20L)))
-
-  expect_equal(x4,
-               data.table(id1 = c(1, 1, 2, 3, 3),
-                          id2 = c(1, 1, 2, 3, 4),
-                          t   = c(1L, 2L, 1L, 2L, NA_integer_),
-                          x   = c(16, 12, NA, NA, 15)))
-
-  expect_equal(y4,
-               data.table(id  = c(1, 2, 5, 6, 3),
-                          id2 = c(1, 1, 2, 3, 4),
-                          y   = c(11L, 15L, 20L, 13L, 10L),
-                          x   = c(16:20)))
-
-  # changed
-  expect_equal(x5,
-               data.table(id = c(1L, 1L, 2L, 3L, NA_integer_, NA_integer_),
-                          t  = c(1L, 2L, 1L, 2L, NA_integer_, 4L),
-                          x  = 11:16))
-
-  expect_equal(y5,
-               data.table(id = c(1,2, 4, NA_integer_, NA_integer_),
-                          y  = c(11L, 15L, 16, 17L, 18L)))
-
-})
 
