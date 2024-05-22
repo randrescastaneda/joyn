@@ -380,7 +380,7 @@ test_that("FULL JOIN - Conducts full join", {
     by.y  = "id2",
     all = TRUE
   )
-
+  attr(jn_dt, 'sorted') <- NULL
 
   expect_equal(
     jn |> fselect(-get(reportvar)),

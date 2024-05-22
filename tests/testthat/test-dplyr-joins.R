@@ -870,7 +870,8 @@ test_that("FULL JOIN - Conducts full join", {
     x4,
     y4,
     by = c("id1 = id2"),
-    relationship = "many-to-many"
+    relationship = "many-to-many",
+    sort = TRUE
   )
   #dplyr::full_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
   jn_dplyr <- dplyr::full_join(
@@ -879,9 +880,9 @@ test_that("FULL JOIN - Conducts full join", {
     by = dplyr::join_by(id1 == id2),
     relationship = "many-to-many"
   )
-  attr(jn_dplyr, "sorted") <- "id1"
-  attr(jn_joyn,
-       "sorted") <- "id"
+  # attr(jn_dplyr, "sorted") <- "id1"
+  # attr(jn_joyn,
+  #      "sorted") <- "id"
   expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -1703,13 +1704,14 @@ test_that("ANTI JOIN - Conducts ANTI join", {
   jn_joyn <- anti_join(
     x = x1,
     y = y1,
-    by = "id"
+    by = "id",
+    sort = TRUE
   )
 
   jn_dplyr <- dplyr::anti_join(
-    x1, y1, by = "id"
+    x1, y1, by = "id", s
   )
-  setorder(jn_dplyr, na.last = F)
+
   attr(
     jn_dplyr,
     "sorted"
