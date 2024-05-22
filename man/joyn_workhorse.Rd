@@ -9,6 +9,7 @@ joyn_workhorse(
   y,
   by = intersect(names(x), names(y)),
   match_type = c("1:1"),
+  sort = FALSE,
   suffixes = getOption("joyn.suffixes")
 )
 }
@@ -22,8 +23,10 @@ joyn_workhorse(
 \item{match_type}{atomic character vector of length 1: either "1:1" (default)
 "1:m", "m:1", or "m:m". Relies on \code{collapse::join()}}
 
-\item{suffixes}{atomic character vector: give suffixes to columns common to both
+\item{sort}{logical: sort the result by the columns in \code{by}
 \code{x} and \code{y}}
+
+\item{suffixes}{atomic character vector: give suffixes to columns common to both}
 }
 \value{
 data object of same class as \code{x}

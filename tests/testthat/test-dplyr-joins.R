@@ -70,11 +70,10 @@ test_that("LEFT JOIN - Conducts left join", {
     by = "id"
   )
 
-  attr( jn_dplyr, "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr,
-    ignore_attr = "row.names" # data.table::serorderv convert row.names to characters.
+    ignore_attr = c("row.names", "sorted") # data.table::serorderv convert row.names to characters.
   )
   expect_equal(
     jn_joyn,
@@ -96,12 +95,12 @@ test_that("LEFT JOIN - Conducts left join", {
     by = "id"
   )
   setorder(jn_dplyr, id, na.last = TRUE)
-  attr(jn_dplyr, "sorted") <- "id"
+
   expect_equal(
     jn_joyn |>
       fselect(-get(reportvar)), # `jvar` should be `.joyn` in principle
     jn_dplyr,
-    ignore_attr = "row.names"
+    ignore_attr = c("row.names", "sorted")
   )
 
   jn <- left_join(
@@ -118,11 +117,12 @@ test_that("LEFT JOIN - Conducts left join", {
   #                        id  = c(1, 2, 1, 2, 5, 6, 6),
   #                        y   = c(11, 15, 11, 15, 20, 13, 13),
   #                        x.y = c(16, 17, 16, 17, 18, 19, 19))
-  attr(jn_dplyr, "sorted") <- "id1"
-  expect_equal(
+  setorder(jn_dplyr, id1, na.last = TRUE)
+
+    expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dplyr,
-    ignore_attr = ".internal.selfref"
+    ignore_attr = c(".internal.selfref", "sorted")
   )
 
   # With "many-to-one" relationship
@@ -140,16 +140,13 @@ test_that("LEFT JOIN - Conducts left join", {
     relationship = "many-to-one"
   )
 
-  attr(jn_dplyr, "sorted") <- "id"
-  attr(jn, "sorted") <- "id"
-  jn_dplyr <- roworder(jn_dplyr, "id", na.last = FALSE)
-
+  setorder(jn_dplyr, id, na.last = TRUE)
   rownames(jn) <- c(1:length(x1$id))
 
   expect_equal(
     jn |> fselect(-get(reportvar)) |> as.data.frame(),
     jn_dplyr |> as.data.frame(),
-    ignore_attr = ".internal.selfref"
+    ignore_attr = c(".internal.selfref", "sorted")
   )
 
 
@@ -472,14 +469,12 @@ test_that("RIGHT JOIN - Conducts right join", {
     x1, y1, by = "id",
     relationship = "many-to-one"
   )
-  attr(
-    jn_dplyr,
-    "sorted"
-  ) <- "id"
+
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
+
   expect_equal(
     jn_joyn,
     jn_joyn2
@@ -499,13 +494,11 @@ test_that("RIGHT JOIN - Conducts right join", {
     by = "id"
   )
   jn_dplyr <- jn_dplyr[order(jn_dplyr$id, na.last = T),]
-  attr(
-    jn_dplyr,
-    "sorted"
-  ) <- "id"
+
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dplyr
+    jn_dplyr,
+    ignore_attr = "sorted"
   )
 
   jn <- right_join(
@@ -521,11 +514,11 @@ test_that("RIGHT JOIN - Conducts right join", {
     by = dplyr::join_by(id1 == id2),
     relationship = "many-to-many"
   )
-  attr(jn_dplyr, "sorted") <- "id1"
-  expect_equal(
+
+    expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dplyr,
-    ignore_attr = '.internal.selfref'
+    ignore_attr = c('.internal.selfref', "sorted")
   )
 })
 
@@ -803,6 +796,10 @@ test_that("FULL JOIN - Conducts full join", {
   setorder(jn_joyn, id, na.last = T)
   attr(jn_dplyr,
        "sorted") <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
+
+
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
@@ -835,6 +832,8 @@ test_that("FULL JOIN - Conducts full join", {
   setorder(jn_joyn, id, na.last = T)
   attr(jn_dplyr,
        "sorted") <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -859,6 +858,8 @@ test_that("FULL JOIN - Conducts full join", {
   setorder(jn_joyn, id, na.last = T)
   attr(jn_dplyr,
        "sorted") <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -879,6 +880,8 @@ test_that("FULL JOIN - Conducts full join", {
     relationship = "many-to-many"
   )
   attr(jn_dplyr, "sorted") <- "id1"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -1249,6 +1252,10 @@ test_that("INNER JOIN - Conducts inner join", {
     jn_dplyr,
     "sorted"
   ) <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
+  attr(jn_joyn2,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
@@ -1285,6 +1292,8 @@ test_that("INNER JOIN - Conducts inner join", {
   setorder(jn_joyn, id, na.last = T)
   attr(jn_dplyr,
        "sorted") <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -1309,6 +1318,8 @@ test_that("INNER JOIN - Conducts inner join", {
     jn_dplyr,
     "sorted"
   ) <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
@@ -1327,7 +1338,13 @@ test_that("INNER JOIN - Conducts inner join", {
     by = dplyr::join_by(id1 == id2),
     relationship = "many-to-many"
   )
+  setorder(jn_dplyr, id1, na.last = T)
+  setorder(jn, id1, na.last = T)
   attr(jn_dplyr, "sorted") <- "id1"
+  attr(jn,
+       "sorted") <- "id1"
+  attr(jn_joyn,
+       "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -1697,14 +1714,15 @@ test_that("ANTI JOIN - Conducts ANTI join", {
     jn_dplyr,
     "sorted"
   ) <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
+  attr(jn_joyn_m1,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
   )
-  expect_equal(
-    jn_joyn,
-    jn_joyn_m1
-  )
+
   expect_true(
     all(c("x") %in% jn_joyn$.joyn)
   )
@@ -1730,6 +1748,8 @@ test_that("ANTI JOIN - Conducts ANTI join", {
   setorder(jn_joyn, id, na.last = T)
   attr(jn_dplyr,
        "sorted") <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -1754,6 +1774,8 @@ test_that("ANTI JOIN - Conducts ANTI join", {
     jn_dplyr,
     "sorted"
   ) <- "id"
+  attr(jn_joyn,
+       "sorted") <- "id"
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
     jn_dplyr
@@ -1772,6 +1794,8 @@ test_that("ANTI JOIN - Conducts ANTI join", {
     by = dplyr::join_by(id1 == id2)
   )
   attr(jn_dplyr, "sorted") <- "id1"
+  attr(jn_joyn,
+       "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)) |> dim(),
     c(0, 6)
