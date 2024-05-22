@@ -229,16 +229,14 @@ joyn <- function(x,
   class_x <- class(x)
 
   # ensure input names can be restored
-  byexp <- grep(pattern = "==?",
-                x       = by,
-                value   = TRUE)
-  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\1",
-                          byexp))
-  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\3",
-                          byexp))
-  ynames  <- copy(names(y))
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y,
+                                 order = FALSE)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
+  ynames   <- copy(names(y))
 
   # maintain name that is bound to original inputs
   x_original <- x

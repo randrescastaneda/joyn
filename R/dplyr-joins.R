@@ -89,18 +89,12 @@ left_join <- function(
   dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  byexp <- grep(pattern = "==?",
-                x       = by,
-                value   = TRUE)
-  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\1",
-                          byexp))
-  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\3",
-                          byexp))
-
-  xbynames <- xbynames[order(fmatch(xbynames, names(x)))]
-  ybynames <- ybynames[order(fmatch(ybynames, names(y)))]
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
 
   if (keep == TRUE) {
     jn_type <- "left"
@@ -255,18 +249,12 @@ right_join <- function(
   dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  byexp <- grep(pattern = "==?",
-                x       = by,
-                value   = TRUE)
-  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\1",
-                          byexp))
-  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\3",
-                          byexp))
-
-  xbynames <- xbynames[order(fmatch(xbynames, names(x)))]
-  ybynames <- ybynames[order(fmatch(ybynames, names(y)))]
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
 
   if (keep == TRUE) {
     jn_type <- "right"
@@ -422,18 +410,12 @@ full_join <- function(
   dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  byexp <- grep(pattern = "==?",
-                x       = by,
-                value   = TRUE)
-  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\1",
-                          byexp))
-  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\3",
-                          byexp))
-
-  xbynames <- xbynames[order(fmatch(xbynames, names(x)))]
-  ybynames <- ybynames[order(fmatch(ybynames, names(y)))]
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
 
   if (keep == TRUE) {
     jn_type <- "full"
@@ -595,18 +577,12 @@ inner_join <- function(
   dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  byexp <- grep(pattern = "==?",
-                x       = by,
-                value   = TRUE)
-  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\1",
-                          byexp))
-  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\3",
-                          byexp))
-
-  xbynames <- xbynames[order(fmatch(xbynames, names(x)))]
-  ybynames <- ybynames[order(fmatch(ybynames, names(y)))]
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
 
   if (keep == TRUE) {
     jn_type <- "inner"
@@ -758,18 +734,12 @@ anti_join <- function(
   dropreport   <- args_check$dropreport
 
   # Column names -----------------------------------
-  byexp <- grep(pattern = "==?",
-                x       = by,
-                value   = TRUE)
-  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\1",
-                          byexp))
-  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
-                          "\\3",
-                          byexp))
-
-  xbynames <- xbynames[order(fmatch(xbynames, names(x)))]
-  ybynames <- ybynames[order(fmatch(ybynames, names(y)))]
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
 
   if (keep == TRUE) {
     jn_type <- "anti"
@@ -1165,8 +1135,6 @@ process_by_vector <- function(by, input = c("left", "right")) {
   }
   out |> unname()
 }
-
-
 
 
 
