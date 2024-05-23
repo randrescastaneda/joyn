@@ -21,8 +21,7 @@ joyn_workhorse(
 \item{by}{atomic character vector: key specifying join}
 
 \item{match_type}{atomic character vector of length 1: either "1:1" (default)
-"1:m", "m:1", or "m:m". If "m:m" then executes \code{data.table::merge.data.table}
-in the backend, otherwise uses \code{collapse::join()}}
+"1:m", "m:1", or "m:m". Relies on \code{collapse::join()}}
 
 \item{sort}{logical: sort the result by the columns in \code{by}
 \code{x} and \code{y}}

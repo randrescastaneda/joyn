@@ -312,7 +312,7 @@ detach_package <- function(pkg_name) {
 
   search_item <- paste("package", pkg_name, sep = ":")
 
-  if(search_item %in% search()) {
+  if (search_item %in% search()) {
 
     detach(search_item,
            unload = TRUE,
@@ -320,3 +320,37 @@ detach_package <- function(pkg_name) {
 
   }
 }
+
+
+
+
+#' Function used to correct names in input data frames using `by` argument
+#'
+#' @param by `by` argument parsed from higher level function
+#' @param x left data frame
+#' @param y right data frame
+#'
+#' @return list
+#' @keywords internal
+correct_names <- function(by, x, y, order = TRUE) {
+  byexp <- grep(pattern = "==?",
+                x       = by,
+                value   = TRUE)
+  xbynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
+                          "\\1",
+                          byexp))
+  ybynames <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)",
+                          "\\3",
+                          byexp))
+
+  if (order) {
+    xbynames <- xbynames[order(fmatch(xbynames, names(x)))]
+    ybynames <- ybynames[order(fmatch(ybynames, names(y)))]
+  }
+
+  out <- list(byexp    = byexp,
+              xbynames = xbynames,
+              ybynames = ybynames)
+  out
+}
+

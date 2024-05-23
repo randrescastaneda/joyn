@@ -7,8 +7,7 @@
 #' @param y data object, "right" or "using"
 #' @param by atomic character vector: key specifying join
 #' @param match_type atomic character vector of length 1: either "1:1" (default)
-#'   "1:m", "m:1", or "m:m". If "m:m" then executes `data.table::merge.data.table`
-#'   in the backend, otherwise uses `collapse::join()`
+#'   "1:m", "m:1", or "m:m". Relies on `collapse::join()`
 #' @param suffixes atomic character vector: give suffixes to columns common to both
 #' @param sort logical: sort the result by the columns in `by`
 #'   `x` and `y`
@@ -75,31 +74,19 @@ joyn_workhorse <- function(
   # not m:m => use collapse::join()
     dt_result <- tryCatch(
       expr = {
-        source_pkg <- if (match_type == "m:m") "data.table::merge" else "collapse::join"
-        if (match_type == "m:m") {
-          data.table::merge.data.table(
-            x               = x,
-            y               = y,
-            by              = by,
-            all             = TRUE,
-            sort            = sort,
-            suffixes        = suffixes,
-            allow.cartesian = TRUE
-          )
+        source_pkg <- "collapse::join"
 
-        } else {
-          collapse::join( x              = x,
-                          y              = y,
-                          how            = "full",
-                          on             = by,
-                          multiple       = TRUE,     # matches row in x with m in y
-                          validate       = "m:m",    # no checks performed
-                          suffix         = suffixes,   # data.table suffixes
-                          keep.col.order = TRUE,
-                          sort           = sort,
-                          verbose        = 0,
-                          column         = NULL)
-      }
+        collapse::join(x              = x,
+                       y              = y,
+                       how            = "full",
+                       on             = by,
+                       multiple       = TRUE,     # matches row in x with m in y
+                       validate       = "m:m",    # no checks performed
+                       suffix         = suffixes,   # data.table suffixes
+                       keep.col.order = TRUE,
+                       sort           = sort,
+                       verbose        = 0,
+                       column         = NULL)
       }, # end of expr section
 
       error = function(e) {
@@ -126,22 +113,6 @@ joyn_workhorse <- function(
           )
         }
 
-        # This is inefficient but it is the only way to return the table when
-        # there is a warning
-
-        if (match_type == "m:m") {
-          data.table::merge.data.table(
-            x               = x,
-            y               = y,
-            by              = by,
-            all             = TRUE,
-            sort            = sort,
-            suffixes        = suffixes,
-            allow.cartesian = TRUE
-          ) |>
-            suppressWarnings()
-
-        } else {
           collapse::join( x              = x,
                           y              = y,
                           how            = "full",
@@ -154,7 +125,6 @@ joyn_workhorse <- function(
                           verbose        = 0,
                           column         = NULL)  |>
             suppressWarnings()
-        }
 
       }
 

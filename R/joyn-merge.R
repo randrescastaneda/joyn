@@ -29,7 +29,7 @@
 #'   observations that matched in both tables and the ones that did not match in
 #'   y. The ones in x will be discarded. If *"inner"*, it only keeps the
 #'   observations that matched both tables. Note that if, for example, a `keep =
-#'   "left"`, the `joyn()` function still executes a full join under the hood
+#'   "left", the `joyn()` function still executes a full join under the hood
 #'   and then filters so that only rows the output table is a left join. This
 #'   behaviour, while inefficient, allows all the diagnostics and checks
 #'   conducted by `joyn`.
@@ -214,9 +214,6 @@ joyn <- function(x,
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
-    x <- copy(x)
-    y <- copy(y)
-
 
   ## X and Y -----------
   check_xy(x,y)
@@ -231,15 +228,57 @@ joyn <- function(x,
   # the resulting table should have the same class as the x table.
   class_x <- class(x)
 
-  # If match type is m:m we need to convert to data.table
-  if (match_type == "m:m") {
-    x <- as.data.table(x)
-    y <- as.data.table(y)
-  }
+  # ensure input names can be restored
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y,
+                                 order = FALSE)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
+  ynames   <- copy(names(y))
+
+  # maintain name that is bound to original inputs
+  x_original <- x
+  y_original <- y
 
   ## Modify BY when is expression ---------
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
+
+  # Change names back on exit
+  # Change names back for inputs------------------------------
+  on.exit(
+    expr = {
+      if (any(grepl(pattern = "keyby", x = names(x_original)))) {
+
+        knames <- names(x_original)[grepl(pattern = "keyby",
+                                          x       = names(x_original))]
+        knames <- knames[order(knames)]
+
+        data.table::setnames(x_original,
+                             old = knames,
+                             new = xbynames)
+      }
+
+      if (any(grepl(pattern = "keyby", x = names(y_original)))) {
+
+        knames <- names(y_original)[grepl(pattern = "keyby",
+                                          x       = names(y_original))]
+        knames <- knames[order(knames)]
+
+        data.table::setnames(y_original,
+                             old = knames,
+                             new = ybynames)
+
+        if (all(names(y_original) %in% ynames)) {
+          colorderv(y_original,
+                    neworder = ynames)
+        }
+      }
+    },
+    add = TRUE
+  )
 
   ## Check suffixes -------------
   check_suffixes(suffixes)
@@ -260,7 +299,6 @@ joyn <- function(x,
   mts <- check_match_type(x, y, by, match_type, verbose)
   tx  <- mts[1]
   ty  <- mts[2]
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Variables to keep in y   ---------
@@ -284,8 +322,7 @@ joyn <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars ZP -------------------------------------
-  #yvars_w <- c(newyvars, ".yreport") # working yvars
+  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars
   x <- x |>
     ftransform(.xreport = 1)
   y <- y |>
@@ -420,7 +457,6 @@ joyn <- function(x,
 
   }
 
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -430,15 +466,14 @@ joyn <- function(x,
                          .xreport = NULL,
                          .yreport = NULL)
 
-  ## Rename by variables -----
-
-  if (!is.null(fixby$xby)) {
-    data.table::setnames(x, fixby$tempkey, fixby$xby)
-    by <- fixby$xby
-    # not necessary
-    # setnames(y, fixby$tempkey, fixby$yby)
+  # Rename by variables -----
+  ## in output
+  if (any(grepl(pattern = "keyby", x = names(x)))) {
+    data.table::setnames(x,
+                         old = names(x)[grepl(pattern = "keyby",
+                                              x       = names(x))],
+                         new = xbynames)
   }
-
 
   ## convert to characters if chosen -------
   if (reporttype == "character") {
@@ -501,6 +536,7 @@ joyn <- function(x,
   }
 
   setattr(x, "class", class_x)
+
   x
 
 }

@@ -31,8 +31,8 @@ update_na_values <- function(dt,
   is_data_table <- inherits(dt, "data.table")
 
   # Add util vars ####
-  dt_1 <- copy(dt)
-  dt_1 <- dt_1 |>
+
+  dt_1 <- dt |>
     ftransform(#use_util_reportvar = get(reportvar),
                # create variable for var.x and var.y is NA
                # TRUE if NOT NA
@@ -57,23 +57,24 @@ update_na_values <- function(dt,
   }
 
   # Replace values ####
-
     if (is_data_table) {
 
-      dt_1[get(reportvar) == 4,
-         (x.var) := mget(y.var)]
+      gv(dt_1[get(reportvar) == 4],
+              x.var) <- gv(dt_1[get(reportvar) == 4],
+                                y.var)
 
-      dt_1[get(reportvar) == 5,
-         eval(x.var) := mget(y.var)]
+      gv(dt_1[get(reportvar) == 5],
+         x.var) <- gv(dt_1[get(reportvar) == 5],
+                      y.var)
 
     } else {
-
-      to_replace <- which(dt_1[[reportvar]] %in% c(4, 5))
-      dt_1[to_replace, x.var] <- dt_1[to_replace, y.var]
+    to_replace <- which(dt_1[[reportvar]] %in% c(4, 5))
+    dt_1[to_replace, x.var] <- dt_1[to_replace, y.var]
     }
 
   # Remove util vars ####
-  get_vars(dt_1, c("varx_na", "vary_na")) <- NULL
+  get_vars(dt_1,
+           c("varx_na", "vary_na")) <- NULL
 
   # Return
   dt_1

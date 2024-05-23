@@ -153,7 +153,6 @@ test_that("LEFT JOIN - Conducts left join", {
 })
 
 
-
 test_that("LEFT JOIN - no id given", {
   jn1 <- left_join(
     x2,
@@ -166,6 +165,7 @@ test_that("LEFT JOIN - no id given", {
   )
   expect_equal(jn1, jn2)
 })
+
 
 test_that("LEFT JOIN - copy given", {
   jn1 <- joyn::left_join(
@@ -265,6 +265,7 @@ test_that("LEFT JOIN - incorrectly specified arguments give errors", {
 
 })
 
+
 test_that("LEFT JOIN - argument `keep` preserves keys in output", {
   jn <- left_join(
     x = x1,
@@ -312,6 +313,7 @@ test_that("LEFT JOIN - argument `keep` preserves keys in output", {
 
 })
 
+
 test_that("LEFT JOIN - update values works", {
   x2a <- x2
   x2a$x <- 1:5
@@ -339,6 +341,7 @@ test_that("LEFT JOIN - update values works", {
   )
 
 })
+
 
 test_that("LEFT JOIN - reportvar works", {
   jn <- left_join(
@@ -375,14 +378,16 @@ test_that("LEFT JOIN - reportvar works", {
 
 
 
+
 test_that("LEFT JOIN - unmatched throws error", {
 
-    left_join(x            = x4,
+  left_join(x              = x4,
               y            = y4,
               relationship = "many-to-many",
               by           = "id2",
               unmatched    = "error") |>
     expect_no_error()
+
 
   left_join(x            = x4,
             y            = y4,
@@ -391,6 +396,7 @@ test_that("LEFT JOIN - unmatched throws error", {
             unmatched    = "error") |>
     expect_error()
 
+
   left_join(x            = x1,
             y            = y1,
             relationship = "many-to-one",
@@ -398,30 +404,32 @@ test_that("LEFT JOIN - unmatched throws error", {
             unmatched    = "error") |>
     expect_error()
 
+
   left_join(x            = x4,
             y            = y4,
             relationship = "many-to-many",
             by           = c("id2", "x"),
             unmatched    = "error") |>
     expect_error()
-
+################################################################################################################################################
   left_join(x            = x4,
             y            = y4,
             relationship = "many-to-many",
             by           = c("id2=id"),
             unmatched    = "error") |>
-    expect_no_error()
+    expect_warning()
 
   left_join(x            = x4,
             y            = y4,
             relationship = "many-to-many",
             by           = c("id1=id2", "id2=id"),
             unmatched    = "error") |>
-    expect_no_error()
+    expect_warning()
 
 
 
 })
+
 
 
 test_that("LEFT JOIN - NA matches", {
@@ -862,7 +870,8 @@ test_that("FULL JOIN - Conducts full join", {
     x4,
     y4,
     by = c("id1 = id2"),
-    relationship = "many-to-many"
+    relationship = "many-to-many",
+    sort = TRUE
   )
   #dplyr::full_join(x4, y4, by = dplyr::join_by(id1 == id2), relationship = "many-to-many")
   jn_dplyr <- dplyr::full_join(
@@ -871,9 +880,9 @@ test_that("FULL JOIN - Conducts full join", {
     by = dplyr::join_by(id1 == id2),
     relationship = "many-to-many"
   )
-  attr(jn_dplyr, "sorted") <- "id1"
-  attr(jn_joyn,
-       "sorted") <- "id"
+  # attr(jn_dplyr, "sorted") <- "id1"
+  # attr(jn_joyn,
+  #      "sorted") <- "id"
   expect_equal(
     jn |> fselect(-get(reportvar)),
     jn_dplyr,
@@ -1671,7 +1680,8 @@ test_that("INNER JOIN - unmatched error", {
              relationship = "many-to-one",
              by           = c("id1=id2", "id2=id"),
              unmatched    = "error") |>
-    expect_error()
+    expect_error() |>
+    expect_warning()
 
 })
 
@@ -1694,13 +1704,14 @@ test_that("ANTI JOIN - Conducts ANTI join", {
   jn_joyn <- anti_join(
     x = x1,
     y = y1,
-    by = "id"
+    by = "id",
+    sort = TRUE
   )
 
   jn_dplyr <- dplyr::anti_join(
-    x1, y1, by = "id"
+    x1, y1, by = "id", s
   )
-  setorder(jn_dplyr, na.last = F)
+
   attr(
     jn_dplyr,
     "sorted"

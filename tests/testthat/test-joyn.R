@@ -43,6 +43,9 @@ x5 = data.table(id = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:18, NA, NA))
 
+#-------------------------------------------------------------------------------
+# TESTS ------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 
 test_that(
@@ -72,6 +75,8 @@ test_that("all types of by argument raise no error", {
        match_type = "m:m") |>
     expect_no_error()
 
+
+  # THIS ONE
   joyn(x          = x4,
        y          = y4,
        by         = c("id1 = id", "id2"),
@@ -451,7 +456,7 @@ test_that("match types work", {
 
 })
 
-
+###########################################################################################
 test_that("Update NAs", {
   # update NAs in x variable form x
   jn <- joyn(x2,
@@ -791,7 +796,58 @@ test_that("anti join warning for update values", {
 })
 
 
+# Test all input data is unchanged
 
 
+test_that("joyn() - input data unchanged", {
+
+  expect_equal(x1,
+               data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                          t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                          x  = 11:15))
+
+  expect_equal(y1,
+               data.table(id = c(1,2, 4),
+                          y  = c(11L, 15L, 16)))
+
+  expect_equal(x2,
+               data.table(id = c(1, 4, 2, 3, NA),
+                          t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                          x  = c(16, 12, NA, NA, 15)))
+
+  expect_equal(y2,
+               data.table(id = c(1, 2, 5, 6, 3),
+                          yd = c(1, 2, 5, 6, 3),
+                          y  = c(11L, 15L, 20L, 13L, 10L),
+                          x  = c(16:20)))
+
+  expect_equal(x3,
+               data.table(id  = c("c","b", "d"),
+                          v   = 8:10,
+                          foo = c(4,2, 7)))
+
+  expect_equal(y3,
+               data.table(id = c("c","b", "c", "a"),
+                          y  = c(11L, 15L, 18L, 20L)))
+
+  expect_equal(x4,
+               data.table(id1 = c(1, 1, 2, 3, 3),
+                          id2 = c(1, 1, 2, 3, 4),
+                          t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                          x   = c(16, 12, NA, NA, 15)))
+
+  expect_equal(y4,
+               data.table(id  = c(1, 2, 5, 6, 3),
+                          id2 = c(1, 1, 2, 3, 4),
+                          y   = c(11L, 15L, 20L, 13L, 10L),
+                          x   = c(16:20)))
+
+  expect_equal(x5,
+               data.table(id = c(1, 2, 5, 6, 3),
+                          yd = c(1, 2, 5, 6, 3),
+                          y  = c(11L, 15L, 20L, 13L, 10L),
+                          x  = c(16:18, NA, NA)))
+
+})
 
 
