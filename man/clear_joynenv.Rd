@@ -23,8 +23,8 @@ print(joyn:::joyn_msgs_exist())
 }
 \seealso{
 Messages functions
-\code{\link{joyn_msgs_exist}()},
 \code{\link{joyn_msg}()},
+\code{\link{joyn_msgs_exist}()},
 \code{\link{joyn_report}()},
 \code{\link{msg_type_dt}()},
 \code{\link{store_msg}()},
