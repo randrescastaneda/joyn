@@ -59,6 +59,9 @@
 <h2 class="pkg-version" data-toc-text="development version" id="joyn-development-version">joyn (development version)<a class="anchor" aria-label="anchor" href="#joyn-development-version"></a></h2>
 <ul><li><p>Add <code><a href="../reference/anti_join.html">anti_join()</a></code> function.</p></li>
 <li><p>Add <code><a href="../reference/unmask_joyn.html">unmask_joyn()</a></code> function to unmask <code>joyn</code> functions that mask <code>dplyr</code> equivalents.</p></li>
+<li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rathern than <code>m</code>.</p></li>
+<li><p>improve ineffciencies in deep copies with <code>m:m</code> joins</p></li>
+<li><p>Replace <code>m:m</code> joins from <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge.data.table</a></code> to <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join</a></code>. Thanks to <a href="https://github.com/SebKrantz" class="external-link">@SebKrantz</a> for the suggestion (<a href="https://github.com/randrescastaneda/joyn/issues/58" class="external-link">#58</a>).</p></li>
 <li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rather than <code>m</code>.</p></li>
 </ul><div class="section level3">
 <h3 id="breaking-changes-development-version">breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>

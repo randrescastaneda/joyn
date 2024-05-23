@@ -207,10 +207,10 @@ and <code>by.y</code> for the y one. For example,</p>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keyby1</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, keyby1, and t</span></span></span>
 <span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x and y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">join is executed.</span></span></span>
-<span><span class="co">#&gt;    x id.x t.x id.y t.y .joyn</span></span>
-<span><span class="co">#&gt; 1 11    1   1    1  13 x &amp; y</span></span>
-<span><span class="co">#&gt; 2 15   NA  NA    2  14 x &amp; y</span></span>
-<span><span class="co">#&gt; 3 16   NA   4    4  15 x &amp; y</span></span></code></pre></div>
+<span><span class="co">#&gt;   id.x t.x  x id.y t.y .joyn</span></span>
+<span><span class="co">#&gt; 1    1   1 11    1  13 x &amp; y</span></span>
+<span><span class="co">#&gt; 2   NA  NA 15    2  14 x &amp; y</span></span>
+<span><span class="co">#&gt; 3   NA   4 16    4  15 x &amp; y</span></span></code></pre></div>
 <p>By default, <code>sort</code> is <code>TRUE</code>, so that the
 merged table will be sorted by the <code>by.x</code> column. Notice that
 the output table distinguishes non-by column <em>t</em> coming from
