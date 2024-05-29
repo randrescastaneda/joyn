@@ -118,6 +118,82 @@ store_msg <- function(type, ...) {
 
 }
 
+# Wrapper for store_msgs
+# create_joyn_msgs
+
+store_joyn_msgs <- function(err       = NULL,
+                             warn      = NULL,
+                             timing    = NULL,
+                             info      = NULL,
+                             highlight = NULL) {
+
+  # Check that only one among err, warn, timing and info is not null, otherwise stop
+
+  # Error messages -----------------------------------------
+
+  if (!is.null(err)) {
+
+    if (!is.null(highlight)) {
+      #err <- lapply(highlight, \(h) gsub(h, style(bolded_pale = h), err))
+      err<- gsub(highlight,
+                 style(bolded_pale = highlight), err)
+    }
+
+    store_msg("err",
+              err  = paste(cli::symbol$cross, "Error: "),
+              pale = err)
+
+  }
+
+  # Warning messages -----------------------------------------
+
+  else if (!is.null(warn)) {
+
+    if (!is.null(highlight)) {
+      warn <- gsub(highlight,
+                  style(bolded_pale = highlight), warn)
+    }
+
+    store_msg("warn",
+              warn = paste(cli::symbol$warn, "Warning: "),
+              pale = warn)
+  }
+
+  # Timing messages -----------------------------------------
+
+  else if (!is.null(timing)) {
+
+    # detect number
+    num_pattern <- "[0-9]+\\.?[0-9]*"
+
+    timing_num <- regmatches(timing,
+                             gregexpr(num_pattern, timing))
+
+    store_msg(type    = "timing",
+              timing  = paste(cli::symbol$record, "  Timing:"),
+              pale    = sub(timing_num, "", timing),
+              timing  = timing_num,
+              pale    = " seconds.")
+
+  }
+
+  # Info messages -----------------------------------------
+
+  else if (!is.null(info)) {
+
+    if (!is.null(highlight)) {
+      info <- gsub(highlight,
+                   style(bolded_pale = highlight), info)
+    }
+
+    store_msg(type = "info",
+              ok   = paste(cli::symbol$info, " Note:  "),
+              pale = info)
+
+  }
+
+  invisible(TRUE)
+}
 
 
 check_style <- \(...) {

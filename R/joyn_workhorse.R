@@ -1,5 +1,5 @@
 
-#' Internal workhorse join function, used in the backend of `joyn`
+#' Internal workhorse join function, used in the back-end of `joyn`
 #'
 #' Always executes a full join.
 #'
