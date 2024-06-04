@@ -342,12 +342,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
     match_type_error <- TRUE
     by2 <- by
-    store_msg("err",
-              err         = paste(cli::symbol$cross, "Error:"),
-              pale        = "   table",
-              bolded_pale = "  {name}",
-              pale        = "  is not uniquely identified by",
-              bolded_pale = "  {by2}")
+    store_joyn_msg(err = "table {.strongTable {name}} is not uniquely identified by {by2}")
 
   }
   match_type_error
@@ -413,12 +408,7 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
     y_in_by <- y_vars_to_keep %in% by
 
     if (any(y_in_by)) {
-      store_msg("info",
-                ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
-                pale        = "Removing key variables",
-                bolded_pale = "  {y_vars_to_keep[y_in_by]}",
-                pale        = "  from",
-                bolded_pale = "  {y_vars_to_keep}")
+      store_joyn_msg(info = "Removing key variables {.strongVar y_vars_to_keep[y_in_by]} from {.strongVar y_vars_to_keep}")
     }
 
     y_vars_to_keep <- y_vars_to_keep[!y_in_by]
