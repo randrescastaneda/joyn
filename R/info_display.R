@@ -122,10 +122,9 @@ store_msg <- function(type, ...) {
 # create_joyn_msgs
 
 store_joyn_msgs <- function(err       = NULL,
-                             warn      = NULL,
-                             timing    = NULL,
-                             info      = NULL,
-                             highlight = NULL) {
+                            warn      = NULL,
+                            timing    = NULL,
+                            info      = NULL) {
 
   # Check that only one among err, warn, timing and info is not null, otherwise stop
 
