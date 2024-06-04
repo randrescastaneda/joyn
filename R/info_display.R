@@ -196,6 +196,7 @@ store_joyn_msgs <- function(err       = NULL,
 }
 
 
+
 check_style <- \(...) {
   if (length(list(...)) == 0) {
     cli::cli_abort(c("no style provided",
