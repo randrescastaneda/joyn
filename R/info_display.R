@@ -121,22 +121,16 @@ store_msg <- function(type, ...) {
 # Wrapper for store_msgs
 # create_joyn_msgs
 
-store_joyn_msgs <- function(err       = NULL,
-                            warn      = NULL,
-                            timing    = NULL,
-                            info      = NULL) {
+store_joyn_msg <- function(err       = NULL,
+                           warn      = NULL,
+                           timing    = NULL,
+                           info      = NULL) {
 
   # Check that only one among err, warn, timing and info is not null, otherwise stop
 
   # Error messages -----------------------------------------
 
   if (!is.null(err)) {
-
-    if (!is.null(highlight)) {
-      #err <- lapply(highlight, \(h) gsub(h, style(bolded_pale = h), err))
-      err<- gsub(highlight,
-                 style(bolded_pale = highlight), err)
-    }
 
     store_msg("err",
               err  = paste(cli::symbol$cross, "Error: "),
@@ -147,11 +141,6 @@ store_joyn_msgs <- function(err       = NULL,
   # Warning messages -----------------------------------------
 
   else if (!is.null(warn)) {
-
-    if (!is.null(highlight)) {
-      warn <- gsub(highlight,
-                  style(bolded_pale = highlight), warn)
-    }
 
     store_msg("warn",
               warn = paste(cli::symbol$warn, "Warning: "),
@@ -180,11 +169,6 @@ store_joyn_msgs <- function(err       = NULL,
 
   else if (!is.null(info)) {
 
-    if (!is.null(highlight)) {
-      info <- gsub(highlight,
-                   style(bolded_pale = highlight), info)
-    }
-
     store_msg(type = "info",
               ok   = paste(cli::symbol$info, " Note:  "),
               pale = info)
@@ -193,8 +177,6 @@ store_joyn_msgs <- function(err       = NULL,
 
   invisible(TRUE)
 }
-
-
 
 check_style <- \(...) {
   if (length(list(...)) == 0) {

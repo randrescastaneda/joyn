@@ -33,24 +33,16 @@ check_xy  <- function(x,y) {
     error_exists <- TRUE
     if (x0 && y0) {
       xy <- c("x", "y")
-      store_msg("err",
-                err  = paste(cli::symbol$cross, "Error:"),
-                pale = "   Neither {.or {.field {xy}}} table has columns.")
+      store_joyn_msg(err = "   Neither {.or {.strongTable {xy}}} table has columns.")
     } else if (x0) {
-      store_msg("err",
-                err  = paste(cli::symbol$cross, "Error:"),
-                pale = "   Input table {.field x} has no columns.")
+      store_joyn_msg(err = "   Input table {.strongTable x} has no columns.")
     } else {
-      store_msg("err",
-                err  = paste(cli::symbol$cross, "Error:"),
-                pale = "   Input table {.field y} has no columns.")
+      store_joyn_msg(err = "   Input table {.strongTable y} has no columns.")
     }
 
   }
 
   # check names -----------
-  # Note (Rossana): in the previous version, the function was not aborting when duplicate names
-  # were found. This is because it was overwriting the value or error_exists in each step.
 
   error_exists <- error_exists || check_duplicate_names(x, "x")
   error_exists <- error_exists || check_duplicate_names(y, "y")
@@ -62,8 +54,6 @@ check_xy  <- function(x,y) {
   return(invisible(TRUE))
 }
 
-# NOTE (Rossana): I believe data frames cannot have duplicate names in R in the first place,
-#                 unless you set check.names = FALSE when creating the data.frame
 
 #' Check if vars in dt have duplicate names
 #'
@@ -92,12 +82,8 @@ check_duplicate_names <- \(dt, name) {
   if (anyDuplicated(nm_x)) {
     dups <- nm_x[duplicated(nm_x)] |>
       unique()
-    store_msg("err",
-          err     = paste(cli::symbol$cross, "Error:"),
-          pale    = " Table {.field {name}} has the following
-                    {cli::qty(length(dups))} column{?s} duplicated:",
-          timing  = "{.var {dups}}",
-          pale    = "\nPlease rename or remove and try again.")
+    store_joyn_msg(err    = " Table {.strongTable {name}} has the following {cli::qty(length(dups))} column{?s} duplicated:
+                   {.strongVar {dups}}. \nPlease rename or remove and try again.")
     return(TRUE)
   }
   return(FALSE)
@@ -124,21 +110,13 @@ check_reportvar <-
   function(reportvar, verbose = getOption("joyn.verbose")) {
     if (is.character(reportvar)) {
       reportvar <- rename_to_valid(reportvar, verbose)
-      store_msg("info",
-           ok = cli::symbol$info, "  ", ok = cli::symbol$pointer,
-           "  ",
-           pale = "Joyn's report available in variable",
-           bolded_pale = "  {reportvar}")
+      store_joyn_msg(info = "Joyn's report available in variable {reportvar}")
 
       return(reportvar)
 
     } else if (is.null(reportvar) || isFALSE(reportvar)) {
 
-     store_msg("info",
-           ok           = paste(cli::symbol$info, "  Note:"),
-           pale         = "  Reporting variable is",
-           bolded_pale  = "\nnot",
-           pale         = "\nreturned")
+     store_joyn_msg(info = "  Reporting variable is {.strong NOT} returned")
 
       return(NULL)
     } else  {
@@ -313,40 +291,19 @@ check_match_type <- function(x, y, by,
     switch(
       m_m,
       "warn_y" = {
-        store_msg(
-          type         = "warn",
-          warn         = paste(cli::symbol$warn, "\nWarning:"),
-          pale         = "\nThe keys supplied uniquely identify",
-          bolded_pale  = "\ny",
-          pale         = "\ntherefore a",
-          bolded_pale  = "\n{tx}:1",
-          pale         = "\njoin is executed."
-        )
+        store_joyn_msg(warn = "The keys supplied uniquely identify {.strongTable y},
+                               therefore a {.strong {tx}:1} join is executed")
       },
 
       "warn_x" = {
-        store_msg(
-          type        = "warn",
-          warn        = paste(cli::symbol$warn,"\nWarning:"),
-          pale        = "\nThe keys supplied uniquely identify",
-          bolded_pale = "\nx",
-          pale        = "\ntherefore a",
-          bolded_pale = "\n1:{ty}",
-          pale        = "\njoin is executed."
-        )
+        store_joyn_msg(warn = "The keys supplied uniquely identify {.strongTable x},
+                               therefore a {.strong 1:{ty}} join is executed")
       },
 
       #},
       "warn_both" = {
-        store_msg(
-          type        = "warn",
-          warn        = paste(cli::symbol$warn, "\nWarning:"),
-          pale        = "\nThe keys supplied uniquely identify both",
-          bolded_pale = "\nx and y",
-          pale        = "\ntherefore a",
-          bolded_pale = "\n1:1",
-          pale        = "\njoin is executed."
-        )
+        store_joyn_msg(warn = "The keys supplied uniquely identify both {.strongTable x and y},
+                               therefore a {.strong 1:1} join is executed")
       }
     )
 
