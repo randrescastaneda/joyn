@@ -108,8 +108,11 @@ check_duplicate_names <- \(dt, name) {
 
 check_reportvar <-
   function(reportvar, verbose = getOption("joyn.verbose")) {
+
     if (is.character(reportvar)) {
+
       reportvar <- rename_to_valid(reportvar, verbose)
+
       store_joyn_msg(info = "Joyn's report available in variable {reportvar}")
 
       return(reportvar)
@@ -376,7 +379,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
   if (length(y_vars_to_keep) > 1 && !is.character(y_vars_to_keep)) {
-    cli::cli_abort("argumet {.arg y_vars_to_keep} must be of length 1
+    cli::cli_abort("argumet {.arg {y_vars_to_keep}} must be of length 1
                    when it is not class character")
   }
 

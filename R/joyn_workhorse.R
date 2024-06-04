@@ -47,22 +47,11 @@ joyn_workhorse <- function(
   if (
     length(by) == 0
   ) {
-    store_msg(
-      type        = "err",
-      err         = cli::symbol$cross,
-      err         = "  Error:",
-      pale        = "  in joyn_workhorse,",
-      bolded_pale = "  by",
-      pale        = "  argument has length of 0"
-    )
 
-    store_msg(
-      type  = "info",
-      ok    = cli::symbol$info, "  ",
-      note  = "\nNote:",
-      pale  = "  Either specify by to identify columns to join on in x and y, or
-              x and y should have common column names"
-    )
+    store_joyn_msg(err = "In joyn_workhorse {.strongArg by} argument has length of 0")
+
+    store_joyn_msg(info = "Either specify by to identify columns to join on in x and y, or x and y should have common column names")
+
   }
   # Measure time
   start_time <- Sys.time()
@@ -98,19 +87,13 @@ joyn_workhorse <- function(
 
       warning = function(w) {
         if (grepl("[Oo]veridentified", w$message)) {
-          store_msg(
-            type  = "warn",
-            ok    = paste(cli::symbol$warning, "\nWarning: "),
-            pale  = "Your data is overidentified. Below the original message from {.pkg {source_pkg}}:",
-            bolded_pale  = "\n{w$message}"
-          )
+
+          store_joyn_msg(warn = "Your data is overidentified. Below the original message from {.strong {source_pkg}}: \n{w$message}")
+
         } else {
-          store_msg(
-            type  = "warn",
-            ok    = paste(cli::symbol$warning, "\nWarning: "),
-            pale  = "{.pkg {source_pkg}} returned the following warning:",
-            bolded_pale  = "\n{w$message}"
-          )
+
+          store_joyn_msg(warn = "{.strong {source_pkg}} returned the following warning: \n{w$message}")
+
         }
 
           collapse::join( x              = x,
@@ -134,13 +117,7 @@ joyn_workhorse <- function(
   end_time <- Sys.time()
   time_taken <- end_time - start_time
 
-  store_msg(
-    type    = "timing",
-    timing  = paste(cli::symbol$record, "  Timing:"),
-    pale    = "  The full joyn is executed in  ",
-    timing  = round(time_taken, 6),
-    pale    = "  seconds" )
-
+  store_joyn_msg(timing = paste("The full joyn is executed in", round(time_taken, 6)))
 
   # Return ----
   return(
