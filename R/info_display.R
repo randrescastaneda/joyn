@@ -128,6 +128,12 @@ store_joyn_msg <- function(err       = NULL,
 
   # Check that only one among err, warn, timing and info is not null, otherwise stop
 
+  if (sum(c(!is.null(err), !is.null(info), !is.null(timing), !is.null(info)))) {
+
+    cli::cli_abort("Only one of err, warn, timing, or info must be provided.")
+
+  }
+
   # Error messages -----------------------------------------
 
   if (!is.null(err)) {
