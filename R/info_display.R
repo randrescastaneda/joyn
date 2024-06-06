@@ -118,9 +118,26 @@ store_msg <- function(type, ...) {
 
 }
 
-# Wrapper for store_msgs
-# create_joyn_msgs
-
+#' Wrapper for store_msg function
+#' This function serves as a wrapper for the store_msg function, which is used to store various types of messages within the .joyn environment.
+#' :errors, warnings, timing information, or info
+#' @param err A character string representing an error message to be stored. Default value is NULL
+#' @param warn A character string representing a warning message to be stored. Default value is NULL
+#' @param timing A character string representing a timing message to be stored. Default value is NULL
+#' @param info A character string representing an info message to be stored. Default value is NULL
+#'
+#' @section Hot to pass the message string:
+#' The function allows for the customization of the message string using {cli} classes to emphasize specific components of the message
+#' Here's how to format the message string:
+#' *For variables:            .strongVar   --example: "{.strongVar {reportvar}}"
+#' *For function arguments:   .strongArg   --example: "{.strongArg {y_vars_to_keep}}"
+#' *For dt/df:                .strongTable --example: "{.strongTable x}"
+#' *For text/anything else:   .strong      --example: "reportvar is {.strong NOT} returned"
+#'
+#'
+#' @return invisible TRUE
+#'
+#' @keywords internal
 store_joyn_msg <- function(err       = NULL,
                            warn      = NULL,
                            timing    = NULL,
