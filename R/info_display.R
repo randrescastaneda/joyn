@@ -133,6 +133,11 @@ store_msg <- function(type, ...) {
 #' *For function arguments:   .strongArg   --example: "{.strongArg {y_vars_to_keep}}"
 #' *For dt/df:                .strongTable --example: "{.strongTable x}"
 #' *For text/anything else:   .strong      --example: "reportvar is {.strong NOT} returned"
+#' *NOTE: By default, the number of seconds specified in timing messages is
+#'        automatically emphasized using a custom formatting approach.
+#'        You do not need to apply {cli} classes nor to specify that the number is in seconds.
+#'        --example usage:  store_joyn_msg(timing =
+#'                                         paste("The full joyn is executed in", round(time_taken, 6)))
 #'
 #'
 #' @return invisible TRUE
