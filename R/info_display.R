@@ -128,19 +128,25 @@ store_joyn_msg <- function(err       = NULL,
 
   # Check that only one among err, warn, timing and info is not null, otherwise stop
 
-  if (sum(c(!is.null(err), !is.null(info), !is.null(timing), !is.null(info)))) {
+  cn <- c(err, warn, timing, info)
 
-    cli::cli_abort("Only one of err, warn, timing, or info must be provided.")
-
+  if (length(cn) != 1) {
+    cli::cli_abort(c("only one of err, warn, timing, info can be not null",
+                     "i" = "check the arguments"))
   }
+
 
   # Error messages -----------------------------------------
 
   if (!is.null(err)) {
 
+    err <- cli::format_inline(err, .envir = parent.frame(1))
+
     store_msg("err",
               err  = paste(cli::symbol$cross, "Error: "),
               pale = err)
+
+    return(invisible(TRUE))
 
   }
 
@@ -148,9 +154,13 @@ store_joyn_msg <- function(err       = NULL,
 
   else if (!is.null(warn)) {
 
+    warn <- cli::format_inline(warn, .envir = parent.frame(1))
+
     store_msg("warn",
               warn = paste(cli::symbol$warn, "Warning: "),
               pale = warn)
+
+    return(invisible(TRUE))
   }
 
   # Timing messages -----------------------------------------
@@ -163,11 +173,15 @@ store_joyn_msg <- function(err       = NULL,
     timing_num <- regmatches(timing,
                              gregexpr(num_pattern, timing))
 
+    timing <- cli::format_inline(timing, .envir = parent.frame(1))
+
     store_msg(type    = "timing",
               timing  = paste(cli::symbol$record, "  Timing:"),
               pale    = sub(timing_num, "", timing),
               timing  = timing_num,
               pale    = " seconds.")
+
+    return(invisible(TRUE))
 
   }
 
@@ -175,13 +189,17 @@ store_joyn_msg <- function(err       = NULL,
 
   else if (!is.null(info)) {
 
+    info <- cli::format_inline(info, .envir = parent.frame(1))
+
     store_msg(type = "info",
               ok   = paste(cli::symbol$info, " Note:  "),
               pale = info)
 
+    return(invisible(TRUE))
+
   }
 
-  invisible(TRUE)
+  return(FALSE) # This should never be reached
 }
 
 check_style <- \(...) {
