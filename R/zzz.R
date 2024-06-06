@@ -140,7 +140,7 @@ set_joyn_options <- function(...,
 }
 
 # ------------------------------------------------------------------------------------------
-# Define custom .strong {cli} classes
+# Define custom .strong {cli} classes to emphasize messages subcomponents
 # --- to be used when creating/storing {joyn} messages
 # -------------------------------------------------------------------------------------------
 
