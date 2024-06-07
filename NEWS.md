@@ -13,6 +13,8 @@
 
 * Add information about duplicated obs in `by` variable when match type is `1` rather than `m`.
 
+* Internal: improve storing of joyn messages.
+
 ## breaking changes
 
 * Now, by default, `joyn` will not sort the data. This is to avoid unnecessary 
