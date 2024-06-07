@@ -57,13 +57,13 @@ joyn_workhorse <- function(
   start_time <- Sys.time()
 
   # Do a full join -------------------------------------------------------------
+  source_pkg <- "collapse::join"
 
   # if not 1:1 => use merge.data.table
 
   # not m:m => use collapse::join()
     dt_result <- tryCatch(
       expr = {
-        source_pkg <- "collapse::join"
 
         collapse::join(x              = x,
                        y              = y,
@@ -75,7 +75,8 @@ joyn_workhorse <- function(
                        keep.col.order = TRUE,
                        sort           = sort,
                        verbose        = 0,
-                       column         = NULL)
+                       column         = NULL,
+                       attr           = TRUE)
       }, # end of expr section
 
       error = function(e) {
