@@ -464,17 +464,8 @@ full_join <- function(
 
   # Unmatched Keys----------------------------------------
   if (unmatched == "error") {
-
     # Store warning message
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "\nargument",
-      bolded_pale = "  warning = error",
-      pale        = "\nis not active in this type of",
-      bolded_pale = "  joyn"
-    )
-
+    store_joyn_msg(warn = "argument {.strongArg warning = error} is not active in this type of joyn")
   }
 
   # Should reportvar be kept
@@ -824,14 +815,7 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
 
   # Check copy
   if (copy == TRUE) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "\nargument",
-      bolded_pale = "  copy = TRUE",
-      pale        = "\nis not active in this version of",
-      bolded_pale = "  joyn"
-    )
+    store_joyn_msg(warn = "argument {.strongArg copy = TRUE} is not active in this version of joyn")
   }
 
   # Check suffix
@@ -854,13 +838,7 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
     )
   }
   if (is.null(keep)) {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn,"\nWarning:"),
-      pale        = "  joyn does not currently allow inequality joins, so",
-      bolded_pale = "  keep = NULL",
-      pale        = "  will retain only keys in x"
-    )
+    store_joyn_msg(warn = "joyn does not currently allow inequality joins, so {.strongArg keep = NULL} will retain only keys in {.strongTable x}")
     keep <- FALSE
   }
 
@@ -893,12 +871,7 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
 
   # Check na_matches
   if (na_matches == "never") {
-    store_msg(
-      type        = "warn",
-      warn        = paste(cli::symbol$warn, "\nWarning:"),
-      pale        = "  Currently, joyn allows only",
-      bolded_pale = "  na_matches = 'na'"
-    )
+    store_joyn_msg(warn = "Currently, joyn allows only {.strongArg na_matches = 'na'}")
   }
 
   # Check reportvar

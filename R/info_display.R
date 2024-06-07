@@ -118,7 +118,111 @@ store_msg <- function(type, ...) {
 
 }
 
+#' Wrapper for store_msg function
+#' This function serves as a wrapper for the store_msg function, which is used to store various types of messages within the .joyn environment.
+#' :errors, warnings, timing information, or info
+#' @param err A character string representing an error message to be stored. Default value is NULL
+#' @param warn A character string representing a warning message to be stored. Default value is NULL
+#' @param timing A character string representing a timing message to be stored. Default value is NULL
+#' @param info A character string representing an info message to be stored. Default value is NULL
+#'
+#' @section Hot to pass the message string:
+#' The function allows for the customization of the message string using {cli} classes to emphasize specific components of the message
+#' Here's how to format the message string:
+#' *For variables:            .strongVar   --example: "{.strongVar {reportvar}}"
+#' *For function arguments:   .strongArg   --example: "{.strongArg {y_vars_to_keep}}"
+#' *For dt/df:                .strongTable --example: "{.strongTable x}"
+#' *For text/anything else:   .strong      --example: "reportvar is {.strong NOT} returned"
+#' *NOTE: By default, the number of seconds specified in timing messages is
+#'        automatically emphasized using a custom formatting approach.
+#'        You do not need to apply {cli} classes nor to specify that the number is in seconds.
+#'        --example usage:  store_joyn_msg(timing =
+#'                                         paste("The full joyn is executed in", round(time_taken, 6)))
+#'
+#'
+#' @return invisible TRUE
+#'
+#' @keywords internal
+store_joyn_msg <- function(err       = NULL,
+                           warn      = NULL,
+                           timing    = NULL,
+                           info      = NULL) {
 
+  # Check that only one among err, warn, timing and info is not null, otherwise stop
+
+  cn <- c(err, warn, timing, info)
+
+  if (length(cn) != 1) {
+    cli::cli_abort(c("only one of err, warn, timing, info can be not null",
+                     "i" = "check the arguments"))
+  }
+
+
+  # Error messages -----------------------------------------
+
+  if (!is.null(err)) {
+
+    err <- cli::format_inline(err, .envir = parent.frame(1))
+
+    store_msg("err",
+              err  = paste(cli::symbol$cross, "Error: "),
+              pale = err)
+
+    return(invisible(TRUE))
+
+  }
+
+  # Warning messages -----------------------------------------
+
+  else if (!is.null(warn)) {
+
+    warn <- cli::format_inline(warn, .envir = parent.frame(1))
+
+    store_msg("warn",
+              warn = paste(cli::symbol$warn, "Warning: "),
+              pale = warn)
+
+    return(invisible(TRUE))
+  }
+
+  # Timing messages -----------------------------------------
+
+  else if (!is.null(timing)) {
+
+    # detect number
+    num_pattern <- "[0-9]+\\.?[0-9]*"
+
+    timing_num <- regmatches(timing,
+                             gregexpr(num_pattern, timing))
+
+    timing <- cli::format_inline(timing, .envir = parent.frame(1))
+
+    store_msg(type    = "timing",
+              timing  = paste(cli::symbol$record, "  Timing:"),
+              pale    = sub(timing_num, "", timing),
+              timing  = timing_num,
+              pale    = " seconds.")
+
+    return(invisible(TRUE))
+
+  }
+
+  # Info messages -----------------------------------------
+
+  else if (!is.null(info)) {
+
+    info <- cli::format_inline(info, .envir = parent.frame(1))
+
+    store_msg(type = "info",
+              ok   = paste(cli::symbol$info, " Note:  "),
+              pale = info)
+
+    return(invisible(TRUE))
+
+  }
+
+  return(FALSE) # This should never be reached
+}
 
 check_style <- \(...) {
   if (length(list(...)) == 0) {

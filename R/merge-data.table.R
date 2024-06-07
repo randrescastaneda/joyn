@@ -148,11 +148,9 @@ check_dt_by <- \(x, y, by, by.x, by.y) {
     cli::cli_abort("`by.x` and `by.y` must be of same length.")
   }
   if (!missing(by) && !missing(by.x)) {
-    store_msg("warn",
-              warn = paste(cli::symbol$warning, "  Warning:"),
-              pale = " Supplied both",
-              bolded_pale = "  by and by.x/by.y. by",
-              pale = " argument will be ignored.")
+
+    store_joyn_msg(warn = " Supplied both {.strong by and by.x/by.y. by} argument will be ignored. ")
+
   }
   if (!is.null(by.x)) {
 

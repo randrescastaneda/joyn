@@ -285,10 +285,10 @@ joyn <- function(x,
 
   if (keep == "anti" &
       (isTRUE(update_values) || isTRUE(update_NAs))) {
-    store_msg("warn",
-              warn = paste(cli::symbol$warning, "  Warning:"),
-              pale = " cannot use arguments {.code update_values = TRUE}
-                         and/or {.code update_NAs = TRUE} for anti join")
+
+    store_joyn_msg(warn = "cannot use arguments {.strongArg update_values = TRUE}
+                         and/or {.strongArg update_NAs = TRUE} for anti join")
+
     update_values <- FALSE
     update_NAs    <- FALSE
   }
@@ -375,12 +375,8 @@ joyn <- function(x,
       check_names <- make.names(check_names, unique = TRUE)
       nrv         <- setdiff(check_names, xnames)
 
-      store_msg(type        = "info",
-                ok          = paste(cli::symbol$info, " Note:  "),
-                pale        = "reportvar",
-                bolded_pale = "  {reportvar}",
-                pale        = "  is already part of the resulting table. It will be changed to",
-                bolded_pale = " {nrv}")
+      store_joyn_msg(info = "reportvar {.strongVar {reportvar}}  is already part of the resulting table. It will be changed to {.strongVar {nrv}}")
+
       reportvar <- nrv
     }
   }
@@ -497,11 +493,10 @@ joyn <- function(x,
       all(x[[reportvar]] %in% c(1, 2))) &&
       !keep == "anti") {
 
-    store_msg("warn",
-              warn = paste(cli::symbol$warning, "  Warning:"),
-              pale = " you have no matching obs. Make sure argument
-                     `by` is correct. Right now, `joyn` is joining by
-                     {.code {by}}")
+    store_joyn_msg(warn = " you have no matching obs. Make sure argument
+                           `by` is correct. Right now, `joyn` is joining by
+                           {.strongVar {by}}")
+
   }
 
   ## Display results------
@@ -517,15 +512,9 @@ joyn <- function(x,
   # store timing
   end_joyn <- Sys.time()
   time_taken_joyn <- end_joyn - start_joyn
-  store_msg(
-    type    = "timing",
-    timing  = paste(cli::symbol$record, "  Timing:"),
-    pale    = "  The entire joyn function, including checks,
-    is executed in  ",
-    timing  = round(time_taken_joyn, 6),
-    pale    = "  seconds"
-  )
 
+  store_joyn_msg(timing = paste("  The entire joyn function, including checks,
+    is executed in  ", round(time_taken_joyn, 6)))
 
   # return messages
   if (verbose == TRUE) {

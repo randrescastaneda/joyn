@@ -139,3 +139,38 @@ set_joyn_options <- function(...,
 
 }
 
+# ------------------------------------------------------------------------------------------
+# Define custom .strong {cli} classes to emphasize messages subcomponents
+# --- to be used when creating/storing {joyn} messages
+# -------------------------------------------------------------------------------------------
+
+# Class 'strong' - for text/general subcomponents of the msg that we want to highlight
+cli::cli_div(theme = list(
+  span.strong = list(color = "#555555"),
+  "span.strong" = list("font-weight" = "bold")),
+  .auto_close = FALSE)
+
+# Class `strongVar` - to highlight variables/column names
+cli::cli_div(theme = list(
+  span.strongVar = list(color = "#0a9396"),
+  "span.strongVar" = list(before = "`"),
+  "span.strongVar" = list("font-weight" = "bold"),
+  "span.strongVar" = list(after = "`")),
+  .auto_close = FALSE)
+
+# Class `strongTable` - to highlight data tables/frames (e.g., x or y)
+cli::cli_div(theme = list(
+  span.strongTable = list(color = "#BF00FF"),
+  "span.strongTable" = list(before = "`"),
+  "span.strongTable" = list("font-weight" = "bold"),
+  "span.strongTable" = list(after = "`")),
+  .auto_close = FALSE)
+
+# Class `strongArg` - to highlight function arguments (e.g., suffixes, match type)
+cli::cli_div(theme = list(
+  span.strongArg = list(color = "#0077b6"),
+  "span.strongArg" = list("font-weight" = "bold")),
+  .auto_close = FALSE)
+
+
+

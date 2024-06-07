@@ -144,10 +144,7 @@ unmask_joyn_fun_ns <- function(fun_name,
   # if package {pkg_name} is not loaded, stop and inform user
   if (!pkg_name %in% tolower(.packages())) {
 
-    store_msg(type = "err",
-              err  = paste(cli::symbol$cross, "Error:"),
-              pale = "   package {pkg_name} must be loaded."
-    )
+    store_joyn_msg(err = "package {.strong {pkg_name}} must be loaded.")
 
     joyn_msg("err")
     cli::cli_abort("{pkg_name} is not loaded")
@@ -157,9 +154,7 @@ unmask_joyn_fun_ns <- function(fun_name,
 
   if (!any(fun_name %in% getNamespaceExports(pkg_name))) {
 
-    store_msg(type = "err",
-              err  = paste(cli::symbol$cross, "Error:"),
-              pale = "   {fun_name} must be exported object(s) of {pkg_name}."
+    store_joyn_msg(err = "   {.strong {fun_name}} must be exported object(s) of {.strong {pkg_name}}."
     )
 
     joyn_msg("err")
@@ -284,13 +279,7 @@ unmask_joyn <- \(fun_name,
   clear_joynenv()
 
   # Inform the user
-  store_msg(type        = "info",
-            ok          = paste(cli::symbol$info, " Note:  "),
-            pale        = "function",
-            bolded_pale = "  {fun_name}",
-            pale        = "  unmasked.",
-            bolded_pale = " {pkg_name}::{fun_name}",
-            pale        = " preferred")
+  store_joyn_msg(info = "function {.strong {fun_name}} unmasked. {.strong {pkg_name}::{fun_name}} preferred")
 
   joyn_msg()
 

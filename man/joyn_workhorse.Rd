@@ -2,7 +2,7 @@
 % Please edit documentation in R/joyn_workhorse.R
 \name{joyn_workhorse}
 \alias{joyn_workhorse}
-\title{Internal workhorse join function, used in the backend of \code{joyn}}
+\title{Internal workhorse join function, used in the back-end of \code{joyn}}
 \usage{
 joyn_workhorse(
   x,
