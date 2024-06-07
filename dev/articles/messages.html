@@ -190,7 +190,7 @@ a another one.</p>
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
 <span><span class="co">#&gt;       id     t     x  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16  x &amp; y</span></span>
@@ -204,7 +204,7 @@ a another one.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Printing the info message</span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"info"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ---------------- Info about change in reporting variable name ----------------</span></span>
@@ -223,9 +223,9 @@ a another one.</p>
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">reportvar</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is already part of the resulting table. It will be changed</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">to</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x.1</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable x</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">reportvar x is already part of the resulting table. It will be changed</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">to x.1</span></span></span>
 <span><span class="co">#&gt;       id     t     x    x.1</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16  x &amp; y</span></span>
@@ -238,9 +238,9 @@ a another one.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"info"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">reportvar</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is already part of the resulting table. It will be changed</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">to</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x.1</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable x</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">reportvar x is already part of the resulting table. It will be changed</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">to x.1</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ------------- Informing that reporting variable is not returned -------------</span></span>
@@ -259,7 +259,7 @@ a another one.</p>
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note:</span><span style="color: #9E9E9E;"> Reporting variable is</span><span style="color: #585858; font-weight: bold; font-style: italic;"> not</span><span style="color: #9E9E9E;"> returned</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;"> Reporting variable is </span><span style="color: #9E9E9E; font-weight: bold;">NOT</span><span style="color: #9E9E9E;"> returned</span></span></span>
 <span><span class="co">#&gt;       id     t     x</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16</span></span>
@@ -272,7 +272,7 @@ a another one.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"info"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note:</span><span style="color: #9E9E9E;"> Reporting variable is</span><span style="color: #585858; font-weight: bold; font-style: italic;"> not</span><span style="color: #9E9E9E;"> returned</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;"> Reporting variable is </span><span style="color: #9E9E9E; font-weight: bold;">NOT</span><span style="color: #9E9E9E;"> returned</span></span></span></code></pre></div>
 <p>Furthermore, info messages will help you keep track of which
 <strong>variables</strong> <strong>in <code>y</code> will be kept after
 the merging</strong>, for example notifying you if any of the y
@@ -294,8 +294,8 @@ part of the <code>by</code> variables.</p>
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
@@ -308,8 +308,8 @@ part of the <code>by</code> variables.</p>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"info"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="timing-messages">Timing messages 🔵<a class="anchor" aria-label="anchor" href="#timing-messages"></a>
@@ -358,8 +358,8 @@ checks</em>
 <span><span class="co">#&gt; 3:      y     1   16.7%</span></span>
 <span><span class="co">#&gt; 4:  total     6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
@@ -371,9 +371,9 @@ checks</em>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000129</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.035917</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000141</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.026062</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span></span>
@@ -390,8 +390,8 @@ checks</em>
 <span><span class="co">#&gt; 2:  x &amp; y     3     60%</span></span>
 <span><span class="co">#&gt; 3:  total     5    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
@@ -402,9 +402,9 @@ checks</em>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.00044</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.03453</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000487</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.025433</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="warning-messages">Warning messages ⚠️<a class="anchor" aria-label="anchor" href="#warning-messages"></a>
@@ -435,10 +435,10 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify y, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed</span></span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
@@ -450,8 +450,8 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; 7:     6    NA    NA     6    13      y</span></span></code></pre></div>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"warn"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed.</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify y, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed</span></span></span></code></pre></div>
 <p>In a similar way, warning messages are generated when choosing
 <code>match_type = "m:m" or "m:1"</code></p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
@@ -469,10 +469,10 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x and y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">join is executed.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify both x and y, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">1:1</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">join is executed</span></span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
@@ -484,8 +484,8 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; 7:     6    NA    NA     6    13      y</span></span></code></pre></div>
 <div class="sourceCode" id="cb19"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"warn"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify both</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x and y</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">join is executed.</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify both x and y, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">1:1</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">join is executed</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb20"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ------------------ Warning that "id" uniquely identifies x2 ------------------</span></span>
@@ -501,10 +501,10 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
 <span><span class="co">#&gt; 4:  total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify x, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed</span></span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
@@ -516,8 +516,8 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; 7:     6    NA    NA     6    13      y</span></span></code></pre></div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"warn"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> The keys supplied uniquely identify</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> therefore a</span><span style="color: #585858; font-weight: bold; font-style: italic;"> 1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed.</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify x, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">1:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed</span></span></span></code></pre></div>
 <p>Other examples of warnings are those that arise when you are trying
 to supply certain arguments to the merging functions that are not yet
 supported by the current version of <code>joyn</code>.</p>
@@ -544,11 +544,11 @@ will make the join retain only keys in <code>x</code>.</p>
 <span><span class="co">#&gt; 2:  x &amp; y     3     60%</span></span>
 <span><span class="co">#&gt; 3:  total     5    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> joyn does not currently allow inequality joins, so</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keep = NULL</span><span style="color: #9E9E9E;"> will</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">joyn does not currently allow inequality joins, so keep = NULL will</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">retain only keys in x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Currently, joyn allows only</span><span style="color: #585858; font-weight: bold; font-style: italic;"> na_matches = 'na'</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">Currently, joyn allows only na_matches = 'na'</span></span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
@@ -559,9 +559,9 @@ will make the join retain only keys in <code>x</code>.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"warn"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> joyn does not currently allow inequality joins, so</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keep = NULL</span><span style="color: #9E9E9E;"> will</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">joyn does not currently allow inequality joins, so keep = NULL will</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">retain only keys in x</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> Currently, joyn allows only</span><span style="color: #585858; font-weight: bold; font-style: italic;"> na_matches = 'na'</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">Currently, joyn allows only na_matches = 'na'</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="error-messages">Error messages ❌<a class="anchor" aria-label="anchor" href="#error-messages"></a>
@@ -585,13 +585,13 @@ names.</p>
 <span>  </span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x_empty</span>,</span>
 <span>     y <span class="op">=</span> <span class="va">y1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> Input table </span><span style="color: #00BB00;">x</span><span style="color: #9E9E9E;"> has no columns.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;"> Input table x has no columns.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_xy()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> wrong input specification</span></span></code></pre></div>
 <div class="sourceCode" id="cb25"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"err"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> Input table </span><span style="color: #00BB00;">x</span><span style="color: #9E9E9E;"> has no columns.</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;"> Input table x has no columns.</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ----------------------- Error due to duplicate names  ------------------------</span></span>
@@ -602,14 +602,14 @@ names.</p>
 <span>                          check.names <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x_duplicates</span>,</span>
 <span>     y <span class="op">=</span> <span class="va">y1</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> Table </span><span style="color: #00BB00;">x</span><span style="color: #9E9E9E;"> has the following column duplicated:</span><span style="color: #0087FF; font-weight: bold;">`x`</span><span style="color: #9E9E9E;"> Please rename or</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;"> Table x has the following column duplicated: x.  Please rename or</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">remove and try again.</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_xy()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> wrong input specification</span></span></code></pre></div>
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"err"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> Table </span><span style="color: #00BB00;">x</span><span style="color: #9E9E9E;"> has the following column duplicated:</span><span style="color: #0087FF; font-weight: bold;">`x`</span><span style="color: #9E9E9E;"> Please rename or</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;"> Table x has the following column duplicated: x.  Please rename or</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">remove and try again.</span></span></span></code></pre></div>
 <p>Furthermore, errors messages are generated when choosing the wrong
 <code>match_type</code>, that is not consistent with the actual
@@ -618,7 +618,7 @@ relationship between the variables being used for merging.
 <div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>, y<span class="op">=</span><span class="va">y1</span>, by<span class="op">=</span><span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table x is not uniquely identified by id</span></span></span>
 <span><span class="co">#&gt; Duplicate counts in <span style="color: #00BB00;">x</span>:</span></span>
 <span><span class="co">#&gt;       id copies</span></span>
 <span><span class="co">#&gt;    &lt;int&gt;  &lt;int&gt;</span></span>
@@ -629,7 +629,7 @@ relationship between the variables being used for merging.
 <span><span class="co">#&gt;   issue occurred</span></span></code></pre></div>
 <div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"err"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table x is not uniquely identified by id</span></span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -658,8 +658,8 @@ of them to be displayed, you can just set <code>type = 'all'</code></p>
 <span><span class="co">#&gt; 3:      y     1   16.7%</span></span>
 <span><span class="co">#&gt; 4:  total     6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
@@ -672,17 +672,17 @@ of them to be displayed, you can just set <code>type = 'all'</code></p>
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Print all messages stored</span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000126</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.035822</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000147</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.023979</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span></code></pre></div>
 <div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Print info messages only </span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"info"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span></code></pre></div>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span></code></pre></div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>

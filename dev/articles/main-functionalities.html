@@ -416,8 +416,8 @@ that the match type is not as expected.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Merging correctly but getting error because something is not right in the data</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x3</span>, <span class="va">y3</span>, by <span class="op">=</span> <span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table x is not uniquely identified by id</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table y is not uniquely identified by id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_match_type()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> match type inconsistency</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> set verbose to TRUE to see where the issue is</span></span></code></pre></div>
@@ -425,8 +425,8 @@ that the match type is not as expected.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Merging wrongly but getting NO errors because you did not use match_type</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x3</span>, <span class="va">y3</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> x</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
-<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error:</span><span style="color: #9E9E9E;"> table</span><span style="color: #585858; font-weight: bold; font-style: italic;"> y</span><span style="color: #9E9E9E;"> is not uniquely identified by</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table x is not uniquely identified by id</span></span></span>
+<span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table y is not uniquely identified by id</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_match_type()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> match type inconsistency</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> set verbose to TRUE to see where the issue is</span></span></code></pre></div>
@@ -551,8 +551,8 @@ form in the <em>percent</em> column.</p>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
 <span><span class="co">#&gt;        id     v   foo     y  .joyn</span></span>
 <span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
 <span><span class="co">#&gt; 1:      c     8     4    11  x &amp; y</span></span>
