@@ -322,40 +322,19 @@ joyn <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars
-  x <- x |>
-    ftransform(.xreport = 1)
-  y <- y |>
-    ftransform(.yreport = 2)
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Actual merge   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  # simple merge
-  i.yvars <- paste0("i.", yvars_w)
-
-  # keep relevant variables in y
-  y <- y |> fselect(
-    by, yvars_w
-  )
-
-  # Perform workhorse join
-  x <- joyn_workhorse(
-    x          = x,
-    y          = y,
-    by         = by,
-    match_type = match_type,
-    suffixes   = suffixes,
-    sort       = sort
-  )
+  yvars_w <- y_vars_to_keep # working yvars
+  # yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars
+  # x <- x |>
+  #   ftransform(.xreport = 1)
+  # y <- y |>
+  #   ftransform(.yreport = 2)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # replace NAs in report vars
-  setnafill(x, fill = 0, cols = c(".xreport", ".yreport"))
+  # setnafill(x, fill = 0, cols = c(".xreport", ".yreport"))
 
   # report variable
   dropreport <- FALSE
@@ -375,17 +354,43 @@ joyn <- function(x,
       check_names <- make.names(check_names, unique = TRUE)
       nrv         <- setdiff(check_names, xnames)
 
-      store_joyn_msg(info = "reportvar {.strongVar {reportvar}}  is already part of the resulting table. It will be changed to {.strongVar {nrv}}")
+      store_joyn_msg(info = "reportvar {.strongVar {reportvar}}  is
+                     already part of the resulting table. It will be
+                     changed to {.strongVar {nrv}}")
 
       reportvar <- nrv
     }
   }
 
 
-  # report variable
-  collapse::settransform(x, use_util_report = .xreport + .yreport)
-  # Can this be done more efficiently with collapse?
-  data.table::setnames(x, "use_util_report", reportvar)
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Actual merge   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  # simple merge
+  i.yvars <- paste0("i.", yvars_w)
+
+  # keep relevant variables in y
+  y <- y |>
+    fselect(by, yvars_w)
+
+  # Perform workhorse join
+  x <- joyn_workhorse(
+    x          = x,
+    y          = y,
+    by         = by,
+    suffixes   = suffixes,
+    sort       = sort,
+    reportvar  = reportvar
+  )
+
+
+
+
+  # # report variable
+  # collapse::settransform(x, use_util_report = .xreport + .yreport)
+  # # Can this be done more efficiently with collapse?
+  # data.table::setnames(x, "use_util_report", reportvar)
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
