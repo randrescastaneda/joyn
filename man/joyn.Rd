@@ -14,7 +14,7 @@ joyn(
   update_values = FALSE,
   update_NAs = update_values,
   reportvar = getOption("joyn.reportvar"),
-  reporttype = c("character", "numeric"),
+  reporttype = c("factor", "character", "numeric"),
   roll = NULL,
   keep_common_vars = FALSE,
   sort = FALSE,

@@ -8,9 +8,9 @@ joyn_workhorse(
   x,
   y,
   by = intersect(names(x), names(y)),
-  match_type = c("1:1"),
   sort = FALSE,
-  suffixes = getOption("joyn.suffixes")
+  suffixes = getOption("joyn.suffixes"),
+  reportvar = getOption("joyn.reportvar")
 )
 }
 \arguments{
@@ -19,9 +19,6 @@ joyn_workhorse(
 \item{y}{data object, "right" or "using"}
 
 \item{by}{atomic character vector: key specifying join}
-
-\item{match_type}{atomic character vector of length 1: either "1:1" (default)
-"1:m", "m:1", or "m:m". Relies on \code{collapse::join()}}
 
 \item{sort}{logical: sort the result by the columns in \code{by}
 \code{x} and \code{y}}

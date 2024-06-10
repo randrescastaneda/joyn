@@ -383,7 +383,7 @@ joyn <- function(x,
     sort       = sort,
     reportvar  = reportvar
   )
-  m <- attr(res, "join.match")$match
+  m <- attr(jn, "join.match")$match
 
 
 

@@ -148,12 +148,17 @@ store_joyn_msg <- function(err       = NULL,
                            timing    = NULL,
                            info      = NULL) {
 
-  # Check that only one among err, warn, timing and info is not null, otherwise stop
+  # Check that only one among err, warn, timing and info is not null,
+  # otherwise stop
+  #
+  # Formals
+  frm <- formals() |>
+    names()
 
   cn <- c(err, warn, timing, info)
 
   if (length(cn) != 1) {
-    cli::cli_abort(c("only one of err, warn, timing, info can be not null",
+    cli::cli_abort(c("only one of {.or {.arg {frm}}} can be not null",
                      "i" = "check the arguments"))
   }
 

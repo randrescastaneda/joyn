@@ -71,8 +71,7 @@ joyn_workhorse <- function(
       error = function(e) {
 
 
-        joyn_msg("err", c("{.pkg {source_pkg}} returned the following:",
-                          x = e$message))
+        store_joyn_msg(err = "{.pkg {source_pkg}} returned the following: {e$message}")
       }, # end of error section
 
       warning = function(w) {
