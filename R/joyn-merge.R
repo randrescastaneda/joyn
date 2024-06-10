@@ -163,7 +163,7 @@ joyn <- function(x,
                  update_values    = FALSE,
                  update_NAs       = update_values,
                  reportvar        = getOption("joyn.reportvar"),
-                 reporttype       = c("character", "numeric"),
+                 reporttype       = c("factor", "character", "numeric"),
                  roll             = NULL,
                  keep_common_vars = FALSE,
                  sort             = FALSE,
@@ -375,7 +375,7 @@ joyn <- function(x,
     fselect(by, yvars_w)
 
   # Perform workhorse join
-  x <- joyn_workhorse(
+  jn <- joyn_workhorse(
     x          = x,
     y          = y,
     by         = by,
@@ -383,42 +383,19 @@ joyn <- function(x,
     sort       = sort,
     reportvar  = reportvar
   )
-
+  m <- attr(res, "join.match")$match
 
 
 
   # # report variable
-  # collapse::settransform(x, use_util_report = .xreport + .yreport)
+  # collapse::settransform(jn, use_util_report = .xreport + .yreport)
   # # Can this be done more efficiently with collapse?
-  # data.table::setnames(x, "use_util_report", reportvar)
+  # data.table::setnames(jn, "use_util_report", reportvar)
 
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Filter rows - `keep`   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  ## rows to keep -----
-  if (keep  %in% c("master", "left") ) {
-
-    x <- x |>
-      fsubset(get(reportvar)  != 2)
-
-  } else if (keep  %in% c("using", "right") ) {
-
-    x <- x |>
-      fsubset(get(reportvar)  != 1)
-
-  } else if (keep  == "inner") {
-
-    x <- x |>
-      fsubset(get(reportvar)  >= 3)
-  } else if (keep == "anti") {
-    x <- x |>
-      fsubset(get(reportvar) == 1)
-  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Update x   ---------
+  #                   Update jn   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var_use <- NULL
   if (isTRUE(update_NAs) || isTRUE(update_values)) {
@@ -427,7 +404,7 @@ joyn <- function(x,
 
   if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
-      x <- update_na_values(dt           = x,
+    jn <- update_na_values(dt           = jn,
                             var          = var_use,
                             reportvar    = reportvar,
                             suffixes     = suffixes,
@@ -435,6 +412,30 @@ joyn <- function(x,
                             rep_values   = update_values
       )
 
+  }
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Filter rows - `keep`   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ## rows to keep -----
+  if (keep  %in% c("master", "left") ) {
+
+    jn <- jn |>
+      fsubset(get(reportvar)  != 2)
+
+  } else if (keep  %in% c("using", "right") ) {
+
+    jn <- jn |>
+      fsubset(get(reportvar)  != 1)
+
+  } else if (keep  == "inner") {
+
+    jn <- jn |>
+      fsubset(get(reportvar)  >= 3)
+  } else if (keep == "anti") {
+    jn <- jn |>
+      fsubset(get(reportvar) == 1)
   }
 
 
@@ -446,15 +447,15 @@ joyn <- function(x,
       gsub("\\.", "\\\\.", x = _) |>
       paste0("$")
 
-    varx <- grep(patterns[1], names(x), value = TRUE)
-    vary <- grep(patterns[2], names(x), value = TRUE)
+    varx <- grep(patterns[1], names(jn), value = TRUE)
+    vary <- grep(patterns[2], names(jn), value = TRUE)
 
     # delete Y vars with suffix
-    collapse::get_vars(x, vary) <- NULL
+    collapse::get_vars(jn, vary) <- NULL
 
     # remove suffixes
     nsvar <- gsub(patterns[1], "", varx)
-    data.table::setnames(x, varx, nsvar)
+    data.table::setnames(jn, varx, nsvar)
 
   }
 
@@ -463,20 +464,32 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## cleaning temporary report variables ----
-  collapse::settransform(x,
-                         .xreport = NULL,
-                         .yreport = NULL)
+  # collapse::settransform(jn,
+  #                        .xreport = NULL,
+  #                        .yreport = NULL)
 
   # Rename by variables -----
   ## in output
-  if (any(grepl(pattern = "keyby", x = names(x)))) {
-    data.table::setnames(x,
-                         old = names(x)[grepl(pattern = "keyby",
-                                              x       = names(x))],
+  if (any(grepl("keyby",names(jn)))) {
+    data.table::setnames(jn,
+                         old = names(jn)[grepl("keyby", names(jn))],
                          new = xbynames)
   }
 
   ## convert to characters if chosen -------
+
+  if (reporttype == "factor") {
+
+    get_vars(jn, reportvar) <-  factor(jn[[reportvar]],
+                                      levels = 1:6,
+                                      labels = c("x",
+                                                 "y",
+                                                 "x & y",
+                                                 "NA updated",
+                                                 "value updated",
+                                                 "not updated"))
+  }
+
   if (reporttype == "character") {
 
     rvar_to_chr <- \(x) {
@@ -489,13 +502,13 @@ joyn <- function(x,
                         default = "conflict")
     }
 
-    settransformv(x, reportvar, rvar_to_chr)
+    settransformv(jn, reportvar, rvar_to_chr)
 
   }
 
   # no matching obs
-  if ((all(x[[reportvar]] %in% c("x", "y")) ||
-      all(x[[reportvar]] %in% c(1, 2))) &&
+  if ((all(jn[[reportvar]] %in% c("x", "y")) ||
+       all(jn[[reportvar]] %in% c(1, 2))) &&
       !keep == "anti") {
 
     store_joyn_msg(warn = " you have no matching obs. Make sure argument
@@ -506,12 +519,12 @@ joyn <- function(x,
 
   ## Display results------
   # freq table
-  d <- freq_table(x, reportvar)
+  d <- freq_table(jn, reportvar)
   rlang::env_poke(.joynenv, "freq_joyn", d)
 
   # Report var
   if (dropreport) {
-    get_vars(x, reportvar) <- NULL
+    get_vars(jn, reportvar) <- NULL
   }
 
   # store timing
@@ -529,8 +542,9 @@ joyn <- function(x,
     joyn_msg(msg_type)
   }
 
-  setattr(x, "class", class_x)
+  setattr(jn, "class", class_x)
+  setattr(jn, "join.match", NULL)
 
-  x
+  jn
 
 }
