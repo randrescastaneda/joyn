@@ -73,6 +73,7 @@ test_that(
 
 # Checking output with match type m:m and 1:1 -------------------------------------------------
 test_that("m:m and 1:1 gives the same output if data is correct", {
+  skip("This test is not needed anymore because the match is always m:m in collapse::join")
   expect_equal(
     joyn_workhorse(
       x          = x2,
@@ -133,8 +134,7 @@ test_that("full joyn is correct", {
   x <- joyn_workhorse(
     x          = x1,
     y          = y1,
-    by         = "id",
-    match_type = "1:1"
+    by         = "id"
   )
   expect_equal(
     nrow(x),
@@ -153,7 +153,9 @@ test_that("FULL- Compare with base::merge", {
     x  = x1,
     y  = y1,
     by = "id"
-  )
+  ) |>
+    fselect(-.joyn) |>
+    setattr('join.match', NULL)
 
   br <- base::merge(
     x   = x1,
@@ -162,37 +164,21 @@ test_that("FULL- Compare with base::merge", {
     all = TRUE
   )
 
-  setorderv(
-    br,
-    "id",
-    na.last = TRUE
-  )
-  setorderv(
-    jn,
-    "id",
-    na.last = TRUE
-  )
-  setattr(
-    br,
-    'sorted',
-    "id"
-  )
-  setattr(
-    jn,
-    'sorted',
-    "id"
-  ) # ZP: check this
+  setorderv(br,"id", na.last = TRUE)
+  setorderv(jn, "id", na.last = TRUE)
+  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id") # ZP: check this
 
-  expect_equal(
-    jn,
-    br
-  )
+  expect_equal(jn, br)
 
   jn <- joyn_workhorse(
     x  = x2,
     y  = y2,
     by = "id"
-  )
+  )  |>
+    fselect(-.joyn) |>
+    setattr('join.match', NULL)
+
 
   br <- base::merge(
     x   = x2,
@@ -213,6 +199,7 @@ test_that("FULL- Compare with base::merge", {
 
 # Checking match types work ------------------------------------------------------------------------
 test_that("match types work", {
+  skip("joyn_workhorse does not check match type")
 
   # note: `joyn_workhorse` does not
   #       check whether match_type

@@ -680,7 +680,11 @@ test_that("error when there is not natural join", {
 
 test_that("different names in key vars are working fine", {
 
-  df <- joyn(x4, y4, by = c("id1 = id", "id2"), match_type = "m:1", y_vars_to_keep = c("y"), sort = TRUE)
+  df <- joyn(x4, y4, by = c("id1 = id", "id2"),
+             match_type = "m:1",
+             y_vars_to_keep = c("y"),
+             sort = TRUE,
+             reporttype =  "character")
 
   dd <- data.table(id1 = c(1, 1, 2, 2, 3, 3, 5, 6),
                    id2 = c(1, 1, 2, 1, 3, 4, 2, 3),
