@@ -423,7 +423,9 @@ joyn_report <- function(verbose = getOption("joyn.verbose")) {
 
   freq <- rlang::env_get(.joynenv, "freq_joyn")
   if (verbose) {
+    cli::cli_h2("JOYn Report")
     print(freq)
+    cli::cli_rule(right = "End of {.field JOYn} report")
   }
   return(invisible(freq))
 }

@@ -383,15 +383,6 @@ joyn <- function(x,
     sort       = sort,
     reportvar  = reportvar
   )
-  m <- attr(jn, "join.match")$match
-
-
-
-  # # report variable
-  # collapse::settransform(jn, use_util_report = .xreport + .yreport)
-  # # Can this be done more efficiently with collapse?
-  # data.table::setnames(jn, "use_util_report", reportvar)
-
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -476,6 +467,17 @@ joyn <- function(x,
                          new = xbynames)
   }
 
+
+  # Report variable ----------
+  # no matching obs
+  if (all(jn[[reportvar]] %in% c(1, 2)) && !keep == "anti") {
+
+    store_joyn_msg(warn = " you have no matching obs. Make sure argument
+                           `by` is correct. Right now, `joyn` is joining by
+                           {.strongVar {by}}")
+
+  }
+
   ## convert to characters if chosen -------
 
   if (reporttype == "factor") {
@@ -506,19 +508,10 @@ joyn <- function(x,
 
   }
 
-  # no matching obs
-  if ((all(jn[[reportvar]] %in% c("x", "y")) ||
-       all(jn[[reportvar]] %in% c(1, 2))) &&
-      !keep == "anti") {
-
-    store_joyn_msg(warn = " you have no matching obs. Make sure argument
-                           `by` is correct. Right now, `joyn` is joining by
-                           {.strongVar {by}}")
-
-  }
 
   ## Display results------
   # freq table
+
   d <- freq_table(jn, reportvar)
   rlang::env_poke(.joynenv, "freq_joyn", d)
 
@@ -535,15 +528,11 @@ joyn <- function(x,
     is executed in  ", round(time_taken_joyn, 6)))
 
   # return messages
-  if (verbose == TRUE) {
-    cli::cli_h2("JOYn Report")
-    joyn_report()
-    cli::cli_rule(right = "End of {.field JOYn} report")
-    joyn_msg(msg_type)
-  }
+  joyn_report(verbose = verbose)
+  if (verbose == TRUE) joyn_msg(msg_type)
 
   setattr(jn, "class", class_x)
-  setattr(jn, "join.match", NULL)
+  # setattr(jn, "join.match", NULL)
 
   jn
 

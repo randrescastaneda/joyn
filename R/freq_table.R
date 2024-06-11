@@ -11,7 +11,6 @@ if (getRversion() >= '2.15.1')
 #' @param x  data frame
 #' @param byvar character: name of variable to tabulate. Use Standard evaluation.
 #' @param digits numeric: number of decimal places to display. Default is 1.
-#' @param na.rm logical: if TRUE remove NAs from calculations. Default is TRUE
 #'
 #' @return data.table with frequencies.
 #' @export
@@ -25,37 +24,20 @@ if (getRversion() >= '2.15.1')
 #' freq_table(x4, "id1")
 freq_table <- function(x,
                        byvar,
-                       digits = 1,
-                       na.rm  = TRUE) {
+                       digits = 1) {
 
-  if (!(is.data.table(x))) {
-    x <- as.data.table(x)
-  } else {
-    x <- data.table::copy(x)
-  }
+  fq <- qtab(x[[byvar]])
+  ft <- data.frame(joyn = names(fq),
+                   n = as.numeric(fq))
+  ft <- ft |>
+    ftransform(percent = paste0(round(n / N * 100, digits), "%"))
 
+  # add row with totals
+  ft <- rowbind(ft, data.table(joyn = "total",
+                               n = fsum(ft$n),
+                               percent = "100%")) |>
+    # filter zeros
+    fsubset(n > 0)
 
-  # Frequencies and format
-  d <- x[, .(n = .N), by = byvar
-  ][, percent :=
-      {
-        total = sum(n, na.rm = na.rm)
-        d <- round((n/ total)*100, digits = digits)
-        d <- as.character(d)
-        d <- paste0(d, "%")
-      }
-  ]
-
-  # Total row just for completeness
-  setorderv(d, byvar)
-  totd <- data.table::data.table(
-    tempname = "total",
-    n        = d[, sum(n, na.rm = na.rm)],
-    percent  = "100%"
-  )
-
-  setnames(totd, "tempname", byvar)
-  d <- data.table::rbindlist(list(d, totd),
-                             use.names = TRUE)
-  return(d)
+  setrename(ft, joyn = byvar, .nse = FALSE)
 }
