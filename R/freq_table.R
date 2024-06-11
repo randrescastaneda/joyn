@@ -24,14 +24,15 @@ if (getRversion() >= '2.15.1')
 #' freq_table(x4, "id1")
 freq_table <- function(x,
                        byvar,
-                       digits = 1) {
+                       digits = 1,
+                       na.rm  = FALSE) {
 
   x_name <- as.character(substitute(x))
   if (!is.data.frame(x)) {
     cli::cli_abort("Argument {.arg x} ({.field {x_name}}) must be a data frame")
   }
 
-  fq <- qtab(x[[byvar]])
+  fq <- qtab(x[[byvar]], na.exclude = na.rm)
   ft <- data.frame(joyn = names(fq),
                    n = as.numeric(fq))
 
