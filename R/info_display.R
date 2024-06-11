@@ -127,20 +127,32 @@ store_msg <- function(type, ...) {
 #' @param info A character string representing an info message to be stored. Default value is NULL
 #'
 #' @section Hot to pass the message string:
-#' The function allows for the customization of the message string using {cli} classes to emphasize specific components of the message
+#' The function allows for the customization of the message string using \{cli\} classes to emphasize specific components of the message
 #' Here's how to format the message string:
-#' *For variables:            .strongVar   --example: "{.strongVar {reportvar}}"
-#' *For function arguments:   .strongArg   --example: "{.strongArg {y_vars_to_keep}}"
-#' *For dt/df:                .strongTable --example: "{.strongTable x}"
-#' *For text/anything else:   .strong      --example: "reportvar is {.strong NOT} returned"
+#' *For variables:            .strongVar
+#' *For function arguments:   .strongArg
+#' *For dt/df:                .strongTable
+#' *For text/anything else:   .strong
 #' *NOTE: By default, the number of seconds specified in timing messages is
 #'        automatically emphasized using a custom formatting approach.
 #'        You do not need to apply {cli} classes nor to specify that the number is in seconds.
-#'        --example usage:  store_joyn_msg(timing =
-#'                                         paste("The full joyn is executed in", round(time_taken, 6)))
+#'
 #'
 #'
 #' @return invisible TRUE
+#'
+#' @examples
+#' \donotrun{
+#' # Timing msg
+#' store_joyn_msg(timing = paste("  The entire joyn function, including checks,
+#'                                        is executed in  ", round(time_taken_joyn, 6)))
+#'
+#' # Error msg
+#' store_joyn_msg(err = " Input table {.strongTable x} has no columns.")
+#'
+#' # Info msg
+#' store_joyn_msg(info = "Joyn's report available in variable {.strongVar {reportvar}}")
+#' }
 #'
 #' @keywords internal
 store_joyn_msg <- function(err       = NULL,
