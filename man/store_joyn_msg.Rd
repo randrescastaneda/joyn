@@ -27,7 +27,7 @@ This function serves as a wrapper for the store_msg function, which is used to s
 }
 \section{Hot to pass the message string}{
 
-The function allows for the customization of the message string using \{cli\} classes to emphasize specific components of the message
+The function allows for the customization of the message string using cli classes to emphasize specific components of the message
 Here's how to format the message string:
 *For variables:            .strongVar
 *For function arguments:   .strongArg
@@ -35,21 +35,20 @@ Here's how to format the message string:
 *For text/anything else:   .strong
 *NOTE: By default, the number of seconds specified in timing messages is
 automatically emphasized using a custom formatting approach.
-You do not need to apply {cli} classes nor to specify that the number is in seconds.
+You do not need to apply cli classes nor to specify that the number is in seconds.
 }
 
 \examples{
-\donotrun{
 # Timing msg
-store_joyn_msg(timing = paste("  The entire joyn function, including checks,
-                                       is executed in  ", round(time_taken_joyn, 6)))
+joyn:::store_joyn_msg(timing = paste("  The entire joyn function, including checks,
+                                       is executed in  ", round(1.8423467, 6)))
 
 # Error msg
-store_joyn_msg(err = " Input table {.strongTable x} has no columns.")
+joyn:::store_joyn_msg(err = " Input table {.strongTable x} has no columns.")
 
 # Info msg
-store_joyn_msg(info = "Joyn's report available in variable {.strongVar {reportvar}}")
-}
+joyn:::store_joyn_msg(info = "Joyn's report available in variable {.strongVar .joyn}")
+
 
 }
 \keyword{internal}
