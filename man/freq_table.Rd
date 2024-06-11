@@ -4,7 +4,7 @@
 \alias{freq_table}
 \title{Tabulate simple frequencies}
 \usage{
-freq_table(x, byvar, digits = 1)
+freq_table(x, byvar, digits = 1, na.rm = FALSE)
 }
 \arguments{
 \item{x}{data frame}
