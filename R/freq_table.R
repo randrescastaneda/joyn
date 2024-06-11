@@ -26,15 +26,22 @@ freq_table <- function(x,
                        byvar,
                        digits = 1) {
 
+  x_name <- as.character(substitute(x))
+  if (!is.data.frame(x)) {
+    cli::cli_abort("Argument {.arg x} ({.field {x_name}}) must be a data frame")
+  }
+
   fq <- qtab(x[[byvar]])
   ft <- data.frame(joyn = names(fq),
                    n = as.numeric(fq))
+
+  N <- fsum(ft$n)
   ft <- ft |>
     ftransform(percent = paste0(round(n / N * 100, digits), "%"))
 
   # add row with totals
   ft <- rowbind(ft, data.table(joyn = "total",
-                               n = fsum(ft$n),
+                               n = N,
                                percent = "100%")) |>
     # filter zeros
     fsubset(n > 0)

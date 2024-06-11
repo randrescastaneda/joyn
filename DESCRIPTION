@@ -37,7 +37,7 @@ Imports:
     data.table,
     cli,
     utils,
-    collapse (>= 2.0.13),
+    collapse (>= 2.0.15),
     lifecycle
 Depends: 
     R (>= 2.10)
