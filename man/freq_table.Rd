@@ -12,6 +12,8 @@ freq_table(x, byvar, digits = 1, na.rm = FALSE)
 \item{byvar}{character: name of variable to tabulate. Use Standard evaluation.}
 
 \item{digits}{numeric: number of decimal places to display. Default is 1.}
+
+\item{na.rm}{logical: report NA values in frequencies. Default is FALSE.}
 }
 \value{
 data.table with frequencies.

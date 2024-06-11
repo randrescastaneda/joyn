@@ -11,6 +11,7 @@ if (getRversion() >= '2.15.1')
 #' @param x  data frame
 #' @param byvar character: name of variable to tabulate. Use Standard evaluation.
 #' @param digits numeric: number of decimal places to display. Default is 1.
+#' @param na.rm logical: report NA values in frequencies. Default is FALSE.
 #'
 #' @return data.table with frequencies.
 #' @export
