@@ -532,7 +532,6 @@ joyn <- function(x,
   if (verbose == TRUE) joyn_msg(msg_type)
 
   setattr(jn, "class", class_x)
-  # setattr(jn, "join.match", NULL)
 
   jn
 
