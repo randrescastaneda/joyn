@@ -49,3 +49,34 @@ freq_table <- function(x,
 
   setrename(ft, joyn = byvar, .nse = FALSE)
 }
+
+
+
+#' Report frequencies from attributes in report var
+#'
+#' @param x dataframe from [joyn_workhorse]
+#' @param y dataframe from original merge ("right" or "using")
+#'
+#' @return dataframe with frequencies of report var
+#' @keywords internal
+report_from_attr <- function(x,y, reportvar) {
+  # from suggestion by @SebKrantz in #58
+  # https://github.com/randrescastaneda/joyn/issues/58
+  m <- attr(x, "join.match")$match
+
+  N <- fnrow(x)
+  nm_x <- attr(m, "N.nomatch") # Number of non-matched x values
+  nm_y <- fnrow(y) - attr(m, "N.distinct") # Number of non-matched y values. If multiple = FALSE attr(m, "N.distinct") = number of unique matches.
+
+
+  counts <- c(nm_x,  nm_y, N-nm_x-nm_y, N)
+  report <- data.frame(
+    .joyn1 = c("x", "y", "x & y", "total"),
+    n = counts,
+    percent = paste0(round(counts / N * 100, 1), "%")
+  ) |>
+    fsubset(n > 0)
+
+  setrename(report, .joyn1 = reportvar, .nse = FALSE)
+
+}

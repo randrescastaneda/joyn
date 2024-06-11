@@ -64,7 +64,8 @@ joyn_workhorse <- function(
                        keep.col.order = TRUE,
                        sort           = sort,
                        verbose        = 0,
-                       column         = ".joyn1")
+                       column         = ".joyn1",
+                       attr           = TRUE)
       }, # end of expr section
 
       error = function(e) {

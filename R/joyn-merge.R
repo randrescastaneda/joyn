@@ -511,8 +511,15 @@ joyn <- function(x,
 
   ## Display results------
   # freq table
+  #
+  if (update_NAs || update_values) {
+    d <- freq_table(jn, reportvar)
+  } else {
+    d <- report_from_attr(jn, y, reportvar)
+  }
+  # remove collapse::join attributes
+  attr(jn, "join.match") <- NULL
 
-  d <- freq_table(jn, reportvar)
   rlang::env_poke(.joynenv, "freq_joyn", d)
 
   # Report var
