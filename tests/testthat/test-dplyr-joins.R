@@ -1800,7 +1800,7 @@ test_that("ANTI JOIN - Conducts ANTI join", {
        "sorted") <- "id1"
   expect_equal(
     jn |> fselect(-get(reportvar)) |> dim(),
-    c(0, 6)
+    c(0, 4)
   )
 })
 

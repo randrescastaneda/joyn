@@ -43,22 +43,23 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
 #                   internal = TRUE)
 
 test_that("correct inputs", {
-  x <- "not a data.table/data.frame"
+  dd <- "not a data.table/data.frame"
 
-  freq_table(x) |>
+  freq_table(dd) |>
     expect_error()
 })
 
 test_that("correct frequencies", {
 
-  b <- base::table(y4$id2)
-  b <- as.numeric(b)
+  b <- base::table(y4$id2) |>
+    as.numeric()
 
   j <- freq_table(y4, "id2")
-  j <- j[ id2 != "total"
-          ][, n]
-
-  expect_equal(b, j)
+  j |>
+    fsubset(id2 != "total") |>
+    fselect(n) |>
+    reg_elem() |>
+    expect_equal(b)
 
 })
 
@@ -67,10 +68,13 @@ test_that("correct totals", {
   tr <- nrow(y4)
 
   j <- freq_table(y4, "id2")
-  j <- j[ id2 == "total"
-          ][, n]
+  j <- freq_table(y4, "id2")
+  j |>
+    fsubset(id2 == "total") |>
+    fselect(n) |>
+    reg_elem() |>
+    expect_equal(tr)
 
-  expect_equal(tr, j)
 })
 
 

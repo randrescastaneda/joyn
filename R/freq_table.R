@@ -11,7 +11,7 @@ if (getRversion() >= '2.15.1')
 #' @param x  data frame
 #' @param byvar character: name of variable to tabulate. Use Standard evaluation.
 #' @param digits numeric: number of decimal places to display. Default is 1.
-#' @param na.rm logical: if TRUE remove NAs from calculations. Default is TRUE
+#' @param na.rm logical: report NA values in frequencies. Default is FALSE.
 #'
 #' @return data.table with frequencies.
 #' @export
@@ -26,36 +26,58 @@ if (getRversion() >= '2.15.1')
 freq_table <- function(x,
                        byvar,
                        digits = 1,
-                       na.rm  = TRUE) {
+                       na.rm  = FALSE) {
 
-  if (!(is.data.table(x))) {
-    x <- as.data.table(x)
-  } else {
-    x <- data.table::copy(x)
+  x_name <- as.character(substitute(x))
+  if (!is.data.frame(x)) {
+    cli::cli_abort("Argument {.arg x} ({.field {x_name}}) must be a data frame")
   }
 
+  fq <- qtab(x[[byvar]], na.exclude = na.rm)
+  ft <- data.frame(joyn = names(fq),
+                   n = as.numeric(fq))
 
-  # Frequencies and format
-  d <- x[, .(n = .N), by = byvar
-  ][, percent :=
-      {
-        total = sum(n, na.rm = na.rm)
-        d <- round((n/ total)*100, digits = digits)
-        d <- as.character(d)
-        d <- paste0(d, "%")
-      }
-  ]
+  N <- fsum(ft$n)
+  ft <- ft |>
+    ftransform(percent = paste0(round(n / N * 100, digits), "%"))
 
-  # Total row just for completeness
-  setorderv(d, byvar)
-  totd <- data.table::data.table(
-    tempname = "total",
-    n        = d[, sum(n, na.rm = na.rm)],
-    percent  = "100%"
-  )
+  # add row with totals
+  ft <- rowbind(ft, data.table(joyn = "total",
+                               n = N,
+                               percent = "100%")) |>
+    # filter zeros
+    fsubset(n > 0)
 
-  setnames(totd, "tempname", byvar)
-  d <- data.table::rbindlist(list(d, totd),
-                             use.names = TRUE)
-  return(d)
+  setrename(ft, joyn = byvar, .nse = FALSE)
+}
+
+
+
+#' Report frequencies from attributes in report var
+#'
+#' @param x dataframe from [joyn_workhorse]
+#' @param y dataframe from original merge ("right" or "using")
+#'
+#' @return dataframe with frequencies of report var
+#' @keywords internal
+report_from_attr <- function(x,y, reportvar) {
+  # from suggestion by @SebKrantz in #58
+  # https://github.com/randrescastaneda/joyn/issues/58
+  m <- attr(x, "join.match")$match
+
+  N <- fnrow(x)
+  nm_x <- attr(m, "N.nomatch") # Number of non-matched x values
+  nm_y <- fnrow(y) - attr(m, "N.distinct") # Number of non-matched y values. If multiple = FALSE attr(m, "N.distinct") = number of unique matches.
+
+
+  counts <- c(nm_x,  nm_y, N-nm_x-nm_y, N)
+  report <- data.frame(
+    .joyn1 = c("x", "y", "x & y", "total"),
+    n = counts,
+    percent = paste0(round(counts / N * 100, 1), "%")
+  ) |>
+    fsubset(n > 0)
+
+  setrename(report, .joyn1 = reportvar, .nse = FALSE)
+
 }

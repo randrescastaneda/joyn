@@ -127,20 +127,31 @@ store_msg <- function(type, ...) {
 #' @param info A character string representing an info message to be stored. Default value is NULL
 #'
 #' @section Hot to pass the message string:
-#' The function allows for the customization of the message string using {cli} classes to emphasize specific components of the message
+#' The function allows for the customization of the message string using cli classes to emphasize specific components of the message
 #' Here's how to format the message string:
-#' *For variables:            .strongVar   --example: "{.strongVar {reportvar}}"
-#' *For function arguments:   .strongArg   --example: "{.strongArg {y_vars_to_keep}}"
-#' *For dt/df:                .strongTable --example: "{.strongTable x}"
-#' *For text/anything else:   .strong      --example: "reportvar is {.strong NOT} returned"
+#' *For variables:            .strongVar
+#' *For function arguments:   .strongArg
+#' *For dt/df:                .strongTable
+#' *For text/anything else:   .strong
 #' *NOTE: By default, the number of seconds specified in timing messages is
 #'        automatically emphasized using a custom formatting approach.
-#'        You do not need to apply {cli} classes nor to specify that the number is in seconds.
-#'        --example usage:  store_joyn_msg(timing =
-#'                                         paste("The full joyn is executed in", round(time_taken, 6)))
+#'        You do not need to apply cli classes nor to specify that the number is in seconds.
+#'
 #'
 #'
 #' @return invisible TRUE
+#'
+#' @examples
+#' # Timing msg
+#' joyn:::store_joyn_msg(timing = paste("  The entire joyn function, including checks,
+#'                                        is executed in  ", round(1.8423467, 6)))
+#'
+#' # Error msg
+#' joyn:::store_joyn_msg(err = " Input table {.strongTable x} has no columns.")
+#'
+#' # Info msg
+#' joyn:::store_joyn_msg(info = "Joyn's report available in variable {.strongVar .joyn}")
+#'
 #'
 #' @keywords internal
 store_joyn_msg <- function(err       = NULL,
@@ -148,12 +159,17 @@ store_joyn_msg <- function(err       = NULL,
                            timing    = NULL,
                            info      = NULL) {
 
-  # Check that only one among err, warn, timing and info is not null, otherwise stop
+  # Check that only one among err, warn, timing and info is not null,
+  # otherwise stop
+  #
+  # Formals
+  frm <- formals() |>
+    names()
 
   cn <- c(err, warn, timing, info)
 
   if (length(cn) != 1) {
-    cli::cli_abort(c("only one of err, warn, timing, info can be not null",
+    cli::cli_abort(c("only one of {.or {.arg {frm}}} can be not null",
                      "i" = "check the arguments"))
   }
 
@@ -418,7 +434,9 @@ joyn_report <- function(verbose = getOption("joyn.verbose")) {
 
   freq <- rlang::env_get(.joynenv, "freq_joyn")
   if (verbose) {
+    cli::cli_h2("JOYn Report")
     print(freq)
+    cli::cli_rule(right = "End of {.field JOYn} report")
   }
   return(invisible(freq))
 }

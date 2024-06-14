@@ -16,7 +16,7 @@ anti_join(
   relationship = "many-to-many",
   y_vars_to_keep = FALSE,
   reportvar = getOption("joyn.reportvar"),
-  reporttype = c("character", "numeric"),
+  reporttype = c("factor", "character", "numeric"),
   roll = NULL,
   keep_common_vars = FALSE,
   sort = TRUE,
