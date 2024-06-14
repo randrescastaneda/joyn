@@ -4,6 +4,12 @@
     <loc>https://randrescastaneda.github.io/joyn/404.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/LICENSE-text.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/LICENSE.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/articles/adv-functionalities.html</loc>
   </url>
   <url>
@@ -31,13 +37,10 @@
     <loc>https://randrescastaneda.github.io/joyn/index.html</loc>
   </url>
   <url>
-    <loc>https://randrescastaneda.github.io/joyn/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>https://randrescastaneda.github.io/joyn/LICENSE.html</loc>
-  </url>
-  <url>
     <loc>https://randrescastaneda.github.io/joyn/news/index.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/anti_join.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/arguments_checks.html</loc>
@@ -71,6 +74,12 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/clear_joynenv.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/correct_names.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/detach_package.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/freq_table.html</loc>
@@ -136,6 +145,9 @@
     <loc>https://randrescastaneda.github.io/joyn/reference/rename_to_valid.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/report_from_attr.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/right_join.html</loc>
   </url>
   <url>
@@ -148,6 +160,9 @@
     <loc>https://randrescastaneda.github.io/joyn/reference/split_match_type.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/store_joyn_msg.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/store_msg.html</loc>
   </url>
   <url>
@@ -155,6 +170,12 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/type_choices.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/unmask_joyn.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/unmask_joyn_fun_ns.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/unmatched_keys.html</loc>
