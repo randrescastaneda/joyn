@@ -27,7 +27,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -173,7 +173,7 @@ and <code>y1</code>.</p>
 <span>     y <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span> <span class="op">)</span> <span class="co">#Note RT: remove this argument once fixing the default value</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -264,7 +264,7 @@ in the <code>by</code> argument</p>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -283,7 +283,7 @@ to join on different variables between <code>x</code> and
 <span>     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id1 = id"</span>, <span class="st">"id2"</span><span class="op">)</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;      id1   id2     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1     1    16    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     2     1    NA    NA      x</span></span>
@@ -335,7 +335,7 @@ ensure the output is correct.</p>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -350,7 +350,7 @@ ensure the output is correct.</p>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;        id     v   foo     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:      c     8     4    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:      c     8     4    18  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:      b     9     2    15  x &amp; y</span></span>
@@ -365,7 +365,7 @@ ensure the output is correct.</p>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     4     2    12    NA    NA      x</span></span>
 <span><span class="co">#&gt; 3:     2     1    NA     2    15  x &amp; y</span></span>
@@ -381,7 +381,7 @@ ensure the output is correct.</p>
 <span>     y <span class="op">=</span> <span class="va">y2</span>,</span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     4     2    12    NA    NA      x</span></span>
 <span><span class="co">#&gt; 3:     2     1    NA     2    15  x &amp; y</span></span>
@@ -398,7 +398,7 @@ ensure the output is correct.</p>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"1:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t country   gdp  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1      16    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     4     2      12    NA      x</span></span>
 <span><span class="co">#&gt; 3:     2     1       3    15  x &amp; y</span></span>
@@ -462,7 +462,7 @@ they match or not.</p>
 <span>     y          <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -484,7 +484,7 @@ in <code>x</code>, both matching and non, and only those observations in
 <span>     keep       <span class="op">=</span> <span class="st">"left"</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -505,7 +505,7 @@ in <code>x</code>, both matching and non, and only those observations in
 <span>     keep       <span class="op">=</span> <span class="st">"right"</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -520,7 +520,7 @@ observations that match in <em>both</em> tables.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, keep <span class="op">=</span> <span class="st">"inner"</span>, match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span></code></pre></div>
@@ -550,11 +550,16 @@ form in the <em>percent</em> column.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   33.3%</span></span>
+<span><span class="co">#&gt; 2     y 1   16.7%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3     50%</span></span>
+<span><span class="co">#&gt; 4 total 6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
 <span><span class="co">#&gt;        id     v   foo     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:      c     8     4    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:      c     8     4    18  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:      b     9     2    15  x &amp; y</span></span>

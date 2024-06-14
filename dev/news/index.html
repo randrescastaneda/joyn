@@ -10,7 +10,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9004</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.0.9007</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,12 +60,15 @@
 <ul><li><p>Add <code><a href="../reference/anti_join.html">anti_join()</a></code> function.</p></li>
 <li><p>Add <code><a href="../reference/unmask_joyn.html">unmask_joyn()</a></code> function to unmask <code>joyn</code> functions that mask <code>dplyr</code> equivalents.</p></li>
 <li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rathern than <code>m</code>.</p></li>
-<li><p>improve ineffciencies in deep copies with <code>m:m</code> joins</p></li>
+<li><p>improve inefficiencies in deep copies with <code>m:m</code> joins</p></li>
 <li><p>Replace <code>m:m</code> joins from <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge.data.table</a></code> to <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join</a></code>. Thanks to <a href="https://github.com/SebKrantz" class="external-link">@SebKrantz</a> for the suggestion (<a href="https://github.com/randrescastaneda/joyn/issues/58" class="external-link">#58</a>).</p></li>
 <li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rather than <code>m</code>.</p></li>
+<li><p>Internal: improve storing of joyn messages.</p></li>
+<li><p>Improve creation of reporting variable. Now, it is created in [collapse::join] rather than in <code>joyn</code> function. In addition, the reporting variable is created as factor to improve performance. Thanks to <a href="https://github.com/SebKrantz" class="external-link">@SebKrantz</a> for the suggestion (<a href="https://github.com/randrescastaneda/joyn/issues/58" class="external-link">#58</a>)</p></li>
 </ul><div class="section level3">
 <h3 id="breaking-changes-development-version">breaking changes<a class="anchor" aria-label="anchor" href="#breaking-changes-development-version"></a></h3>
-<ul><li>Now, by default, <code>joyn</code> will not sort the data. This is to avoid unnecessary computational time that most of the time is not needed. If the user wants to sort the data, they can use the <code>sort</code> argument, which triggers the sorting mechanism of <code>collapse</code> package.</li>
+<ul><li><p>Now, by default, <code>joyn</code> will not sort the data. This is to avoid unnecessary computational time that most of the time is not needed. If the user wants to sort the data, they can use the <code>sort</code> argument, which triggers the sorting mechanism of <code>collapse</code> package.</p></li>
+<li><p>report variable (named “.join” by default) is now a factor instead of character. Yet, users can still use character if they want with the <code>reporttype = "character"</code>.</p></li>
 </ul></div>
 </div>
     <div class="section level2">
