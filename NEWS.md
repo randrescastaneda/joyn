@@ -1,4 +1,4 @@
-# joyn (development version)
+# joyn 0.2.1
 
 
 * Add `anti_join()` function.
