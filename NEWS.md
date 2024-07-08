@@ -34,7 +34,6 @@ the sorting mechanism of `collapse` package.
 
 * `joyn` has gained two new authors: Zander Prinsloo and Rossana Tatulli.
 
-* Official [blog](https://blogs.worldbank.org/en/opendata/from-frustration-to-joyn--introducing-joyn-for-r--a-tool-for-sma) release
 
 ## Breaking changes
 
