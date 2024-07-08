@@ -1,5 +1,9 @@
 # joyn 0.2.1
 
+* Remove unmasking functions as we realized that they are not necessary. 
+
+# joyn 0.2.1 (Not in CRAN)
+
 
 * Add `anti_join()` function.
 

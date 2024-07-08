@@ -27,7 +27,7 @@ if (getRversion() >= "2.15.1") {
       'use_util_reportvar',
       'varx_na',
       'type',
-      "joyn1"
+      ".joyn1"
     ),
     package = utils::packageName()
   )
