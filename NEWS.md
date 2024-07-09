@@ -1,3 +1,5 @@
+# joyn 0.2.2
+
 # joyn 0.2.1
 
 * Remove unmasking functions as we realized that they are not necessary. 
