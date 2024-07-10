@@ -19,7 +19,7 @@ right_join(
   update_values = FALSE,
   update_NAs = update_values,
   reportvar = getOption("joyn.reportvar"),
-  reporttype = c("character", "numeric"),
+  reporttype = c("factor", "character", "numeric"),
   roll = NULL,
   keep_common_vars = FALSE,
   sort = TRUE,
@@ -168,7 +168,7 @@ will be added to the original name to distinguish from the resulting
 variable in the joined table.}
 
 \item{sort}{logical: If TRUE, sort by key variables in \code{by}. Default is
-TRUE.}
+FALSE.}
 
 \item{verbose}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}
@@ -218,6 +218,7 @@ right_join(x1, y1, relationship = "many-to-one")
 }
 \seealso{
 Other dplyr alternatives: 
+\code{\link{anti_join}()},
 \code{\link{full_join}()},
 \code{\link{inner_join}()},
 \code{\link{left_join}()}

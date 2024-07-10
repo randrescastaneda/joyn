@@ -1,6 +1,39 @@
+# joyn 0.2.2
+
+* Remove unmasking functions as we realized that they are not necessary. 
+
+# joyn 0.2.1 (Not in CRAN)
+
+
+* Add `anti_join()` function.
+
+* Add `unmask_joyn()` function to unmask `joyn` functions that mask `dplyr` equivalents.
+
+* Add information about duplicated obs in `by` variable when match type is `1` rathern than `m`. 
+
+* improve inefficiencies in deep copies with `m:m` joins
+
+* Replace `m:m` joins from `data.table::merge.data.table` to `collapse::join`. Thanks to @SebKrantz for the suggestion (#58).
+
+* Add information about duplicated obs in `by` variable when match type is `1` rather than `m`.
+
+* Internal: improve storing of joyn messages.
+
+* Improve creation of reporting variable. Now, it is created in [collapse::join] rather than in `joyn` function. In addition, the reporting variable is created as factor to improve performance. Thanks to @SebKrantz for the suggestion (#58)
+
+## breaking changes
+
+* Now, by default, `joyn` will not sort the data. This is to avoid unnecessary 
+computational time that most of the time is not needed. 
+If the user wants to sort the data, they can use the `sort` argument, which triggers 
+the sorting mechanism of `collapse` package.
+
+* report variable (named ".join" by default) is now a factor instead of character. Yet, users can still use character if they want with the `reporttype = "character"`.
+
 # joyn 0.2.0
 
-`joyn` has gained two new authors: Zander Prinsloo and Rossana Tatulli. 
+* `joyn` has gained two new authors: Zander Prinsloo and Rossana Tatulli.
+
 
 ## Breaking changes
 

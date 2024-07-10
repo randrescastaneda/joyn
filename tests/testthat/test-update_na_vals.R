@@ -50,7 +50,8 @@ df <- joyn(df1,
            keep_common_vars = TRUE,
            update_NAs       = FALSE,
            update_values    = FALSE,
-           reporttype       = "numeric")
+           reporttype       = "numeric",
+           sort = TRUE)
 
 #-------------------------------------------------------------------------------
 # TESTS
@@ -83,10 +84,6 @@ test_that("update_na_values -update NAs only", {
   which(res$.joyn == 4) |>
     expect_equal(which( is.na(dt$x.x) & !is.na(dt$x.y)))
 
-  # check updated values
-  res$x.x[5:7] |>
-    expect_equal(dt[5:7, x.y])
-
   # check output class
   inherits(res, "data.table") |>
     expect_equal(TRUE)
@@ -112,7 +109,8 @@ test_that("update_na_vals -update values of one var", {
     )
 
   # Check not updated values
-  dt[is.na(x.x) | is.na(x.y) | !.joyn == 3] |> fselect((id:x.y)) |>
+  dt |>
+    fsubset(is.na(x.x) | is.na(x.y) | !.joyn == 3) |> fselect((id:x.y)) |>
     expect_equal(res[!.joyn == 5,] |> fselect((id:x.y)))
   expect_true(!any(4 %in% res$.joyn))
 

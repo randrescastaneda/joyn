@@ -29,7 +29,7 @@
 #'   observations that matched in both tables and the ones that did not match in
 #'   y. The ones in x will be discarded. If *"inner"*, it only keeps the
 #'   observations that matched both tables. Note that if, for example, a `keep =
-#'   "left"`, the `joyn()` function still executes a full join under the hood
+#'   "left", the `joyn()` function still executes a full join under the hood
 #'   and then filters so that only rows the output table is a left join. This
 #'   behaviour, while inefficient, allows all the diagnostics and checks
 #'   conducted by `joyn`.
@@ -61,7 +61,7 @@
 #'   will be added to the original name to distinguish from the resulting
 #'   variable in the joined table.
 #' @param  sort logical: If TRUE, sort by key variables in `by`. Default is
-#'   TRUE.
+#'   FALSE.
 #' @param allow.cartesian logical: Check documentation in official [web
 #'   site](https://rdatatable.gitlab.io/data.table/reference/merge.html/).
 #'   Default is `NULL`, which implies that if the join is "1:1" it will be
@@ -157,15 +157,16 @@ joyn <- function(x,
                  by               = intersect(names(x), names(y)),
                  match_type       = c("1:1", "1:m", "m:1", "m:m"),
                  keep             = c("full", "left", "master",
-                                       "right", "using", "inner"),
-                 y_vars_to_keep   = TRUE,
+                                      "right", "using", "inner",
+                                      "anti"),
+                 y_vars_to_keep   = ifelse(keep == "anti", FALSE, TRUE),
                  update_values    = FALSE,
                  update_NAs       = update_values,
                  reportvar        = getOption("joyn.reportvar"),
-                 reporttype       = c("character", "numeric"),
+                 reporttype       = c("factor", "character", "numeric"),
                  roll             = NULL,
                  keep_common_vars = FALSE,
-                 sort             = TRUE,
+                 sort             = FALSE,
                  verbose          = getOption("joyn.verbose"),
                  suffixes         = getOption("joyn.suffixes"),
                  allow.cartesian  = deprecated(),
@@ -213,9 +214,6 @@ joyn <- function(x,
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   start_joyn <- Sys.time()
-    x <- copy(x)
-    y <- copy(y)
-
 
   ## X and Y -----------
   check_xy(x,y)
@@ -230,18 +228,70 @@ joyn <- function(x,
   # the resulting table should have the same class as the x table.
   class_x <- class(x)
 
-  # If match type is m:m we need to convert to data.table
-  if (match_type == "m:m") {
-    x <- as.data.table(x)
-    y <- as.data.table(y)
-  }
+  # ensure input names can be restored
+  correct_names <- correct_names(by = by,
+                                 x  = x,
+                                 y  = y,
+                                 order = FALSE)
+  byexp    <- correct_names$byexp
+  xbynames <- correct_names$xbynames
+  ybynames <- correct_names$ybynames
+  ynames   <- copy(names(y))
+
+  # maintain name that is bound to original inputs
+  x_original <- x
+  y_original <- y
 
   ## Modify BY when is expression ---------
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
+  # Change names back on exit
+  # Change names back for inputs------------------------------
+  on.exit(
+    expr = {
+      if (any(grepl(pattern = "keyby", x = names(x_original)))) {
+
+        knames <- names(x_original)[grepl(pattern = "keyby",
+                                          x       = names(x_original))]
+        knames <- knames[order(knames)]
+
+        data.table::setnames(x_original,
+                             old = knames,
+                             new = xbynames)
+      }
+
+      if (any(grepl(pattern = "keyby", x = names(y_original)))) {
+
+        knames <- names(y_original)[grepl(pattern = "keyby",
+                                          x       = names(y_original))]
+        knames <- knames[order(knames)]
+
+        data.table::setnames(y_original,
+                             old = knames,
+                             new = ybynames)
+
+        if (all(names(y_original) %in% ynames)) {
+          colorderv(y_original,
+                    neworder = ynames)
+        }
+      }
+    },
+    add = TRUE
+  )
+
   ## Check suffixes -------------
   check_suffixes(suffixes)
+
+  if (keep == "anti" &
+      (isTRUE(update_values) || isTRUE(update_NAs))) {
+
+    store_joyn_msg(warn = "cannot use arguments {.strongArg update_values = TRUE}
+                         and/or {.strongArg update_NAs = TRUE} for anti join")
+
+    update_values <- FALSE
+    update_NAs    <- FALSE
+  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #           Consistency of join   ---------
@@ -249,7 +299,6 @@ joyn <- function(x,
   mts <- check_match_type(x, y, by, match_type, verbose)
   tx  <- mts[1]
   ty  <- mts[2]
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Variables to keep in y   ---------
@@ -273,47 +322,19 @@ joyn <- function(x,
   #             include report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars ZP -------------------------------------
-  #yvars_w <- c(newyvars, ".yreport") # working yvars
-  x <- x |>
-    ftransform(.xreport = 1)
-  y <- y |>
-    ftransform(.yreport = 2)
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Actual merge   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  # simple merge
-  i.yvars <- paste0("i.", yvars_w)
-
-  # keep relevant variables in y
-  y <- y |> fselect(
-    by, yvars_w
-  )
-
-  if (
-    (keep == "anti" | keep == "semi") &
-    match_type == "m:m"
-  ) stop(
-    "Anti and semi joins cannot be performed on m:m joins at this stage"
-  )
-
-  # Perform workhorse join
-  x <- joyn_workhorse(
-    x          = x,
-    y          = y,
-    by         = by,
-    match_type = match_type,
-    suffixes   = suffixes
-  )
+  yvars_w <- y_vars_to_keep # working yvars
+  # yvars_w <- c(y_vars_to_keep, ".yreport") # working yvars
+  # x <- x |>
+  #   ftransform(.xreport = 1)
+  # y <- y |>
+  #   ftransform(.yreport = 2)
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Report variable   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   # replace NAs in report vars
-  setnafill(x, fill = 0, cols = c(".xreport", ".yreport"))
+  # setnafill(x, fill = 0, cols = c(".xreport", ".yreport"))
 
   # report variable
   dropreport <- FALSE
@@ -333,46 +354,39 @@ joyn <- function(x,
       check_names <- make.names(check_names, unique = TRUE)
       nrv         <- setdiff(check_names, xnames)
 
-      store_msg(type        = "info",
-                ok          = paste(cli::symbol$info, " Note:  "),
-                pale        = "reportvar",
-                bolded_pale = "  {reportvar}",
-                pale        = "  is already part of the resulting table. It will be changed to",
-                bolded_pale = " {nrv}")
+      store_joyn_msg(info = "reportvar {.strongVar {reportvar}}  is
+                     already part of the resulting table. It will be
+                     changed to {.strongVar {nrv}}")
+
       reportvar <- nrv
     }
   }
 
 
-  # report variable
-  collapse::settransform(x, use_util_report = .xreport + .yreport)
-  # Can this be done more efficiently with collapse?
-  data.table::setnames(x, "use_util_report", reportvar)
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Actual merge   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  # simple merge
+  i.yvars <- paste0("i.", yvars_w)
+
+  # keep relevant variables in y
+  y <- y |>
+    fselect(by, yvars_w)
+
+  # Perform workhorse join
+  jn <- joyn_workhorse(
+    x          = x,
+    y          = y,
+    by         = by,
+    suffixes   = suffixes,
+    sort       = sort,
+    reportvar  = reportvar
+  )
 
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Filter rows - `keep`   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  ## rows to keep -----
-  if (keep  %in% c("master", "left") ) {
-
-    x <- x |>
-      fsubset(get(reportvar)  != 2)
-
-  } else if (keep  %in% c("using", "right") ) {
-
-    x <- x |>
-      fsubset(get(reportvar)  != 1)
-
-  } else if (keep  == "inner") {
-
-    x <- x |>
-      fsubset(get(reportvar)  >= 3)
-  }
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Update x   ---------
+  #                   Update jn   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var_use <- NULL
   if (isTRUE(update_NAs) || isTRUE(update_values)) {
@@ -381,13 +395,38 @@ joyn <- function(x,
 
   if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
 
-    x <- update_na_values(dt           = x,
-                          var          = var_use,
-                          reportvar    = reportvar,
-                          suffixes     = suffixes,
-                          rep_NAs      = update_NAs,
-                          rep_values   = update_values
-    )
+    jn <- update_na_values(dt           = jn,
+                            var          = var_use,
+                            reportvar    = reportvar,
+                            suffixes     = suffixes,
+                            rep_NAs      = update_NAs,
+                            rep_values   = update_values
+      )
+
+  }
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Filter rows - `keep`   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  ## rows to keep -----
+  if (keep  %in% c("master", "left") ) {
+
+    jn <- jn |>
+      fsubset(get(reportvar)  != 2)
+
+  } else if (keep  %in% c("using", "right") ) {
+
+    jn <- jn |>
+      fsubset(get(reportvar)  != 1)
+
+  } else if (keep  == "inner") {
+
+    jn <- jn |>
+      fsubset(get(reportvar)  >= 3)
+  } else if (keep == "anti") {
+    jn <- jn |>
+      fsubset(get(reportvar) == 1)
   }
 
 
@@ -399,45 +438,60 @@ joyn <- function(x,
       gsub("\\.", "\\\\.", x = _) |>
       paste0("$")
 
-    varx <- grep(patterns[1], names(x), value = TRUE)
-    vary <- grep(patterns[2], names(x), value = TRUE)
+    varx <- grep(patterns[1], names(jn), value = TRUE)
+    vary <- grep(patterns[2], names(jn), value = TRUE)
 
     # delete Y vars with suffix
-    collapse::get_vars(x, vary) <- NULL
+    collapse::get_vars(jn, vary) <- NULL
 
     # remove suffixes
     nsvar <- gsub(patterns[1], "", varx)
-    data.table::setnames(x, varx, nsvar)
+    data.table::setnames(jn, varx, nsvar)
 
   }
-
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #              Display results and cleaning   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   ## cleaning temporary report variables ----
-  collapse::settransform(x,
-                         .xreport = NULL,
-                         .yreport = NULL)
+  # collapse::settransform(jn,
+  #                        .xreport = NULL,
+  #                        .yreport = NULL)
 
-
-  if (sort) {
-    setorderv(x, by, na.last = na.last)
-    setattr(x, 'sorted', by)
+  # Rename by variables -----
+  ## in output
+  if (any(grepl("keyby",names(jn)))) {
+    data.table::setnames(jn,
+                         old = names(jn)[grepl("keyby", names(jn))],
+                         new = xbynames)
   }
 
-  ## Rename by variables -----
 
-  if (!is.null(fixby$xby)) {
-    data.table::setnames(x, fixby$tempkey, fixby$xby)
-    by <- fixby$xby
-    # not necessary
-    # setnames(y, fixby$tempkey, fixby$yby)
+  # Report variable ----------
+  # no matching obs
+  if (all(jn[[reportvar]] %in% c(1, 2)) && !keep == "anti") {
+
+    store_joyn_msg(warn = " you have no matching obs. Make sure argument
+                           `by` is correct. Right now, `joyn` is joining by
+                           {.strongVar {by}}")
+
   }
-
 
   ## convert to characters if chosen -------
+
+  if (reporttype == "factor") {
+
+    get_vars(jn, reportvar) <-  factor(jn[[reportvar]],
+                                      levels = 1:6,
+                                      labels = c("x",
+                                                 "y",
+                                                 "x & y",
+                                                 "NA updated",
+                                                 "value updated",
+                                                 "not updated"))
+  }
+
   if (reporttype == "character") {
 
     rvar_to_chr <- \(x) {
@@ -450,53 +504,42 @@ joyn <- function(x,
                         default = "conflict")
     }
 
-    settransformv(x, reportvar, rvar_to_chr)
+    settransformv(jn, reportvar, rvar_to_chr)
 
   }
 
-  # no matching obs
-  if (all(x[[reportvar]] %in% c("x", "y")) ||
-      all(x[[reportvar]] %in% c(1, 2))) {
-
-    store_msg("warn",
-              warn = paste(cli::symbol$warning, "  Warning:"),
-              pale = " you have no matchig obs. Make sure argument
-                     `by` is correct. Right now, `joyn` is joining by
-                     {.code {by}}")
-  }
 
   ## Display results------
   # freq table
-  d <- freq_table(x, reportvar)
+  #
+  if (update_NAs || update_values) {
+    d <- freq_table(jn, reportvar)
+  } else {
+    d <- report_from_attr(jn, y, reportvar)
+  }
+  # remove collapse::join attributes
+  attr(jn, "join.match") <- NULL
+
   rlang::env_poke(.joynenv, "freq_joyn", d)
 
   # Report var
   if (dropreport) {
-    get_vars(x, reportvar) <- NULL
+    get_vars(jn, reportvar) <- NULL
   }
 
   # store timing
   end_joyn <- Sys.time()
   time_taken_joyn <- end_joyn - start_joyn
-  store_msg(
-    type    = "timing",
-    timing  = paste(cli::symbol$record, "  Timing:"),
-    pale    = "  The entire joyn function, including checks,
-    is executed in  ",
-    timing  = round(time_taken_joyn, 6),
-    pale    = "  seconds"
-  )
 
+  store_joyn_msg(timing = paste("  The entire joyn function, including checks,
+    is executed in  ", round(time_taken_joyn, 6)))
 
   # return messages
-  if (verbose == TRUE) {
-    cli::cli_h2("JOYn Report")
-    joyn_report()
-    cli::cli_rule(right = "End of {.field JOYn} report")
-    joyn_msg(msg_type)
-  }
+  joyn_report(verbose = verbose)
+  if (verbose == TRUE) joyn_msg(msg_type)
 
-  setattr(x, "class", class_x)
-  x
+  setattr(jn, "class", class_x)
+
+  jn
 
 }

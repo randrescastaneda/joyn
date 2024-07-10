@@ -26,7 +26,8 @@ if (getRversion() >= "2.15.1") {
       ".yreport",
       'use_util_reportvar',
       'varx_na',
-      'type'
+      'type',
+      ".joyn1"
     ),
     package = utils::packageName()
   )

@@ -12,7 +12,7 @@ performs a number of checks, and filters to allow the user-specified join."><!--
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,8 @@ performs a number of checks, and filters to allow the user-specified join."><!--
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
-    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
+    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr joins wrappers</a>
+    <a class="dropdown-item" href="../articles/merge-wrapper.html">`data.table::merge()` wrapper</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -40,7 +41,7 @@ performs a number of checks, and filters to allow the user-specified join."><!--
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="nav-link" href="https://rossanatat.github.io/joyn/">
+  <a class="external-link nav-link" href="https://github.com/randrescastaneda/joyn/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -83,7 +84,8 @@ performs a number of checks, and filters to allow the user-specified join.</p>
 <span>  allow.cartesian <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  yvars <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
 <span>  keep_y_in_x <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
-<span>  na.last <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.na.last"</span><span class="op">)</span></span>
+<span>  na.last <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.na.last"</span><span class="op">)</span>,</span>
+<span>  msg_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.msg_type"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -218,6 +220,10 @@ By specifying <code>TRUE</code> of <code>FALSE</code> you force the behavior of 
 default is <code>TRUE</code>. <code>setorder</code> and <code>setorderv</code> only accept
 <code>TRUE</code>/<code>FALSE</code> with default <code>FALSE</code>.</p></dd>
 
+
+<dt>msg_type</dt>
+<dd><p>character: type of messages to display by default</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -291,124 +297,124 @@ The Default is <code>FALSE</code> as it is the default value of
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     x 2     40%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: x &amp; y 3     60%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: total 5    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     2     40%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     3     60%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  total     5    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">5.4e-05</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.037525</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id  t  x  y .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA NA 15 NA     x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  1  1 11 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  1  2 12 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  2  1 13 15 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  3  2 14 NA     x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x     y  .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    11    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    13    15  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    14    NA      x</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Bad merge for not specifying by argument or match_type</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     x 4   44.4%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: x &amp; y 1   11.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     y 4   44.4%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: total 9    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     4   44.4%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     1   11.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      y     4   44.4%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  total     9    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and x</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000114</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.039942</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id  t  x yd  y .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA NA 15 NA NA     x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  1  2 12 NA NA     x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  1  1 16  1 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  2  1 NA NA NA     x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  2 NA 17  2 15     y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:  3  2 NA NA NA     x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  3 NA 20  3 10     y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:  5 NA 18  5 20     y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9:  6 NA 19  6 13     y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id, x&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y  .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     1    16     1    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    NA    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     2    NA    17     2    15      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     3     2    NA    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:     3    NA    20     3    10      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:     5    NA    18     5    20      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:     6    NA    19     6    13      y</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># good merge, ignoring variable x from y</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     x 1   14.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2: x &amp; y 4   57.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     y 2   28.6%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4: total 7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     1   14.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     4   57.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      y     2   28.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  total     7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000138</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.057123</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id  t  x yd  y .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA NA 15 NA NA     x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  1  1 16  1 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  1  2 12  1 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  2  1 NA  2 15 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  3  2 NA  3 10 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:  5 NA NA  5 20     y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  6 NA NA  6 13     y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y  .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    16     1    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12     1    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    NA     2    15  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    NA     3    10  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     5    NA    NA     5    20      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:     6    NA    NA     6    13      y</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># update NAs in x variable form x</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, update_NAs <span class="op">=</span> <span class="cn">TRUE</span>, match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA updated 4   57.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:          x 1   14.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      x &amp; y 2   28.6%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      total 7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA updated     4   57.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:          x     1   14.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      x &amp; y     2   28.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      total     7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">1e-04</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.038754</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id  t  x yd  y      .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA NA 15 NA NA          x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  1  1 16  1 11      x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  1  2 12  1 11      x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  2  1 17  2 15 NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  3  2 20  3 10 NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:  5 NA 18  5 20 NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  6 NA 19  6 13 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y      .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA          x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    16     1    11      x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12     1    11      x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    17     2    15 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    20     3    10 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     5    NA    18     5    20 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:     6    NA    19     6    13 NA updated</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Update values in x with variables from y</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, update_values <span class="op">=</span> <span class="cn">TRUE</span>, match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA updated 4   57.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   not updated 1   14.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: value updated 2   28.6%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:         total 7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>            .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA updated     4   57.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   not updated     1   14.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3: value updated     2   28.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:         total     7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">9.7e-05</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.05649</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id  t  x yd  y         .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA NA 15 NA NA   not updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  1  1 16  1 11 value updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  1  2 16  1 11 value updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  2  1 17  2 15    NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:  3  2 20  3 10    NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:  5 NA 18  5 20    NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:  6 NA 19  6 13    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y         .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;        &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA   not updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    16     1    11 value updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    16     1    11 value updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    17     2    15    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    20     3    10    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     5    NA    18     5    20    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:     6    NA    19     6    13    NA updated</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>
@@ -417,7 +423,7 @@ The Default is <code>FALSE</code> as it is the default value of
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">

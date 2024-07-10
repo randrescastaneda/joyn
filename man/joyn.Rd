@@ -9,15 +9,15 @@ joyn(
   y,
   by = intersect(names(x), names(y)),
   match_type = c("1:1", "1:m", "m:1", "m:m"),
-  keep = c("full", "left", "master", "right", "using", "inner"),
-  y_vars_to_keep = TRUE,
+  keep = c("full", "left", "master", "right", "using", "inner", "anti"),
+  y_vars_to_keep = ifelse(keep == "anti", FALSE, TRUE),
   update_values = FALSE,
   update_NAs = update_values,
   reportvar = getOption("joyn.reportvar"),
-  reporttype = c("character", "numeric"),
+  reporttype = c("factor", "character", "numeric"),
   roll = NULL,
   keep_common_vars = FALSE,
-  sort = TRUE,
+  sort = FALSE,
   verbose = getOption("joyn.verbose"),
   suffixes = getOption("joyn.suffixes"),
   allow.cartesian = deprecated(),
@@ -57,10 +57,7 @@ that matched in both tables and the ones that did not match in x. The ones
 in y will be discarded. If \emph{"right"} or \emph{"using"}, it keeps the
 observations that matched in both tables and the ones that did not match in
 y. The ones in x will be discarded. If \emph{"inner"}, it only keeps the
-observations that matched both tables. Note that if, for example, a \code{keep = "left"}, the \code{joyn()} function still executes a full join under the hood
-and then filters so that only rows the output table is a left join. This
-behaviour, while inefficient, allows all the diagnostics and checks
-conducted by \code{joyn}.}
+observations that matched both tables. Note that if, for example, a \verb{keep = "left", the }joyn()\verb{function still executes a full join under the hood and then filters so that only rows the output table is a left join. This behaviour, while inefficient, allows all the diagnostics and checks conducted by}joyn`.}
 
 \item{y_vars_to_keep}{character: Vector of variable names in \code{y} that will be
 kept after the merge. If TRUE (the default), it keeps all the brings all
@@ -96,7 +93,7 @@ will be added to the original name to distinguish from the resulting
 variable in the joined table.}
 
 \item{sort}{logical: If TRUE, sort by key variables in \code{by}. Default is
-TRUE.}
+FALSE.}
 
 \item{verbose}{logical: if FALSE, it won't display any message (programmer's
 option). Default is TRUE.}

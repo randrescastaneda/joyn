@@ -2,14 +2,15 @@
 % Please edit documentation in R/joyn_workhorse.R
 \name{joyn_workhorse}
 \alias{joyn_workhorse}
-\title{Internal workhorse join function, used in the backend of \code{joyn}}
+\title{Internal workhorse join function, used in the back-end of \code{joyn}}
 \usage{
 joyn_workhorse(
   x,
   y,
   by = intersect(names(x), names(y)),
-  match_type = c("1:1"),
-  suffixes = getOption("joyn.suffixes")
+  sort = FALSE,
+  suffixes = getOption("joyn.suffixes"),
+  reportvar = getOption("joyn.reportvar")
 )
 }
 \arguments{
@@ -19,12 +20,10 @@ joyn_workhorse(
 
 \item{by}{atomic character vector: key specifying join}
 
-\item{match_type}{atomic character vector of length 1: either "1:1" (default)
-"1:m", "m:1", or "m:m". If "m:m" then executes \code{data.table::merge.data.table}
-in the backend, otherwise uses \code{collapse::join()}}
-
-\item{suffixes}{atomic character vector: give suffixes to columns common to both
+\item{sort}{logical: sort the result by the columns in \code{by}
 \code{x} and \code{y}}
+
+\item{suffixes}{atomic character vector: give suffixes to columns common to both}
 }
 \value{
 data object of same class as \code{x}

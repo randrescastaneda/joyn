@@ -1,7 +1,7 @@
 Package: joyn
 Type: Package
 Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
-Version: 0.2.0
+Version: 0.2.2
 Authors@R: c(person(given = "R.Andres", 
                     family = "Castaneda", 
                     email = "acastanedaa@worldbank.org",
@@ -20,7 +20,7 @@ Description: Tool for diagnosing table joins. It combines the speed of `collapse
      of the `merge` command in `Stata`.
 License: MIT + file LICENSE
 Encoding: UTF-8
-URL: https://github.com/randrescastaneda/joyn, https://rossanatat.github.io/joyn/
+URL: https://github.com/randrescastaneda/joyn, https://randrescastaneda.github.io/joyn/
 BugReports: https://github.com/randrescastaneda/joyn/issues
 Suggests: 
     badger,
@@ -37,7 +37,7 @@ Imports:
     data.table,
     cli,
     utils,
-    collapse (>= 2.0.9),
+    collapse (>= 2.0.15),
     lifecycle
 Depends: 
     R (>= 2.10)

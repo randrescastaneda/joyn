@@ -103,16 +103,13 @@ Furthermore, `joyn` provides a function that generates simple frequency tables, 
 # Tabulating frequencies of var `id`
 
 freq_table(x     = x1, 
-           byvar = "id")
+           byvar = "id")[]
 
 # Removing NAs from the calculation
 
 freq_table(x     = x1, 
            byvar = "id", 
-           na.rm = TRUE)
+           na.rm = TRUE)[]
 
 
 ```
-
-## Renaming variables
-TODO: Check why rename_to_valid is exported 

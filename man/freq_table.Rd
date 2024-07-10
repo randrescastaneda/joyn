@@ -4,7 +4,7 @@
 \alias{freq_table}
 \title{Tabulate simple frequencies}
 \usage{
-freq_table(x, byvar, digits = 1, na.rm = TRUE)
+freq_table(x, byvar, digits = 1, na.rm = FALSE)
 }
 \arguments{
 \item{x}{data frame}
@@ -13,7 +13,7 @@ freq_table(x, byvar, digits = 1, na.rm = TRUE)
 
 \item{digits}{numeric: number of decimal places to display. Default is 1.}
 
-\item{na.rm}{logical: if TRUE remove NAs from calculations. Default is TRUE}
+\item{na.rm}{logical: report NA values in frequencies. Default is FALSE.}
 }
 \value{
 data.table with frequencies.

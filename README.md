@@ -2,20 +2,14 @@
 # joyn
 
 <!-- badges: start -->
-<!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg/)](https://github.com/randrescastaneda/joyn/actions/) -->
 
 [![CRAN
 checks](https://badges.cranchecks.info/summary/joyn.svg)](https://cran.r-project.org/web/checks/check_results_joyn.html)
 [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
-[![](https://img.shields.io/badge/devel%20version-0.2.0-blue.svg)](https://github.com/randrescastaneda/joyn)
-[![](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://codecov.io/gh/randrescastaneda/joyn)
+[![](https://img.shields.io/badge/devel%20version-0.2.1-blue.svg)](https://github.com/randrescastaneda/joyn)
+[![](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn)
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
-<!-- [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing) -->
-<!-- [![codecov](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn?branch=master) -->
 
-<!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
-<!-- [![](https://img.shields.io/badge/devel%20version-0.2.0-blue.svg)](https://github.com/randrescastaneda/joyn) -->
-<!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml) -->
 <!-- badges: end -->
 
 `joyn` empowers you to assess the results of joining data frames, making
@@ -200,23 +194,21 @@ joyn(x = x1,
 #> 
 #> ── JOYn Report ──
 #> 
-#>     .joyn     n percent
-#>    <char> <int>  <char>
-#> 1:      x     2   33.3%
-#> 2:  x & y     3     50%
-#> 3:      y     1   16.7%
-#> 4:  total     6    100%
+#>   .joyn n percent
+#> 1     x 2   33.3%
+#> 2     y 1   16.7%
+#> 3 x & y 3     50%
+#> 4 total 6    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> ℹ ❯ Removing key variables id from id and y
-#> Key: <id>
+#> ℹ Note: Joyn's report available in variable .joyn
+#> ℹ Note: Removing key variables id from id and y
 #>       id     t     x     y  .joyn
-#>    <num> <int> <int> <num> <char>
-#> 1:    NA    NA    15    NA      x
-#> 2:     1     1    11    11  x & y
-#> 3:     1     2    12    11  x & y
-#> 4:     2     1    13    15  x & y
-#> 5:     3     2    14    NA      x
+#>    <num> <int> <int> <num> <fctr>
+#> 1:     1     1    11    11  x & y
+#> 2:     1     2    12    11  x & y
+#> 3:     2     1    13    15  x & y
+#> 4:     3     2    14    NA      x
+#> 5:    NA    NA    15    NA      x
 #> 6:     4    NA    NA    16      y
 
 # keep just those observations that match
@@ -227,16 +219,15 @@ joyn(x = x1,
 #> 
 #> ── JOYn Report ──
 #> 
-#>     .joyn     n percent
-#>    <char> <int>  <char>
-#> 1:  x & y     3    100%
-#> 2:  total     3    100%
+#>   .joyn n percent
+#> 1     x 2   66.7%
+#> 2     y 1   33.3%
+#> 3 total 3    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> ℹ ❯ Removing key variables id from id and y
-#> Key: <id>
+#> ℹ Note: Joyn's report available in variable .joyn
+#> ℹ Note: Removing key variables id from id and y
 #>       id     t     x     y  .joyn
-#>    <num> <int> <int> <num> <char>
+#>    <num> <int> <int> <num> <fctr>
 #> 1:     1     1    11    11  x & y
 #> 2:     1     2    12    11  x & y
 #> 3:     2     1    13    15  x & y
@@ -248,27 +239,25 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>     .joyn     n percent
-#>    <char> <int>  <char>
-#> 1:      x     4   44.4%
-#> 2:  x & y     1   11.1%
-#> 3:      y     4   44.4%
-#> 4:  total     9    100%
+#>   .joyn n percent
+#> 1     x 4   44.4%
+#> 2     y 4   44.4%
+#> 3 x & y 1   11.1%
+#> 4 total 9    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> ℹ ❯ Removing key variables id and x from id, yd, y, and x
-#> Key: <id, x>
+#> ℹ Note: Joyn's report available in variable .joyn
+#> ℹ Note: Removing key variables id and x from id, yd, y, and x
 #>       id     t     x    yd     y  .joyn
-#>    <num> <int> <num> <num> <int> <char>
-#> 1:    NA    NA    15    NA    NA      x
-#> 2:     1     1    16     1    11  x & y
+#>    <num> <int> <num> <num> <int> <fctr>
+#> 1:     1     1    16     1    11  x & y
+#> 2:     4     2    12    NA    NA      x
 #> 3:     2     1    NA    NA    NA      x
-#> 4:     2    NA    17     2    15      y
-#> 5:     3     2    NA    NA    NA      x
-#> 6:     3    NA    20     3    10      y
-#> 7:     4     2    12    NA    NA      x
-#> 8:     5    NA    18     5    20      y
-#> 9:     6    NA    19     6    13      y
+#> 4:     3     2    NA    NA    NA      x
+#> 5:    NA    NA    15    NA    NA      x
+#> 6:     2    NA    17     2    15      y
+#> 7:     5    NA    18     5    20      y
+#> 8:     6    NA    19     6    13      y
+#> 9:     3    NA    20     3    10      y
 
 # good merge, ignoring variable x from y
 joyn(x = x2, 
@@ -278,23 +267,21 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>     .joyn     n percent
-#>    <char> <int>  <char>
-#> 1:      x     2   28.6%
-#> 2:  x & y     3   42.9%
-#> 3:      y     2   28.6%
-#> 4:  total     7    100%
+#>   .joyn n percent
+#> 1     x 2   28.6%
+#> 2     y 2   28.6%
+#> 3 x & y 3   42.9%
+#> 4 total 7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> Key: <id>
+#> ℹ Note: Joyn's report available in variable .joyn
+#> ℹ Note: Removing key variables id from id, yd, y, and x
 #>       id     t     x    yd     y  .joyn
-#>    <num> <int> <num> <num> <int> <char>
-#> 1:    NA    NA    15    NA    NA      x
-#> 2:     1     1    16     1    11  x & y
+#>    <num> <int> <num> <num> <int> <fctr>
+#> 1:     1     1    16     1    11  x & y
+#> 2:     4     2    12    NA    NA      x
 #> 3:     2     1    NA     2    15  x & y
 #> 4:     3     2    NA     3    10  x & y
-#> 5:     4     2    12    NA    NA      x
+#> 5:    NA    NA    15    NA    NA      x
 #> 6:     5    NA    NA     5    20      y
 #> 7:     6    NA    NA     6    13      y
 
@@ -306,23 +293,21 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>         .joyn     n percent
-#>        <char> <int>  <char>
-#> 1: NA updated     4   57.1%
-#> 2:          x     2   28.6%
-#> 3:      x & y     1   14.3%
-#> 4:      total     7    100%
+#>        .joyn n percent
+#> 1          x 2   28.6%
+#> 2      x & y 1   14.3%
+#> 3 NA updated 4   57.1%
+#> 4      total 7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> Key: <id>
+#> ℹ Note: Joyn's report available in variable .joyn
+#> ℹ Note: Removing key variables id from id, yd, y, and x
 #>       id     t     x    yd     y      .joyn
-#>    <num> <int> <num> <num> <int>     <char>
-#> 1:    NA    NA    15    NA    NA          x
-#> 2:     1     1    16     1    11      x & y
+#>    <num> <int> <num> <num> <int>     <fctr>
+#> 1:     1     1    16     1    11      x & y
+#> 2:     4     2    12    NA    NA          x
 #> 3:     2     1    17     2    15 NA updated
 #> 4:     3     2    20     3    10 NA updated
-#> 5:     4     2    12    NA    NA          x
+#> 5:    NA    NA    15    NA    NA          x
 #> 6:     5    NA    18     5    20 NA updated
 #> 7:     6    NA    19     6    13 NA updated
 
@@ -334,23 +319,21 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>            .joyn     n percent
-#>           <char> <int>  <char>
-#> 1:    NA updated     4   57.1%
-#> 2:   not updated     2   28.6%
-#> 3: value updated     1   14.3%
-#> 4:         total     7    100%
+#>           .joyn n percent
+#> 1    NA updated 4   57.1%
+#> 2 value updated 1   14.3%
+#> 3   not updated 2   28.6%
+#> 4         total 7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> ℹ ❯ Removing key variables id from id, yd, y, and x
-#> Key: <id>
+#> ℹ Note: Joyn's report available in variable .joyn
+#> ℹ Note: Removing key variables id from id, yd, y, and x
 #>       id     t     x    yd     y         .joyn
-#>    <num> <int> <num> <num> <int>        <char>
-#> 1:    NA    NA    15    NA    NA   not updated
-#> 2:     1     1    16     1    11 value updated
+#>    <num> <int> <num> <num> <int>        <fctr>
+#> 1:     1     1    16     1    11 value updated
+#> 2:     4     2    12    NA    NA   not updated
 #> 3:     2     1    17     2    15    NA updated
 #> 4:     3     2    20     3    10    NA updated
-#> 5:     4     2    12    NA    NA   not updated
+#> 5:    NA    NA    15    NA    NA   not updated
 #> 6:     5    NA    18     5    20    NA updated
 #> 7:     6    NA    19     6    13    NA updated
 
@@ -363,22 +346,20 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>     .joyn     n percent
-#>    <char> <int>  <char>
-#> 1:      x     2   28.6%
-#> 2:  x & y     3   42.9%
-#> 3:      y     2   28.6%
-#> 4:  total     7    100%
+#>   .joyn n percent
+#> 1     x 2   28.6%
+#> 2     y 2   28.6%
+#> 3 x & y 3   42.9%
+#> 4 total 7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
-#> ℹ ❯ Joyn's report available in variable .joyn
-#> Key: <id>
+#> ℹ Note: Joyn's report available in variable .joyn
 #>       id     t     x  .joyn
-#>    <num> <int> <num> <char>
-#> 1:    NA    NA    15      x
-#> 2:     1     1    16  x & y
+#>    <num> <int> <num> <fctr>
+#> 1:     1     1    16  x & y
+#> 2:     4     2    12      x
 #> 3:     2     1    NA  x & y
 #> 4:     3     2    NA  x & y
-#> 5:     4     2    12      x
+#> 5:    NA    NA    15      x
 #> 6:     5    NA    NA      y
 #> 7:     6    NA    NA      y
 ```

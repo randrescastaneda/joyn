@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +43,8 @@
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
-    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
+    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr joins wrappers</a>
+    <a class="dropdown-item" href="../articles/merge-wrapper.html">`data.table::merge()` wrapper</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -58,7 +59,7 @@
 
       <ul class="navbar-nav">
 <li class="nav-item">
-  <a class="nav-link" href="https://rossanatat.github.io/joyn/">
+  <a class="external-link nav-link" href="https://github.com/randrescastaneda/joyn/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -85,7 +86,12 @@
     
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn" class="external-link">joyn</a></span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn" class="external-link">joyn</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Attaching package: 'joyn'</span></span>
+<span><span class="co">#&gt; The following object is masked from 'package:base':</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;     merge</span></span></code></pre></div>
 <div class="section level2">
 <h2 id="overview">Overview<a class="anchor" aria-label="anchor" href="#overview"></a>
 </h2>
@@ -108,6 +114,7 @@ instead.</p>
 <code class="sourceCode R"><span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/randrescastaneda/joyn" class="external-link">joyn</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'data.table' was built under R version 4.3.3</span></span>
 <span></span>
 <span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
 <span>                 t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
@@ -165,13 +172,15 @@ and <code>y1</code>.</p>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>,</span>
 <span>     y <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span> <span class="op">)</span> <span class="co">#Note RT: remove this argument once fixing the default value</span></span>
-<span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  3  2 14 NA     x</span></span>
-<span><span class="co">#&gt; 6:  4 NA NA 16     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span></code></pre></div>
 <p>The output table is the result of a <em>full join</em> -which is what
 <code>joyn</code> always executes by the default. This means that the
 returning table will retains both matching and non matching rows from
@@ -255,13 +264,15 @@ in the <code>by</code> argument</p>
 <span>     y <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  3  2 14 NA     x</span></span>
-<span><span class="co">#&gt; 6:  4 NA NA 16     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span></code></pre></div>
 <p>If you don’t want to join by all variables in common between
 <code>x</code> and <code>y</code>, you can alternately use equivalency
 as an element of <code>by</code> vector. This specification allows you
@@ -273,15 +284,17 @@ to join on different variables between <code>x</code> and
 <span>     y <span class="op">=</span> <span class="va">y4</span>, </span>
 <span>     by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"id1 = id"</span>, <span class="st">"id2"</span><span class="op">)</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id1 id2  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1:   1   1  1 16 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 2:   1   1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:   2   2  1 NA NA     x</span></span>
-<span><span class="co">#&gt; 4:   2   1 NA NA 15     y</span></span>
-<span><span class="co">#&gt; 5:   3   3  2 NA NA     x</span></span>
-<span><span class="co">#&gt; 6:   3   4 NA 15 10 x &amp; y</span></span>
-<span><span class="co">#&gt; 7:   5   2 NA NA 20     y</span></span>
-<span><span class="co">#&gt; 8:   6   3 NA NA 13     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id1, id2&gt;</span></span>
+<span><span class="co">#&gt;      id1   id2     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1     1    16    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    NA    NA    15      y</span></span>
+<span><span class="co">#&gt; 4:     2     2     1    NA    NA      x</span></span>
+<span><span class="co">#&gt; 5:     3     3     2    NA    NA      x</span></span>
+<span><span class="co">#&gt; 6:     3     4    NA    15    10  x &amp; y</span></span>
+<span><span class="co">#&gt; 7:     5     2    NA    NA    20      y</span></span>
+<span><span class="co">#&gt; 8:     6     3    NA    NA    13      y</span></span></code></pre></div>
 <p>Also, notice that <code>joyn</code> will <code>sort</code> the
 resulting table by key variables in <code>by</code>. This is because
 <code>sort = TRUE</code> by default.</p>
@@ -324,54 +337,62 @@ ensure the output is correct.</p>
 <span>     y <span class="op">=</span> <span class="va">y1</span>,</span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  3  2 14 NA     x</span></span>
-<span><span class="co">#&gt; 6:  4 NA NA 16     y</span></span>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span>
 <span></span>
 <span><span class="co"># Many to many match type</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x3</span>,</span>
 <span>     y <span class="op">=</span> <span class="va">y3</span>,</span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  v foo  y .joyn</span></span>
-<span><span class="co">#&gt; 1:  a NA  NA 20     y</span></span>
-<span><span class="co">#&gt; 2:  b  9   2 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  c  8   4 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  c  8   4 18 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  d 10   7 NA     x</span></span>
-<span><span class="co">#&gt; 6:  d 11   3 NA     x</span></span>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;        id     v   foo     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      a    NA    NA    20      y</span></span>
+<span><span class="co">#&gt; 2:      b     9     2    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:      c     8     4    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:      c     8     4    18  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:      d    10     7    NA      x</span></span>
+<span><span class="co">#&gt; 6:      d    11     3    NA      x</span></span>
 <span></span>
 <span><span class="co"># One to one match type - the default</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x2</span>,</span>
 <span>     y <span class="op">=</span> <span class="va">y2</span>,</span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x yd  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 16  1 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1 NA  2 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  3  2 NA  3 10 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  4  2 12 NA NA     x</span></span>
-<span><span class="co">#&gt; 6:  5 NA NA  5 20     y</span></span>
-<span><span class="co">#&gt; 7:  6 NA NA  6 13     y</span></span>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    16     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    NA     2    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    NA     3    10  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     4     2    12    NA    NA      x</span></span>
+<span><span class="co">#&gt; 6:     5    NA    NA     5    20      y</span></span>
+<span><span class="co">#&gt; 7:     6    NA    NA     6    13      y</span></span>
 <span></span>
 <span><span class="co"># Same join as:</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x2</span>,</span>
 <span>     y <span class="op">=</span> <span class="va">y2</span>,</span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x yd  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 16  1 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1 NA  2 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  3  2 NA  3 10 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  4  2 12 NA NA     x</span></span>
-<span><span class="co">#&gt; 6:  5 NA NA  5 20     y</span></span>
-<span><span class="co">#&gt; 7:  6 NA NA  6 13     y</span></span>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    16     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    NA     2    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    NA     3    10  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     4     2    12    NA    NA      x</span></span>
+<span><span class="co">#&gt; 6:     5    NA    NA     5    20      y</span></span>
+<span><span class="co">#&gt; 7:     6    NA    NA     6    13      y</span></span>
 <span></span>
 <span></span>
 <span><span class="co"># One to many match type </span></span>
@@ -379,14 +400,16 @@ ensure the output is correct.</p>
 <span>     y <span class="op">=</span> <span class="va">y5</span>,</span>
 <span>     by <span class="op">=</span> <span class="st">"id"</span>,</span>
 <span>     match_type <span class="op">=</span> <span class="st">"1:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t country gdp .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA      15  NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1      16  11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1       3  15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  2  1       3  20 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  3  2      NA  10 x &amp; y</span></span>
-<span><span class="co">#&gt; 6:  4  2      12  NA     x</span></span>
-<span><span class="co">#&gt; 7:  6 NA      NA  13     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t country   gdp  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt;   &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA      15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1      16    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1       3    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     2     1       3    20  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     3     2      NA    10  x &amp; y</span></span>
+<span><span class="co">#&gt; 6:     4     2      12    NA      x</span></span>
+<span><span class="co">#&gt; 7:     6    NA      NA    13      y</span></span></code></pre></div>
 <p>However, if are unsure/wrong about the relationships between the
 observations in your tables, <code>joyn</code> will let you know that
 something is not right. Suppose you think your data is uniquely
@@ -443,13 +466,15 @@ they match or not.</p>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x          <span class="op">=</span> <span class="va">x1</span>, </span>
 <span>     y          <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  3  2 14 NA     x</span></span>
-<span><span class="co">#&gt; 6:  4 NA NA 16     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span></code></pre></div>
 </li>
 <li>
 <p><strong><code>keep = "left"</code></strong> or
@@ -464,12 +489,14 @@ in <code>x</code>, both matching and non, and only those observations in
 <span>     y          <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>     keep       <span class="op">=</span> <span class="st">"left"</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1: NA NA 15 NA     x</span></span>
-<span><span class="co">#&gt; 2:  1  1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  3  2 14 NA     x</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
+<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span></code></pre></div>
 </li>
 <li>
 <p><strong><code>keep = "right"</code></strong> or
@@ -484,11 +511,13 @@ in <code>x</code>, both matching and non, and only those observations in
 <span>     y          <span class="op">=</span> <span class="va">y1</span>,</span>
 <span>     keep       <span class="op">=</span> <span class="st">"right"</span>, </span>
 <span>     match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1:  1  1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 2:  1  2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  4 NA NA 16     y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     4    NA    NA    16      y</span></span></code></pre></div>
 </li>
 <li>
 <p><strong><code>keep = "inner"</code></strong> keeps only those
@@ -498,10 +527,12 @@ observations that match in <em>both</em> tables.</p>
 <span><span class="co"># keep matching obs in both tables</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, keep <span class="op">=</span> <span class="st">"inner"</span>, match_type <span class="op">=</span> <span class="st">"m:m"</span><span class="op">)</span></span>
-<span><span class="co">#&gt;    id t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 1:  1 1 11 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 2:  1 2 12 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  2 1 13 15 x &amp; y</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span></code></pre></div>
 </li>
 </ul>
 </div>
@@ -528,24 +559,18 @@ form in the <em>percent</em> column.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    .joyn n percent</span></span>
-<span><span class="co">#&gt; 1:     x 2   33.3%</span></span>
-<span><span class="co">#&gt; 2: x &amp; y 3     50%</span></span>
-<span><span class="co">#&gt; 3:     y 1   16.7%</span></span>
-<span><span class="co">#&gt; 4: total 6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.019223</span><span style="color: #9E9E9E;"> seconds</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.084579</span></span></span>
-<span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds</span></span></span>
-<span><span class="co">#&gt;    id  v foo  y .joyn</span></span>
-<span><span class="co">#&gt; 1:  a NA  NA 20     y</span></span>
-<span><span class="co">#&gt; 2:  b  9   2 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 3:  c  8   4 11 x &amp; y</span></span>
-<span><span class="co">#&gt; 4:  c  8   4 18 x &amp; y</span></span>
-<span><span class="co">#&gt; 5:  d 10   7 NA     x</span></span>
-<span><span class="co">#&gt; 6:  d 11   3 NA     x</span></span></code></pre></div>
+<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt;        id     v   foo     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      a    NA    NA    20      y</span></span>
+<span><span class="co">#&gt; 2:      b     9     2    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:      c     8     4    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:      c     8     4    18  x &amp; y</span></span>
+<span><span class="co">#&gt; 5:      d    10     7    NA      x</span></span>
+<span><span class="co">#&gt; 6:      d    11     3    NA      x</span></span></code></pre></div>
 <p>📝 <strong>Displaying messages</strong></p>
 <p>One of the value added of <code>joyn</code> is that it produces a
 number of messages that are intended to inform you about the status of
@@ -565,7 +590,7 @@ any messages.</p>
 
     <footer><div class="pkgdown-footer-left">
   <p></p>
-<p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+<p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">

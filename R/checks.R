@@ -33,24 +33,16 @@ check_xy  <- function(x,y) {
     error_exists <- TRUE
     if (x0 && y0) {
       xy <- c("x", "y")
-      store_msg("err",
-                err  = paste(cli::symbol$cross, "Error:"),
-                pale = "   Neither {.or {.field {xy}}} table has columns.")
+      store_joyn_msg(err = "   Neither {.or {.strongTable {xy}}} table has columns.")
     } else if (x0) {
-      store_msg("err",
-                err  = paste(cli::symbol$cross, "Error:"),
-                pale = "   Input table {.field x} has no columns.")
+      store_joyn_msg(err = "   Input table {.strongTable x} has no columns.")
     } else {
-      store_msg("err",
-                err  = paste(cli::symbol$cross, "Error:"),
-                pale = "   Input table {.field y} has no columns.")
+      store_joyn_msg(err = "   Input table {.strongTable y} has no columns.")
     }
 
   }
 
   # check names -----------
-  # Note (Rossana): in the previous version, the function was not aborting when duplicate names
-  # were found. This is because it was overwriting the value or error_exists in each step.
 
   error_exists <- error_exists || check_duplicate_names(x, "x")
   error_exists <- error_exists || check_duplicate_names(y, "y")
@@ -62,8 +54,6 @@ check_xy  <- function(x,y) {
   return(invisible(TRUE))
 }
 
-# NOTE (Rossana): I believe data frames cannot have duplicate names in R in the first place,
-#                 unless you set check.names = FALSE when creating the data.frame
 
 #' Check if vars in dt have duplicate names
 #'
@@ -92,12 +82,8 @@ check_duplicate_names <- \(dt, name) {
   if (anyDuplicated(nm_x)) {
     dups <- nm_x[duplicated(nm_x)] |>
       unique()
-    store_msg("err",
-          err     = paste(cli::symbol$cross, "Error:"),
-          pale    = " Table {.field {name}} has the following
-                    {cli::qty(length(dups))} column{?s} duplicated:",
-          timing  = "{.var {dups}}",
-          pale    = "\nPlease rename or remove and try again.")
+    store_joyn_msg(err    = " Table {.strongTable {name}} has the following {cli::qty(length(dups))} column{?s} duplicated:
+                   {.strongVar {dups}}. \nPlease rename or remove and try again.")
     return(TRUE)
   }
   return(FALSE)
@@ -122,27 +108,22 @@ check_duplicate_names <- \(dt, name) {
 
 check_reportvar <-
   function(reportvar, verbose = getOption("joyn.verbose")) {
+
     if (is.character(reportvar)) {
+
       reportvar <- rename_to_valid(reportvar, verbose)
-      store_msg("info",
-           ok = cli::symbol$info, "  ", ok = cli::symbol$pointer,
-           "  ",
-           pale = "Joyn's report available in variable",
-           bolded_pale = "  {reportvar}")
+
+      store_joyn_msg(info = "Joyn's report available in variable {.strongVar {reportvar}}")
 
       return(reportvar)
 
     } else if (is.null(reportvar) || isFALSE(reportvar)) {
 
-     store_msg("info",
-           ok           = paste(cli::symbol$info, "  Note:"),
-           pale         = "  Reporting variable is",
-           bolded_pale  = "\nnot",
-           pale         = "\nreturned")
+     store_joyn_msg(info = "  Reporting variable is {.strong NOT} returned")
 
       return(NULL)
     } else  {
-      cli::cli_abort("reportvar should be character, NULL or FALSE")
+      cli::cli_abort("{.strongArg reportvar} should be character, NULL or FALSE")
     }
   }
 
@@ -222,7 +203,9 @@ check_by_vars <- function(by, x, y) {
 #' # Inconsistent match type
 #' joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 #' }
-check_match_type <- function(x, y, by, match_type, verbose) {
+check_match_type <- function(x, y, by,
+                             match_type,
+                             verbose = getOption("joyn.verbose")) {
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # computations   ---------
@@ -233,37 +216,72 @@ check_match_type <- function(x, y, by, match_type, verbose) {
 
   # Check which messages to return
   match_type_error <- FALSE
-  x_m              <- TRUE
-  y_m              <- TRUE
+  x_m    <-  y_m   <- TRUE
+  mte_x  <- mte_y  <- FALSE
 
   if (tx == "1") {
-    match_type_error <-
-      is_match_type_error(x, "x", by, verbose, match_type_error)
+      mte_x <- is_match_type_error(x, "x", by, verbose, match_type_error)
   } else {
     x_m <- is_valid_m_key(x, by)
   }
 
   if (ty == "1") {
-    match_type_error <-
-      is_match_type_error(y, "y", by, verbose, match_type_error)
+      mte_y <- is_match_type_error(y, "y", by, verbose, match_type_error)
   } else {
       y_m <- is_valid_m_key(y, by)
     }
 
+  if (TRUE %in% c(mte_x, mte_y)) {
+    match_type_error <-TRUE
+    }
+
   # Error if user chooses "1" but actually "m" ----
   if (match_type_error) {
+
     msg     <- "match type inconsistency"
     hint    <-
-      "you could use `return_report = TRUE` in `joyn::is_id()`
-    to see where the problem is"
+      "set verbose to TRUE to see where the issue is"
     joyn_msg("err")
+
+    if (verbose == TRUE) {
+
+      msg     <- "match type inconsistency"
+      hint    <-
+        "refer to the duplicate counts in the table(s) above
+       to identify where the issue occurred"
+
+      if (mte_x == TRUE) {
+        display_id_x <- is_id(x, by, return_report = TRUE, verbose = FALSE) |>
+          fsubset(copies > 1)
+
+        cli::cli_inform("Duplicate counts in {.field x}:")
+        print(display_id_x)
+        # I would like to show the table with the duplicated values.
+        # Something like this:
+        #      dt <- collapse::join(x, display_id_x,
+        #      on = by,
+        #      how = "inner",
+        #      verbose = FALSE)
+        #      dt[]
+      }
+
+      if (mte_y == TRUE) {
+        display_id_y <- is_id(y, by, return_report = TRUE, verbose = FALSE) |>
+          fsubset(copies > 1)
+
+        cli::cli_inform("Duplicate counts in {.field y}:")
+        print(display_id_y)
+      }
+
+    }
+
     cli::cli_abort(c(msg,
                      i = hint),
-                   class = "joyn_error")
+                     class = "joyn_error")
 
   }
 
-  # Warning if user choses "m" but actually "1" ----
+  # Warning if user chooses "m" but actually "1" ----
   m_m <- data.table::fcase(
     isTRUE(x_m)  & isTRUE(y_m),  "none",
     isTRUE(x_m)  & isFALSE(y_m), "warn_y",
@@ -276,40 +294,19 @@ check_match_type <- function(x, y, by, match_type, verbose) {
     switch(
       m_m,
       "warn_y" = {
-        store_msg(
-          type         = "warn",
-          warn         = paste(cli::symbol$warn, "\nWarning:"),
-          pale         = "\nThe keys supplied uniquely identify",
-          bolded_pale  = "\ny",
-          pale         = "\ntherefore a",
-          bolded_pale  = "\n{tx}:1",
-          pale         = "\njoin is executed."
-        )
+        store_joyn_msg(warn = "The keys supplied uniquely identify {.strongTable y},
+                               therefore a {.strong {tx}:1} join is executed")
       },
 
       "warn_x" = {
-        store_msg(
-          type        = "warn",
-          warn        = paste(cli::symbol$warn,"\nWarning:"),
-          pale        = "\nThe keys supplied uniquely identify",
-          bolded_pale = "\nx",
-          pale        = "\ntherefore a",
-          bolded_pale = "\n1:{ty}",
-          pale        = "\njoin is executed."
-        )
+        store_joyn_msg(warn = "The keys supplied uniquely identify {.strongTable x},
+                               therefore a {.strong 1:{ty}} join is executed")
       },
 
       #},
       "warn_both" = {
-        store_msg(
-          type        = "warn",
-          warn        = paste(cli::symbol$warn, "\nWarning:"),
-          pale        = "\nThe keys supplied uniquely identify both",
-          bolded_pale = "\nx and y",
-          pale        = "\ntherefore a",
-          bolded_pale = "\n1:1",
-          pale        = "\njoin is executed."
-        )
+        store_joyn_msg(warn = "The keys supplied uniquely identify both {.strongTable x and y},
+                               therefore a {.strong 1:1} join is executed")
       }
     )
 
@@ -348,12 +345,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 
     match_type_error <- TRUE
     by2 <- by
-    store_msg("err",
-              err         = paste(cli::symbol$cross, "Error:"),
-              pale        = "   table",
-              bolded_pale = "  {name}",
-              pale        = "  is not uniquely identified by",
-              bolded_pale = "  {by2}")
+    store_joyn_msg(err = "table {.strongTable {name}} is not uniquely identified by {.strongVar {by2}}")
 
   }
   match_type_error
@@ -387,7 +379,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
 
   if (length(y_vars_to_keep) > 1 && !is.character(y_vars_to_keep)) {
-    cli::cli_abort("argumet {.arg y_vars_to_keep} must be of length 1
+    cli::cli_abort("argumet {.arg {y_vars_to_keep}} must be of length 1
                    when it is not class character")
   }
 
@@ -419,12 +411,7 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
     y_in_by <- y_vars_to_keep %in% by
 
     if (any(y_in_by)) {
-      store_msg("info",
-                ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
-                pale        = "Removing key variables",
-                bolded_pale = "  {y_vars_to_keep[y_in_by]}",
-                pale        = "  from",
-                bolded_pale = "  {y_vars_to_keep}")
+      store_joyn_msg(info = "Removing key variables {.strongVar {y_vars_to_keep[y_in_by]}} from {.strongVar {y_vars_to_keep}}")
     }
 
     y_vars_to_keep <- y_vars_to_keep[!y_in_by]

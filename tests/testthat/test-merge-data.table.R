@@ -130,9 +130,12 @@ test_that("LEFT JOIN - Conducts left join", {
                              all.x = TRUE,
                              by = "id")
 
+  setorderv(jn_dt, "id", na.last = TRUE)
+
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
   expect_equal(
@@ -144,7 +147,8 @@ test_that("LEFT JOIN - Conducts left join", {
       by = "id",
       reportvar = FALSE
     ),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 
@@ -164,11 +168,13 @@ test_that("LEFT JOIN - Conducts left join", {
     by = "id"
   )
 
+  setorderv(jn_dt, "id", na.last = TRUE)
 
   expect_equal(
     jn_joyn |>
       fselect(-get(reportvar)), # `reportvar` should be `.joyn` in principle
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 
@@ -191,10 +197,12 @@ test_that("LEFT JOIN - Conducts left join", {
     by.y = "id2"
   )
 
+  setorderv(jn_dt, c("id1", "id2"), na.last = TRUE)
 
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 })
@@ -224,7 +232,8 @@ test_that("RIGHT JOIN - Conducts right join", {
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 
@@ -246,7 +255,8 @@ test_that("RIGHT JOIN - Conducts right join", {
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
   expect_equal(
@@ -258,7 +268,8 @@ test_that("RIGHT JOIN - Conducts right join", {
       all.y = TRUE,
       reportvar = FALSE
     ),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 
@@ -281,7 +292,8 @@ test_that("RIGHT JOIN - Conducts right join", {
 
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 })
@@ -308,10 +320,13 @@ test_that("FULL JOIN - Conducts full join", {
     all = TRUE
   )
 
+  setorderv(jn_dt, c("id"), na.last = TRUE)
+
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = TRUE
   )
 
   expect_true(
@@ -339,9 +354,12 @@ test_that("FULL JOIN - Conducts full join", {
     all = TRUE
   )
 
+  setorderv(jn_dt, c("id"), na.last = TRUE)
+
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 
@@ -362,7 +380,7 @@ test_that("FULL JOIN - Conducts full join", {
     by.y  = "id2",
     all = TRUE
   )
-
+  attr(jn_dt, 'sorted') <- NULL
 
   expect_equal(
     jn |> fselect(-get(reportvar)),
@@ -550,7 +568,8 @@ test_that("INNER JOIN - Conducts inner join", {
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
   expect_true(
@@ -577,7 +596,8 @@ test_that("INNER JOIN - Conducts inner join", {
 
   expect_equal(
     jn_joyn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 
@@ -599,7 +619,8 @@ test_that("INNER JOIN - Conducts inner join", {
 
   expect_equal(
     jn |> fselect(-get(reportvar)),
-    jn_dt
+    jn_dt,
+    ignore_attr = 'sorted'
   )
 
 })

@@ -43,6 +43,9 @@ x5 = data.table(id = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:18, NA, NA))
 
+#-------------------------------------------------------------------------------
+# TESTS ------------------------------------------------------------------------
+#-------------------------------------------------------------------------------
 
 
 test_that(
@@ -72,6 +75,8 @@ test_that("all types of by argument raise no error", {
        match_type = "m:m") |>
     expect_no_error()
 
+
+  # THIS ONE
   joyn(x          = x4,
        y          = y4,
        by         = c("id1 = id", "id2"),
@@ -173,7 +178,8 @@ test_that("inverse joyn works", {
       keep = "left",
       by = "id",
       match_type = "m:1",
-      reportvar = FALSE
+      reportvar = FALSE,
+      sort      = TRUE
     )
   rr <-
     joyn(
@@ -182,7 +188,8 @@ test_that("inverse joyn works", {
       keep = "right",
       by = "id",
       match_type = "1:m",
-      reportvar = FALSE
+      reportvar = FALSE,
+      sort      = TRUE
     )
 
   lnames <- names(ll)
@@ -197,7 +204,8 @@ test_that("inverse joyn works", {
       by = "id",
       match_type = "m:1",
       reportvar = FALSE,
-      keep = "left"
+      keep = "left",
+      sort = TRUE
     )
   rt <-
     joyn(
@@ -206,7 +214,8 @@ test_that("inverse joyn works", {
       by = "id",
       match_type = "1:m",
       reportvar = FALSE,
-      keep = "right"
+      keep = "right",
+      sort = TRUE
     )
 
   lnamest <- names(lt)
@@ -224,14 +233,15 @@ test_that("FULL- Compare with base::merge", {
     y1,
     by         = "id",
     reportvar  = FALSE,
-    match_type = "m:1"
+    match_type = "m:1",
+    sort = TRUE
   )
 
   br <- base::merge(x1, y1, by = "id", all = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
   setorderv(jn, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
   expect_equal(jn, br, ignore_attr = 'row.names')
 
@@ -239,13 +249,14 @@ test_that("FULL- Compare with base::merge", {
              y2,
              by= "id",
               reportvar = FALSE,
-              keep_common_vars = TRUE)
+              keep_common_vars = TRUE,
+             sort = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
   setorderv(jn, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
@@ -263,12 +274,13 @@ test_that("LEFT- Compare with base::merge", {
       by = "id",
       reportvar = FALSE,
       keep = "left",
-      match_type = "m:1"
+      match_type = "m:1",
+      sort = TRUE
     )
   br <- base::merge(x1, y1, by = "id", all.x = TRUE)
   setorderv(br, "id", na.last = TRUE)
   setorderv(jn, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
   expect_equal(jn, br, ignore_attr = "row.names")
 
 
@@ -279,13 +291,14 @@ test_that("LEFT- Compare with base::merge", {
       reportvar = FALSE,
       keep = "left",
       match_type = "1:1",
-      keep_common_vars = TRUE
+      keep_common_vars = TRUE,
+      sort = TRUE
     )
 
   br <- base::merge(x2, y2, by = "id", all.x = TRUE)
   setorderv(br, "id", na.last = TRUE)
   setorderv(jn, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
@@ -304,11 +317,12 @@ test_that("RIGHT - Compare with base::merge", {
       by = "id",
       reportvar = FALSE,
       keep = "right",
-      match_type = "m:1"
+      match_type = "m:1",
+      sort = TRUE
     )
   br <- base::merge(x1, y1, by = "id", all.y = TRUE)
   setorderv(br, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
 
   expect_equal(jn, br)
@@ -322,13 +336,14 @@ test_that("RIGHT - Compare with base::merge", {
       reportvar        = FALSE,
       keep             = "right",
       match_type       = "1:1",
-      keep_common_vars = TRUE
+      keep_common_vars = TRUE,
+      sort = TRUE
     )
 
   br <- base::merge(x2, y2, by = "id", all.y = TRUE)
 
   setorderv(br, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
@@ -346,11 +361,12 @@ test_that("INNER - Compare with base::merge", {
       by         = "id",
       reportvar  = FALSE,
       keep       = "inner",
-      match_type = "m:1"
+      match_type = "m:1",
+      sort = TRUE
     )
   br <- base::merge(x1, y1, by = "id")
   setorderv(br, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
 
   expect_equal(jn, br)
@@ -364,12 +380,13 @@ test_that("INNER - Compare with base::merge", {
       reportvar        = FALSE,
       keep             = "inner",
       match_type       = "1:1",
-      keep_common_vars = TRUE
+      keep_common_vars = TRUE,
+      sort = TRUE
     )
   br <- base::merge(x2, y2, by = "id")
 
   setorderv(br, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
 
   setcolorder(jn, names(br))
@@ -439,14 +456,15 @@ test_that("match types work", {
 
 })
 
-
+###########################################################################################
 test_that("Update NAs", {
   # update NAs in x variable form x
   jn <- joyn(x2,
              y2,
              by               = "id",
              update_NAs       = TRUE,
-             keep_common_vars = TRUE)
+             keep_common_vars = TRUE,
+             sort = TRUE)
 
   idx <- x2[is.na(x), "id"]
 
@@ -456,7 +474,8 @@ test_that("Update NAs", {
                y2,
                by               = "id = yd",
                update_NAs       = TRUE,
-               keep_common_vars = TRUE)
+               keep_common_vars = TRUE,
+               sort = TRUE)
 
 
   expect_equal(jn_1[idx, on = "id"][, x.x], y2[idx, on = "id"][, x])
@@ -465,7 +484,8 @@ test_that("Update NAs", {
                y4,
                by               = c("id", "y"),
                update_NAs       = TRUE,
-               keep_common_vars = TRUE)
+               keep_common_vars = TRUE,
+               sort = TRUE)
 
   to_replace <- x5[is.na(x), "id"]
 
@@ -475,7 +495,8 @@ test_that("Update NAs", {
                y4,
                by               = c("id = id2", "yd = id"),
                update_NAs       = FALSE,
-               keep_common_vars = TRUE)
+               keep_common_vars = TRUE,
+              sort = TRUE)
 
   to_replace <- out[(is.na(x.x) & !is.na(x.y)) | (is.na(y.x) & !is.na(y.y) ), c("id", "yd")]
 
@@ -483,9 +504,10 @@ test_that("Update NAs", {
                y4,
                by               = c("id = id2", "yd = id"),
                update_NAs       = TRUE,
-               keep_common_vars = TRUE)
+               keep_common_vars = TRUE,
+               sort = TRUE)
 
-  any(jn_3[to_replace, ".joyn"] != "NA updated") |>
+  any(jn_3[to_replace, on = c("id", "yd")][, .joyn] != "NA updated", with = FALSE) |>
     expect_equal(FALSE)
 
 })
@@ -498,7 +520,8 @@ test_that("Update actual values", {
             by               = "id",
             update_values    = TRUE,
             update_NAs       = TRUE,
-            keep_common_vars = TRUE)
+            keep_common_vars = TRUE,
+            sort = TRUE)
 
   br <- base::merge(x2, y2, by = "id", all = TRUE)
 
@@ -509,7 +532,7 @@ test_that("Update actual values", {
 
   setorderv(br, "id", na.last = TRUE)
   setorderv(jn, "id", na.last = TRUE)
-  setattr(br, 'sorted', "id")
+  setattr(jn, 'sorted', "id")
 
   expect_equal(jn |>
                  fselect(x.x),
@@ -551,7 +574,6 @@ test_that("y vars are extracted correctly", {
               y_vars_to_keep = yvars)
 
   expect_equal(names(jn), c(names(x2), yvars, ".joyn"))
-
 
   jn <-
     joyn(
@@ -658,7 +680,11 @@ test_that("error when there is not natural join", {
 
 test_that("different names in key vars are working fine", {
 
-  df <- joyn(x4, y4, by = c("id1 = id", "id2"), match_type = "m:1", y_vars_to_keep = c("y"))
+  df <- joyn(x4, y4, by = c("id1 = id", "id2"),
+             match_type = "m:1",
+             y_vars_to_keep = c("y"),
+             sort = TRUE,
+             reporttype =  "character")
 
   dd <- data.table(id1 = c(1, 1, 2, 2, 3, 3, 5, 6),
                    id2 = c(1, 1, 2, 1, 3, 4, 2, 3),
@@ -669,7 +695,9 @@ test_that("different names in key vars are working fine", {
                    )
 
   setorderv(dd, c("id1", "id2"), na.last = TRUE)
+  setattr(df, 'sorted', c("id1", "id2"))
   setattr(dd, 'sorted', c("id1", "id2"))
+
 
   expect_equal(df, dd)
 
@@ -706,7 +734,124 @@ test_that("output table class", {
     expect_equal(class(x2))
 })
 
+# Test anti-join
+#_________________________________
+test_that("joyn's how = anti works as expected", {
+
+  r <- joyn(x          = x1,
+            y          = y1,
+            match_type = "m:1",
+            by         = "id",
+            keep       = "anti",
+            sort       = TRUE)
+
+  expect_true(funique(r$`.joyn`) == "x")
+  expect_equal(names(r),
+               c(names(x1), ".joyn"))
+  expect_equal(r$id,
+               c(3, NA_real_))
+  rn <- names(joyn(x              = x1,
+                   y              = y1,
+                   match_type     = "m:1",
+                   by             = "id",
+                   keep           = "anti",
+                   y_vars_to_keep = TRUE,
+                   sort           = TRUE))
+  expect_false(all(names(r) == rn[1:length(names(r))]))
+
+  # m:m anti joins
+  r <- joyn(x              = x4,
+            y              = y4[!id2 == 3,],
+            match_type     = "m:m",
+            by             = c("id1 = id2"),
+            keep           = "anti",
+            y_vars_to_keep = TRUE,
+            sort = TRUE)
+
+  expect_true(allNA(r$y))
+  expect_true(all(r$id1 == 3))
+  expect_true(all(r$.joyn == "x"))
 
 
+})
+
+test_that("anti join warning for update values", {
+
+  expect_message(
+    r <- joyn(x          = x1,
+              y          = y1,
+              match_type = "m:1",
+              by         = "id",
+              keep       = "anti",
+              update_values = TRUE,
+              verbose = TRUE))
+
+  r2 <- joyn(x          = x1,
+             y          = y1,
+             match_type = "m:1",
+             by         = "id",
+             keep       = "anti",
+             update_values = FALSE)
+
+  expect_equal(r,
+               r2)
+
+
+})
+
+
+# Test all input data is unchanged
+
+
+test_that("joyn() - input data unchanged", {
+
+  expect_equal(x1,
+               data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                          t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                          x  = 11:15))
+
+  expect_equal(y1,
+               data.table(id = c(1,2, 4),
+                          y  = c(11L, 15L, 16)))
+
+  expect_equal(x2,
+               data.table(id = c(1, 4, 2, 3, NA),
+                          t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                          x  = c(16, 12, NA, NA, 15)))
+
+  expect_equal(y2,
+               data.table(id = c(1, 2, 5, 6, 3),
+                          yd = c(1, 2, 5, 6, 3),
+                          y  = c(11L, 15L, 20L, 13L, 10L),
+                          x  = c(16:20)))
+
+  expect_equal(x3,
+               data.table(id  = c("c","b", "d"),
+                          v   = 8:10,
+                          foo = c(4,2, 7)))
+
+  expect_equal(y3,
+               data.table(id = c("c","b", "c", "a"),
+                          y  = c(11L, 15L, 18L, 20L)))
+
+  expect_equal(x4,
+               data.table(id1 = c(1, 1, 2, 3, 3),
+                          id2 = c(1, 1, 2, 3, 4),
+                          t   = c(1L, 2L, 1L, 2L, NA_integer_),
+                          x   = c(16, 12, NA, NA, 15)))
+
+  expect_equal(y4,
+               data.table(id  = c(1, 2, 5, 6, 3),
+                          id2 = c(1, 1, 2, 3, 4),
+                          y   = c(11L, 15L, 20L, 13L, 10L),
+                          x   = c(16:20)))
+
+  expect_equal(x5,
+               data.table(id = c(1, 2, 5, 6, 3),
+                          yd = c(1, 2, 5, 6, 3),
+                          y  = c(11L, 15L, 20L, 13L, 10L),
+                          x  = c(16:18, NA, NA)))
+
+})
 
 

@@ -12,7 +12,7 @@ fashion to dplyr::right_join"><!-- mathjax --><script src="https://cdnjs.cloudfl
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.5</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -28,7 +28,8 @@ fashion to dplyr::right_join"><!-- mathjax --><script src="https://cdnjs.cloudfl
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/main-functionalities.html">Main functionalities</a>
     <a class="dropdown-item" href="../articles/adv-functionalities.html">Advanced functionalities</a>
-    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr-joins</a>
+    <a class="dropdown-item" href="../articles/dplyr-joins.html">dplyr joins wrappers</a>
+    <a class="dropdown-item" href="../articles/merge-wrapper.html">`data.table::merge()` wrapper</a>
     <a class="dropdown-item" href="../articles/messages.html">Messages</a>
     <a class="dropdown-item" href="../articles/aux-functions.html">Additional functions</a>
   </div>
@@ -40,7 +41,7 @@ fashion to dplyr::right_join"><!-- mathjax --><script src="https://cdnjs.cloudfl
         <input type="search" class="form-control me-sm-2" aria-label="Toggle navigation" name="search-input" data-search-index="../search.json" id="search-input" placeholder="Search for" autocomplete="off"></form>
 
       <ul class="navbar-nav"><li class="nav-item">
-  <a class="nav-link" href="https://rossanatat.github.io/joyn/">
+  <a class="external-link nav-link" href="https://github.com/randrescastaneda/joyn/">
     <span class="fab fa fab fa-github fa-lg"></span>
      
   </a>
@@ -251,8 +252,38 @@ option). Default is TRUE.</p></dd>
 
 
 <dt>...</dt>
-<dd><p>Arguments passed on to <code><a href="joyn.html">joyn</a></code></p><dl><dt><code></code></dt>
-<dd></dd>
+<dd><p>Arguments passed on to <code><a href="joyn.html">joyn</a></code></p><dl><dt><code>match_type</code></dt>
+<dd><p>character: one of <em>"m:m"</em>, <em>"m:1"</em>, <em>"1:m"</em>, <em>"1:1"</em>.
+Default is <em>"1:1"</em> since this the most restrictive. However, following
+Stata's recommendation, it is better to be explicit and use any of the
+other three match types (See details in <em>match types sections</em>).</p></dd>
+
+    <dt><code>allow.cartesian</code></dt>
+<dd><p>logical: Check documentation in official <a href="https://rdatatable.gitlab.io/data.table/reference/merge.html/" class="external-link">web site</a>.
+Default is <code>NULL</code>, which implies that if the join is "1:1" it will be
+<code>FALSE</code>, but if the join has any "m" on it, it will be converted to <code>TRUE</code>.
+By specifying <code>TRUE</code> of <code>FALSE</code> you force the behavior of the join.</p></dd>
+
+    <dt><code>suffixes</code></dt>
+<dd><p>A character(2) specifying the suffixes to be used for making
+non-by column names unique. The suffix behaviour works in a similar fashion
+as the <a href="https://rdrr.io/r/base/merge.html" class="external-link">base::merge</a> method does.</p></dd>
+
+    <dt><code>yvars</code></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded" class="external-link"><img src="figures/lifecycle-superseded.svg" alt="[Superseded]"></a>: use now <code>y_vars_to_keep</code></p></dd>
+
+    <dt><code>keep_y_in_x</code></dt>
+<dd><p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded" class="external-link"><img src="figures/lifecycle-superseded.svg" alt="[Superseded]"></a>: use now
+<code>keep_common_vars</code></p></dd>
+
+    <dt><code>msg_type</code></dt>
+<dd><p>character: type of messages to display by default</p></dd>
+
+    <dt><code>na.last</code></dt>
+<dd><p><code>logical</code>. If <code>TRUE</code>, missing values in the data are placed last; if <code>FALSE</code>, they are placed first; if <code>NA</code> they are removed.
+<code>na.last=NA</code> is valid only for <code>x[order(., na.last)]</code> and its
+default is <code>TRUE</code>. <code>setorder</code> and <code>setorderv</code> only accept
+<code>TRUE</code>/<code>FALSE</code> with default <code>FALSE</code>.</p></dd>
 
   
 </dl></dd>
@@ -262,7 +293,15 @@ option). Default is TRUE.</p></dd>
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     
 
-<p>data frame</p>
+<p>An data frame of the same class as <code>x</code>. The properties of the output
+are as close as possible to the ones returned by the dplyr alternative.</p>
+    </div>
+    <div class="section level2">
+    <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
+    <div class="dont-index"><p>Other dplyr alternatives: 
+<code><a href="full_join.html">full_join</a>()</code>,
+<code><a href="inner_join.html">inner_join</a>()</code>,
+<code><a href="left_join.html">left_join</a>()</code></p></div>
     </div>
 
     <div class="section level2">
@@ -279,21 +318,21 @@ option). Default is TRUE.</p></dd>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    .joyn n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: x &amp; y 3     75%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     y 1     25%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: total 4    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  x &amp; y     3     75%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:      y     1     25%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  total     4    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The full joyn is executed in </span><span style="color: #0000D7; font-weight: bold;">0.000128</span><span style="color: #9E9E9E;"> seconds</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #0000D7; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> the entire joyn function, including checks, is executed in </span><span style="color: #0000D7; font-weight: bold;">0.055939</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #9E9E9E;">seconds</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    id  t  x  y .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:  1  1 11 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  1  2 12 11 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  2  1 13 15 x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  4 NA NA 16     y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x     y  .joyn</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    11    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    13    15  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     4    NA    NA    16      y</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -301,7 +340,7 @@ option). Default is TRUE.</p></dd>
 
 
     <footer><div class="pkgdown-footer-left">
-  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo.</p>
+  <p></p><p>Developed by <a href="https://randrescastaneda.rbind.io/" class="external-link">R.Andres Castaneda</a>, Zander Prinsloo, Rossana Tatulli.</p>
 </div>
 
 <div class="pkgdown-footer-right">
