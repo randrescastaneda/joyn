@@ -855,3 +855,30 @@ test_that("joyn() - input data unchanged", {
 })
 
 
+test_that("update_values still filters rows for left joins", {
+
+  x <- data.frame(id = 1:5,
+                  a  = 1:5,
+                  b  = 2:6)
+  y <- data.frame(id = c(1, 11, 2, 12, 5),
+                  a  = 11:15,
+                  b  = 12:16)
+
+  # for data.table
+  j1 <- joyn(x             = qDT(x),
+             y             = qDT(y),
+             by            = "id",
+             keep          = "left",
+             update_values = TRUE)
+
+  j2 <- joyn(x             = x,
+             y             = y,
+             by            = "id",
+             keep          = "left",
+             update_values = TRUE)
+
+  expect_true(all(j1$id %in% x$id))
+  expect_true(all(j2$id %in% x$id))
+
+})
+
