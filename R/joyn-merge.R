@@ -385,25 +385,6 @@ joyn <- function(x,
   )
 
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  #                   Update jn   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  var_use <- NULL
-  if (isTRUE(update_NAs) || isTRUE(update_values)) {
-    var_use <- common_vars
-  }
-
-  if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
-
-    jn <- update_na_values(dt           = jn,
-                            var          = var_use,
-                            reportvar    = reportvar,
-                            suffixes     = suffixes,
-                            rep_NAs      = update_NAs,
-                            rep_values   = update_values
-      )
-
-  }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Filter rows - `keep`   ---------
@@ -429,6 +410,28 @@ joyn <- function(x,
       fsubset(get(reportvar) == 1)
   }
 
+
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  #                   Update jn   ---------
+  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  var_use <- NULL
+  if (isTRUE(update_NAs) || isTRUE(update_values)) {
+    var_use <- common_vars
+  }
+
+  if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
+    # filter_var <- jn |>
+    #   fselect(get(reportvar))
+    #print(filter_var)
+    jn <- update_na_values(dt           = jn,
+                           var          = var_use,
+                           reportvar    = reportvar,
+                           suffixes     = suffixes,
+                           rep_NAs      = update_NAs,
+                           rep_values   = update_values
+    )
+
+  }
 
   ### common vars ----------
 
