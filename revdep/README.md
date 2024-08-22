@@ -2,30 +2,30 @@
 
 |field    |value                                    |
 |:--------|:----------------------------------------|
-|version  |R version 4.3.1 (2023-06-16 ucrt)        |
-|os       |Windows Server 2016 x64 (build 14393)    |
+|version  |R version 4.4.1 (2024-06-14 ucrt)        |
+|os       |Windows 11 x64 (build 22631)             |
 |system   |x86_64, mingw32                          |
 |ui       |RStudio                                  |
 |language |(EN)                                     |
-|collate  |English_United States.1252               |
-|ctype    |English_United States.1252               |
+|collate  |English_United States.utf8               |
+|ctype    |English_United States.utf8               |
 |tz       |America/New_York                         |
-|date     |2024-03-29                               |
-|rstudio  |2023.09.1+494 Desert Sunflower (desktop) |
+|date     |2024-08-03                               |
+|rstudio  |2024.04.2+764 Chocolate Cosmos (desktop) |
 |pandoc   |NA                                       |
 
 # Dependencies
 
-|package    |old    |new        |<U+0394>  |
+|package    |old    |new        |Δ  |
 |:----------|:------|:----------|:--|
-|joyn       |0.1.4  |0.1.6.9004 |*  |
-|cli        |3.6.2  |3.6.2      |   |
-|collapse   |NA     |2.0.11     |*  |
-|data.table |1.15.2 |1.15.2     |   |
+|joyn       |0.2.2  |0.2.2.9001 |*  |
+|cli        |3.6.3  |3.6.3      |   |
+|collapse   |2.0.15 |2.0.15     |   |
+|data.table |1.15.4 |1.15.4     |   |
 |glue       |1.7.0  |1.7.0      |   |
-|lifecycle  |NA     |1.0.4      |*  |
-|Rcpp       |NA     |1.0.12     |*  |
-|rlang      |1.1.3  |1.1.3      |   |
+|lifecycle  |1.0.4  |1.0.4      |   |
+|Rcpp       |1.0.13 |1.0.13     |   |
+|rlang      |1.1.4  |1.1.4      |   |
 
 # Revdeps
 
