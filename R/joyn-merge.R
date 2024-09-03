@@ -539,7 +539,43 @@ joyn <- function(x,
 
   # return messages
   joyn_report(verbose = verbose)
-  if (verbose == TRUE) joyn_msg(msg_type)
+
+  if (verbose == TRUE) {
+    #joyn_msg(msg_type)
+
+    notes_count <- sum(.joynenv$joyn_msgs$type %in% c("info", "note"))
+    warn_count  <- sum(.joynenv$joyn_msgs$type == "warn")
+
+    # show messages
+    # warning_type <- "warn"
+    # info_type <- "info"
+    # note_type <- "note"
+    #
+    # cli::cli_text(
+    #   "Joyn found
+    #   {.run [{print(notes_count)} notes](joyn::joyn_msg({note_type}))}
+    #   for you"
+    # )
+    #
+    # }
+
+    # Option 1 -display them all
+    cli::cli_text(
+      "Joyn found {.strongArg {notes_count}} notes and {.strongArg {warn_count}} warnings.
+      {.run [Click here](joyn::joyn_msg())} to view them \n"
+    )
+
+    # cli::cli_text(
+    #   "{.run [Click here](joyn::joyn_msg())} to view them."
+    # )
+
+  }
+
+  # if (verbose == TRUE) {
+  #
+  #   # inform about number of notes/info/warnings found
+  #
+  # }
 
   setattr(jn, "class", class_x)
 
