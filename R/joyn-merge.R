@@ -561,7 +561,7 @@ joyn <- function(x,
 
     cli::cli_li(
       sprintf(
-        "Joyn found {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and
+        "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
         {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
         ",
         info_type, warning_type
@@ -569,12 +569,6 @@ joyn <- function(x,
     )
 
   }
-
-  # if (verbose == TRUE) {
-  #
-  #   # inform about number of notes/info/warnings found
-  #
-  # }
 
   setattr(jn, "class", class_x)
 
