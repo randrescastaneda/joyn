@@ -7,7 +7,8 @@
     joyn.suffixes        = c(".x", ".y"),
     joyn.match_type      = c("1:1", "1:m", "m:1", "m:m"),
     joyn.na.last         = FALSE,
-    joyn.msg_type        = "basic"
+    joyn.msg_type        = "basic",
+    joyn.output_method   = if (rstudioapi::isAvailable()) "cli" else "plain"
   )
   toset <- !(names(op.joyn) %in% names(op))
 

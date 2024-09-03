@@ -543,13 +543,18 @@ joyn <- function(x,
   if (verbose == TRUE) {
     #joyn_msg(msg_type)
 
-    notes_count <- sum(.joynenv$joyn_msgs$type %in% c("info", "note"))
-    warn_count  <- sum(.joynenv$joyn_msgs$type == "warn")
+    notes_count <- sum(
+      .joynenv$joyn_msgs$type %in% c("info", "note")
+      )
+
+    warn_count  <- sum(
+      .joynenv$joyn_msgs$type == "warn"
+      )
 
     # show messages
     warning_type <- "warn"
-    info_type <- "info"
-    note_type <- "note"
+    info_type    <- "info"
+    note_type    <- "note"
 
     # Option 1 -display them all
     # cli::cli_text(
@@ -557,16 +562,24 @@ joyn <- function(x,
     #   {.run [Click here](joyn::joyn_msg())} to view them \n"
     # )
 
-    # option 2
+    # option 2 -clickable x and y warnings
 
-    cli::cli_li(
-      sprintf(
-        "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
+    # get output method option
+    output_method <- getOption("joyn.output_method", "plain")
+
+    if (output_method == "cli") {
+      cli::cli_li(
+        sprintf(
+          "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
         {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
         ",
-        info_type, warning_type
+          info_type, warning_type
+        )
       )
-    )
+    } else {
+      joyn_msg(msg_type)
+    }
+
 
   }
 
