@@ -551,18 +551,13 @@ joyn <- function(x,
       .joynenv$joyn_msgs$type == "warn"
       )
 
-    # show messages
     warning_type <- "warn"
     info_type    <- "info"
     note_type    <- "note"
 
-    # Option 1 -display them all
-    # cli::cli_text(
-    #   "Joyn found {.strongArg {notes_count}} notes and {.strongArg {warn_count}} warnings.
-    #   {.run [Click here](joyn::joyn_msg())} to view them \n"
-    # )
-
     # option 2 -clickable x and y warnings
+
+    ## show messages ------------------
 
     # get output method option
     output_method <- getOption("joyn.output_method", "plain")
@@ -579,7 +574,6 @@ joyn <- function(x,
     } else {
       joyn_msg(msg_type)
     }
-
 
   }
 
