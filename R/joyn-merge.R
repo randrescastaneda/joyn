@@ -547,9 +547,9 @@ joyn <- function(x,
     warn_count  <- sum(.joynenv$joyn_msgs$type == "warn")
 
     # show messages
-    # warning_type <- "warn"
-    # info_type <- "info"
-    # note_type <- "note"
+    warning_type <- "warn"
+    info_type <- "info"
+    note_type <- "note"
     #
     # cli::cli_text(
     #   "Joyn found
@@ -560,14 +560,21 @@ joyn <- function(x,
     # }
 
     # Option 1 -display them all
-    cli::cli_text(
-      "Joyn found {.strongArg {notes_count}} notes and {.strongArg {warn_count}} warnings.
-      {.run [Click here](joyn::joyn_msg())} to view them \n"
-    )
-
     # cli::cli_text(
-    #   "{.run [Click here](joyn::joyn_msg())} to view them."
+    #   "Joyn found {.strongArg {notes_count}} notes and {.strongArg {warn_count}} warnings.
+    #   {.run [Click here](joyn::joyn_msg())} to view them \n"
     # )
+
+    # option 2
+
+    cli::cli_li(
+      sprintf(
+        "Joyn found {.run [{.strongArg {print(notes_count)} notes}](joyn::joyn_msg('%s'))} and
+        {.run [{.strongArg {print(warn_count)} warnings}](joyn::joyn_msg('%s'))}
+        ",
+        info_type, warning_type
+      )
+    )
 
   }
 
