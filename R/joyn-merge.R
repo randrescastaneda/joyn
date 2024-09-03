@@ -550,14 +550,6 @@ joyn <- function(x,
     warning_type <- "warn"
     info_type <- "info"
     note_type <- "note"
-    #
-    # cli::cli_text(
-    #   "Joyn found
-    #   {.run [{print(notes_count)} notes](joyn::joyn_msg({note_type}))}
-    #   for you"
-    # )
-    #
-    # }
 
     # Option 1 -display them all
     # cli::cli_text(
@@ -569,8 +561,8 @@ joyn <- function(x,
 
     cli::cli_li(
       sprintf(
-        "Joyn found {.run [{.strongArg {print(notes_count)} notes}](joyn::joyn_msg('%s'))} and
-        {.run [{.strongArg {print(warn_count)} warnings}](joyn::joyn_msg('%s'))}
+        "Joyn found {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and
+        {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
         ",
         info_type, warning_type
       )
