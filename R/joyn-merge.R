@@ -562,7 +562,7 @@ joyn <- function(x,
     # get output method option
     output_method <- getOption("joyn.output_method", "plain")
 
-    if (output_method == "cli") {
+    if (output_method) {
       cli::cli_li(
         sprintf(
           "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
