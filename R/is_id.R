@@ -35,40 +35,32 @@ if (getRversion() >= '2.15.1')
 #' is_id(y1, by = "id")
 is_id <- function(dt,
                   by,
-                  verbose        = getOption("joyn.verbose"),
+                  verbose  = getOption("joyn.verbose", default = FALSE),
                   return_report  = FALSE) {
 
-  # make sure it is data.table
-  if (!(is.data.table(dt))) {
+  # Ensure dt is a data.table
+  if (!is.data.table(dt)) {
     dt <- as.data.table(dt)
-  } else {
-    dt <- data.table::copy(dt)
   }
 
-  # count
-  m     <- dt[, .(copies =.N), by = mget(by)]
-  is_id <- m[, mean(copies)] == 1
+  # Check for duplicates
+  is_id <- !(anyDuplicated(dt, by = by) > 0)
 
   if (verbose) {
-
-    cli::cli_h3("Duplicates in terms of {.code {by}}")
-
-    d <- freq_table(m, "copies")
-    print(d[])
-
-    cli::cli_rule(right = "End of {.field is_id()} report")
-
+    if (is_id) {
+      cli::cli_alert_success("No duplicates found by {.code {by}}")
+    } else {
+      cli::cli_alert_warning("Duplicates found by: {.code {by}}")
+    }
   }
 
-  if (isFALSE(return_report)) {
-
-    return(is_id)
-
+  if (return_report) {
+    # Return the duplicated rows if requested
+    dup_rows <- dt[duplicated(dt, by = by) |
+                     duplicated(dt, by = by, fromLast = TRUE)]
+    # freq_table(x = dt, byvar = by)[]
+    return(dup_rows)
   } else {
-
-    return(m)
-
+    return(is_id)
   }
-
 }
-
