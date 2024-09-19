@@ -26,7 +26,8 @@ if (getRversion() >= '2.15.1')
 freq_table <- function(x,
                        byvar,
                        digits = 1,
-                       na.rm  = FALSE) {
+                       na.rm  = FALSE,
+                       freq_var_name = "n") {
 
   x_name <- as.character(substitute(x))
   if (!is.data.frame(x)) {
@@ -48,7 +49,10 @@ freq_table <- function(x,
     # filter zeros
     fsubset(n > 0)
 
-  setrename(ft, joyn = byvar, .nse = FALSE)
+  setrename(ft,
+            joyn = byvar,
+            n    = freq_var_name,
+            .nse = FALSE)
 }
 
 
