@@ -24,175 +24,120 @@
 possible_ids <- function(dt,
                          exclude = NULL,
                          include = NULL,
-                         verbose = getOption("possible_ids.verbose")) {
+                         exclude_types = NULL,
+                         include_types = NULL,
+                         verbose = getOption("possible_ids.verbose", default = FALSE),
+                         comb_size = 5,
+                         get_all  = FALSE) {
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Check inputs   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+  # Ensure dt is a data.table
   if (!is.data.frame(dt)) {
     stop("data must be a data frame")
   }
-
-  if (is.data.table(dt)) {
-    dt <- as.data.frame(dt)
+  if (!is.data.table(dt)) {
+    dt <- as.data.table(dt)
   }
 
+  # Get all variable names
+  vars <- names(dt) |> copy()
 
-  if (is.null(exclude) && !is.null(include)) {
-    if (verbose) {
-      cli::cli_alert_warning("Since {.code exclude} is NULL, {.code include}
-                             directive does not make sense. Ignored.",
-                             wrap = TRUE)
-    }
-    warning("inconsistent use of `include`")
-  }
+  # Compute the primary class of each variable
+  vars_class <- vapply(dt, function(x) class(x)[1], character(1))
+  names(vars_class) <- vars  # Ensure names are preserved
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ## exclude variables from check ------
-
-  vars    <- names(dt)
-
-  ### Exclude variable according to their type ---------
+  # Apply 'include' filter
   if (!is.null(include)) {
-
-    # Find position of variable to include
-    ii <- which(names(dt) %in% include)
-
-  } else {
-
-    ii <- NULL
-
+    vars <- intersect(vars, include)
   }
 
-  ### Exclude variable by name ---------
+  # Apply 'include_types' filter
+  if (!is.null(include_types)) {
+    vars <- vars[vars_class[vars] %in% include_types]
+  }
+
+  # Apply 'exclude' filter
   if (!is.null(exclude)) {
+    vars <- setdiff(vars, exclude)
+  }
 
-    if (any(grepl("^_", exclude))) {
+  # Apply 'exclude_types' filter
+  if (!is.null(exclude_types)) {
+    vars <- vars[!(vars_class[vars] %in% exclude_types)]
+  }
 
-      type_ex <- exclude[grepl("^_", exclude)]
-      vars_ex <- exclude[!grepl("^_", exclude)]
+  # Remove duplicate column names... just in case
+  vars <- unique(vars)
 
-      type_ex <- match.arg(type_ex, c("_character", "_numeric"))
+  if (length(vars) == 0) {
+    if (verbose) {
+      cli::cli_alert_danger("No variables available after applying include/exclude filters.")
+    }
+    return(NULL) # should this be an error?
+  }
 
-      # find variable that meet criteria and exclude them, making sure to include
-      # the variables of the user.
-      ex <- gsub("^_", "", type_ex)
-      FUN <- paste0("is.", ex)
+  # Check if any variables uniquely identify the data individually
+  unique_vars <- vapply(vars,
+                        \(var) !anyDuplicated(dt[[var]]),
+                        logical(1))
 
-      n_cols <- unlist(lapply(dt, FUN))
-      n_cols[ii] <- FALSE
+  # Collect variables that are unique identifiers
+  unique_ids <- vars[unique_vars]
 
-      # Exclude variables by name
+  # Initialize list to store possible IDs
+  possible_ids_list <- list()
 
-      if (length(vars_ex) > 0) {
-        ex         <-which(names(dt) %in% vars_ex)
-        n_cols[ex] <- TRUE
-      }
+  # Add individual unique variables
+  if (length(unique_ids) > 0) {
+    possible_ids_list <- c(possible_ids_list, as.list(unique_ids))
+    if (verbose) {
+      cli::cli_alert_info("Found unique identifiers: {.code {unique_ids}}")
+    }
+  }
 
-      vars <- names(dt)[!n_cols]
+  # Remove unique identifiers from vars to reduce combinations
+  vars <- setdiff(vars, unique_ids)
 
-    } else {
-      vars <- vars[!(vars %in% exclude)]
+  # If data is uniquely identified by existing variables, return the unique IDs
+  if (length(possible_ids_list) > 0 && fnrow(dt) == fnrow(unique(dt[, ..unique_ids]))) {
+    return(possible_ids_list)
+  }
 
-      if (identical(vars, names(dt))) {
-        if (verbose) {
-          cli::cli_alert_warning("Variable {.field {exclude}} is not available in data frame.
-                                Nothing is excluded.", wrap = TRUE)
+  # Start with combinations of size 2 up to the number of remaining vars
+  for (i in 2:min(length(vars), comb_size)) {  # Limit combination size to 5 for efficiency
+    combos <- combn(vars, i, simplify = FALSE)
+
+    if (verbose) {
+      msg <- sprintf("combinations of %s variables", i)
+      cli::cli_progress_bar(msg, total = length(combos))
+    }
+
+    for (combo in combos) {
+      # Check if the combination uniquely identifies the data
+      if (is_id(dt, by = combo, verbose = FALSE)) {
+        # This is inefficient... it is copying every time...
+        # I need to think better on how to do it.
+        possible_ids_list <- c(possible_ids_list, list(combo))
+        if (!get_all) {
+          return(possible_ids_list)
         }
-
-        warning("inconsistenty use of `exclude`")
-
+        # Remove variables in the current combo from vars to avoid redundant checks
+        vars <- setdiff(vars, combo)
+        break  # Break since we found a minimal unique key of size i
       }
-
+      if (verbose) cli::cli_progress_update()
+    }
+    # Break if all variables are used
+    if (length(vars) == 0) {
+      break
     }
   }
 
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  ## check all names are unieuq --------
-  dup_var <- duplicated(vars)
-
-  if (any(dup_var)) {
-
-    dvars <- vars[dup_var]
-
-    msg     <- "column names must be unique"
-    hint    <- "try changing the names using {.fun make.names}"
-    problem <- "{.var {dvars}}  {?is/are}  duplicated"
-    cli::cli_abort(c(
-                  msg,
-                  i = hint,
-                  x = problem
-                  ))
-
-  }
-
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Find duplicates   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  duplicates <- is_id(dt, by = vars, verbose = FALSE)
-  if (duplicates) {
+  if (length(possible_ids_list) == 0) {
     if (verbose) {
-      cli::cli_alert_success("There are no duplicates in data frame")
+      cli::cli_alert_warning("No unique identifier found.")
     }
-  } else {
-    if (verbose) {
-      cli::cli_alert_warning("Data has duplicates. returning NULL")
-    }
-    is_id(dt, by = vars, verbose = TRUE)
     return(NULL)
+  } else {
+    return(possible_ids_list)
   }
-
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  # Find ids   ---------
-  #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  nvars <- length(vars)
-
-  found <- FALSE
-  i = 0
-  while(i < nvars && found == FALSE) {
-    i = i + 1
-    cm <- utils::combn(vars, m = i)
-
-    lcm <- dim(cm)[2]  # number of combinations of size j
-
-    selected_vars <- vector(length = lcm)
-    for (j in 1:lcm) {
-      tvars <- cm[, j] # testing vars
-      selected_vars[j] <- is_id(dt, by = tvars, verbose = FALSE)
-    }
-
-    sv <- which(selected_vars)
-
-    if (length(sv) > 0) {
-
-      if (length(sv) == 1 && i > 1) {
-
-        lv <- list(V1 = cm[, sv])
-
-      } else if (i == 1) {
-
-        ee <- as.data.frame(t(cm[, sv]))
-        lv <- lapply(ee, unique)
-
-      } else {
-
-        ee <- as.data.frame(cm[, sv])
-        lv <- lapply(ee, unique)
-
-      }
-
-      found <- TRUE
-
-    }
-  }
-
-  if (verbose) {
-    cli::cli_alert("we found {length(lv)} possible id{?s}")
-  }
-
-  return(lv)
-
 }

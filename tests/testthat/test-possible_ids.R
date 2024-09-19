@@ -118,3 +118,78 @@ test_that("duplicated names", {
 })
 
 
+
+library(lubridate)   # For date functions
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Number of rows and variables
+n_rows <- 1e5        # 100,000 rows
+n_vars <- 50         # Total variables
+
+# Initialize an empty data.table
+dt_large <- data.table(n = 1:n_rows)
+
+# Function to generate random data
+generate_random_data <- function(n, type) {
+  switch(type,
+         "numeric_int" = sample(1:1e6, n, replace = TRUE),
+         "numeric_double" = rnorm(n),
+         "character" = replicate(n, paste0(sample(letters, 5, replace = TRUE), collapse = "")),
+         "factor" = factor(sample(letters[1:10], n, replace = TRUE)),
+         "logical" = sample(c(TRUE, FALSE), n, replace = TRUE),
+         "date" = as.Date("2000-01-01") + sample(0:3650, n, replace = TRUE),
+         "datetime" = as.POSIXct("2000-01-01") + sample(0:(3650*24*60*60), n, replace = TRUE)
+  )
+}
+
+# Variable types and counts
+var_types <- c("numeric_int", "numeric_double", "character", "factor", "logical", "date", "datetime")
+vars_per_type <- c(10, 10, 10, 10, 5, 3, 2)  # sum to 50
+
+# Generate variables and add to the data.table
+var_count <- 0
+for (i in seq_along(var_types)) {
+  type <- var_types[i]
+  n_vars_type <- vars_per_type[i]
+  for (j in 1:n_vars_type) {
+    var_count <- var_count + 1
+    var_name <- paste0(type, "_", j)
+    dt_large[, (var_name) := generate_random_data(n_rows, type)]
+  }
+}
+
+# Introduce duplicates intentionally
+# Duplicate the first 100 rows
+dt_large <- rowbind(dt_large, dt_large[1:100, ])
+
+# Shuffle the data
+dt_large <- dt_large[sample(.N)]
+dt_large[, id := .I]
+
+
+possible_ids(
+  dt = dt_large,
+  verbose = TRUE
+)
+
+# Remove the 'id' column to simulate data without a clear unique identifier
+dt_large[, id := NULL]
+
+possible_ids_list <- possible_ids(
+  dt = dt_large,
+  exclude_types = c("logical", "date", "datetime"),  # Exclude some types for efficiency
+  verbose = TRUE
+)
+possible_ids_list
+
+
+# Display the structure of the data.table
+str(dt_large)
+
+
+
+
+
+
