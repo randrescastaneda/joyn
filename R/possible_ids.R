@@ -30,6 +30,7 @@ possible_ids <- function(dt,
                          comb_size = 5,
                          get_all  = FALSE) {
 
+  # defenses ---------
   # Ensure dt is a data.table
   if (!is.data.frame(dt)) {
     stop("data must be a data frame")
@@ -41,29 +42,22 @@ possible_ids <- function(dt,
   # Get all variable names
   vars <- names(dt) |> copy()
 
-  # Compute the primary class of each variable
-  vars_class <- vapply(dt, function(x) class(x)[1], character(1))
-  names(vars_class) <- vars  # Ensure names are preserved
+  # Exclude and include -------
 
-  # Apply 'include' filter
-  if (!is.null(include)) {
-    vars <- intersect(vars, include)
-  }
+  ## classes ----------
+  vars <- filter_by_class(dt = dt,
+                          vars = vars,
+                          include_types = include_types,
+                          exclude_types = exclude_types)
 
-  # Apply 'include_types' filter
-  if (!is.null(include_types)) {
-    vars <- vars[vars_class[vars] %in% include_types]
-  }
+  ## var names --------
+  vars <- filter_by_name(vars, include, exclude)
 
-  # Apply 'exclude' filter
-  if (!is.null(exclude)) {
-    vars <- setdiff(vars, exclude)
-  }
 
-  # Apply 'exclude_types' filter
-  if (!is.null(exclude_types)) {
-    vars <- vars[!(vars_class[vars] %in% exclude_types)]
-  }
+
+
+
+
 
   # Remove duplicate column names... just in case
   vars <- unique(vars)
@@ -140,4 +134,35 @@ possible_ids <- function(dt,
   } else {
     return(possible_ids_list)
   }
+}
+
+
+filter_by_class <- function(dt, vars, include_types, exclude_types) {
+  # Compute the primary class of each variable
+  vars_class <- vapply(dt, function(x) class(x)[1], character(1))
+  names(vars_class) <- vars  # Ensure names are preserved
+
+  # Apply 'include_types' filter
+  if (!is.null(include_types)) {
+    vars <- vars[vars_class[vars] %in% include_types]
+  }
+
+  # Apply 'exclude_types' filter
+  if (!is.null(exclude_types)) {
+    vars <- vars[!(vars_class[vars] %in% exclude_types)]
+  }
+  vars
+}
+
+filter_by_name <- function(vars, include, exclude) {
+  # Apply 'include' filter
+  if (!is.null(include)) {
+    vars <- intersect(vars, include)
+  }
+
+  # Apply 'exclude' filter
+  if (!is.null(exclude)) {
+    vars <- setdiff(vars, exclude)
+  }
+  vars
 }
