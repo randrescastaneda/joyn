@@ -55,14 +55,14 @@ above.}
 list with possible identifiers
 }
 \description{
-Identify possible variables uniquely identifying x
+Identify possible combinations of variables that  uniquely identifying dt
 }
 \section{Number of possible IDs}{
 
 
 The number of possible IDs in a dataframe could be very large. This is why,
 \code{possible_ids()} makes use of heuristics to return something useful without
-wasting the time of the user. in addition, we provide multiple parameter so
+wasting the time of the user. In addition, we provide multiple parameter so
 that the user can fine tune their search for possible IDs easily and
 quickly.
 
