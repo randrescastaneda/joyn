@@ -3,13 +3,41 @@
 #' Identify possible variables uniquely identifying x
 #'
 #' @param dt data frame
-#' @param exclude character: Exclude variables to be selected as identifiers. It
-#'   could be either the name of the variables of one type of the variable
-#'   prefixed by "_". For instance, "_numeric" or "_character".
+#' @param exclude character: Exclude variables to be selected as identifiers.
 #' @param include character: Name of variable to be included, that might belong
 #'   to the group excluded in the `exclude`
+#' @param exclude_classes character: classes to exclude from analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @param include_classes character: classes to include from analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @param min_combination_size numeric: Min number of combinations. Default is
+#'   1, so all combinations.
+#' @param max_combination_size numeric. Max number of combinations. Default is
+#'   5. If there is a combinations of identifiers larger than
+#'   `max_combination_size`, they won't be found
+#' @param max_processing_time numeric: Max time to process in seconds. After
+#'   that, it returns what it found.
+#' @param max_numb_possible_ids numeric: Max number of possible IDs to find. See
+#'   details.
+#' @param get_all logical: get all possible combinations based on the parameters
+#'   above.
 #' @param verbose logical: If FALSE no message will be displayed. Default is
 #'   TRUE
+#'
+#' @section Number of possible IDs:
+#'
+#'   The number of possible IDs in a dataframe could be very large. This is why,
+#'   `possible_ids()` makes use of heuristics to return something useful without
+#'   wasting the time of the user. in addition, we provide multiple parameter so
+#'   that the user can fine tune their search for possible IDs easily and
+#'   quickly.
+#'
+#'   Say for instance that you have a dataframe with 10 variables. Testing every
+#'   possible pair of variables will give you 90 possible unique identifiers for
+#'   this dataframe. If you want to test all the possible IDs, you will have to
+#'   test more 5000 combinations. If the dataframe has many rows, it may take a
+#'   while.
+#'
 #'
 #' @return list with possible identifiers
 #' @export
