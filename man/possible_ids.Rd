@@ -8,7 +8,14 @@ possible_ids(
   dt,
   exclude = NULL,
   include = NULL,
-  verbose = getOption("possible_ids.verbose")
+  exclude_classes = NULL,
+  include_classes = NULL,
+  verbose = getOption("possible_ids.verbose", default = FALSE),
+  min_combination_size = 1,
+  max_combination_size = 5,
+  max_processing_time = 60,
+  max_numb_possible_ids = 100,
+  get_all = FALSE
 )
 }
 \arguments{

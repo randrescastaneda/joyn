@@ -24,8 +24,8 @@
 possible_ids <- function(dt,
                          exclude = NULL,
                          include = NULL,
-                         exclude_types = NULL,
-                         include_types = NULL,
+                         exclude_classes = NULL,
+                         include_classes = NULL,
                          verbose = getOption("possible_ids.verbose",
                                              default = FALSE),
                          min_combination_size = 1,
@@ -51,8 +51,8 @@ possible_ids <- function(dt,
   ## classes ----------
   vars <- filter_by_class(dt = dt,
                           vars = vars,
-                          include_types = include_types,
-                          exclude_types = exclude_types)
+                          include_classes = include_classes,
+                          exclude_classes = exclude_classes)
 
   ## var names --------
   vars <- filter_by_name(vars, include, exclude)
@@ -112,8 +112,18 @@ possible_ids <- function(dt,
 
   # Start testing combinations
   start_time <- Sys.time()
-  max_size <- min(length(vars), max_combination_size)
   min_size <- max(min_combination_size, 2)
+  max_size <- min(length(vars), max_combination_size)
+
+  # where there is only one variable or not enough vars to combine
+  if (min_size >= max_size) {
+    if (verbose) {
+      cli::cli_alert_warning(
+        "Can't make combinations of {.field {vars}} if the min number of
+        combinations is {min_size} and the max is {max_size}")
+    }
+    return(remove_null(possible_ids_list))
+  }
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
@@ -198,19 +208,19 @@ possible_ids <- function(dt,
 }
 
 
-filter_by_class <- function(dt, vars, include_types, exclude_types) {
+filter_by_class <- function(dt, vars, include_classes, exclude_classes) {
   # Compute the primary class of each variable
   vars_class <- vapply(dt, function(x) class(x)[1], character(1))
   names(vars_class) <- vars  # Ensure names are preserved
 
-  # Apply 'include_types' filter
-  if (!is.null(include_types)) {
-    vars <- vars[vars_class[vars] %in% include_types]
+  # Apply 'include_classes' filter
+  if (!is.null(include_classes)) {
+    vars <- vars[vars_class[vars] %in% include_classes]
   }
 
-  # Apply 'exclude_types' filter
-  if (!is.null(exclude_types)) {
-    vars <- vars[!(vars_class[vars] %in% exclude_types)]
+  # Apply 'exclude_classes' filter
+  if (!is.null(exclude_classes)) {
+    vars <- vars[!(vars_class[vars] %in% exclude_classes)]
   }
   vars
 }

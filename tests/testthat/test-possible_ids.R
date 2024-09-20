@@ -51,7 +51,7 @@ test_that("error if not dataframe", {
 
 })
 
-test_that("inconsistent user of `include`", {
+test_that("inconsistent use of `include`", {
 
   expect_warning(possible_ids(x1,
                             include = "x"))
@@ -61,18 +61,18 @@ test_that("inconsistent user of `include`", {
 test_that("exclude and include", {
 
   dd <- possible_ids(x3,
-               exclude = "_numeric",
+               exclude_classes =  c("numeric", "integer"),
                include = "foo")
-  expect_equal(c("V1", "V2"), names(dd))
+  expect_equal(unlist(dd), c("id", "foo"))
 
 })
 
 
-test_that("get NULL when duplicates", {
+test_that("get length 0", {
 
-  expect_null(possible_ids(x1,
-                           exclude = "_numeric",
-                           include = "t"))
+  expect_length(possible_ids(x1,
+                           exclude_classes = c("numeric", "integer"),
+                           include = "t"), 0)
 
 })
 
@@ -117,19 +117,22 @@ test_that("duplicated names", {
 
 })
 
-
-
-library(lubridate)   # For date functions
+# Big data --------------------
 
 # Set seed for reproducibility
 set.seed(123)
 
 # Number of rows and variables
-n_rows <- 1e5        # 100,000 rows
+n_rows <- 1e4        # 10,000 rows
 n_vars <- 50         # Total variables
 
 # Initialize an empty data.table
-dt_large <- data.table(n = 1:n_rows)
+dt_large <- data.table(id = 1:n_rows)
+
+# Manually create three variables that uniquely identify the data
+dt_large[, unique_id1 := rep(1:10, each = 1000)]  # 1000 unique values repeated 100 times
+dt_large[, unique_id2 := sample(letters, n_rows, replace = TRUE)]  # Random character variable
+dt_large[, unique_id3 := sample(1:1000, n_rows, replace = TRUE)]   # Random integer
 
 # Function to generate random data
 generate_random_data <- function(n, type) {
@@ -146,7 +149,7 @@ generate_random_data <- function(n, type) {
 
 # Variable types and counts
 var_types <- c("numeric_int", "numeric_double", "character", "factor", "logical", "date", "datetime")
-vars_per_type <- c(10, 10, 10, 10, 5, 3, 2)  # sum to 50
+vars_per_type <- c(10, 10, 10, 10, 5, 3, 2)  # Total should sum to 50
 
 # Generate variables and add to the data.table
 var_count <- 0
@@ -160,14 +163,43 @@ for (i in seq_along(var_types)) {
   }
 }
 
-# Introduce duplicates intentionally
-# Duplicate the first 100 rows
-dt_large <- rowbind(dt_large, dt_large[1:100, ])
+# Introduce duplicates in some columns that are NOT the unique identifiers
+# For example, we can duplicate the first 100 rows in the "numeric_int_1" and "character_1" columns
+# dt_large <- rbind(dt_large, dt_large[1:100, .(numeric_int_1, character_1)])
 
-# Shuffle the data
+# Shuffle the data to avoid ordered data
 dt_large <- dt_large[sample(.N)]
-dt_large[, id := .I]
 
+
+
+# dt_large[, id := .I]
+dt <- copy(dt_large)
+
+possible_ids(
+  dt = dt_large,
+  exclude_types = c("numeric"),
+  verbose = TRUE
+)
+
+possible_ids(
+  dt = dt_large,
+  exclude_types = c("numeric"),
+  exclude = "id",
+  verbose = TRUE
+)
+
+uniq_vars <- grep("unique_id", names(dt_large), value = TRUE)
+pids <- possible_ids(
+  dt = dt_large,
+  exclude_types = c("logical", "date", "datetime", "numeric"),
+  exclude = "id",
+  include = uniq_vars,
+  verbose = TRUE,
+  min_combination_size = 3,
+  # max_combination_size = 3,
+  max_processing_time = 240,
+  get_all = TRUE
+)
 
 possible_ids(
   dt = dt_large,
@@ -184,12 +216,10 @@ possible_ids_list <- possible_ids(
 )
 possible_ids_list
 
-
-# Display the structure of the data.table
-str(dt_large)
-
-
-
-
-
-
+possible_ids_list <- possible_ids(
+  dt = dt_large,
+  exclude_types = c("logical", "date", "datetime", "numeric"),  # Exclude some types for efficiency
+  max_processing_time = 120,
+  verbose = TRUE
+)
+possible_ids_list
