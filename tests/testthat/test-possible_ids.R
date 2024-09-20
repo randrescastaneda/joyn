@@ -78,9 +78,10 @@ test_that("get length 0", {
 
 
 test_that("Exclude nothing", {
+  p1 <- possible_ids(x1)
+  p2 <- possible_ids(x1, exclude = "rer")
 
-  expect_warning(possible_ids(x1,
-                              exclude = "rer"))
+  expect_equal(p1, p2)
 
 })
 
@@ -91,9 +92,10 @@ test_that("Exclude type and variable", {
 
   xx4[, id2 := as.character(id2)]
   dd <- possible_ids(xx4,
-               exclude = c("_character", "x"))
+               exclude_classes = c("character"),
+               exclude = "x")
 
-  expect_equal(c("id1", "t"), dd$V1)
+  expect_equal(c("id1", "t"), unlist(dd))
 
 })
 
@@ -104,7 +106,7 @@ test_that("Exclude more than one variable", {
   dd <- possible_ids(x4,
              exclude = c("id2", "x"))
 
-  expect_equal(c("id1", "t"), dd$V1)
+  expect_equal(c("id1", "t"), unlist(dd))
 
 })
 

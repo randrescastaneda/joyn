@@ -55,11 +55,15 @@ possible_ids <- function(dt,
                           exclude_classes = exclude_classes)
 
   ## var names --------
-  vars <- filter_by_name(vars, include, exclude)
+  vars <- filter_by_name(vars, include, exclude, verbose)
 
 
-  # Remove duplicate column names... just in case
-  vars <- unique(vars)
+  ##  no duplicated vars -------------
+  if (anyDuplicated(vars)) {
+    dupvars <- vars[duplicated(vars)] |>
+      unique()
+    cli::cli_abort("vars {.field {dupvars}} are duplicated.")
+  }
 
   if (verbose) {
     cli::cli_alert_info("Variables to test: {.field {vars}}")
@@ -79,7 +83,7 @@ possible_ids <- function(dt,
   unique_counts <- vapply(dt[, ..vars], fnunique, numeric(1))
   vars          <- vars[order(unique_counts)]
   unique_counts <- unique_counts[order(unique_counts)]
-  n_row         <- fnrow(dt)
+  n_rows         <- fnrow(dt)
   init_index    <- 0
 
 
@@ -88,7 +92,7 @@ possible_ids <- function(dt,
   possible_ids_list <- vector("list", max_numb_possible_ids)
 
   if (min_combination_size == 1) {
-    unique_ids    <- vars[unique_counts == n_row]
+    unique_ids    <- vars[unique_counts == n_rows]
     # Add individual unique variables
     init_index <- length(unique_ids)
     if (init_index > 0) {
@@ -111,12 +115,13 @@ possible_ids <- function(dt,
   # combinations -----------
 
   # Start testing combinations
-  start_time <- Sys.time()
-  min_size <- max(min_combination_size, 2)
-  max_size <- min(length(vars), max_combination_size)
+  start_time   <- Sys.time()
+  min_size     <- max(min_combination_size, 2)
+  max_size     <- min(length(vars), max_combination_size)
+  elapsed_time <- 0
 
   # where there is only one variable or not enough vars to combine
-  if (min_size >= max_size) {
+  if (min_size > max_size) {
     if (verbose) {
       cli::cli_alert_warning(
         "Can't make combinations of {.field {vars}} if the min number of
@@ -132,16 +137,21 @@ possible_ids <- function(dt,
 
     # Prune combinations where the product of unique counts is less
     # than n_rows
-    combos_to_keep <- vapply(combos, \(combo) {
-      prod(unique_counts[combo]) >= n_rows
-    }, logical(1))
+    combos_to_keep <- vapply(combos,
+                             \(combo) {
+                               prod(unique_counts[combo]) >= n_rows
+                               },
+                             logical(1))
 
     combos <- combos[combos_to_keep]
 
     # Estimate processing time and prune combinations
-    est_times <- vapply(combos, function(combo) {
-      estimate_combination_time(n_rows, unique_counts[combo])
-    }, numeric(1))
+    est_times <- vapply(combos,
+                        \(combo) {
+                          estimate_combination_time(n_rows,
+                                                    unique_counts[combo])
+                          },
+                        numeric(1))
 
     if (verbose) {
       cli::cli_progress_bar(
@@ -155,7 +165,7 @@ possible_ids <- function(dt,
       if (is_id(dt, by = combo, verbose = FALSE)) {
         # This is inefficient... it is copying every time...
         # I need to think better on how to do it.
-        possible_ids_list[j] <- combo
+        possible_ids_list[[j]] <- combo
         j <- init_index + 1
         if (j > max_numb_possible_ids) {
           if (verbose) {
@@ -201,10 +211,8 @@ possible_ids <- function(dt,
     if (verbose) {
       cli::cli_alert_warning("No unique identifier found.")
     }
-    return(NULL)
-  } else {
-    return(remove_null(possible_ids_list))
   }
+  return(remove_null(possible_ids_list))
 }
 
 
@@ -225,9 +233,14 @@ filter_by_class <- function(dt, vars, include_classes, exclude_classes) {
   vars
 }
 
-filter_by_name <- function(vars, include, exclude) {
+filter_by_name <- function(vars, include, exclude, verbose) {
   # Apply 'exclude' filter
   if (!is.null(exclude)) {
+    wno_exc <- which(!exclude %in% vars) # which not excluded
+    if (length(wno_exc) > 0 & verbose) {
+      no_exc <- exclude[wno_exc]
+      cli::cli_alert_warning("var{?s} {.var {no_exc}} not found in dataframe")
+    }
     vars <- setdiff(vars, exclude)
   }
 
