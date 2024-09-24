@@ -101,11 +101,11 @@ possible_ids <- function(dt,
   if (anyDuplicated(vars)) {
     dupvars <- vars[duplicated(vars)] |>
       unique()
-    cli::cli_abort("vars {.field {dupvars}} are duplicated.")
+    cli::cli_abort("vars {.strongVar {dupvars}} are duplicated.")
   }
 
   if (verbose) {
-    cli::cli_alert_info("Variables to test: {.field {vars}}")
+    cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
   }
 
   if (length(vars) == 0) {
