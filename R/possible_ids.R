@@ -130,7 +130,6 @@ possible_ids <- function(dt,
   init_index    <- 0
 
 
-
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
 

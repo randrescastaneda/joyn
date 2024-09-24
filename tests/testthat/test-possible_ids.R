@@ -58,6 +58,35 @@ test_that("vars provided by user", {
                vars = c("t")) |>
     expect_error()
 
+  # one or more vars not included in dt
+  possible_ids(x4,
+               vars = c("id3", "id2")) |>
+    expect_error()
+
+  possible_ids(dt,
+               vars = c("id", "d3", "id2"))
+
+  possible_ids(x4,
+               vars = c("id3", "id4")) |>
+    expect_error()
+
+  # check only combs with vars in vars are returned
+  all_ids_dt <- possible_ids(dt)
+
+  use_ids_dt <- possible_ids(dt,
+               vars = c("id", "numeric_double_1", "numeric_double_2"))
+
+
+
+
+
+
+
+
+
+
+
+
 })
 test_that("inconsistent use of `include`", {
 
