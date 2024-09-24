@@ -50,18 +50,18 @@
 #'                 x   = c(16, 12, NA, NA, 15))
 #' possible_ids(x4)
 possible_ids <- function(dt,
-                         vars = NULL
-                         exclude = NULL,
-                         include = NULL,
-                         exclude_classes = NULL,
-                         include_classes = NULL,
-                         verbose = getOption("possible_ids.verbose",
-                                             default = FALSE),
-                         min_combination_size = 1,
-                         max_combination_size = 5,
-                         max_processing_time = 60, # in seconds
-                         max_numb_possible_ids = 100,
-                         get_all  = FALSE) {
+                         vars                        = NULL,
+                         exclude                     = NULL,
+                         include                     = NULL,
+                         exclude_classes             = NULL,
+                         include_classes             = NULL,
+                         verbose                     = getOption("possible_ids.verbose",
+                                                        default = FALSE),
+                         min_combination_size        = 1,
+                         max_combination_size        = 5,
+                         max_processing_time         = 60, # in seconds
+                         max_numb_possible_ids       = 100,
+                         get_all                     = FALSE) {
 
   # defenses ---------
   # Ensure dt is a data.table
@@ -77,7 +77,11 @@ possible_ids <- function(dt,
   if (is.null(vars)) {
     vars <- names(dt) |> copy()
   } else {
-    # check that `vars` are in dt
+    missing_vars <- setdiff(vars, names(dt))
+    if (length(missing_vars) > 0) {
+      cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
+    }
+
   }
 
   # Exclude and include -------
