@@ -50,6 +50,7 @@
 #'                 x   = c(16, 12, NA, NA, 15))
 #' possible_ids(x4)
 possible_ids <- function(dt,
+                         vars = NULL
                          exclude = NULL,
                          include = NULL,
                          exclude_classes = NULL,
@@ -72,7 +73,12 @@ possible_ids <- function(dt,
   }
 
   # Get all variable names
-  vars <- names(dt) |> copy()
+  #vars <- names(dt) |> copy()
+  if (is.null(vars)) {
+    vars <- names(dt) |> copy()
+  } else {
+    # check that `vars` are in dt
+  }
 
   # Exclude and include -------
 
