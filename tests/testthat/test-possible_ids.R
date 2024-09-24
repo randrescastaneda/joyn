@@ -70,21 +70,17 @@ test_that("vars provided by user", {
                vars = c("id3", "id4")) |>
     expect_error()
 
-  # check only combs with vars in vars are returned
+  # check combs with vars in vars are returned
   all_ids_dt <- possible_ids(dt)
 
   use_ids_dt <- possible_ids(dt,
                vars = c("id", "numeric_double_1", "numeric_double_2"))
 
+  all(sapply(use_ids_dt,
+             function(x) { x %in% all_ids_dt })) |>
+    expect_equal(TRUE)
 
-
-
-
-
-
-
-
-
+  # no errors raised if vars in dt
 
 
 })
