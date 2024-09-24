@@ -83,6 +83,10 @@ possible_ids <- function(dt,
       cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
     }
 
+    if (length(vars) < 2) {
+     cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
+    }
+
   }
 
   # Exclude and include -------

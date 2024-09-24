@@ -51,6 +51,14 @@ test_that("error if not dataframe", {
 
 })
 
+test_that("vars provided by user", {
+
+  # single var -raise error
+  possible_ids(x4,
+               vars = c("t")) |>
+    expect_error()
+
+})
 test_that("inconsistent use of `include`", {
 
   expect_warning(possible_ids(x1,
