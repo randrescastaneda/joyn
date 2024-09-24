@@ -3,6 +3,7 @@
 #' Identify possible combinations of variables that  uniquely identifying dt
 #'
 #' @param dt data frame
+#' @param vars character: A vector of variable names to consider for identifying unique combinations. If `NULL` (default), all variables in the data frame are considered.
 #' @param exclude character: Exclude variables to be selected as identifiers.
 #' @param include character: Name of variable to be included, that might belong
 #'   to the group excluded in the `exclude`

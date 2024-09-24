@@ -6,6 +6,7 @@
 \usage{
 possible_ids(
   dt,
+  vars = NULL,
   exclude = NULL,
   include = NULL,
   exclude_classes = NULL,
@@ -20,6 +21,8 @@ possible_ids(
 }
 \arguments{
 \item{dt}{data frame}
+
+\item{vars}{character: A vector of variable names to consider for identifying unique combinations. If \code{NULL} (default), all variables in the data frame are considered.}
 
 \item{exclude}{character: Exclude variables to be selected as identifiers.}
 
