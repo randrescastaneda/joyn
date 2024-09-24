@@ -179,13 +179,18 @@ dt <- copy(dt_large)
 
 possible_ids(
   dt = dt_large,
-  exclude_types = c("numeric"),
   verbose = TRUE
 )
 
 possible_ids(
   dt = dt_large,
   exclude_types = c("numeric"),
+  verbose = TRUE
+)
+
+possible_ids(
+  dt = dt_large,
+  exclude_classes = c("numeric"),
   exclude = "id",
   verbose = TRUE
 )
@@ -193,7 +198,7 @@ possible_ids(
 uniq_vars <- grep("unique_id", names(dt_large), value = TRUE)
 pids <- possible_ids(
   dt = dt_large,
-  exclude_types = c("logical", "date", "datetime", "numeric"),
+  exclude_classes = c("logical", "date", "datetime", "numeric"),
   exclude = "id",
   include = uniq_vars,
   verbose = TRUE,
