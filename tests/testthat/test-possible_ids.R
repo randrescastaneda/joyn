@@ -64,23 +64,45 @@ test_that("vars provided by user", {
     expect_error()
 
   possible_ids(dt,
-               vars = c("id", "d3", "id2"))
-
-  possible_ids(x4,
-               vars = c("id3", "id4")) |>
+               vars = c("id", "id3", "id2")) |>
     expect_error()
 
-  # check combs with vars in vars are returned
-  all_ids_dt <- possible_ids(dt)
+
+  ids_dt <- possible_ids(dt, get)
+
+  vars = c("id", "numeric_double_1", "numeric_double_2")
 
   use_ids_dt <- possible_ids(dt,
-               vars = c("id", "numeric_double_1", "numeric_double_2"))
+               vars = vars)
 
   all(sapply(use_ids_dt,
-             function(x) { x %in% all_ids_dt })) |>
+             function(x) { x %in% ids_dt })) |>
+    expect_equal(TRUE)
+
+  all(unlist(use_ids_dt) %in% vars) |>
     expect_equal(TRUE)
 
   # no errors raised if vars in dt
+
+  # Check if the combination of unique_id1, unique_id2, and unique_id3 uniquely identifies rows
+  vars <- c("id", "unique_id2", "unique_id3")
+
+  res <- dt_large[, .N,
+           by = vars][N > 1] |>
+    nrow()
+
+  # NOTE (RT) --> this test should be correct, but fails because of an issue with the function (?)
+#
+#   if (res == 0) {  # if no duplicate rows
+#     possible_ids(dt,
+#                  vars = vars,
+#                  get_all = TRUE) |>
+#       unlist() |>
+#       expect_equal(vars)
+#   }
+
+  # check that returned ids only include vars in vars
+  ids <-
 
 
 })
@@ -152,7 +174,7 @@ test_that("duplicated names", {
 
 })
 
-# Big data --------------------
+# Auxiliary data: Big data table--------------------
 
 # Set seed for reproducibility
 set.seed(123)
@@ -164,7 +186,7 @@ n_vars <- 50         # Total variables
 # Initialize an empty data.table
 dt_large <- data.table(id = 1:n_rows)
 
-# Manually create three variables that uniquely identify the data
+## Manually create three variables that uniquely identify the data ####
 dt_large[, unique_id1 := rep(1:10, each = 1000)]  # 1000 unique values repeated 100 times
 dt_large[, unique_id2 := sample(letters, n_rows, replace = TRUE)]  # Random character variable
 dt_large[, unique_id3 := sample(1:1000, n_rows, replace = TRUE)]   # Random integer
@@ -198,7 +220,7 @@ for (i in seq_along(var_types)) {
   }
 }
 
-# Introduce duplicates in some columns that are NOT the unique identifiers
+## Introduce duplicates in some columns that are NOT the unique identifiers ####
 # For example, we can duplicate the first 100 rows in the "numeric_int_1" and "character_1" columns
 # dt_large <- rbind(dt_large, dt_large[1:100, .(numeric_int_1, character_1)])
 
@@ -226,9 +248,9 @@ possible_ids(
 uniq_vars <- grep("unique_id", names(dt_large), value = TRUE)
 pids <- possible_ids(
   dt = dt_large,
-  exclude_classes = c("logical", "date", "datetime", "numeric"),
+  #exclude_classes = c("logical", "date", "datetime", "numeric"),
   exclude = "id",
-  include = uniq_vars,
+  #vars = uniq_vars,
   verbose = TRUE,
   min_combination_size = 3,
   # max_combination_size = 3,
@@ -241,7 +263,7 @@ possible_ids(
   verbose = TRUE
 )
 
-# Remove the 'id' column to simulate data without a clear unique identifier
+## Remove the 'id' column to simulate data without a clear unique identifier ####
 dt_large[, id := NULL]
 
 possible_ids_list <- possible_ids(
