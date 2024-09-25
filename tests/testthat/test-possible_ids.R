@@ -114,7 +114,6 @@ test_that("inconsistent use of `include`", {
                include = c("id", "x")) |>
     expect_no_error()
 
-
 })
 
 test_that("exclude and include", {
@@ -122,7 +121,27 @@ test_that("exclude and include", {
   dd <- possible_ids(x3,
                exclude_classes =  c("numeric", "integer"),
                include = "foo")
-  expect_equal(unlist(dd), c("id", "foo"))
+
+  expect_equal(unlist(dd),
+               c("id", "foo"))
+
+  #
+
+  # possible_ids(dt,
+  #              #include_classes = c("integer"),
+  #              exclude = c(paste0("numeric_double", 1:8))) |> unlist()
+
+  # example excluding integers
+
+  possible_ids(dt,
+               exclude = c("numeric_double_7", "numeric_double_8"))
+
+  # to complete
+
+  possible_ids(dt,
+               exclude_classes = "numeric") |> unlist()
+
+
 
 })
 
