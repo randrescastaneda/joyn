@@ -576,39 +576,30 @@ joyn <- function(x,
         cli::cli_text("Joyn returned:")
 
         # notes
-        cli::cli_li(
-          sprintf(
-            "{.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))}
+        if (notes_count > 0) {
+          cli::cli_li(
+            sprintf(
+              "{.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))}
           ",
-            info_type
-          )
-        )
+              info_type
+            )
+          )}
 
         # warnings
-        cli::cli_li(
-          sprintf(
-            "
+        if (warn_count > 0 ) {
+          cli::cli_li(
+            sprintf(
+              "
           {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
           ",
-            warning_type
-          )
-        )
-
-
+              warning_type
+            )
+          )}
       }
-      # cli::cli_li(
-      #   sprintf(
-      #     "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
-      #   {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
-      #   ",
-      #     info_type, warning_type
-      #   )
-      # )
+
     } else {
       joyn_msg(msg_type)
     }
-
-
 
   }
   setattr(jn, "class", class_x)
