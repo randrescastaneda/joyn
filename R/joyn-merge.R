@@ -541,15 +541,6 @@ joyn <- function(x,
   joyn_report(verbose = verbose)
 
   if (verbose == TRUE) {
-    #joyn_msg(msg_type)
-
-    # notes_count <- sum(
-    #   .joynenv$joyn_msgs$type %in% c("info", "note")
-    #   )
-    #
-    # warn_count  <- sum(
-    #   .joynenv$joyn_msgs$type == "warn"
-    #   )
 
     type_element <- rlang::env_get(.joynenv,
                                    "joyn_msgs")$type
@@ -560,12 +551,18 @@ joyn <- function(x,
     notes_count <- fsum(type_element %in% c("info", "note"),
                         na.rm = TRUE)
 
+    # notes_count <- sum(
+    #   .joynenv$joyn_msgs$type %in% c("info", "note")
+    # )
+    #
+    # warn_count  <- sum(
+    #   .joynenv$joyn_msgs$type == "warn"
+    # )
+
 
     warning_type <- "warn"
     info_type    <- "info"
     note_type    <- "note"
-
-    # option 2 -clickable x and y warnings
 
     ## show messages ------------------
 
@@ -573,20 +570,47 @@ joyn <- function(x,
     output_method <- getOption("joyn.output_method")
 
     if (output_method == TRUE) {
-      cli::cli_li(
-        sprintf(
-          "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
-        {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
-        ",
-          info_type, warning_type
+
+      if (notes_count > 0 || warn_count > 0) {
+
+        cli::cli_text("Joyn returned:")
+
+        # notes
+        cli::cli_li(
+          sprintf(
+            "{.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))}
+          ",
+            info_type
+          )
         )
-      )
+
+        # warnings
+        cli::cli_li(
+          sprintf(
+            "
+          {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
+          ",
+            warning_type
+          )
+        )
+
+
+      }
+      # cli::cli_li(
+      #   sprintf(
+      #     "Joyn returned {.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))} and raised
+      #   {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
+      #   ",
+      #     info_type, warning_type
+      #   )
+      # )
     } else {
       joyn_msg(msg_type)
     }
 
-  }
 
+
+  }
   setattr(jn, "class", class_x)
 
   jn
