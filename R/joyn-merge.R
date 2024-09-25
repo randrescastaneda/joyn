@@ -543,13 +543,23 @@ joyn <- function(x,
   if (verbose == TRUE) {
     #joyn_msg(msg_type)
 
-    notes_count <- sum(
-      .joynenv$joyn_msgs$type %in% c("info", "note")
-      )
+    # notes_count <- sum(
+    #   .joynenv$joyn_msgs$type %in% c("info", "note")
+    #   )
+    #
+    # warn_count  <- sum(
+    #   .joynenv$joyn_msgs$type == "warn"
+    #   )
 
-    warn_count  <- sum(
-      .joynenv$joyn_msgs$type == "warn"
-      )
+    type_element <- rlang::env_get(.joynenv,
+                                   "joyn_msgs")$type
+
+    warn_count <- fsum(type_element == "warn",
+                       na.rm = TRUE)
+
+    notes_count <- fsum(type_element %in% c("info", "note"),
+                        na.rm = TRUE)
+
 
     warning_type <- "warn"
     info_type    <- "info"
