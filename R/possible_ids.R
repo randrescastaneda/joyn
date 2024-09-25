@@ -76,7 +76,17 @@ possible_ids <- function(dt,
   # Get all variable names
   #vars <- names(dt) |> copy()
   if (is.null(vars)) {
-    vars <- names(dt) |> copy()
+    vars <- names(dt) |>
+      copy()
+
+  # 2 options:
+  #   1. If include is not null raise an error -user must provide either include or vars
+  #   2. Remove from include vars in vars:
+    if (!is.null(include)){
+      include <- setdiff(include,
+                         vars)
+    }
+
   } else {
     missing_vars <- setdiff(vars, names(dt))
     if (length(missing_vars) > 0) {

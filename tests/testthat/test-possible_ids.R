@@ -68,9 +68,9 @@ test_that("vars provided by user", {
     expect_error()
 
 
-  ids_dt <- possible_ids(dt, get)
+  ids_dt <- possible_ids(dt)
 
-  vars = c("id", "numeric_double_1", "numeric_double_2")
+  vars <- c("id", "numeric_double_1", "numeric_double_2")
 
   use_ids_dt <- possible_ids(dt,
                vars = vars)
@@ -82,7 +82,6 @@ test_that("vars provided by user", {
   all(unlist(use_ids_dt) %in% vars) |>
     expect_equal(TRUE)
 
-  # no errors raised if vars in dt
 
   # Check if the combination of unique_id1, unique_id2, and unique_id3 uniquely identifies rows
   vars <- c("id", "unique_id2", "unique_id3")
@@ -91,25 +90,30 @@ test_that("vars provided by user", {
            by = vars][N > 1] |>
     nrow()
 
-  # NOTE (RT) --> this test should be correct, but fails because of an issue with the function (?)
-#
-#   if (res == 0) {  # if no duplicate rows
-#     possible_ids(dt,
-#                  vars = vars,
-#                  get_all = TRUE) |>
-#       unlist() |>
-#       expect_equal(vars)
-#   }
+  # --if it does, possible_ids should return those vars
 
-  # check that returned ids only include vars in vars
-  ids <-
+  # NOTE (RT) --> this test should be correct, but fails --> find issue in function (?)
 
+  if (res == 0) {  # if no duplicate rows
+    possible_ids(dt,
+                 vars = vars,
+                 get_all = TRUE) |>
+      unlist() |>
+      expect_equal(vars)
+  }
 
 })
+
 test_that("inconsistent use of `include`", {
 
   expect_warning(possible_ids(x1,
                             include = "x"))
+
+  # this was failing due to wrong relationship between vars and include
+  possible_ids(x1,
+               include = c("id", "x")) |>
+    expect_no_error()
+
 
 })
 
