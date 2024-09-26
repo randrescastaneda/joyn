@@ -58,7 +58,7 @@ possible_ids <- function(dt,
                          include_classes             = NULL,
                          verbose                     = getOption("possible_ids.verbose",
                                                         default = FALSE),
-                         return_checked_vars         = FALSE,
+                         return_checked_vars         = TRUE,
                          min_combination_size        = 1,
                          max_combination_size        = 5,
                          max_processing_time         = 60, # in seconds
@@ -86,12 +86,12 @@ possible_ids <- function(dt,
     # if (!is.null(include)){
     #   include <- setdiff(include,
     #                      vars)
-    # }
-
-    if (!is.null(include)){
-        vars <- setdiff(vars,
-                           include)
-      }
+    # # }
+    #
+    # if (!is.null(include)){
+    #     vars <- setdiff(vars,
+    #                        include)
+    #   }
 
 
 
