@@ -109,7 +109,6 @@ test_that("inconsistent use of `include`", {
   expect_warning(possible_ids(x1,
                             include = "x"))
 
-  # this was failing due to wrong relationship between vars and include
   possible_ids(x1,
                include = c("id", "x")) |>
     expect_no_error()
@@ -125,21 +124,43 @@ test_that("exclude and include", {
   expect_equal(unlist(dd),
                c("id", "foo"))
 
-  #
+  ## Test combination between include class and exclude vars ####
 
-  # possible_ids(dt,
-  #              #include_classes = c("integer"),
-  #              exclude = c(paste0("numeric_double", 1:8))) |> unlist()
+  checked_vars <- possible_ids(dt,
+                 return_checked_vars = TRUE,
+                 include_classes     = c("integer"),
+                 exclude             = paste0("numeric_int_", 1:5))
 
-  # example excluding integers
+  any(
+    paste0("numeric_int_", 1:5) %in% checked_vars
+    ) |>
+    expect_equal(FALSE)
 
-  possible_ids(dt,
-               exclude = c("numeric_double_7", "numeric_double_8"))
+  all(
+    paste0("numeric_int_", 6:10) %in% checked_vars
+  ) |>
+    expect_equal(TRUE)
 
-  # to complete
+  ## Test combination between include vars and exclude class ####
+  checked_vars <- possible_ids(dt,
+                               return_checked_vars = TRUE,
+                               include     = c("numeric_double_1",
+                                               "numeric_double_2"),
+                               exclude_classes = "numeric")
 
-  possible_ids(dt,
-               exclude_classes = "numeric") |> unlist()
+  all(
+    paste0("numeric_double_", 1:2) %in% checked_vars
+  ) |>
+    expect_equal(TRUE)
+
+  any(
+    paste0("numeric_double_", 3:10) %in% checked_vars
+  ) |>
+    expect_equal(FALSE)
+
+  checked_vars <- possible_ids(x2,
+                               include = "x",
+                               exclude_classes = "numeric")
 
 
 

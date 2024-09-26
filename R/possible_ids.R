@@ -58,6 +58,7 @@ possible_ids <- function(dt,
                          include_classes             = NULL,
                          verbose                     = getOption("possible_ids.verbose",
                                                         default = FALSE),
+                         return_checked_vars         = FALSE,
                          min_combination_size        = 1,
                          max_combination_size        = 5,
                          max_processing_time         = 60, # in seconds
@@ -82,10 +83,17 @@ possible_ids <- function(dt,
   # 2 options:
   #   1. If include is not null raise an error -user must provide either include or vars
   #   2. Remove from include vars in vars:
+    # if (!is.null(include)){
+    #   include <- setdiff(include,
+    #                      vars)
+    # }
+
     if (!is.null(include)){
-      include <- setdiff(include,
-                         vars)
-    }
+        vars <- setdiff(vars,
+                           include)
+      }
+
+
 
   } else {
     missing_vars <- setdiff(vars, names(dt))
@@ -110,6 +118,10 @@ possible_ids <- function(dt,
   ## var names --------
   vars <- filter_by_name(vars, include, exclude, verbose)
 
+  # return vars to check ####
+  if (return_checked_vars) {
+    return(vars)
+  }
 
   ##  no duplicated vars -------------
   if (anyDuplicated(vars)) {
@@ -264,6 +276,8 @@ possible_ids <- function(dt,
       cli::cli_alert_warning("No unique identifier found.")
     }
   }
+
+  # add option to return checked vars:
   return(remove_null(possible_ids_list))
 }
 
