@@ -76,9 +76,37 @@ possible_ids <- function(dt,
 
   # Get all variable names
   #vars <- names(dt) |> copy()
-  if (is.null(vars)) {
+
+
+  # Vars argument attempt one -------
+
+  if (!(is.null(vars))) { #when user provdes vars
+
+    # exclude should not be used
+    if (!(is.null(exclude) & is.null(exclude_classes))) {
+      exclude         <- NULL
+      exclude_classes <- NULL
+      cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+    }
+
+    # include
+    if (!is.null(include)) {
+      vars <- funique(c(vars, setdiff(include, vars)))
+    }
+  } else {
     vars <- names(dt) |>
       copy()
+  }
+
+
+
+
+
+
+  # OLD VERSION #####
+  # if (is.null(vars)) {
+  #   vars <- names(dt) |>
+  #     copy()
 
   # 2 options:
   #   1. If include is not null raise an error -user must provide either include or vars
@@ -95,17 +123,17 @@ possible_ids <- function(dt,
 
 
 
-  } else {
-    missing_vars <- setdiff(vars, names(dt))
-    if (length(missing_vars) > 0) {
-      cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
-    }
-
-    if (length(vars) < 2) {
-     cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
-    }
-
-  }
+  # } else {
+  #   missing_vars <- setdiff(vars, names(dt))
+  #   if (length(missing_vars) > 0) {
+  #     cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
+  #   }
+  #
+  #   if (length(vars) < 2) {
+  #    cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
+  #   }
+  #
+  # }
 
   # Exclude and include -------
 
