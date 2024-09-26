@@ -545,19 +545,9 @@ joyn <- function(x,
     type_element <- rlang::env_get(.joynenv,
                                    "joyn_msgs")$type
 
-    warn_count <- fsum(type_element == "warn",
-                       na.rm = TRUE)
+    warn_count <- fsum(type_element == "warn")
 
-    notes_count <- fsum(type_element %in% c("info", "note"),
-                        na.rm = TRUE)
-
-    # notes_count <- sum(
-    #   .joynenv$joyn_msgs$type %in% c("info", "note")
-    # )
-    #
-    # warn_count  <- sum(
-    #   .joynenv$joyn_msgs$type == "warn"
-    # )
+    notes_count <- fsum(type_element %in% c("info", "note"))
 
 
     warning_type <- "warn"
