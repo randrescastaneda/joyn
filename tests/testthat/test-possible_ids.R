@@ -158,9 +158,38 @@ test_that("exclude and include", {
   ) |>
     expect_equal(FALSE)
 
-  checked_vars <- possible_ids(x2,
+  res_ids <- possible_ids(x2,
                                include = "x",
                                exclude_classes = "numeric")
+
+  res_ids |>
+    unlist() |>
+    expect_equal(c("t", "x"))
+
+  res_ids <- possible_ids(x3,
+                          include = "id",
+                          exclude_classes = "character")
+
+  res_ids |>
+    unlist() |>
+    expect_equal(c("foo", "id"))
+
+  # alert if include and exclude same class ####
+  possible_ids(dt,
+               include_classes = "numeric",
+               exclude_classes = "numeric") |>
+    expect_message()
+
+  # alert if include and exclude same vars ####
+  possible_ids(dt,
+               include = c("id", "unique_id1"),
+               exclude = c("id", "unique_id1")) |>
+    expect_message()
+
+
+
+
+
 
 
 
