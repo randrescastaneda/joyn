@@ -370,7 +370,9 @@ filter_by_name <- function(vars, include, exclude, verbose) {
   }
 
   # Apply 'include' filter
-  c(vars, include)
+
+  c(vars,
+            setdiff(include, vars))
 
 }
 

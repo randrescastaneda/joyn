@@ -100,8 +100,7 @@ test_that("vars provided by user", {
 
   if (res == 0) {  # if no duplicate rows
     possible_ids(dt,
-                 vars = vars,
-                 get_all = TRUE) |>
+                 vars = vars) |>
       unlist() |>
       expect_equal(vars)
   }
@@ -114,6 +113,20 @@ test_that("relationship include and vars", {
                vars = c("id1", "id2"),
                include = c("t")) |>
     expect_no_error()
+
+  possible_ids(dt,
+               vars = c("id", "unique_id2"),
+               include = c("id", "factor_1", "factor_2")) |>
+    expect_no_error()
+
+  possible_ids(x4,
+               vars = NULL,
+               include = c("t", "x")) |>
+    expect_no_error()
+
+  possible_ids(x4,
+               vars = c("t", "x"),
+               include = NULL)
 
 
 })
