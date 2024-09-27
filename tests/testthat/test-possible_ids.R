@@ -67,6 +67,10 @@ test_that("vars provided by user", {
                vars = c("id", "id3", "id2")) |>
     expect_error()
 
+  possible_ids(dt,
+               vars = c("id", "numeric_int_1", "character_1"),
+               verbose = TRUE) |>
+    expect_no_error()
 
   ids_dt <- possible_ids(dt)
 
@@ -103,6 +107,21 @@ test_that("vars provided by user", {
   }
 
 })
+
+test_that("relationship include and vars", {
+
+  possible_ids(x4,
+               vars = c("id1", "id2"),
+               include = c("t")) |>
+    expect_no_error()
+
+
+})
+
+test_that("relationship exclude and vars") {
+
+  # add tests
+}
 
 test_that("inconsistent use of `include`", {
 

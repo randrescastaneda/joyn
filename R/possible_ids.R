@@ -58,7 +58,7 @@ possible_ids <- function(dt,
                          include_classes             = NULL,
                          verbose                     = getOption("possible_ids.verbose",
                                                         default = FALSE),
-                         return_checked_vars         = TRUE,
+                         return_checked_vars         = FALSE,
                          min_combination_size        = 1,
                          max_combination_size        = 5,
                          max_processing_time         = 60, # in seconds
@@ -80,25 +80,52 @@ possible_ids <- function(dt,
 
   # Vars argument attempt one -------
 
-  if (!(is.null(vars))) { #when user provdes vars
+  # if (!(is.null(vars))) { #when user provides vars
+  #
+  #   # exclude should not be used
+  #   if (!(is.null(exclude) & is.null(exclude_classes))) {
+  #     exclude         <- NULL
+  #     exclude_classes <- NULL
+  #     cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+  #   }
+  #
+  #   # include
+  #   if (!is.null(include)) {
+  #     vars <- funique(c(vars, setdiff(include, vars)))
+  #   }
+  # } else {
+  #   vars <- names(dt) |>
+  #     copy()
+  # }
 
-    # exclude should not be used
-    if (!(is.null(exclude) & is.null(exclude_classes))) {
-      exclude         <- NULL
-      exclude_classes <- NULL
-      cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+  # Vars arg attempt two --------
+
+   if (is.null(vars)) {
+     vars <- names(dt) |>
+       copy()
+     } else {
+    # check if all vars are in dt
+    missing_vars <- setdiff(vars, names(dt))
+
+    if (length(missing_vars) > 0) {
+       cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
     }
 
-    # include
-    if (!is.null(include)) {
-      vars <- funique(c(vars, setdiff(include, vars)))
-    }
-  } else {
-    vars <- names(dt) |>
-      copy()
-  }
+    # check at least 2 vars are provided
 
+     if (length(vars) < 2) {
+      cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
+     }
 
+   }
+
+     # to fix duplicates with include
+
+  # if (!is.null(include)){
+  #    vars <- funique(c(vars,
+  #                      setdiff(include, vars)))
+  #
+  #  }
 
 
 
@@ -146,10 +173,12 @@ possible_ids <- function(dt,
   ## var names --------
   vars <- filter_by_name(vars, include, exclude, verbose)
 
+  ## NOTE: DUPLICATES ORIGINATE HERE -IN FILTER BY NAME !!
+
   # return vars to check ####
-  if (return_checked_vars) {
-    return(vars)
-  }
+  # if (return_checked_vars) {
+  #   return(vars)
+  # }
 
   ##  no duplicated vars -------------
   if (anyDuplicated(vars)) {
@@ -335,7 +364,9 @@ filter_by_name <- function(vars, include, exclude, verbose) {
       no_exc <- exclude[wno_exc]
       cli::cli_alert_warning("var{?s} {.var {no_exc}} not found in dataframe")
     }
-    vars <- setdiff(vars, exclude)
+    #vars <- setdiff(vars, exclude)
+    vars <- c(vars,
+              setdiff(include, vars))
   }
 
   # Apply 'include' filter
