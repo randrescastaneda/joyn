@@ -58,7 +58,7 @@ possible_ids <- function(dt,
                          include_classes             = NULL,
                          verbose                     = getOption("possible_ids.verbose",
                                                         default = FALSE),
-                         return_checked_vars         = FALSE,
+                         store_checked_vars          = TRUE,
                          min_combination_size        = 1,
                          max_combination_size        = 5,
                          max_processing_time         = 60, # in seconds
@@ -116,6 +116,13 @@ possible_ids <- function(dt,
      if (length(vars) < 2) {
       cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
      }
+
+    # exclude should not be used
+      if (!(is.null(exclude) & is.null(exclude_classes))) {
+        exclude         <- NULL
+        exclude_classes <- NULL
+        cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+      }
 
    }
 
@@ -334,8 +341,20 @@ possible_ids <- function(dt,
     }
   }
 
-  # add option to return checked vars:
-  return(remove_null(possible_ids_list))
+  ret_list <- remove_null(possible_ids_list)
+
+  if (store_checked_vars == TRUE) {
+    # store checked vars in env and has an attribute
+    rlang::env_poke(env = .joynenv,
+                    nm = "possible_ids",
+                    value = vars)
+
+    #add vars as an attribute to the list remove_null(possible_ids_list)
+    attr(ret_list, "checked_vars") <- vars
+  }
+
+  #return(remove_null(possible_ids_list))
+  return(ret_list)
 }
 
 

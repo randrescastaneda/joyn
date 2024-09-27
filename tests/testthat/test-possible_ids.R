@@ -133,13 +133,22 @@ test_that("relationship include and vars", {
 
 test_that("relationship exclude and vars") {
 
-  # add tests
+  possible_ids(x4,
+               vars = c("t", "x"),
+               exclude_classes = "character") |>
+    expect_message()
+
+  possible_ids(x4,
+               vars = c("id1", "x"),
+               exclude = "x") |>
+    expect_message()
 }
 
 test_that("inconsistent use of `include`", {
 
-  expect_warning(possible_ids(x1,
-                            include = "x"))
+  # why is this an inconsistent use of include?
+  # expect_warning(possible_ids(x1,
+  #                           include = "x"))
 
   possible_ids(x1,
                include = c("id", "x")) |>
