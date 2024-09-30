@@ -76,7 +76,7 @@ possible_ids <- function(dt,
   # Get all variable names
   #vars <- names(dt) |> copy()
 
-  # Vars arg attempt two --------
+  # Vars --------
 
    if (is.null(vars)) {
      vars <- names(dt) |>
@@ -141,6 +141,9 @@ possible_ids <- function(dt,
     return(NULL) # should this be an error?
   }
 
+  print(vars)
+
+
   # Unique values ---------
 
   # Sort variables by number of unique values (ascending order)
@@ -153,6 +156,19 @@ possible_ids <- function(dt,
 
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
+
+  # add checked vars to .joynenv
+  if (store_checked_vars == TRUE) {
+    # store in .joynenv
+    rlang::env_poke(env = .joynenv,
+                    nm = "checked_ids",
+                    value = vars)
+
+    # add attribute
+    attr(possible_ids_list, "checked_ids") <- vars
+  }
+
+  #print(attributes(possible_ids_list))
 
   if (min_combination_size == 1) {
     unique_ids    <- vars[unique_counts == n_rows]
@@ -175,15 +191,15 @@ possible_ids <- function(dt,
     }
   }
 
-  print(vars)
-  # add checked vars to .joynenv
-  if (store_checked_vars == TRUE) {
-    # store in .joynenv
-    rlang::env_poke(env = .joynenv,
-                    nm = "checked_ids",
-                    value = vars)
-
-  }
+  # print(vars)
+  # # add checked vars to .joynenv
+  # if (store_checked_vars == TRUE) {
+  #   # store in .joynenv
+  #   rlang::env_poke(env = .joynenv,
+  #                   nm = "checked_ids",
+  #                   value = vars)
+  #
+  # }
 
 
   # combinations -----------
@@ -203,8 +219,6 @@ possible_ids <- function(dt,
     }
     return(remove_null(possible_ids_list))
   }
-
-  print(vars)
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
