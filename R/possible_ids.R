@@ -3,8 +3,7 @@
 #' Identify possible combinations of variables that  uniquely identifying dt
 #'
 #' @param dt data frame
-#' @param vars character: A vector of variable names to consider for identifying unique combinations. If `NULL` (default), all variables in the data frame are considered.
-#' @param exclude character: Exclude variables to be selected as identifiers.
+#' @param vars character: A vector of variable names to consider for identifying unique combinations.
 #' @param include character: Name of variable to be included, that might belong
 #'   to the group excluded in the `exclude`
 #' @param exclude_classes character: classes to exclude from analysis (e.g.,
@@ -77,27 +76,6 @@ possible_ids <- function(dt,
   # Get all variable names
   #vars <- names(dt) |> copy()
 
-
-  # Vars argument attempt one -------
-
-  # if (!(is.null(vars))) { #when user provides vars
-  #
-  #   # exclude should not be used
-  #   if (!(is.null(exclude) & is.null(exclude_classes))) {
-  #     exclude         <- NULL
-  #     exclude_classes <- NULL
-  #     cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
-  #   }
-  #
-  #   # include
-  #   if (!is.null(include)) {
-  #     vars <- funique(c(vars, setdiff(include, vars)))
-  #   }
-  # } else {
-  #   vars <- names(dt) |>
-  #     copy()
-  # }
-
   # Vars arg attempt two --------
 
    if (is.null(vars)) {
@@ -125,49 +103,6 @@ possible_ids <- function(dt,
       }
 
    }
-
-     # to fix duplicates with include
-
-  # if (!is.null(include)){
-  #    vars <- funique(c(vars,
-  #                      setdiff(include, vars)))
-  #
-  #  }
-
-
-
-
-  # OLD VERSION #####
-  # if (is.null(vars)) {
-  #   vars <- names(dt) |>
-  #     copy()
-
-  # 2 options:
-  #   1. If include is not null raise an error -user must provide either include or vars
-  #   2. Remove from include vars in vars:
-    # if (!is.null(include)){
-    #   include <- setdiff(include,
-    #                      vars)
-    # # }
-    #
-    # if (!is.null(include)){
-    #     vars <- setdiff(vars,
-    #                        include)
-    #   }
-
-
-
-  # } else {
-  #   missing_vars <- setdiff(vars, names(dt))
-  #   if (length(missing_vars) > 0) {
-  #     cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
-  #   }
-  #
-  #   if (length(vars) < 2) {
-  #    cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
-  #   }
-  #
-  # }
 
   # Exclude and include -------
 
@@ -240,6 +175,17 @@ possible_ids <- function(dt,
     }
   }
 
+  print(vars)
+  # add checked vars to .joynenv
+  if (store_checked_vars == TRUE) {
+    # store in .joynenv
+    rlang::env_poke(env = .joynenv,
+                    nm = "checked_ids",
+                    value = vars)
+
+  }
+
+
   # combinations -----------
 
   # Start testing combinations
@@ -257,6 +203,8 @@ possible_ids <- function(dt,
     }
     return(remove_null(possible_ids_list))
   }
+
+  print(vars)
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
@@ -329,6 +277,9 @@ possible_ids <- function(dt,
       }
       if (verbose) cli::cli_progress_update()
     }
+
+    # charcare(0)
+    print(vars)
     # Break if all variables are used
     if (length(vars) == 0 || elapsed_time > max_processing_time) {
       break
@@ -341,19 +292,28 @@ possible_ids <- function(dt,
     }
   }
 
+
+
   ret_list <- remove_null(possible_ids_list)
+  #   setattrib("checked_vars" = vars)
 
-  if (store_checked_vars == TRUE) {
-    # store checked vars in env and has an attribute
-    rlang::env_poke(env = .joynenv,
-                    nm = "possible_ids",
-                    value = vars)
+  #if (store_checked_vars == TRUE) {
 
-    #add vars as an attribute to the list remove_null(possible_ids_list)
-    attr(ret_list, "checked_vars") <- vars
-  }
+  #  print(.joynenv)
+  #  print(vars)
+  #   # store checked vars in env and has an attribute
+  #   rlang::env_poke(env = .joynenv,
+  #                   possible_ids  = vars)
+  #                   #value = vars)
+  #
+  #   #add vars as an attribute to the list remove_null(possible_ids_list)
+  #   attr(ret_list, "checked_vars") <- vars
+  # #}
 
-  #return(remove_null(possible_ids_list))
+  # setattr(x = ret_list,
+  #         name = "checked_vars",
+  #         value = vars)
+
   return(ret_list)
 }
 
