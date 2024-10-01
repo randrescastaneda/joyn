@@ -264,7 +264,7 @@ possible_ids <- function(dt,
         # This is inefficient... it is copying every time...
         # I need to think better on how to do it.
         possible_ids_list[[j]] <- combo
-        j <- init_index + 1
+        j <- init_index + 1 # RT I think this has to be fixed
         if (j > max_numb_possible_ids) {
           if (verbose) {
             cli::cli_alert_warning(
