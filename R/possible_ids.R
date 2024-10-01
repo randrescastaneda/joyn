@@ -141,7 +141,7 @@ possible_ids <- function(dt,
     return(NULL) # should this be an error?
   }
 
-  print(vars)
+  #print(vars)
 
 
   # Unique values ---------
@@ -163,12 +163,13 @@ possible_ids <- function(dt,
     rlang::env_poke(env = .joynenv,
                     nm = "checked_ids",
                     value = vars)
+    print(.joynenv$checked_ids)
 
     # add attribute
     attr(possible_ids_list, "checked_ids") <- vars
+    print(attributes(possible_ids_list))
   }
 
-  #print(attributes(possible_ids_list))
 
   if (min_combination_size == 1) {
     unique_ids    <- vars[unique_counts == n_rows]
@@ -218,10 +219,17 @@ possible_ids <- function(dt,
         combinations is {min_size} and the max is {max_size}")
     }
     return(remove_null(possible_ids_list))
+    # this returns an empty list -should we raise an error instead? (RT)
   }
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
+
+    # make sure length of vars is >= comb_size
+    # Skip the iteration if comb_size is larger than the number of variables in vars
+    if (length(vars) < comb_size) {
+      next
+    }
 
     combos <- combn(vars, comb_size, simplify = FALSE)
 
@@ -292,8 +300,6 @@ possible_ids <- function(dt,
       if (verbose) cli::cli_progress_update()
     }
 
-    # charcare(0)
-    print(vars)
     # Break if all variables are used
     if (length(vars) == 0 || elapsed_time > max_processing_time) {
       break
@@ -308,7 +314,7 @@ possible_ids <- function(dt,
 
 
 
-  ret_list <- remove_null(possible_ids_list)
+  #ret_list <- remove_null(possible_ids_list)
   #   setattrib("checked_vars" = vars)
 
   #if (store_checked_vars == TRUE) {
@@ -328,7 +334,7 @@ possible_ids <- function(dt,
   #         name = "checked_vars",
   #         value = vars)
 
-  return(ret_list)
+  return(remove_null(possible_ids_list))
 }
 
 
