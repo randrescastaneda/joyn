@@ -269,9 +269,30 @@ test_that("get all works", {
   #   expect_no_error()
 
 
+})
 
-  # get all with
 
+test_that("Max combination size", {
+
+  res <- possible_ids(dt,
+               vars = c( "unique_id1", "unique_id2", "unique_id3",
+                        "character_1", "character_2", "character_3", "character_4"),
+               max_combination_size = 5)
+
+
+  sapply(res, function(sublist) {
+    length(sublist) <= 3}) |>
+    all() |>
+    expect_true()
+
+  res <- possible_ids(x1,
+                      get_all = TRUE,
+                      max_combination_size = 2)
+
+  sapply(res, function(sublist) {
+    length(sublist) <= 2}) |>
+    all() |>
+    expect_true()
 
 
 })
