@@ -245,6 +245,37 @@ test_that("get length 0", {
 
 })
 
+test_that("get all works", {
+
+  # no error
+  possible_ids(x4,
+               get_all = TRUE) |>
+    expect_no_error()
+
+  # get all with user selected vars
+  possible_ids(x4,
+               vars = c("id1", "t"),
+               get_all = TRUE) |>
+    expect_no_error()
+
+  # get all with max number of combinations
+  possible_ids(x4,
+               max_combination_size = 3,
+               get_all = TRUE) |>
+    expect_no_error()
+
+  # possible_ids(dt,
+  #              get_all = TRUE) |>
+  #   expect_no_error()
+
+
+
+  # get all with
+
+
+
+})
+
 
 test_that("Exclude nothing", {
   p1 <- possible_ids(x1)

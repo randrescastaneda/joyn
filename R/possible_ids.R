@@ -159,15 +159,21 @@ possible_ids <- function(dt,
 
   # add checked vars to .joynenv
   if (store_checked_vars == TRUE) {
-    # store in .joynenv
-    rlang::env_poke(env = .joynenv,
-                    nm = "checked_ids",
-                    value = vars)
-    print(.joynenv$checked_ids)
 
-    # add attribute
-    attr(possible_ids_list, "checked_ids") <- vars
-    print(attributes(possible_ids_list))
+    checked_ids <- vars
+
+    print("here")
+    print(checked_ids)
+
+    # # store in .joynenv
+    # rlang::env_poke(env = .joynenv,
+    #                 nm = "checked_ids",
+    #                 value = vars)
+    # print(.joynenv$checked_ids)
+    #
+    # # add attribute
+    # attr(possible_ids_list, "checked_ids") <- vars
+    # print(attributes(possible_ids_list))
   }
 
 
@@ -317,8 +323,13 @@ possible_ids <- function(dt,
 
 
 
-  #ret_list <- remove_null(possible_ids_list)
-  #   setattrib("checked_vars" = vars)
+  ret_list <- remove_null(possible_ids_list)
+
+  if (store_checked_vars) {
+    attr(ret_list, "checked_ids") <- checked_ids
+
+  }
+
 
   #if (store_checked_vars == TRUE) {
 
@@ -337,7 +348,9 @@ possible_ids <- function(dt,
   #         name = "checked_vars",
   #         value = vars)
 
-  return(remove_null(possible_ids_list))
+  #return(remove_null(possible_ids_list))
+
+  return(ret_list)
 }
 
 
