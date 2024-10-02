@@ -252,7 +252,26 @@ possible_ids <- function(dt,
           return(possible_ids_list)
         }
         if (!get_all) {
-          return(remove_null(possible_ids_list))
+
+          # debug statement
+          print("not get_all")
+          print("not get all, checked vars")
+          print(checked_ids)
+
+          ret_list <- remove_null(possible_ids_list)
+
+          if (store_checked_vars == TRUE) {
+            # add attribute
+            attr(ret_list, "checked_ids") <- checked_ids
+
+            # store in .joynenv
+            rlang::env_poke(env   = .joynenv,
+                            nm    = "checked_ids",
+                            value = checked_ids)
+
+          }
+
+          return(ret_list)
         }
         # Remove variables in the current combo from vars to
         # avoid redundant checks

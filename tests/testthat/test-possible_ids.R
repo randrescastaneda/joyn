@@ -44,6 +44,20 @@ test_that("convert to data.table", {
   expect_equal(possible_ids(x1), possible_ids(xx1))
 })
 
+
+test_that("store checked ids", {
+
+  store_checked_vars <- TRUE
+
+  res <- possible_ids(x4,
+               store_checked_vars = store_checked_vars)
+
+
+  # does not work
+
+
+})
+
 test_that("error if not dataframe", {
 
   m1 <- as.matrix(x1)
@@ -298,6 +312,32 @@ test_that("Max combination size", {
 
 test_that("Min combination size", {
 
+  possible_ids(x4,
+               min_combination_size = 1,
+               get_all = FALSE) |>
+    unlist() |>
+    length() > 1 |>
+    expect_true()
+
+
+  res <- possible_ids(dt,
+               min_combination_size = 3,
+               get_all = FALSE) |>
+    unlist()
+
+  expect_true(length(res) >= 3)
+
+
+  possible_ids(x4,
+               #min_combination_size = 1,
+               max_combination_size = 1) |>
+    expect_message()
+
+
+  possible_ids(x4,
+               min_combination_size = 3,
+               max_combination_size = 2) |>
+    expect_message()
 
 })
 
