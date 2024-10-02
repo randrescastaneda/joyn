@@ -294,6 +294,10 @@ test_that("Max combination size", {
     all() |>
     expect_true()
 
+})
+
+test_that("Min combination size", {
+
 
 })
 

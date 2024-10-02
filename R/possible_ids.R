@@ -115,13 +115,6 @@ possible_ids <- function(dt,
   ## var names --------
   vars <- filter_by_name(vars, include, exclude, verbose)
 
-  ## NOTE: DUPLICATES ORIGINATE HERE -IN FILTER BY NAME !!
-
-  # return vars to check ####
-  # if (return_checked_vars) {
-  #   return(vars)
-  # }
-
   ##  no duplicated vars -------------
   if (anyDuplicated(vars)) {
     dupvars <- vars[duplicated(vars)] |>
@@ -143,7 +136,6 @@ possible_ids <- function(dt,
 
   #print(vars)
 
-
   # Unique values ---------
 
   # Sort variables by number of unique values (ascending order)
@@ -157,23 +149,11 @@ possible_ids <- function(dt,
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
 
-  # add checked vars to .joynenv
+  # store checked ids
   if (store_checked_vars == TRUE) {
 
     checked_ids <- vars
 
-    print("here")
-    print(checked_ids)
-
-    # # store in .joynenv
-    # rlang::env_poke(env = .joynenv,
-    #                 nm = "checked_ids",
-    #                 value = vars)
-    # print(.joynenv$checked_ids)
-    #
-    # # add attribute
-    # attr(possible_ids_list, "checked_ids") <- vars
-    # print(attributes(possible_ids_list))
   }
 
 
@@ -197,17 +177,6 @@ possible_ids <- function(dt,
       unique_counts <- unique_counts[vars]
     }
   }
-
-  # print(vars)
-  # # add checked vars to .joynenv
-  # if (store_checked_vars == TRUE) {
-  #   # store in .joynenv
-  #   rlang::env_poke(env = .joynenv,
-  #                   nm = "checked_ids",
-  #                   value = vars)
-  #
-  # }
-
 
   # combinations -----------
 
@@ -321,34 +290,23 @@ possible_ids <- function(dt,
     }
   }
 
-
+  # ----------------------------- #
+  # Return ####
+  # ----------------------------- #
 
   ret_list <- remove_null(possible_ids_list)
 
-  if (store_checked_vars) {
+  if (store_checked_vars == TRUE) {
+    # add attribute
     attr(ret_list, "checked_ids") <- checked_ids
+
+    # store in .joynenv
+    rlang::env_poke(env   = .joynenv,
+                    nm    = "checked_ids",
+                    value = checked_ids)
 
   }
 
-
-  #if (store_checked_vars == TRUE) {
-
-  #  print(.joynenv)
-  #  print(vars)
-  #   # store checked vars in env and has an attribute
-  #   rlang::env_poke(env = .joynenv,
-  #                   possible_ids  = vars)
-  #                   #value = vars)
-  #
-  #   #add vars as an attribute to the list remove_null(possible_ids_list)
-  #   attr(ret_list, "checked_vars") <- vars
-  # #}
-
-  # setattr(x = ret_list,
-  #         name = "checked_vars",
-  #         value = vars)
-
-  #return(remove_null(possible_ids_list))
 
   return(ret_list)
 }
