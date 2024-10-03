@@ -47,10 +47,9 @@ test_that("convert to data.table", {
 
 test_that("store checked ids", {
 
-  store_checked_vars <- TRUE
+
 
   res <- possible_ids(x4,
-                      store_checked_vars = store_checked_vars,
                       get_all = TRUE)
 
   attributes(res)$checked_ids |>
@@ -60,8 +59,7 @@ test_that("store checked ids", {
     expect_setequal(names(x4))
 
   # with get_all = FALSE
-  res <- possible_ids(x4,
-               store_checked_vars = store_checked_vars)
+  res <- possible_ids(x4)
 
   attributes(res)$checked_ids |>
     expect_setequal(names(x4))
