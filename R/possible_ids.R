@@ -23,7 +23,6 @@
 #'   above.
 #' @param verbose logical: If FALSE no message will be displayed. Default is
 #'   TRUE
-#' @param store_checked_vars logical: If `TRUE`, stores the variables checked in .joynenv environment and as an attribute of the returned list. Default is `TRUE`.
 #'
 #' @section Number of possible IDs:
 #'
@@ -150,11 +149,14 @@ possible_ids <- function(dt,
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
 
-  # store checked ids
-  if (store_checked_vars == TRUE) {
+  checked_ids <- vars |>
+    copy()
 
-    checked_ids <- vars |>
-      copy()
+  # store checked ids
+  #if (store_checked_vars == TRUE) {
+
+  # checked_ids <- vars |>
+  #     copy()
 
 
       # # add attribute
@@ -166,7 +168,7 @@ possible_ids <- function(dt,
       #                 value = checked_ids)
 
 
-  }
+  #}
 
 
   if (min_combination_size == 1) {
@@ -266,25 +268,32 @@ possible_ids <- function(dt,
         }
         if (!get_all) {
 
+
+          ret_list <- store_checked_ids(checked_ids = checked_ids,
+                                        possible_ids = possible_ids_list,
+          )
+
+          return(ret_list)
+
           # debug statement
           # print("FALSE get_all")
           # print("not get all, checked vars")
           # print(checked_ids)
 
-          ret_list <- remove_null(possible_ids_list)
+          #ret_list <- remove_null(possible_ids_list)
 
-          if (store_checked_vars == TRUE) {
-            # add attribute
-            attr(ret_list, "checked_ids") <- checked_ids
-
-            # store in .joynenv
-            rlang::env_poke(env   = .joynenv,
-                            nm    = "checked_ids",
-                            value = checked_ids)
-
-          }
-
-          return(ret_list)
+          # if (store_checked_vars == TRUE) {
+          #   # add attribute
+          #   attr(ret_list, "checked_ids") <- checked_ids
+          #
+          #   # store in .joynenv
+          #   rlang::env_poke(env   = .joynenv,
+          #                   nm    = "checked_ids",
+          #                   value = checked_ids)
+          #
+          # }
+          #
+          # return(ret_list)
         }
         # Remove variables in the current combo from vars to
         # avoid redundant checks
@@ -326,18 +335,24 @@ possible_ids <- function(dt,
   # Return ####
   # ----------------------------- #
 
-  ret_list <- remove_null(possible_ids_list)
+  # ret_list <- remove_null(possible_ids_list)
+  #
+  # if (store_checked_vars == TRUE) {
+  #   # add attribute
+  #   attr(ret_list, "checked_ids") <- checked_ids
+  #
+  #   # store in .joynenv
+  #   rlang::env_poke(env   = .joynenv,
+  #                   nm    = "checked_ids",
+  #                   value = checked_ids)
+  #
+  # }
+  #
+  # return(ret_list)
 
-  if (store_checked_vars == TRUE) {
-    # add attribute
-    attr(ret_list, "checked_ids") <- checked_ids
-
-    # store in .joynenv
-    rlang::env_poke(env   = .joynenv,
-                    nm    = "checked_ids",
-                    value = checked_ids)
-
-  }
+  ret_list <- store_checked_ids(checked_ids = checked_ids,
+                    possible_ids = possible_ids_list,
+                    )
 
   return(ret_list)
 }
