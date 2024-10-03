@@ -145,8 +145,8 @@ possible_ids <- function(dt,
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
 
-  checked_ids <- vars |>
-    copy()
+  checked_ids <- vars
+    #copy()
 
   if (min_combination_size == 1) {
     unique_ids    <- vars[unique_counts == n_rows]
@@ -320,9 +320,7 @@ filter_by_name <- function(vars, include, exclude, verbose) {
       no_exc <- exclude[wno_exc]
       cli::cli_alert_warning("var{?s} {.var {no_exc}} not found in dataframe")
     }
-    #vars <- setdiff(vars, exclude)
-    vars <- c(vars,
-              setdiff(include, vars))
+    vars <- setdiff(vars, exclude)
   }
 
   # Apply 'include' filter

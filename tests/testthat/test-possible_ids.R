@@ -195,9 +195,9 @@ test_that("exclude and include", {
   ## Test combination between include class and exclude vars ####
 
   checked_vars <- possible_ids(dt,
-                 return_checked_vars = TRUE,
-                 include_classes     = c("integer"),
-                 exclude             = paste0("numeric_int_", 1:5))
+                               #get_all = TRUE,
+                               #include_classes     = c("integer"),
+                               exclude             = paste0("numeric_int_", 1:5))
 
   any(
     paste0("numeric_int_", 1:5) %in% checked_vars
