@@ -37,8 +37,6 @@ to the group excluded in the \code{exclude}}
 \item{verbose}{logical: If FALSE no message will be displayed. Default is
 TRUE}
 
-\item{store_checked_vars}{logical: If \code{TRUE}, stores the variables checked in .joynenv environment and as an attribute of the returned list. Default is \code{TRUE}.}
-
 \item{min_combination_size}{numeric: Min number of combinations. Default is
 1, so all combinations.}
 
