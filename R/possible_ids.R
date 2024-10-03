@@ -23,6 +23,7 @@
 #'   above.
 #' @param verbose logical: If FALSE no message will be displayed. Default is
 #'   TRUE
+#' @param store_checked_vars logical: If `TRUE`, stores the variables checked in .joynenv environment and as an attribute of the returned list. Default is `TRUE`.
 #'
 #' @section Number of possible IDs:
 #'

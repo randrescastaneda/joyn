@@ -12,6 +12,7 @@ possible_ids(
   exclude_classes = NULL,
   include_classes = NULL,
   verbose = getOption("possible_ids.verbose", default = FALSE),
+  store_checked_vars = TRUE,
   min_combination_size = 1,
   max_combination_size = 5,
   max_processing_time = 60,
@@ -22,9 +23,7 @@ possible_ids(
 \arguments{
 \item{dt}{data frame}
 
-\item{vars}{character: A vector of variable names to consider for identifying unique combinations. If \code{NULL} (default), all variables in the data frame are considered.}
-
-\item{exclude}{character: Exclude variables to be selected as identifiers.}
+\item{vars}{character: A vector of variable names to consider for identifying unique combinations.}
 
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}
@@ -37,6 +36,8 @@ to the group excluded in the \code{exclude}}
 
 \item{verbose}{logical: If FALSE no message will be displayed. Default is
 TRUE}
+
+\item{store_checked_vars}{logical: If \code{TRUE}, stores the variables checked in .joynenv environment and as an attribute of the returned list. Default is \code{TRUE}.}
 
 \item{min_combination_size}{numeric: Min number of combinations. Default is
 1, so all combinations.}
