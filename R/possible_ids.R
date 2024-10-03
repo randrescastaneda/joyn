@@ -153,16 +153,17 @@ possible_ids <- function(dt,
   # store checked ids
   if (store_checked_vars == TRUE) {
 
-    checked_ids <- vars
+    checked_ids <- vars |>
+      copy()
 
 
-      # add attribute
-      attr(possible_ids_list, "checked_ids") <- checked_ids
-
-      # store in .joynenv
-      rlang::env_poke(env   = .joynenv,
-                      nm    = "checked_ids",
-                      value = checked_ids)
+      # # add attribute
+      # attr(possible_ids_list, "checked_ids") <- checked_ids
+      #
+      # # store in .joynenv
+      # rlang::env_poke(env   = .joynenv,
+      #                 nm    = "checked_ids",
+      #                 value = checked_ids)
 
 
   }
@@ -215,6 +216,7 @@ possible_ids <- function(dt,
     # Skip the iteration if comb_size is larger than the number of variables in vars
     if (length(vars) < comb_size) {
       next
+      # or break
     }
 
     combos <- combn(vars, comb_size, simplify = FALSE)
@@ -393,4 +395,29 @@ estimate_combination_time <- function(n_rows, unique_counts) {
 remove_null <- \(x) {
   y <- vapply(x, \(.) !is.null(.), logical(1))
   x[y]
+}
+
+
+# Function to store checked vars as possible ids
+
+store_checked_ids <- function(checked_ids,
+                              possible_ids,
+                              env = .joynenv) {
+
+  # Remove null from possible ids
+  possible_ids <- remove_null(possible_ids)
+
+  # Store checked_ids in environment
+  rlang::env_poke(env   = env,
+                  nm    = "checked_ids",
+                  value = checked_ids)
+
+  # Store attribute
+  attr(possible_ids,
+       "checked_ids") <- checked_ids
+
+  # Return
+  return(possible_ids)
+
+
 }
