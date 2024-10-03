@@ -59,7 +59,16 @@ test_that("store checked ids", {
   .joynenv$checked_ids |>
     expect_setequal(names(x4))
 
-  # does not work with get_all = FALSE
+  # with get_all = FALSE
+  res <- possible_ids(x4,
+               store_checked_vars = store_checked_vars)
+
+  attributes(res)$checked_ids |>
+    expect_setequal(names(x4))
+
+  .joynenv$checked_ids |>
+    expect_setequal(names(x4))
+
 
 
 })

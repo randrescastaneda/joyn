@@ -154,6 +154,16 @@ possible_ids <- function(dt,
 
     checked_ids <- vars
 
+
+      # add attribute
+      attr(possible_ids_list, "checked_ids") <- checked_ids
+
+      # store in .joynenv
+      rlang::env_poke(env   = .joynenv,
+                      nm    = "checked_ids",
+                      value = checked_ids)
+
+
   }
 
 
@@ -254,9 +264,9 @@ possible_ids <- function(dt,
         if (!get_all) {
 
           # debug statement
-          print("not get_all")
-          print("not get all, checked vars")
-          print(checked_ids)
+          # print("FALSE get_all")
+          # print("not get all, checked vars")
+          # print(checked_ids)
 
           ret_list <- remove_null(possible_ids_list)
 
@@ -325,7 +335,6 @@ possible_ids <- function(dt,
                     value = checked_ids)
 
   }
-
 
   return(ret_list)
 }
