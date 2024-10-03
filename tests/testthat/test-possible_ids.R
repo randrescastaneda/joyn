@@ -194,10 +194,12 @@ test_that("exclude and include", {
 
   ## Test combination between include class and exclude vars ####
 
-  checked_vars <- possible_ids(dt,
-                               #get_all = TRUE,
-                               #include_classes     = c("integer"),
+  res <- possible_ids(dt,
+                               get_all = TRUE,
+                               include_classes     = c("integer"),
                                exclude             = paste0("numeric_int_", 1:5))
+
+  checked_vars <- attributes(res)$checked_ids
 
   any(
     paste0("numeric_int_", 1:5) %in% checked_vars
@@ -210,11 +212,15 @@ test_that("exclude and include", {
     expect_equal(TRUE)
 
   ## Test combination between include vars and exclude class ####
-  checked_vars <- possible_ids(dt,
-                               return_checked_vars = TRUE,
+  res <- possible_ids(dt,
+                      get_all = TRUE,
                                include     = c("numeric_double_1",
                                                "numeric_double_2"),
                                exclude_classes = "numeric")
+
+  # TODO: Fix from here
+
+  checked_vars <- attributes(res)$checked_ids
 
   all(
     paste0("numeric_double_", 1:2) %in% checked_vars
