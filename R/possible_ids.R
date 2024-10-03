@@ -73,9 +73,7 @@ possible_ids <- function(dt,
     dt <- as.data.table(dt)
   }
 
-  # Get all variable names
-  #vars <- names(dt) |> copy()
-
+  # Get variable
   # Vars --------
 
    if (is.null(vars)) {
@@ -134,8 +132,6 @@ possible_ids <- function(dt,
     return(NULL) # should this be an error?
   }
 
-  #print(vars)
-
   # Unique values ---------
 
   # Sort variables by number of unique values (ascending order)
@@ -151,25 +147,6 @@ possible_ids <- function(dt,
 
   checked_ids <- vars |>
     copy()
-
-  # store checked ids
-  #if (store_checked_vars == TRUE) {
-
-  # checked_ids <- vars |>
-  #     copy()
-
-
-      # # add attribute
-      # attr(possible_ids_list, "checked_ids") <- checked_ids
-      #
-      # # store in .joynenv
-      # rlang::env_poke(env   = .joynenv,
-      #                 nm    = "checked_ids",
-      #                 value = checked_ids)
-
-
-  #}
-
 
   if (min_combination_size == 1) {
     unique_ids    <- vars[unique_counts == n_rows]
@@ -215,7 +192,6 @@ possible_ids <- function(dt,
   for (comb_size in min_size:max_size) {
 
     # make sure length of vars is >= comb_size
-    # Skip the iteration if comb_size is larger than the number of variables in vars
     if (length(vars) < comb_size) {
       next
       # or break
@@ -255,7 +231,6 @@ possible_ids <- function(dt,
         # I need to think better on how to do it.
         possible_ids_list[[j]] <- combo
 
-        #j <- init_index + 1 # RT I think this has to be fixed
         j <- j + 1
 
         if (j > max_numb_possible_ids) {
@@ -268,32 +243,10 @@ possible_ids <- function(dt,
         }
         if (!get_all) {
 
-
           ret_list <- store_checked_ids(checked_ids = checked_ids,
-                                        possible_ids = possible_ids_list,
-          )
-
+                                        possible_ids = possible_ids_list)
           return(ret_list)
 
-          # debug statement
-          # print("FALSE get_all")
-          # print("not get all, checked vars")
-          # print(checked_ids)
-
-          #ret_list <- remove_null(possible_ids_list)
-
-          # if (store_checked_vars == TRUE) {
-          #   # add attribute
-          #   attr(ret_list, "checked_ids") <- checked_ids
-          #
-          #   # store in .joynenv
-          #   rlang::env_poke(env   = .joynenv,
-          #                   nm    = "checked_ids",
-          #                   value = checked_ids)
-          #
-          # }
-          #
-          # return(ret_list)
         }
         # Remove variables in the current combo from vars to
         # avoid redundant checks
@@ -335,24 +288,8 @@ possible_ids <- function(dt,
   # Return ####
   # ----------------------------- #
 
-  # ret_list <- remove_null(possible_ids_list)
-  #
-  # if (store_checked_vars == TRUE) {
-  #   # add attribute
-  #   attr(ret_list, "checked_ids") <- checked_ids
-  #
-  #   # store in .joynenv
-  #   rlang::env_poke(env   = .joynenv,
-  #                   nm    = "checked_ids",
-  #                   value = checked_ids)
-  #
-  # }
-  #
-  # return(ret_list)
-
   ret_list <- store_checked_ids(checked_ids = checked_ids,
-                    possible_ids = possible_ids_list,
-                    )
+                                possible_ids = possible_ids_list)
 
   return(ret_list)
 }
