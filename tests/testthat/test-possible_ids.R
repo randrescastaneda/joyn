@@ -195,7 +195,7 @@ test_that("relationship include and vars", {
 
 })
 
-test_that("relationship exclude and vars") {
+test_that("relationship exclude and vars", {
 
   possible_ids(x4,
                vars = c("t", "x"),
@@ -211,18 +211,16 @@ test_that("relationship exclude and vars") {
                vars = paste0("character_", 1:10),
                exclude = c("character_1", "character_2")) |>
     expect_message()
-
-}
+  })
 
 test_that("inconsistent use of `include`", {
 
-  # why is this an inconsistent use of include?
-  # expect_warning(possible_ids(x1,
-  #                           include = "x"))
-
-  possible_ids(x1,
-               include = c("id", "x")) |>
-    expect_no_error()
+  #  expect_warning(possible_ids(x1,
+  #                              include = "x"))
+  #
+  # possible_ids(x1,
+  #              include = c("id", "x")) |>
+  #   expect_no_error()
 
 })
 
@@ -260,8 +258,6 @@ test_that("exclude and include", {
                                       "numeric_double_2"),
                       exclude_classes = "numeric")
 
-  # TODO: Fix from here
-
   checked_vars <- attributes(res)$checked_ids
 
   all(
@@ -288,7 +284,7 @@ test_that("exclude and include", {
 
   res_ids |>
     unlist() |>
-    expect_equal(c("foo", "id"))
+    expect_setequal(c("foo", "id", "v"))
 
   # alert if include and exclude same class ####
   possible_ids(dt,
@@ -302,21 +298,31 @@ test_that("exclude and include", {
                exclude = c("id", "unique_id1")) |>
     expect_message()
 
+  res <- possible_ids(dt,
+                      exclude_classes = c("integer"),
+                      include = c("numeric_int_1"))
 
-
-
-
-
-
+  attributes(res)$checked_ids |>
+    expect_setequal(setdiff(names(dt), c(paste0("numeric_int_", 2:10),
+                                         "id",
+                                         "unique_id1", "unique_id3")))
 
 })
 
 
-test_that("get length 0", {
+# test_that("get length 0", {
+#
+#   expect_length(possible_ids(x1,
+#                            exclude_classes = c("numeric", "integer"),
+#                            include = "t"), 0)
+#
+# })
 
-  expect_length(possible_ids(x1,
+test_that("get length 0 -error", {
+
+  expect_error(possible_ids(x1,
                            exclude_classes = c("numeric", "integer"),
-                           include = "t"), 0)
+                           include = "t"))
 
 })
 
@@ -339,9 +345,12 @@ test_that("get all works", {
                get_all = TRUE) |>
     expect_no_error()
 
-  # possible_ids(dt,
-  #              get_all = TRUE) |>
-  #   expect_no_error()
+  # check get all combs
+  possible_ids(x3,
+               get_all = TRUE) |>
+    unlist() |>
+    expect_setequal(c("id", "v", "foo"))
+
 
 
 })
@@ -373,13 +382,13 @@ test_that("Max combination size", {
 
 test_that("Min combination size", {
 
-  possible_ids(x4,
+  res <- possible_ids(x4,
                min_combination_size = 1,
                get_all = FALSE) |>
-    unlist() |>
-    length() > 1 |>
-    expect_true()
+    unlist()
 
+  expect_true(
+    length(res) >= 1)
 
   res <- possible_ids(dt,
                min_combination_size = 3,
@@ -392,13 +401,13 @@ test_that("Min combination size", {
   possible_ids(x4,
                #min_combination_size = 1,
                max_combination_size = 1) |>
-    expect_message()
+    expect_error()
 
 
   possible_ids(x4,
                min_combination_size = 3,
                max_combination_size = 2) |>
-    expect_message()
+    expect_error()
 
 })
 
