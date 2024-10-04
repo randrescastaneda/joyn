@@ -57,7 +57,6 @@ possible_ids <- function(dt,
                          include_classes             = NULL,
                          verbose                     = getOption("possible_ids.verbose",
                                                         default = FALSE),
-                         store_checked_vars          = TRUE,
                          min_combination_size        = 1,
                          max_combination_size        = 5,
                          max_processing_time         = 60, # in seconds
@@ -80,6 +79,7 @@ possible_ids <- function(dt,
      vars <- names(dt) |>
        copy()
      } else {
+
     # check if all vars are in dt
     missing_vars <- setdiff(vars, names(dt))
 
@@ -105,8 +105,8 @@ possible_ids <- function(dt,
   # Exclude and include -------
 
   ## classes ----------
-  vars <- filter_by_class(dt = dt,
-                          vars = vars,
+  vars <- filter_by_class(dt              = dt,
+                          vars            = vars,
                           include_classes = include_classes,
                           exclude_classes = exclude_classes)
 
@@ -138,7 +138,7 @@ possible_ids <- function(dt,
   unique_counts <- vapply(dt[, ..vars], fnunique, numeric(1))
   vars          <- vars[order(unique_counts)]
   unique_counts <- unique_counts[order(unique_counts)]
-  n_rows         <- fnrow(dt)
+  n_rows        <- fnrow(dt)
   init_index    <- 0
 
 
@@ -157,13 +157,21 @@ possible_ids <- function(dt,
       if (verbose) {
         cli::cli_alert_info("Found unique identifiers: {.code {unique_ids}}")
       }
-      if (!get_all) return(remove_null(possible_ids_list))
+      if (!get_all) {
+        ret_list <- store_checked_ids(checked_ids,
+                                      possible_ids_list)
+        return(ret_list)
+      }
+        #return(remove_null(possible_ids_list))
 
       # Remove unique identifiers from vars to reduce combinations
       vars <- setdiff(vars, unique_ids)
       if (length(vars) == 0) {
         # All variables are unique identifiers
-        return(remove_null(possible_ids_list))
+        ret_list <- store_checked_ids(checked_ids,
+                                      possible_ids_list)
+        return(ret_list)
+        #return(remove_null(possible_ids_list))
       }
       unique_counts <- unique_counts[vars]
     }
@@ -184,8 +192,12 @@ possible_ids <- function(dt,
         "Can't make combinations of {.field {vars}} if the min number of
         combinations is {min_size} and the max is {max_size}")
     }
-    return(remove_null(possible_ids_list))
-    # this returns an empty list -should we raise an error instead? (RT)
+    # ret_list <- store_checked_ids(checked_ids,
+    #                               possible_ids_list)
+    # return(ret_list)
+    #return(remove_null(possible_ids_list))
+    # this returned an empty list - I would raise an error instead (RT)
+    cli::cli_abort("No unique identifier found.")
   }
 
   j <- init_index + 1
@@ -239,7 +251,10 @@ possible_ids <- function(dt,
             "Max number of possible IDs ({max_numb_possible_ids}) reached.
             You may modify it in argument {.arg max_numb_possible_ids}")
           }
-          return(possible_ids_list)
+          #return(possible_ids_list)
+          ret_list <- store_checked_ids(checked_ids = checked_ids,
+                                        possible_ids = possible_ids_list)
+          return(ret_list)
         }
         if (!get_all) {
 

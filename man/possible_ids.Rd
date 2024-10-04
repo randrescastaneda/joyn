@@ -12,7 +12,6 @@ possible_ids(
   exclude_classes = NULL,
   include_classes = NULL,
   verbose = getOption("possible_ids.verbose", default = FALSE),
-  store_checked_vars = TRUE,
   min_combination_size = 1,
   max_combination_size = 5,
   max_processing_time = 60,
