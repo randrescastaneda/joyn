@@ -145,8 +145,8 @@ possible_ids <- function(dt,
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
 
-  checked_ids <- vars
-    #copy()
+  checked_ids <- vars |>
+    copy()
 
   if (min_combination_size == 1) {
     unique_ids    <- vars[unique_counts == n_rows]
@@ -162,7 +162,6 @@ possible_ids <- function(dt,
                                       possible_ids_list)
         return(ret_list)
       }
-        #return(remove_null(possible_ids_list))
 
       # Remove unique identifiers from vars to reduce combinations
       vars <- setdiff(vars, unique_ids)
@@ -171,7 +170,6 @@ possible_ids <- function(dt,
         ret_list <- store_checked_ids(checked_ids,
                                       possible_ids_list)
         return(ret_list)
-        #return(remove_null(possible_ids_list))
       }
       unique_counts <- unique_counts[vars]
     }
@@ -192,11 +190,7 @@ possible_ids <- function(dt,
         "Can't make combinations of {.field {vars}} if the min number of
         combinations is {min_size} and the max is {max_size}")
     }
-    # ret_list <- store_checked_ids(checked_ids,
-    #                               possible_ids_list)
-    # return(ret_list)
-    #return(remove_null(possible_ids_list))
-    # this returned an empty list - I would raise an error instead (RT)
+
     cli::cli_abort("No unique identifier found.")
   }
 
@@ -251,7 +245,6 @@ possible_ids <- function(dt,
             "Max number of possible IDs ({max_numb_possible_ids}) reached.
             You may modify it in argument {.arg max_numb_possible_ids}")
           }
-          #return(possible_ids_list)
           ret_list <- store_checked_ids(checked_ids = checked_ids,
                                         possible_ids = possible_ids_list)
           return(ret_list)
@@ -337,11 +330,10 @@ filter_by_name <- function(vars, include, exclude, verbose) {
     }
     vars <- setdiff(vars, exclude)
   }
-
   # Apply 'include' filter
 
   c(vars,
-            setdiff(include, vars))
+    setdiff(include, vars))
 
 }
 
@@ -363,8 +355,11 @@ remove_null <- \(x) {
 }
 
 
-# Function to store checked vars as possible ids
-
+# Function to store checked vars as possible ids:
+#  1. Remove nulls in possible ids list
+#  2. Poke environment
+#  3. Save checked vars as attribute
+#  4. Return possible ids list
 store_checked_ids <- function(checked_ids,
                               possible_ids,
                               env = .joynenv) {
