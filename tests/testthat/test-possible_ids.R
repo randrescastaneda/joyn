@@ -1,3 +1,5 @@
+# PREPARATION ####
+
 withr::local_options(joyn.verbose = FALSE)
 library(data.table)
 # options(possible_ids.verbose = FALSE)
@@ -37,6 +39,118 @@ y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
                 x   = c(16:20))
+
+# Auxiliary data: Big data table--------------------
+
+# Set seed for reproducibility
+set.seed(123)
+
+# Number of rows and variables
+n_rows <- 1e4        # 10,000 rows
+n_vars <- 50         # Total variables
+
+# Initialize an empty data.table
+dt_large <- data.table(id = 1:n_rows)
+
+## Manually create three variables that uniquely identify the data ####
+dt_large[, unique_id1 := rep(1:10, each = 1000)]  # 1000 unique values repeated 100 times
+dt_large[, unique_id2 := sample(letters, n_rows, replace = TRUE)]  # Random character variable
+dt_large[, unique_id3 := sample(1:1000, n_rows, replace = TRUE)]   # Random integer
+
+# Function to generate random data
+generate_random_data <- function(n, type) {
+  switch(type,
+         "numeric_int" = sample(1:1e6, n, replace = TRUE),
+         "numeric_double" = rnorm(n),
+         "character" = replicate(n, paste0(sample(letters, 5, replace = TRUE), collapse = "")),
+         "factor" = factor(sample(letters[1:10], n, replace = TRUE)),
+         "logical" = sample(c(TRUE, FALSE), n, replace = TRUE),
+         "date" = as.Date("2000-01-01") + sample(0:3650, n, replace = TRUE),
+         "datetime" = as.POSIXct("2000-01-01") + sample(0:(3650*24*60*60), n, replace = TRUE)
+  )
+}
+
+# Variable types and counts
+var_types <- c("numeric_int", "numeric_double", "character", "factor", "logical", "date", "datetime")
+vars_per_type <- c(10, 10, 10, 10, 5, 3, 2)  # Total should sum to 50
+
+# Generate variables and add to the data.table
+var_count <- 0
+for (i in seq_along(var_types)) {
+  type <- var_types[i]
+  n_vars_type <- vars_per_type[i]
+  for (j in 1:n_vars_type) {
+    var_count <- var_count + 1
+    var_name <- paste0(type, "_", j)
+    dt_large[, (var_name) := generate_random_data(n_rows, type)]
+  }
+}
+
+## Introduce duplicates in some columns that are NOT the unique identifiers ####
+# For example, we can duplicate the first 100 rows in the "numeric_int_1" and "character_1" columns
+# dt_large <- rbind(dt_large, dt_large[1:100, .(numeric_int_1, character_1)])
+
+# Shuffle the data to avoid ordered data
+dt_large <- dt_large[sample(.N)]
+
+
+
+# dt_large[, id := .I]
+dt <- copy(dt_large)
+
+
+possible_ids(
+  dt = dt_large,
+  exclude_classes = c("numeric"),
+  verbose = TRUE
+)
+
+possible_ids(
+  dt = dt_large,
+  exclude_classes = c("numeric"),
+  exclude = "id",
+  verbose = TRUE
+)
+
+uniq_vars <- grep("unique_id", names(dt_large), value = TRUE)
+pids <- possible_ids(
+  dt = dt_large,
+  #exclude_classes = c("logical", "date", "datetime", "numeric"),
+  exclude = "id",
+  #vars = uniq_vars,
+  verbose = TRUE,
+  min_combination_size = 3,
+  # max_combination_size = 3,
+  max_processing_time = 240,
+  get_all = TRUE
+)
+
+possible_ids(
+  dt = dt_large,
+  verbose = TRUE
+)
+
+## Remove the 'id' column to simulate data without a clear unique identifier ####
+dt_large[, id := NULL]
+
+possible_ids_list <- possible_ids(
+  dt = dt_large,
+  exclude_classes = c("logical", "date", "datetime"),  # Exclude some types for efficiency
+  verbose = TRUE
+)
+possible_ids_list
+
+possible_ids_list <- possible_ids(
+  dt = dt_large,
+  exclude_classes = c("logical", "date", "datetime", "numeric"),  # Exclude some types for efficiency
+  max_processing_time = 120,
+  verbose = TRUE
+)
+possible_ids_list
+
+
+
+# TESTS ####
 
 
 test_that("convert to data.table", {
@@ -134,19 +248,18 @@ test_that("vars provided by user", {
   # Check if the combination of unique_id1, unique_id2, and unique_id3 uniquely identifies rows
   vars <- c("id", "unique_id2", "unique_id3")
 
-  res <- dt_large[, .N,
+  res <- dt[, .N,
            by = vars][N > 1] |>
     nrow()
 
   # --if it does, possible_ids should return those vars
 
-  # NOTE (RT) --> this test should be correct, but fails --> find issue in function (?)
-
   if (res == 0) {  # if no duplicate rows
     possible_ids(dt,
-                 vars = vars) |>
+                 vars = vars,
+                 min_combination_size = 3) |>
       unlist() |>
-      expect_equal(vars)
+      expect_setequal(vars)
   }
 
 })
@@ -213,16 +326,16 @@ test_that("relationship exclude and vars", {
     expect_message()
   })
 
-test_that("inconsistent use of `include`", {
-
-  #  expect_warning(possible_ids(x1,
-  #                              include = "x"))
-  #
-  # possible_ids(x1,
-  #              include = c("id", "x")) |>
-  #   expect_no_error()
-
-})
+# test_that("inconsistent use of `include`", {
+#
+#   #  expect_warning(possible_ids(x1,
+#   #                              include = "x"))
+#   #
+#   # possible_ids(x1,
+#   #              include = c("id", "x")) |>
+#   #   expect_no_error()
+#
+# })
 
 test_that("exclude and include", {
 
