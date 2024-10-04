@@ -47,8 +47,6 @@ test_that("convert to data.table", {
 
 test_that("store checked ids", {
 
-
-
   res <- possible_ids(x4,
                       get_all = TRUE)
 
@@ -67,7 +65,26 @@ test_that("store checked ids", {
   .joynenv$checked_ids |>
     expect_setequal(names(x4))
 
+  # with large dt -get_all FALSE
+  res <- possible_ids(dt,
+                      vars = paste0("numeric_int_", 1:4))
 
+  attributes(res)$checked_ids |>
+    expect_setequal(paste0("numeric_int_", 1:4))
+
+  .joynenv$checked_ids |>
+    expect_setequal(paste0("numeric_int_", 1:4))
+
+  # with large dt -get_all TRUE
+  res <- possible_ids(dt,
+                      vars = paste0("numeric_int_", 1:4),
+                      get_all = TRUE)
+
+  attributes(res)$checked_ids |>
+    expect_setequal(paste0("numeric_int_", 1:4))
+
+  .joynenv$checked_ids |>
+    expect_setequal(paste0("numeric_int_", 1:4))
 
 })
 
@@ -153,7 +170,27 @@ test_that("relationship include and vars", {
 
   possible_ids(x4,
                vars = c("t", "x"),
-               include = NULL)
+               include = NULL) |>
+    expect_no_error()
+
+  # test checked vars are at least `vars` plus those in `include`
+  res <- possible_ids(x4,
+                      vars = c("id1", "id2", "t"),
+                      include = "t")
+
+  checked_ids <- attributes(res)$checked_ids
+
+  checked_ids |>
+    expect_setequal(c("id1", "id2", "t"))
+
+  res <- possible_ids(dt,
+                      vars = c("logical_1", "logical_2", "factor_1", "factor_2"),
+                      include = "unique_id1")
+
+  checked_ids <- attributes(res)$checked_ids
+
+  checked_ids |>
+    expect_setequal(c("logical_1", "logical_2", "factor_1", "factor_2", "unique_id1"))
 
 
 })
@@ -169,6 +206,12 @@ test_that("relationship exclude and vars") {
                vars = c("id1", "x"),
                exclude = "x") |>
     expect_message()
+
+  possible_ids(dt,
+               vars = paste0("character_", 1:10),
+               exclude = c("character_1", "character_2")) |>
+    expect_message()
+
 }
 
 test_that("inconsistent use of `include`", {
@@ -213,10 +256,9 @@ test_that("exclude and include", {
 
   ## Test combination between include vars and exclude class ####
   res <- possible_ids(dt,
-                      get_all = TRUE,
-                               include     = c("numeric_double_1",
-                                               "numeric_double_2"),
-                               exclude_classes = "numeric")
+                      include     = c("numeric_double_1",
+                                      "numeric_double_2"),
+                      exclude_classes = "numeric")
 
   # TODO: Fix from here
 
