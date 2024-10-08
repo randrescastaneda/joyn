@@ -445,24 +445,57 @@ df_test <- data.table(a = 1:50)
 # dt[, .(as.data.table(create_ids(.N, numb_ids = 3)))]
 
 # Attempt two -----------
-create_unique_variables_fast <- function(n_rows, X, prefix = "var") {
+create_unique_variables <- function(n_rows, n_ids, prefix = "id") {
   # Initialize a list to store the generated variables
-  vars <- vector("list", X)
+  vars <- vector("list", n_ids)
 
   # The maximum unique values each variable can have to maintain uniqueness
-  max_vals <- ceiling(n_rows^(1 / X))
+  max_vals <- ceiling(n_rows^(1 / n_ids))
 
   # Generate each variable using sequences and vectorization
-  for (i in seq_len(X)) {
+  for (i in seq_len(n_ids)) {
+
     # For the i-th variable, create a repeating sequence of increasing length
-    repeat_factor <- max_vals^(X - i)
-    vars[[i]] <- rep(rep(seq_len(max_vals), each = repeat_factor), length.out = n_rows)
+    repeat_factor <- max_vals^(n_ids - i)
+    vars[[i]] <- rep(rep(seq_len(max_vals),
+                         each = repeat_factor), length.out = n_rows)
   }
 
   # Set the names of the variables (e.g., var1, var2, ...)
-  names(vars) <- paste0(prefix, seq_len(X))
+  names(vars) <- paste0(prefix,
+                        seq_len(n_ids))
+
+  return(vars)
 
   # Convert the list of variables into a data frame and return it
-  return(as.data.frame(vars))
+  # return(as.data.frame(vars))
 }
+
+# fixing the issue of duplicate rows:
+create_unique_ids_2 <- function(n_rows, n_ids, prefix = "id") {
+  # Initialize a list to store the generated variables
+  vars <- vector("list", n_ids)
+
+  # The maximum unique values each variable can have to maintain uniqueness
+  max_vals <- ceiling(n_rows^(1 / n_ids))
+
+  # Generate a sequence of unique identifiers
+  all_ids <- expand.grid(lapply(1:n_ids, function(x) seq_len(max_vals)))
+
+  # Randomly sample the unique combinations without replacement
+  sampled_ids <- all_ids[sample(nrow(all_ids), n_rows), ]
+
+  # Store each unique identifier in the vars list
+  for (i in seq_len(n_ids)) {
+    vars[[i]] <- sampled_ids[[i]]
+  }
+
+  # Set the names of the variables (e.g., id1, id2, ...)
+  names(vars) <- paste0(prefix, seq_len(n_ids))
+
+  return(vars)
+
+  #return(as.data.table(vars))
+}
+
 
