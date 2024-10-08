@@ -379,5 +379,90 @@ store_checked_ids <- function(checked_ids,
   # Return
   return(possible_ids)
 
-
 }
+
+# Create variables that uniquely idenitfy a dt
+# Attempt one -----------------------------------------------------
+df_test <- data.table(a = 1:50)
+
+# create_ids <- function(n_rows, numb_ids = 2, prefix = "id") {
+#   # Initialize the list to store the ID columns
+#   ids <- vector("list", numb_ids)
+#
+#   remaining_rows <- n_rows
+#   id_name <- paste0("id", 1:numb_ids)
+#
+#   power_den <- 1 / seq(numb_ids, 1)
+#
+#   for (i in seq_len(numb_ids)) {
+#
+#     # Calculate the number of unique values for the current ID variable
+#     n_unique <- ceiling(remaining_rows^power_den[i])
+#
+#     # Generate the ID values, ensuring that they will work together to uniquely identify rows
+#     ids[[i]] <- rep(seq_len(n_unique),
+#                     length.out = n_rows)
+#
+#     # Update the remaining number of rows to ensure uniqueness with future IDs
+#     remaining_rows <- remaining_rows / n_unique
+#   }
+#   # return
+#   names(ids) <- id_name
+#   ids
+# }
+
+# create_ids <- function(n_rows, numb_ids = 2, prefix = "id") {
+#   # Initialize the list to store the ID columns
+#   ids <- vector("list", numb_ids)
+#
+#   remaining_rows <- n_rows
+#   id_name <- paste0("id", 1:numb_ids)
+#   for (i in seq_len(numb_ids)) {
+#
+#     # Calculate the number of unique values for the current ID variable
+#     n_unique <- ceiling(remaining_rows^(1 / (numb_ids - i + 1)))
+#
+#     # Generate the ID values, ensuring that they will work together to uniquely identify rows
+#     ids[[i]] <- rep(1:n_unique, length.out = n_rows)
+#
+#     # Update the remaining number of rows to ensure uniqueness with future IDs
+#     remaining_rows <- remaining_rows / n_unique
+#   }
+#   # return
+#   names(ids) <- id_name
+#   ids
+# }
+
+# different ways to use it.
+# just IDs
+# ids <- create_ids(nrow(df_test), 3)
+#
+# # create own names
+# vars <- c("var1", "var2", "var3")
+# dt[, (vars) := create_ids(.N, numb_ids = 3)]
+#
+# # use create_ids logic (you need to colbind them later)
+# dt[, .(as.data.table(create_ids(.N, numb_ids = 3)))]
+
+# Attempt two -----------
+create_unique_variables_fast <- function(n_rows, X, prefix = "var") {
+  # Initialize a list to store the generated variables
+  vars <- vector("list", X)
+
+  # The maximum unique values each variable can have to maintain uniqueness
+  max_vals <- ceiling(n_rows^(1 / X))
+
+  # Generate each variable using sequences and vectorization
+  for (i in seq_len(X)) {
+    # For the i-th variable, create a repeating sequence of increasing length
+    repeat_factor <- max_vals^(X - i)
+    vars[[i]] <- rep(rep(seq_len(max_vals), each = repeat_factor), length.out = n_rows)
+  }
+
+  # Set the names of the variables (e.g., var1, var2, ...)
+  names(vars) <- paste0(prefix, seq_len(X))
+
+  # Convert the list of variables into a data frame and return it
+  return(as.data.frame(vars))
+}
+
