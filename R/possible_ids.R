@@ -472,18 +472,22 @@ create_unique_variables <- function(n_rows, n_ids, prefix = "id") {
 }
 
 # fixing the issue of duplicate rows:
-create_unique_ids_2 <- function(n_rows, n_ids, prefix = "id") {
-  # Initialize a list to store the generated variables
-  vars <- vector("list", n_ids)
 
-  # The maximum unique values each variable can have to maintain uniqueness
+create_ids <- function(n_rows, n_ids, prefix = "id") {
+
+  vars <- vector("list",
+                 n_ids)
+
+  # Get max unique values each variable can have to keep uniqueness
   max_vals <- ceiling(n_rows^(1 / n_ids))
 
   # Generate a sequence of unique identifiers
-  all_ids <- expand.grid(lapply(1:n_ids, function(x) seq_len(max_vals)))
+  all_ids <- expand.grid(lapply(1:n_ids,
+                                function(x) seq_len(max_vals)))
 
   # Randomly sample the unique combinations without replacement
-  sampled_ids <- all_ids[sample(nrow(all_ids), n_rows), ]
+  sampled_ids <- all_ids[sample(nrow(all_ids),
+                                n_rows), ]
 
   # Store each unique identifier in the vars list
   for (i in seq_len(n_ids)) {
@@ -491,11 +495,27 @@ create_unique_ids_2 <- function(n_rows, n_ids, prefix = "id") {
   }
 
   # Set the names of the variables (e.g., id1, id2, ...)
-  names(vars) <- paste0(prefix, seq_len(n_ids))
+  names(vars) <- paste0(prefix,
+                        seq_len(n_ids))
 
   return(vars)
-
-  #return(as.data.table(vars))
 }
+
+# another version ####
+create_random_unique_variables <- function(n_rows, n_ids, max_vals, prefix = "id") {
+  # Initialize a data frame to store the sampled variables
+  sampled_vars <- as.data.frame(matrix(NA, nrow = n_rows, ncol = n_ids))
+
+  # For each variable (column), sample 'n_rows' random values from '1:max_vals'
+  for (i in seq_len(n_ids)) {
+    sampled_vars[[i]] <- sample(seq_len(max_vals), n_rows, replace = TRUE)
+  }
+
+  # Set the names of the variables (e.g., id1, id2, ...)
+  names(sampled_vars) <- paste0(prefix, seq_len(n_ids))
+
+  return(sampled_vars)
+}
+
 
 
