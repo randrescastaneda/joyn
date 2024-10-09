@@ -478,33 +478,41 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
   vars <- vector("list",
                  n_ids)
 
-  # Get max unique values each variable can have to keep uniqueness
-  max_vals <- ceiling(n_rows^(1 / n_ids))
-
   # If n_ids is 1, simply generate a sequence of IDs
   if (n_ids == 1) {
     vars[[1]] <- seq_len(n_rows)
     names(vars)[1] <- paste0(prefix, 1)
+
+    #print(vars)
+
+    return(vars)
+  } else {
+
+    # Get max unique values each variable can have to keep uniqueness
+    max_vals <- ceiling(n_rows^(1 / n_ids))
+
+    # Generate a sequence of unique identifiers
+    all_ids <- expand.grid(lapply(1:n_ids,
+                                  function(x) seq_len(max_vals)))
+
+    # Randomly sample the unique combinations without replacement
+    sampled_ids <- all_ids[sample(nrow(all_ids),
+                                  n_rows), ]
+
+    # Store each unique identifier in the vars list
+    for (i in seq_len(n_ids)) {
+      vars[[i]] <- sampled_ids[[i]]
+    }
+
+    # Set the names of the variables (e.g., id1, id2, ...)
+    names(vars) <- paste0(prefix,
+                          seq_len(n_ids))
+
+    return(vars)
+
   }
 
-  # Generate a sequence of unique identifiers
-  all_ids <- expand.grid(lapply(1:n_ids,
-                                function(x) seq_len(max_vals)))
 
-  # Randomly sample the unique combinations without replacement
-  sampled_ids <- all_ids[sample(nrow(all_ids),
-                                n_rows), ]
-
-  # Store each unique identifier in the vars list
-  for (i in seq_len(n_ids)) {
-    vars[[i]] <- sampled_ids[[i]]
-  }
-
-  # Set the names of the variables (e.g., id1, id2, ...)
-  names(vars) <- paste0(prefix,
-                        seq_len(n_ids))
-
-  return(vars)
 }
 
 # examples:
