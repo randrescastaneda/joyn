@@ -12,7 +12,7 @@ performs a number of checks, and filters to allow the user-specified join."><!--
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -70,15 +70,15 @@ performs a number of checks, and filters to allow the user-specified join.</p>
 <span>  <span class="va">y</span>,</span>
 <span>  by <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span><span class="op">)</span>,</span>
 <span>  match_type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"1:1"</span>, <span class="st">"1:m"</span>, <span class="st">"m:1"</span>, <span class="st">"m:m"</span><span class="op">)</span>,</span>
-<span>  keep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"full"</span>, <span class="st">"left"</span>, <span class="st">"master"</span>, <span class="st">"right"</span>, <span class="st">"using"</span>, <span class="st">"inner"</span><span class="op">)</span>,</span>
-<span>  y_vars_to_keep <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  keep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"full"</span>, <span class="st">"left"</span>, <span class="st">"master"</span>, <span class="st">"right"</span>, <span class="st">"using"</span>, <span class="st">"inner"</span>, <span class="st">"anti"</span><span class="op">)</span>,</span>
+<span>  y_vars_to_keep <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span><span class="va">keep</span> <span class="op">==</span> <span class="st">"anti"</span>, <span class="cn">FALSE</span>, <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  update_values <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  update_NAs <span class="op">=</span> <span class="va">update_values</span>,</span>
 <span>  reportvar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.reportvar"</span><span class="op">)</span>,</span>
-<span>  reporttype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"character"</span>, <span class="st">"numeric"</span><span class="op">)</span>,</span>
+<span>  reporttype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"factor"</span>, <span class="st">"character"</span>, <span class="st">"numeric"</span><span class="op">)</span>,</span>
 <span>  roll <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_common_vars <span class="op">=</span> <span class="cn">FALSE</span>,</span>
-<span>  sort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
+<span>  sort <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  verbose <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.verbose"</span><span class="op">)</span>,</span>
 <span>  suffixes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.suffixes"</span><span class="op">)</span>,</span>
 <span>  allow.cartesian <span class="op">=</span> <span class="fu">deprecated</span><span class="op">(</span><span class="op">)</span>,</span>
@@ -129,10 +129,7 @@ that matched in both tables and the ones that did not match in x. The ones
 in y will be discarded. If <em>"right"</em> or <em>"using"</em>, it keeps the
 observations that matched in both tables and the ones that did not match in
 y. The ones in x will be discarded. If <em>"inner"</em>, it only keeps the
-observations that matched both tables. Note that if, for example, a <code>keep = "left"</code>, the <code>joyn()</code> function still executes a full join under the hood
-and then filters so that only rows the output table is a left join. This
-behaviour, while inefficient, allows all the diagnostics and checks
-conducted by <code>joyn</code>.</p></dd>
+observations that matched both tables. Note that if, for example, a <code>keep = "left", the </code>joyn()<code>function still executes a full join under the hood and then filters so that only rows the output table is a left join. This behaviour, while inefficient, allows all the diagnostics and checks conducted by</code>joyn`.</p></dd>
 
 
 <dt>y_vars_to_keep</dt>
@@ -184,7 +181,7 @@ variable in the joined table.</p></dd>
 
 <dt>sort</dt>
 <dd><p>logical: If TRUE, sort by key variables in <code>by</code>. Default is
-TRUE.</p></dd>
+FALSE.</p></dd>
 
 
 <dt>verbose</dt>
@@ -297,72 +294,66 @@ The Default is <code>FALSE</code> as it is the default value of
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     2     40%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     3     60%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:  total     5    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     x 2     40%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 x &amp; y 3     60%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 total 5    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x     y  .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    11    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    13    15  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    14    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    11    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    13    15  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     3     2    14    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    NA    NA    15    NA      x</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># Bad merge for not specifying by argument or match_type</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     4   44.4%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     1   11.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      y     4   44.4%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  total     9    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     x 4   44.4%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     y 4   44.4%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 x &amp; y 1   11.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 total 9    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and x</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id, x&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id and x from id, yd, y, and x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y  .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    16     1    11  x &amp; y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12    NA    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     1    16     1    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    NA    NA    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     2    NA    17     2    15      y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     3     2    NA    NA    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7:     3    NA    20     3    10      y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8:     5    NA    18     5    20      y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9:     6    NA    19     6    13      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    NA    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     3     2    NA    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    NA    NA    15    NA    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     2    NA    17     2    15      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7:     5    NA    18     5    20      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8:     6    NA    19     6    13      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9:     3    NA    20     3    10      y</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># good merge, ignoring variable x from y</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="op">(</span><span class="va">x2</span>, <span class="va">y2</span>, by <span class="op">=</span> <span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"m:1"</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     1   14.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     4   57.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      y     2   28.6%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  total     7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     x 1   14.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     y 2   28.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 x &amp; y 4   57.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 total 7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y  .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    16     1    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12     1    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    NA     2    15  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    NA     3    10  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    16     1    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12     1    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    NA     2    15  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     3     2    NA     3    10  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    NA    NA    15    NA    NA      x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:     5    NA    NA     5    20      y</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:     6    NA    NA     6    13      y</span>
 <span class="r-in"><span></span></span>
@@ -371,23 +362,21 @@ The Default is <code>FALSE</code> as it is the default value of
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         .joyn     n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1: NA updated     4   57.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:          x     1   14.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      x &amp; y     2   28.6%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:      total     7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1          x 1   14.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2      x &amp; y 2   28.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 NA updated 4   57.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4      total 7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y      .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA          x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    16     1    11      x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12     1    11      x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    17     2    15 NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    20     3    10 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;     &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    16     1    11      x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12     1    11      x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    17     2    15 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     3     2    20     3    10 NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    NA    NA    15    NA    NA          x</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:     5    NA    18     5    20 NA updated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:     6    NA    19     6    13 NA updated</span>
 <span class="r-in"><span></span></span>
@@ -396,23 +385,21 @@ The Default is <code>FALSE</code> as it is the default value of
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>            .joyn     n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>           &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA updated     4   57.1%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:   not updated     1   14.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3: value updated     2   28.6%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:         total     7    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>           .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1    NA updated 4   57.1%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 value updated 2   28.6%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3   not updated 1   14.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4         total 7    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, yd, y, and x</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, yd, y, and x</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x    yd     y         .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;        &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA    NA   not updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    16     1    11 value updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    16     1    11 value updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    17     2    15    NA updated</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    20     3    10    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;        &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    16     1    11 value updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    16     1    11 value updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    17     2    15    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     3     2    20     3    10    NA updated</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:    NA    NA    15    NA    NA   not updated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 6:     5    NA    18     5    20    NA updated</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 7:     6    NA    19     6    13    NA updated</span>
 <span class="r-in"><span></span></span>
