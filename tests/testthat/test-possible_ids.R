@@ -186,7 +186,9 @@ test_that("create_ids works as intended", {
   # with more than an id
   vars <- c("var1", "var2", "var3")
 
-  res <- df_test[, (vars) := create_ids(.N,
+  dt <- df_test |> copy()
+
+  res <- dt[, (vars) := create_ids(.N,
                                         n_ids = 3)]
 
   nrow(res[, .N,
@@ -194,6 +196,23 @@ test_that("create_ids works as intended", {
      by = vars][N > 1]) |>
     expect_equal(0)
 
+  res <- df_test[, .(as.data.table(
+    create_ids(.N, n_ids = 3)
+    ))]
+
+  nrow(res[, .N,
+
+           by = c("id1", "id2", "id3")][N > 1]) |>
+    expect_equal(0)
+
+  dt <- dt_large |> copy()
+
+  new_ids <- as.data.table(create_ids(nrow(dt),
+                                      n_ids = 3,
+                                      prefix = "new_id"))
+
+  # Bind the new IDs to the existing data.table
+  dt <- cbind(dt, new_ids)
 
 
 })
