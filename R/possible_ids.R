@@ -381,39 +381,23 @@ store_checked_ids <- function(checked_ids,
 
 }
 
-# Create variables that uniquely idenitfy a dt
-# Attempt one -----------------------------------------------------
-df_test <- data.table(a = 1:50)
-
-# Attempt two -----------
-create_unique_variables <- function(n_rows, n_ids, prefix = "id") {
-  # Initialize a list to store the generated variables
-  vars <- vector("list", n_ids)
-
-  # The maximum unique values each variable can have to maintain uniqueness
-  max_vals <- ceiling(n_rows^(1 / n_ids))
-
-  # Generate each variable using sequences and vectorization
-  for (i in seq_len(n_ids)) {
-
-    # For the i-th variable, create a repeating sequence of increasing length
-    repeat_factor <- max_vals^(n_ids - i)
-    vars[[i]] <- rep(rep(seq_len(max_vals),
-                         each = repeat_factor), length.out = n_rows)
-  }
-
-  # Set the names of the variables (e.g., var1, var2, ...)
-  names(vars) <- paste0(prefix,
-                        seq_len(n_ids))
-
-  return(vars)
-
-  # Convert the list of variables into a data frame and return it
-  # return(as.data.frame(vars))
-}
-
-# fixing the issue of duplicate rows:
-
+#' Create variables that uniquely identify rows in a data table
+#'
+#' This function generates unique identifier columns for a given number of rows, based on the specified number of identifier variables.
+#'
+#' @param n_rows An integer specifying the number of rows in the data table for which unique identifiers need to be generated.
+#' @param n_ids An integer specifying the number of identifiers to be created. If `n_ids` is 1, a simple sequence of unique IDs is created. If greater than 1, a combination of IDs is generated.
+#' @param prefix A character string specifying the prefix for the identifier variable names (default is `"id"`).
+#'
+#' @return A named list where each element is a vector representing a unique identifier column. The number of elements in the list corresponds to the number of identifier variables (`n_ids`). The length of each element is equal to `n_rows`.
+#'
+#' @details
+#' The function handles two scenarios:
+#' 1. When `n_ids` is 1, it simply returns a sequence of integers from 1 to `n_rows`.
+#' 2. When `n_ids` is greater than 1, it generates combinations of IDs such that the rows are uniquely identified by the combination of the identifier variables.
+#'
+#'
+#' @keywords internal
 create_ids <- function(n_rows, n_ids, prefix = "id") {
 
   vars <- vector("list",
@@ -436,7 +420,7 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
     all_ids <- expand.grid(lapply(1:n_ids,
                                   function(x) seq_len(max_vals)))
 
-    # Randomly sample the unique combinations without replacement
+    # Randomly sample the unique combinations
     sampled_ids <- all_ids[sample(nrow(all_ids),
                                   n_rows), ]
 
@@ -445,32 +429,13 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
       vars[[i]] <- sampled_ids[[i]]
     }
 
-    # Set the names of the variables (e.g., id1, id2, ...)
     names(vars) <- paste0(prefix,
                           seq_len(n_ids))
 
     return(vars)
-
   }
 
-
 }
-
-#examples:
-ids <- create_ids(nrow(df_test), 3)
-# create own names
-vars <- c("var1", "var2", "var3")
-dt[, (vars) := create_ids(.N, n_ids = 3)]
-
-# use create_ids logic (you need to colbind them later)
-dt[, .(as.data.table(create_ids(.N, n_ids = 3)))]
-
-# Create a new dataset and generate IDs for it
-df_new <- data.frame(b = 1:15)
-
-# Generate 4 unique ID columns for the new dataset
-df_new_ids <- create_ids(nrow(df_new), 4)
-
 
 
 
