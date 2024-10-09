@@ -152,11 +152,48 @@ possible_ids_list
 
 # TESTS ####
 ## Test create ids --------------------- ####
+df_test <- data.table(a = 1:50)
+
 
 test_that("create_ids works as intended", {
 
   # with a single id
-  res <- as.data.frame(create_ids(n_rows = 50, n_ids = 1))
+  res <- as.data.frame(create_ids(n_rows = 50,
+                                  n_ids = 1))
+
+  nrow(unique(res)) |>
+    expect_equal(50)
+
+  class(res) |>
+    expect_equal("data.frame")
+
+
+  # ret class
+  res <- create_ids(n_rows = 50,
+                    n_ids = 1)
+
+  class(res) |>
+    expect_equal("list")
+
+  length(res) |>
+    expect_equal(1)
+
+  # prefix
+  create_ids(n_rows = 40, n_ids = 4, prefix = "unique_id") |>
+    names() |>
+    expect_equal(paste0("unique_id", 1:4))
+
+  # with more than an id
+  vars <- c("var1", "var2", "var3")
+
+  res <- df_test[, (vars) := create_ids(.N,
+                                        n_ids = 3)]
+
+  nrow(res[, .N,
+
+     by = vars][N > 1]) |>
+    expect_equal(0)
+
 
 
 })
