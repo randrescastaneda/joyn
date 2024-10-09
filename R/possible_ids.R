@@ -481,6 +481,12 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
   # Get max unique values each variable can have to keep uniqueness
   max_vals <- ceiling(n_rows^(1 / n_ids))
 
+  # If n_ids is 1, simply generate a sequence of IDs
+  if (n_ids == 1) {
+    vars[[1]] <- seq_len(n_rows)
+    names(vars)[1] <- paste0(prefix, 1)
+  }
+
   # Generate a sequence of unique identifiers
   all_ids <- expand.grid(lapply(1:n_ids,
                                 function(x) seq_len(max_vals)))
@@ -501,24 +507,32 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
   return(vars)
 }
 
-# another version ####
-create_random_unique_variables <- function(n_rows, n_ids, prefix = "id") {
-  # Calculate max_vals based on n_rows and n_ids
-  max_vals <- ceiling(n_rows^(1 / n_ids))
-
-  # Initialize a data frame to store the sampled variables
-  sampled_vars <- as.data.frame(matrix(NA, nrow = n_rows, ncol = n_ids))
-
-  # For each variable (column), sample 'n_rows' random values from '1:max_vals'
-  for (i in seq_len(n_ids)) {
-    sampled_vars[[i]] <- sample(seq_len(max_vals), n_rows, replace = TRUE)
-  }
-
-  # Set the names of the variables (e.g., id1, id2, ...)
-  names(sampled_vars) <- paste0(prefix, seq_len(n_ids))
-
-  return(sampled_vars)
-}
-
+# examples:
+# ids <- create_ids(nrow(df_test), 3)
+# # create own names
+# vars <- c("var1", "var2", "var3")
+# dt[, (vars) := create_ids(.N, n_ids = 3)]
+#
+# # use create_ids logic (you need to colbind them later)
+# dt[, .(as.data.table(create_ids(.N, n_ids = 3)))]
+#
+# # Create a new dataset and generate IDs for it
+# df_new <- data.frame(b = 1:15)
+#
+# # Generate 4 unique ID columns for the new dataset
+# df_new_ids <- create_ids(nrow(df_new), 4)
+#
+# # Bind the IDs to the new dataset
+# df_new <- cbind(df_new, df_new_ids)
+#
+# # with data table
+# # Create a data.table for demonstration
+# dt <- data.table(a = 1:10)
+#
+# # Generate unique IDs and convert them into a data.table
+# id_dt <- as.data.table(create_ids(.N, n_ids = 3))
+#
+# # Bind the new ID columns to the original data.table
+# dt <- cbind(dt, id_dt)
 
 

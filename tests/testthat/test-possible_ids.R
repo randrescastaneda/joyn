@@ -1,5 +1,5 @@
-# PREPARATION ####
 
+# PREPARATION ####
 withr::local_options(joyn.verbose = FALSE)
 library(data.table)
 # options(possible_ids.verbose = FALSE)
@@ -151,8 +151,19 @@ possible_ids_list
 
 
 # TESTS ####
+## Test create ids --------------------- ####
+
+test_that("create_ids works as intended", {
+
+  # with a single id
+  res <- as.data.frame(create_ids(n_rows = 50, n_ids = 1))
 
 
+})
+
+
+
+## Test possible_ids ------------------- ####
 test_that("convert to data.table", {
   xx1 <- as.data.frame(x1)
   expect_equal(possible_ids(x1), possible_ids(xx1))
