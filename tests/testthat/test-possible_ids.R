@@ -154,6 +154,7 @@ possible_ids_list
 ## Test create ids --------------------- ####
 
 test_that("create_ids works as intended", {
+  df_test <- data.table(a = 1:50)
 
   # with a single id
   res <- as.data.frame(create_ids(n_rows = 50,
