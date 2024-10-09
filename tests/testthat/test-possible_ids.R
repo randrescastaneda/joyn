@@ -152,8 +152,6 @@ possible_ids_list
 
 # TESTS ####
 ## Test create ids --------------------- ####
-df_test <- data.table(a = 1:50)
-
 
 test_that("create_ids works as intended", {
 
@@ -490,14 +488,6 @@ test_that("exclude and include", {
 })
 
 
-# test_that("get length 0", {
-#
-#   expect_length(possible_ids(x1,
-#                            exclude_classes = c("numeric", "integer"),
-#                            include = "t"), 0)
-#
-# })
-
 test_that("get length 0 -error", {
 
   expect_error(possible_ids(x1,
@@ -631,6 +621,35 @@ test_that("duplicated names", {
   setnames(xx4, "t", "x")
 
   expect_error(possible_ids(xx4))
+
+})
+
+test_that("identifies ids", {
+
+  vars <- c("var1", "var2", "var3")
+  dt[, (vars) := create_ids(.N, n_ids = 3)]
+
+  possible_ids(dt,
+               vars = vars) |>
+    unlist() |>
+    expect_equal(vars)
+
+  df_test <- as.data.frame(
+    create_ids(n_rows = 50,
+               n_ids = 3)
+  )
+
+  possible_ids(df_test,
+               vars = c("id1", "id2"),
+               include = "id3") |>
+    unlist() |>
+    expect_equal(c("id1", "id2", "id3"))
+
+  possible_ids(df_test,
+               exclude_classes = "integer",
+               include = c("id1", "id2", "id3")) |>
+    unlist() |>
+    expect_equal(c("id1", "id2", "id3"))
 
 })
 
