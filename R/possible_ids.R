@@ -502,7 +502,10 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
 }
 
 # another version ####
-create_random_unique_variables <- function(n_rows, n_ids, max_vals, prefix = "id") {
+create_random_unique_variables <- function(n_rows, n_ids, prefix = "id") {
+  # Calculate max_vals based on n_rows and n_ids
+  max_vals <- ceiling(n_rows^(1 / n_ids))
+
   # Initialize a data frame to store the sampled variables
   sampled_vars <- as.data.frame(matrix(NA, nrow = n_rows, ncol = n_ids))
 
