@@ -413,12 +413,16 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
     return(vars)
   } else {
 
-    # Get max unique values each variable can have to keep uniqueness
+    # Get max unique values each variable can have
     max_vals <- ceiling(n_rows^(1 / n_ids))
 
     # Generate a sequence of unique identifiers
-    all_ids <- expand.grid(lapply(1:n_ids,
-                                  function(x) seq_len(max_vals)))
+
+    all_ids <- expand.grid(rep(list(seq_len(max_vals)),
+                               n_ids))
+
+    # nrows smaller ?
+    # nrows always bigger (?)
 
     # Randomly sample the unique combinations
     sampled_ids <- all_ids[sample(nrow(all_ids),
