@@ -38,7 +38,7 @@ data.table::merge, which is why merge masks the other two."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Merge two data frames</h1>
-      <small class="dont-index">Source: <a href="https://github.com/randrescastaneda/joyn/blob/DEV/R/merge-data.table.R" class="external-link"><code>R/merge-data.table.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/randrescastaneda/joyn/blob/wbpage-0.2.3/R/merge-data.table.R" class="external-link"><code>R/merge-data.table.R</code></a></small>
       <div class="d-none name"><code>merge.Rd</code></div>
     </div>
 
@@ -107,7 +107,7 @@ data from both <code>x</code> and <code>y</code> are included in the output.</p>
 <dd><p>logical. If <code>TRUE</code> (default), the rows of the merged
 <code>data.table</code> are sorted by setting the key to the <code>by / by.x</code> columns. If
 <code>FALSE</code>, unlike base R's <code>merge</code> for which row order is unspecified, the
-row order in <code>x</code> is retained (including retaining the position of missing entries when
+row order in <code>x</code> is retained (including retaining the position of missings when
 <code>all.x=TRUE</code>), followed by <code>y</code> rows that don't match <code>x</code> (when <code>all.y=TRUE</code>)
 retaining the order those appear in <code>y</code>.</p></dd>
 
