@@ -40,6 +40,9 @@
     <loc>https://randrescastaneda.github.io/joyn/news/index.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/anti_join.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/arguments_checks.html</loc>
   </url>
   <url>
@@ -71,6 +74,9 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/clear_joynenv.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/correct_names.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/freq_table.html</loc>
@@ -136,6 +142,9 @@
     <loc>https://randrescastaneda.github.io/joyn/reference/rename_to_valid.html</loc>
   </url>
   <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/report_from_attr.html</loc>
+  </url>
+  <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/right_join.html</loc>
   </url>
   <url>
@@ -146,6 +155,9 @@
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/split_match_type.html</loc>
+  </url>
+  <url>
+    <loc>https://randrescastaneda.github.io/joyn/reference/store_joyn_msg.html</loc>
   </url>
   <url>
     <loc>https://randrescastaneda.github.io/joyn/reference/store_msg.html</loc>

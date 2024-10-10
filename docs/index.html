@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -75,11 +75,7 @@
 <div class="page-header"><h1 id="joyn">joyn<a class="anchor" aria-label="anchor" href="#joyn"></a>
 </h1></div>
 <!-- badges: start -->
-<!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/workflows/R-CMD-check/badge.svg/)](https://github.com/randrescastaneda/joyn/actions/) -->
 
-<!-- [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn) -->
-<!-- [![](https://img.shields.io/badge/devel%20version-0.2.0-blue.svg)](https://github.com/randrescastaneda/joyn) -->
-<!-- [![R-CMD-check](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/randrescastaneda/joyn/actions/workflows/R-CMD-check.yaml) -->
 <!-- badges: end -->
 <p><code>joyn</code> empowers you to assess the results of joining data frames, making it easier and more efficient to combine your tables. Similar in philosophy to the <code>merge</code> command in <code>Stata</code>, <code>joyn</code> offers matching key variables and detailed join reports to ensure accurate and insightful results.</p>
 <div class="section level2">
@@ -213,23 +209,21 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     2   33.3%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     3     50%</span></span>
-<span><span class="co">#&gt; 3:      y     1   16.7%</span></span>
-<span><span class="co">#&gt; 4:  total     6    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   33.3%</span></span>
+<span><span class="co">#&gt; 2     y 1   16.7%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3     50%</span></span>
+<span><span class="co">#&gt; 4 total 6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ℹ ❯ Removing key variables id from id and y</span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
+<span><span class="co">#&gt; ℹ Note: Removing key variables id from id and y</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
-<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA      x</span></span>
 <span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span>
 <span></span>
 <span><span class="co"># keep just those observations that match</span></span>
@@ -240,16 +234,15 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:  x &amp; y     3    100%</span></span>
-<span><span class="co">#&gt; 2:  total     3    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   66.7%</span></span>
+<span><span class="co">#&gt; 2     y 1   33.3%</span></span>
+<span><span class="co">#&gt; 3 total 3    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ℹ ❯ Removing key variables id from id and y</span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
+<span><span class="co">#&gt; ℹ Note: Removing key variables id from id and y</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
 <span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
 <span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
@@ -261,27 +254,25 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     4   44.4%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     1   11.1%</span></span>
-<span><span class="co">#&gt; 3:      y     4   44.4%</span></span>
-<span><span class="co">#&gt; 4:  total     9    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 4   44.4%</span></span>
+<span><span class="co">#&gt; 2     y 4   44.4%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 1   11.1%</span></span>
+<span><span class="co">#&gt; 4 total 9    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ℹ ❯ Removing key variables id and x from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; Key: &lt;id, x&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
+<span><span class="co">#&gt; ℹ Note: Removing key variables id and x from id, yd, y, and x</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    16     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     4     2    12    NA    NA      x</span></span>
 <span><span class="co">#&gt; 3:     2     1    NA    NA    NA      x</span></span>
-<span><span class="co">#&gt; 4:     2    NA    17     2    15      y</span></span>
-<span><span class="co">#&gt; 5:     3     2    NA    NA    NA      x</span></span>
-<span><span class="co">#&gt; 6:     3    NA    20     3    10      y</span></span>
-<span><span class="co">#&gt; 7:     4     2    12    NA    NA      x</span></span>
-<span><span class="co">#&gt; 8:     5    NA    18     5    20      y</span></span>
-<span><span class="co">#&gt; 9:     6    NA    19     6    13      y</span></span>
+<span><span class="co">#&gt; 4:     3     2    NA    NA    NA      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA    NA      x</span></span>
+<span><span class="co">#&gt; 6:     2    NA    17     2    15      y</span></span>
+<span><span class="co">#&gt; 7:     5    NA    18     5    20      y</span></span>
+<span><span class="co">#&gt; 8:     6    NA    19     6    13      y</span></span>
+<span><span class="co">#&gt; 9:     3    NA    20     3    10      y</span></span>
 <span></span>
 <span><span class="co"># good merge, ignoring variable x from y</span></span>
 <span><span class="fu"><a href="reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x2</span>, </span>
@@ -291,23 +282,21 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     2   28.6%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     3   42.9%</span></span>
-<span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
-<span><span class="co">#&gt; 4:  total     7    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   28.6%</span></span>
+<span><span class="co">#&gt; 2     y 2   28.6%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3   42.9%</span></span>
+<span><span class="co">#&gt; 4 total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
+<span><span class="co">#&gt; ℹ Note: Removing key variables id from id, yd, y, and x</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    16     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    16     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     4     2    12    NA    NA      x</span></span>
 <span><span class="co">#&gt; 3:     2     1    NA     2    15  x &amp; y</span></span>
 <span><span class="co">#&gt; 4:     3     2    NA     3    10  x &amp; y</span></span>
-<span><span class="co">#&gt; 5:     4     2    12    NA    NA      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA    NA      x</span></span>
 <span><span class="co">#&gt; 6:     5    NA    NA     5    20      y</span></span>
 <span><span class="co">#&gt; 7:     6    NA    NA     6    13      y</span></span>
 <span></span>
@@ -319,23 +308,21 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;         .joyn     n percent</span></span>
-<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1: NA updated     4   57.1%</span></span>
-<span><span class="co">#&gt; 2:          x     2   28.6%</span></span>
-<span><span class="co">#&gt; 3:      x &amp; y     1   14.3%</span></span>
-<span><span class="co">#&gt; 4:      total     7    100%</span></span>
+<span><span class="co">#&gt;        .joyn n percent</span></span>
+<span><span class="co">#&gt; 1          x 2   28.6%</span></span>
+<span><span class="co">#&gt; 2      x &amp; y 1   14.3%</span></span>
+<span><span class="co">#&gt; 3 NA updated 4   57.1%</span></span>
+<span><span class="co">#&gt; 4      total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
+<span><span class="co">#&gt; ℹ Note: Removing key variables id from id, yd, y, and x</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y      .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;     &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA          x</span></span>
-<span><span class="co">#&gt; 2:     1     1    16     1    11      x &amp; y</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;     &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    16     1    11      x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     4     2    12    NA    NA          x</span></span>
 <span><span class="co">#&gt; 3:     2     1    17     2    15 NA updated</span></span>
 <span><span class="co">#&gt; 4:     3     2    20     3    10 NA updated</span></span>
-<span><span class="co">#&gt; 5:     4     2    12    NA    NA          x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA    NA          x</span></span>
 <span><span class="co">#&gt; 6:     5    NA    18     5    20 NA updated</span></span>
 <span><span class="co">#&gt; 7:     6    NA    19     6    13 NA updated</span></span>
 <span></span>
@@ -347,23 +334,21 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;            .joyn     n percent</span></span>
-<span><span class="co">#&gt;           &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA updated     4   57.1%</span></span>
-<span><span class="co">#&gt; 2:   not updated     2   28.6%</span></span>
-<span><span class="co">#&gt; 3: value updated     1   14.3%</span></span>
-<span><span class="co">#&gt; 4:         total     7    100%</span></span>
+<span><span class="co">#&gt;           .joyn n percent</span></span>
+<span><span class="co">#&gt; 1    NA updated 4   57.1%</span></span>
+<span><span class="co">#&gt; 2 value updated 1   14.3%</span></span>
+<span><span class="co">#&gt; 3   not updated 2   28.6%</span></span>
+<span><span class="co">#&gt; 4         total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; ℹ ❯ Removing key variables id from id, yd, y, and x</span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
+<span><span class="co">#&gt; ℹ Note: Removing key variables id from id, yd, y, and x</span></span>
 <span><span class="co">#&gt;       id     t     x    yd     y         .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;        &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA   not updated</span></span>
-<span><span class="co">#&gt; 2:     1     1    16     1    11 value updated</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;int&gt;        &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    16     1    11 value updated</span></span>
+<span><span class="co">#&gt; 2:     4     2    12    NA    NA   not updated</span></span>
 <span><span class="co">#&gt; 3:     2     1    17     2    15    NA updated</span></span>
 <span><span class="co">#&gt; 4:     3     2    20     3    10    NA updated</span></span>
-<span><span class="co">#&gt; 5:     4     2    12    NA    NA   not updated</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA    NA   not updated</span></span>
 <span><span class="co">#&gt; 6:     5    NA    18     5    20    NA updated</span></span>
 <span><span class="co">#&gt; 7:     6    NA    19     6    13    NA updated</span></span>
 <span></span>
@@ -376,22 +361,20 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     2   28.6%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     3   42.9%</span></span>
-<span><span class="co">#&gt; 3:      y     2   28.6%</span></span>
-<span><span class="co">#&gt; 4:  total     7    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   28.6%</span></span>
+<span><span class="co">#&gt; 2     y 2   28.6%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3   42.9%</span></span>
+<span><span class="co">#&gt; 4 total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
-<span><span class="co">#&gt; ℹ ❯ Joyn's report available in variable .joyn</span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt;       id     t     x  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    16  x &amp; y</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    16  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     4     2    12      x</span></span>
 <span><span class="co">#&gt; 3:     2     1    NA  x &amp; y</span></span>
 <span><span class="co">#&gt; 4:     3     2    NA  x &amp; y</span></span>
-<span><span class="co">#&gt; 5:     4     2    12      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15      x</span></span>
 <span><span class="co">#&gt; 6:     5    NA    NA      y</span></span>
 <span><span class="co">#&gt; 7:     6    NA    NA      y</span></span></code></pre></div>
 </div>
