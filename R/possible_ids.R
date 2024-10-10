@@ -421,16 +421,15 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
     all_ids <- expand.grid(rep(list(seq_len(max_vals)),
                                n_ids))
 
-    # nrows smaller ?
-    # nrows always bigger (?)
-
-    # Randomly sample the unique combinations
-    sampled_ids <- all_ids[sample(nrow(all_ids),
-                                  n_rows), ]
+    if (nrow(all_ids) > n_rows) {
+      # Randomly sample the unique combinations
+      all_ids <- all_ids[sample(nrow(all_ids),
+                                    n_rows), ]
+    }
 
     # Store each unique identifier in the vars list
     for (i in seq_len(n_ids)) {
-      vars[[i]] <- sampled_ids[[i]]
+      vars[[i]] <- all_ids[[i]]
     }
 
     names(vars) <- paste0(prefix,
