@@ -36,6 +36,9 @@ We'll start with a rough overview of the different kinds of messages that might 
 
 4.  `<span style = "color: #`{=html}CE2029`;">`{=html}**Error**
 
+When running `joyn()` in an interactive session, if `verbose = TRUE` you will receive feedback on the operation through clickable bullet points summarizing the messages generated during the join. For example, you will see a summary of how many notes and warnings were returned. 
+
+
 ```{r setup}
 
 # Setup 
@@ -43,6 +46,26 @@ library(joyn)
 library(data.table)
 
 ```
+
+```{r example-clickable-msg}
+
+x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15)
+
+y1 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16))
+
+joyn(x1,
+     y1,
+     match_type = "m:m",
+     verbose = TRUE)
+
+```
+
+
+By clicking on these messages in the console, you can explore the details further. However, this interactive feature is not available in this website version since it does not support such interactivity.
+
 
 ```{r msg-type}
 
@@ -63,14 +86,6 @@ Recall that one of the additional features of joyn is that it returns a **report
 ```{r info-ex1}
 
 # Example dataframes
-
-x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
-                t  = c(1L, 2L, 1L, 2L, NA_integer_),
-                x  = 11:15)
-
-y1 = data.table(id = c(1,2, 4),
-                y  = c(11L, 15L, 16))
-
 
 x2 = data.table(id = c(1, 4, 2, 3, NA),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -268,7 +283,7 @@ joyn_msg("err")
 
 `joyn` stores the messages in the `joyn` environment.
 
-In order to print them, you can use the `joyn_msg()` function. The `msg_type` argument allows you to specify a certain type of message you would like to visualize, or, if you want all of them to be displayed, you can just set `type = 'all'`
+In order to directly print them, you can use the `joyn_msg()` function. The `msg_type` argument allows you to specify a certain type of message you would like to visualize, or, if you want all of them to be displayed, you can just set `type = 'all'`
 
 ```{r joyn-msg-ex}
 
