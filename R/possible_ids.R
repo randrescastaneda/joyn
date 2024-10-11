@@ -355,11 +355,20 @@ remove_null <- \(x) {
 }
 
 
-# Function to store checked vars as possible ids:
-#  1. Remove nulls in possible ids list
-#  2. Poke environment
-#  3. Save checked vars as attribute
-#  4. Return possible ids list
+#' store checked variables as possible ids
+#'
+#' This function processes a list of possible IDs by removing any `NULL` entries,
+#' storing a set of checked variables as an attribute and in the specified environment,
+#' and then returning the updated list of possible IDs.
+#'
+#' @param checked_ids A vector of variable names that have been checked as possible IDs.
+#' @param possible_ids A list containing potential identifiers. This list may contain `NULL` values, which will be removed by the function.
+#' @param env An environment where the `checked_ids` will be stored. The default is `.joynenv`.
+#'
+#' @return A list of possible IDs with `NULL` values removed, and the `checked_ids` stored as an attribute.
+#'
+#'
+#' @keywords internal
 store_checked_ids <- function(checked_ids,
                               possible_ids,
                               env = .joynenv) {
@@ -390,11 +399,6 @@ store_checked_ids <- function(checked_ids,
 #' @param prefix A character string specifying the prefix for the identifier variable names (default is `"id"`).
 #'
 #' @return A named list where each element is a vector representing a unique identifier column. The number of elements in the list corresponds to the number of identifier variables (`n_ids`). The length of each element is equal to `n_rows`.
-#'
-#' @details
-#' The function handles two scenarios:
-#' 1. When `n_ids` is 1, it simply returns a sequence of integers from 1 to `n_rows`.
-#' 2. When `n_ids` is greater than 1, it generates combinations of IDs such that the rows are uniquely identified by the combination of the identifier variables.
 #'
 #'
 #' @keywords internal
