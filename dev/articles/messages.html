@@ -84,6 +84,11 @@ of them in detail with representative examples.</p>
 <li><p><span style="color: #FE5A1D;"><strong>Warning</strong></span></p></li>
 <li><p><span style="color: #CE2029;"><strong>Error</strong></span></p></li>
 </ol>
+<p>When running <code><a href="../reference/joyn.html">joyn()</a></code> in an interactive session, if
+<code>verbose = TRUE</code> you will receive feedback on the operation
+through clickable bullet points summarizing the messages generated
+during the join. For example, you will see a summary of how many notes
+and warnings were returned.</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Setup </span></span>
@@ -95,6 +100,43 @@ of them in detail with representative examples.</p>
 <span><span class="co">#&gt;     merge</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span></code></pre></div>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span></span>
+<span><span class="va">x1</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
+<span>                t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
+<span>                x  <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x1</span>,</span>
+<span>     <span class="va">y1</span>,</span>
+<span>     match_type <span class="op">=</span> <span class="st">"m:m"</span>,</span>
+<span>     verbose <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   33.3%</span></span>
+<span><span class="co">#&gt; 2     y 1   16.7%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3     50%</span></span>
+<span><span class="co">#&gt; 4 total 6    100%</span></span>
+<span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">The keys supplied uniquely identify y, therefore a </span><span style="color: #9E9E9E; font-weight: bold;">m:1</span><span style="color: #9E9E9E;"> join is</span></span></span>
+<span><span class="co">#&gt; <span style="color: #9E9E9E;">executed</span></span></span>
+<span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA      x</span></span>
+<span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span></code></pre></div>
+<p>By clicking on these messages in the console, you can explore the
+details further. However, this interactive feature is not available in
+this website version since it does not support such interactivity.</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Checking available types of messages</span></span>
 <span><span class="va">msgs_types</span> <span class="op">=</span> <span class="fu">joyn</span><span class="fu">:::</span><span class="fu"><a href="../reference/type_choices.html">type_choices</a></span><span class="op">(</span><span class="op">)</span></span>
@@ -119,17 +161,9 @@ reporting variable is not returned instead. Also, an info message might
 let you know that the name you want to assign to the reporting variable
 is already present in the returning table, so that it will be changed to
 a another one.</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Example dataframes</span></span>
-<span></span>
-<span><span class="va">x1</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
-<span>                t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
-<span>                x  <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
-<span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
 <span></span>
 <span><span class="va">x2</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>                t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
@@ -251,7 +285,7 @@ a another one.</p>
 the merging</strong>, for example notifying you if any of the y
 variables you have specified to keep will be removed because they are
 part of the <code>by</code> variables.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x              <span class="op">=</span> <span class="va">x2</span>,</span>
 <span>     y              <span class="op">=</span> <span class="va">y2</span>,</span>
@@ -312,7 +346,7 @@ in reported time.</p>
 checks</em>
 </li>
 </ol>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># --------------------------- Example with full join ---------------------------</span></span>
 <span></span>
@@ -340,8 +374,8 @@ checks</em>
 <span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000286</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.020961</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000279</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.02059</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span>
 <span></span>
 <span></span>
@@ -369,8 +403,8 @@ checks</em>
 <span><span class="co">#&gt; 5:    NA    NA    15    NA      x</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000556</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.020419</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000559</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.020429</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -387,7 +421,7 @@ accordingly.</p>
 uniquely identified by the key <code>id</code>, but the user is choosing
 a “one to many” relationship instead. The user will be alerted and a
 “one to one” join will be executed instead.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Warning that "id" uniquely identifies y2 </span></span>
 <span></span>
@@ -419,7 +453,7 @@ a “one to many” relationship instead. The user will be alerted and a
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">executed</span></span></span></code></pre></div>
 <p>In a similar way, warning messages are generated when choosing
 <code>match_type = "m:m" or "m:1"</code></p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ------------ Warning that "id" uniquely identifies both x2 and y2 ------------</span></span>
 <span></span>
@@ -488,7 +522,7 @@ similar message is displayed when <code>keep = NULL</code>. Given that
 the current version of <code>joyn</code> does not support inequality
 joins, <code>joyn</code> will warn you that <code>keep = NULL</code>
 will make the join retain only keys in <code>x</code>.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu">joyn</span><span class="fu">::</span><span class="fu"><a href="../reference/left_join.html">left_join</a></span><span class="op">(</span>x            <span class="op">=</span> <span class="va">x1</span>, </span>
 <span>                y            <span class="op">=</span> <span class="va">y1</span>, </span>
@@ -536,7 +570,7 @@ variable names. Error messages will also pop up if you provide an input
 data table that has no variables, or that has duplicate variable
 names.</p>
 <p>Representative messages in this regard can be visualized below:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># ----------------- Error due to input table x with no columns -----------------</span></span>
 <span></span>
@@ -571,7 +605,7 @@ names.</p>
 <code>match_type</code>, that is not consistent with the actual
 relationship between the variables being used for merging.
 <code>joyn</code> will therefore display the following message:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>, y<span class="op">=</span><span class="va">y1</span>, by<span class="op">=</span><span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table x is not uniquely identified by id</span></span></span>
@@ -592,11 +626,12 @@ relationship between the variables being used for merging.
 </h2>
 <p><code>joyn</code> stores the messages in the <code>joyn</code>
 environment.</p>
-<p>In order to print them, you can use the <code><a href="../reference/joyn_msg.html">joyn_msg()</a></code>
-function. The <code>msg_type</code> argument allows you to specify a
-certain type of message you would like to visualize, or, if you want all
-of them to be displayed, you can just set <code>type = 'all'</code></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<p>In order to directly print them, you can use the
+<code><a href="../reference/joyn_msg.html">joyn_msg()</a></code> function. The <code>msg_type</code> argument
+allows you to specify a certain type of message you would like to
+visualize, or, if you want all of them to be displayed, you can just set
+<code>type = 'all'</code></p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Execute a join </span></span>
 <span></span>
@@ -627,8 +662,8 @@ of them to be displayed, you can just set <code>type = 'all'</code></p>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000278</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.020658</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000273</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.020227</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span>
 <span></span>
 <span><span class="co"># Print info messages only </span></span>
