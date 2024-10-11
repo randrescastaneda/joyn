@@ -19,11 +19,4 @@ A named list where each element is a vector representing a unique identifier col
 \description{
 This function generates unique identifier columns for a given number of rows, based on the specified number of identifier variables.
 }
-\details{
-The function handles two scenarios:
-\enumerate{
-\item When \code{n_ids} is 1, it simply returns a sequence of integers from 1 to \code{n_rows}.
-\item When \code{n_ids} is greater than 1, it generates combinations of IDs such that the rows are uniquely identified by the combination of the identifier variables.
-}
-}
 \keyword{internal}
