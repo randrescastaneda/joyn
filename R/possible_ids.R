@@ -412,8 +412,6 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
     vars[[1]] <- seq_len(n_rows)
     names(vars)[1] <- paste0(prefix, 1)
 
-    #print(vars)
-
     return(vars)
   } else {
 
