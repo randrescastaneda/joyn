@@ -67,9 +67,7 @@ test_that("correct totals", {
 
   tr <- nrow(y4)
 
-  j <- freq_table(y4, "id2")
-  j <- freq_table(y4, "id2")
-  j |>
+  freq_table(y4, "id2") |>
     fsubset(id2 == "total") |>
     fselect(n) |>
     reg_elem() |>

@@ -75,10 +75,13 @@ test_that("returns correct report table", {
       id = c("c", "b", "c", "a"),
       y = c(11L, 15L, 18L, 20L)
     )
-  j <- is_id(y, by = "id", return_report = TRUE)
+  j <- is_id(y, by = "id", return_report = TRUE) |>
+    roworder(by = "id")
 
-  r <- data.table(id = c("c", "b", "a"),
-                  copies = c(2L, 1L, 1L))
+  r <- data.table(id = c("c", "b", "a", "total"),
+                  copies = c(2L, 1L, 1L, 4L),
+                  percent = c("50%", "25%", "25%", "100%")) |>
+    roworder(by = "id")
 
   expect_equal(j, r)
 
