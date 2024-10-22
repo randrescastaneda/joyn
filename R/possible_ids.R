@@ -423,6 +423,8 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
     all_ids <- expand.grid(rep(list(seq_len(max_vals)),
                                n_ids))
 
+    #collapse::fnrow faster?
+
     if (nrow(all_ids) > n_rows) {
       # Randomly sample the unique combinations
       all_ids <- all_ids[sample(nrow(all_ids),
