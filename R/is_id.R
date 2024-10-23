@@ -61,9 +61,12 @@ is_id <- function(dt,
     d <- freq_table(x = dt,
                      byvar = by,
                      freq_var_name = "copies")
-    d |>
-      fsubset(copies > 1) |>
-      print()
+
+    if (verbose) {
+      d |>
+        fsubset(copies > 1) |>
+        print()
+    }
 
     if (verbose) cli::cli_rule(right = "End of {.field is_id()} report")
     return(invisible(d))
