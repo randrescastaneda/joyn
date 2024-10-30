@@ -24,13 +24,15 @@ possible_ids(
 
 \item{vars}{character: A vector of variable names to consider for identifying unique combinations.}
 
+\item{exclude}{character: Names of variables to exclude from analysis}
+
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}
 
 \item{exclude_classes}{character: classes to exclude from analysis (e.g.,
 "numeric", "integer", "date")}
 
-\item{include_classes}{character: classes to include from analysis (e.g.,
+\item{include_classes}{character: classes to include in the analysis (e.g.,
 "numeric", "integer", "date")}
 
 \item{verbose}{logical: If FALSE no message will be displayed. Default is

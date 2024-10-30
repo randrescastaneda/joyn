@@ -4,11 +4,12 @@
 #'
 #' @param dt data frame
 #' @param vars character: A vector of variable names to consider for identifying unique combinations.
+#' @param exclude character: Names of variables to exclude from analysis
 #' @param include character: Name of variable to be included, that might belong
 #'   to the group excluded in the `exclude`
 #' @param exclude_classes character: classes to exclude from analysis (e.g.,
 #'   "numeric", "integer", "date")
-#' @param include_classes character: classes to include from analysis (e.g.,
+#' @param include_classes character: classes to include in the analysis (e.g.,
 #'   "numeric", "integer", "date")
 #' @param min_combination_size numeric: Min number of combinations. Default is
 #'   1, so all combinations.
