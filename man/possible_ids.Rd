@@ -22,7 +22,7 @@ possible_ids(
 \arguments{
 \item{dt}{data frame}
 
-\item{exclude}{character: Exclude variables to be selected as identifiers.}
+\item{vars}{character: A vector of variable names to consider for identifying unique combinations.}
 
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}

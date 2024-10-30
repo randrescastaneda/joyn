@@ -3,7 +3,7 @@
 #' Identify possible combinations of variables that  uniquely identifying dt
 #'
 #' @param dt data frame
-#' @param exclude character: Exclude variables to be selected as identifiers.
+#' @param vars character: A vector of variable names to consider for identifying unique combinations.
 #' @param include character: Name of variable to be included, that might belong
 #'   to the group excluded in the `exclude`
 #' @param exclude_classes character: classes to exclude from analysis (e.g.,
@@ -50,18 +50,18 @@
 #'                 x   = c(16, 12, NA, NA, 15))
 #' possible_ids(x4)
 possible_ids <- function(dt,
-                         vars = NULL,
-                         exclude = NULL,
-                         include = NULL,
-                         exclude_classes = NULL,
-                         include_classes = NULL,
-                         verbose = getOption("possible_ids.verbose",
-                                             default = FALSE),
-                         min_combination_size = 1,
-                         max_combination_size = 5,
-                         max_processing_time = 60, # in seconds
-                         max_numb_possible_ids = 100,
-                         get_all  = FALSE) {
+                         vars                        = NULL,
+                         exclude                     = NULL,
+                         include                     = NULL,
+                         exclude_classes             = NULL,
+                         include_classes             = NULL,
+                         verbose                     = getOption("possible_ids.verbose",
+                                                        default = FALSE),
+                         min_combination_size        = 1,
+                         max_combination_size        = 5,
+                         max_processing_time         = 60, # in seconds
+                         max_numb_possible_ids       = 100,
+                         get_all                     = FALSE) {
 
   # defenses ---------
   # Ensure dt is a data.table
@@ -72,34 +72,56 @@ possible_ids <- function(dt,
     dt <- as.data.table(dt)
   }
 
-  # Get all variable names
-  if (is.null(vars)) {
-    vars <- names(dt) |> copy()
-  } else {
-    # check that `vars` are in dt
-  }
+  # Get variable
+  # Vars --------
+
+   if (is.null(vars)) {
+     vars <- names(dt) |>
+       copy()
+     } else {
+
+    # check if all vars are in dt
+    missing_vars <- setdiff(vars, names(dt))
+
+    if (length(missing_vars) > 0) {
+       cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
+    }
+
+    # check at least 2 vars are provided
+
+     if (length(vars) < 2) {
+      cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
+     }
+
+    # exclude should not be used
+      if (!(is.null(exclude) & is.null(exclude_classes))) {
+        exclude         <- NULL
+        exclude_classes <- NULL
+        cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+      }
+
+   }
 
   # Exclude and include -------
 
   ## classes ----------
-  vars <- filter_by_class(dt = dt,
-                          vars = vars,
+  vars <- filter_by_class(dt              = dt,
+                          vars            = vars,
                           include_classes = include_classes,
                           exclude_classes = exclude_classes)
 
   ## var names --------
   vars <- filter_by_name(vars, include, exclude, verbose)
 
-
   ##  no duplicated vars -------------
   if (anyDuplicated(vars)) {
     dupvars <- vars[duplicated(vars)] |>
       unique()
-    cli::cli_abort("vars {.field {dupvars}} are duplicated.")
+    cli::cli_abort("vars {.strongVar {dupvars}} are duplicated.")
   }
 
   if (verbose) {
-    cli::cli_alert_info("Variables to test: {.field {vars}}")
+    cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
   }
 
   if (length(vars) == 0) {
@@ -116,13 +138,15 @@ possible_ids <- function(dt,
   unique_counts <- vapply(dt[, ..vars], fnunique, numeric(1))
   vars          <- vars[order(unique_counts)]
   unique_counts <- unique_counts[order(unique_counts)]
-  n_rows         <- fnrow(dt)
+  n_rows        <- fnrow(dt)
   init_index    <- 0
-
 
 
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
+
+  checked_ids <- vars |>
+    copy()
 
   if (min_combination_size == 1) {
     unique_ids    <- vars[unique_counts == n_rows]
@@ -133,13 +157,19 @@ possible_ids <- function(dt,
       if (verbose) {
         cli::cli_alert_info("Found unique identifiers: {.code {unique_ids}}")
       }
-      if (!get_all) return(remove_null(possible_ids_list))
+      if (!get_all) {
+        ret_list <- store_checked_ids(checked_ids,
+                                      possible_ids_list)
+        return(ret_list)
+      }
 
       # Remove unique identifiers from vars to reduce combinations
       vars <- setdiff(vars, unique_ids)
       if (length(vars) == 0) {
         # All variables are unique identifiers
-        return(remove_null(possible_ids_list))
+        ret_list <- store_checked_ids(checked_ids,
+                                      possible_ids_list)
+        return(ret_list)
       }
       unique_counts <- unique_counts[vars]
     }
@@ -160,11 +190,18 @@ possible_ids <- function(dt,
         "Can't make combinations of {.field {vars}} if the min number of
         combinations is {min_size} and the max is {max_size}")
     }
-    return(remove_null(possible_ids_list))
+
+    cli::cli_abort("No unique identifier found.")
   }
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
+
+    # make sure length of vars is >= comb_size
+    if (length(vars) < comb_size) {
+      next
+      # or break
+    }
 
     combos <- combn(vars, comb_size, simplify = FALSE)
 
@@ -199,17 +236,25 @@ possible_ids <- function(dt,
         # This is inefficient... it is copying every time...
         # I need to think better on how to do it.
         possible_ids_list[[j]] <- combo
-        j <- init_index + 1
+
+        j <- j + 1
+
         if (j > max_numb_possible_ids) {
           if (verbose) {
             cli::cli_alert_warning(
             "Max number of possible IDs ({max_numb_possible_ids}) reached.
             You may modify it in argument {.arg max_numb_possible_ids}")
           }
-          return(possible_ids_list)
+          ret_list <- store_checked_ids(checked_ids = checked_ids,
+                                        possible_ids = possible_ids_list)
+          return(ret_list)
         }
         if (!get_all) {
-          return(remove_null(possible_ids_list))
+
+          ret_list <- store_checked_ids(checked_ids = checked_ids,
+                                        possible_ids = possible_ids_list)
+          return(ret_list)
+
         }
         # Remove variables in the current combo from vars to
         # avoid redundant checks
@@ -234,6 +279,7 @@ possible_ids <- function(dt,
       }
       if (verbose) cli::cli_progress_update()
     }
+
     # Break if all variables are used
     if (length(vars) == 0 || elapsed_time > max_processing_time) {
       break
@@ -245,7 +291,15 @@ possible_ids <- function(dt,
       cli::cli_alert_warning("No unique identifier found.")
     }
   }
-  return(remove_null(possible_ids_list))
+
+  # ----------------------------- #
+  # Return ####
+  # ----------------------------- #
+
+  ret_list <- store_checked_ids(checked_ids = checked_ids,
+                                possible_ids = possible_ids_list)
+
+  return(ret_list)
 }
 
 
@@ -276,9 +330,10 @@ filter_by_name <- function(vars, include, exclude, verbose) {
     }
     vars <- setdiff(vars, exclude)
   }
-
   # Apply 'include' filter
-  c(vars, include)
+
+  c(vars,
+    setdiff(include, vars))
 
 }
 
@@ -298,6 +353,99 @@ remove_null <- \(x) {
   y <- vapply(x, \(.) !is.null(.), logical(1))
   x[y]
 }
+
+
+#' store checked variables as possible ids
+#'
+#' This function processes a list of possible IDs by removing any `NULL` entries,
+#' storing a set of checked variables as an attribute and in the specified environment,
+#' and then returning the updated list of possible IDs.
+#'
+#' @param checked_ids A vector of variable names that have been checked as possible IDs.
+#' @param possible_ids A list containing potential identifiers. This list may contain `NULL` values, which will be removed by the function.
+#' @param env An environment where the `checked_ids` will be stored. The default is `.joynenv`.
+#'
+#' @return A list of possible IDs with `NULL` values removed, and the `checked_ids` stored as an attribute.
+#'
+#'
+#' @keywords internal
+store_checked_ids <- function(checked_ids,
+                              possible_ids,
+                              env = .joynenv) {
+
+  # Remove null from possible ids
+  possible_ids <- remove_null(possible_ids)
+
+  # Store checked_ids in environment
+  rlang::env_poke(env   = env,
+                  nm    = "checked_ids",
+                  value = checked_ids)
+
+  # Store attribute
+  attr(possible_ids,
+       "checked_ids") <- checked_ids
+
+  # Return
+  return(possible_ids)
+
+}
+
+#' Create variables that uniquely identify rows in a data table
+#'
+#' This function generates unique identifier columns for a given number of rows, based on the specified number of identifier variables.
+#'
+#' @param n_rows An integer specifying the number of rows in the data table for which unique identifiers need to be generated.
+#' @param n_ids An integer specifying the number of identifiers to be created. If `n_ids` is 1, a simple sequence of unique IDs is created. If greater than 1, a combination of IDs is generated.
+#' @param prefix A character string specifying the prefix for the identifier variable names (default is `"id"`).
+#'
+#' @return A named list where each element is a vector representing a unique identifier column. The number of elements in the list corresponds to the number of identifier variables (`n_ids`). The length of each element is equal to `n_rows`.
+#'
+#'
+#' @keywords internal
+create_ids <- function(n_rows, n_ids, prefix = "id") {
+
+  vars <- vector("list",
+                 n_ids)
+
+  # If n_ids is 1, simply generate a sequence of IDs
+  if (n_ids == 1) {
+    vars[[1]] <- seq_len(n_rows)
+    names(vars)[1] <- paste0(prefix, 1)
+
+    return(vars)
+  } else {
+
+    # Get max unique values each variable can have
+    max_vals <- ceiling(n_rows^(1 / n_ids))
+
+    # Generate a sequence of unique identifiers
+
+    all_ids <- expand.grid(rep(list(seq_len(max_vals)),
+                               n_ids))
+
+    #collapse::fnrow faster?
+
+    if (fnrow(all_ids) > n_rows) {
+      # Randomly sample the unique combinations
+      all_ids <- all_ids[sample(fnrow(all_ids),
+                                    n_rows), ]
+    }
+
+    # Store each unique identifier in the vars list
+    for (i in seq_len(n_ids)) {
+      vars[[i]] <- all_ids[[i]]
+    }
+
+    names(vars) <- paste0(prefix,
+                          seq_len(n_ids))
+
+    return(vars)
+  }
+
+}
+
+
+
 
 
 
