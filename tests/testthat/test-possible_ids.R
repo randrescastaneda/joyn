@@ -722,6 +722,7 @@ possible_ids(
 possible_ids(
   dt = dt_large,
   exclude_classes = c("numeric"),
+  exclude_classes = c("numeric"),
   exclude = "id",
   verbose = TRUE
 )
