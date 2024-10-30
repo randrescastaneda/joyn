@@ -56,15 +56,19 @@ is_id <- function(dt,
 
   if (return_report) {
     # Return the duplicated rows if requested
-    cli::cli_h3("Duplicates in terms of {.code {by}}")
+    if (verbose) cli::cli_h3("Duplicates in terms of {.code {by}}")
 
     d <- freq_table(x = dt,
                      byvar = by,
                      freq_var_name = "copies")
-    d |>
-      fsubset(copies > 1) |>
-      print()
-    cli::cli_rule(right = "End of {.field is_id()} report")
+
+    if (verbose) {
+      d |>
+        fsubset(copies > 1) |>
+        print()
+    }
+
+    if (verbose) cli::cli_rule(right = "End of {.field is_id()} report")
     return(invisible(d))
   } else {
     return(is_id)
