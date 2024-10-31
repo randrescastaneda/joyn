@@ -204,7 +204,7 @@ possible_ids <- function(dt,
       # or break
     }
 
-    combos <- combn(vars, comb_size, simplify = FALSE)
+    combos <- utils::combn(vars, comb_size, simplify = FALSE)
 
     # Prune combinations where the product of unique counts is less
     # than n_rows
