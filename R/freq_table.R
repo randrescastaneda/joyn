@@ -12,6 +12,7 @@ if (getRversion() >= '2.15.1')
 #' @param byvar character: name of variable to tabulate. Use Standard evaluation.
 #' @param digits numeric: number of decimal places to display. Default is 1.
 #' @param na.rm logical: report NA values in frequencies. Default is FALSE.
+#' @param freq_var_name character: name for frequency variable. Default is "n"
 #'
 #' @return data.table with frequencies.
 #' @export
@@ -26,31 +27,43 @@ if (getRversion() >= '2.15.1')
 freq_table <- function(x,
                        byvar,
                        digits = 1,
-                       na.rm  = FALSE) {
+                       na.rm  = FALSE,
+                       freq_var_name = "n") {
 
   x_name <- as.character(substitute(x))
   if (!is.data.frame(x)) {
     cli::cli_abort("Argument {.arg x} ({.field {x_name}}) must be a data frame")
   }
+  if (isFALSE(is.data.table(x))) {
+    x <- qDT(x)
+  }
 
-  fq <- qtab(x[[byvar]], na.exclude = na.rm)
-  ft <- data.frame(joyn = names(fq),
-                   n = as.numeric(fq))
+
+  fq <- qtab(x[, ..byvar], na.exclude = na.rm, dnn = byvar)
+
+  ft <- fq |>
+    as.data.table() |>
+    setnames("N", "n") |>
+    # filter zeros
+    fsubset(n > 0)
 
   N <- fsum(ft$n)
   ft <- ft |>
     ftransform(percent = paste0(round(n / N * 100, digits), "%"))
 
   # add row with totals
-  ft <- rowbind(ft, data.table(joyn = "total",
-                               n = N,
-                               percent = "100%")) |>
-    # filter zeros
-    fsubset(n > 0)
+  total_row <- rep("total", length(byvar)) |>
+    as.list() |>
+    as.data.table() |>
+    setnames(new  = byvar) |>
+    ftransform(n = N,
+               percent = "100%")
 
-  setrename(ft, joyn = byvar, .nse = FALSE)
+  ft <- rowbind(ft, total_row)
+  setrename(ft,
+            n    = freq_var_name,
+            .nse = FALSE)
 }
-
 
 
 #' Report frequencies from attributes in report var

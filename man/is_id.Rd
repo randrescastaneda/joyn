@@ -4,7 +4,12 @@
 \alias{is_id}
 \title{Check if dt is uniquely identified by \code{by} variable}
 \usage{
-is_id(dt, by, verbose = getOption("joyn.verbose"), return_report = FALSE)
+is_id(
+  dt,
+  by,
+  verbose = getOption("joyn.verbose", default = FALSE),
+  return_report = FALSE
+)
 }
 \arguments{
 \item{dt}{either right of left table}

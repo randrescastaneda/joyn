@@ -6,30 +6,76 @@
 \usage{
 possible_ids(
   dt,
+  vars = NULL,
   exclude = NULL,
   include = NULL,
-  verbose = getOption("possible_ids.verbose")
+  exclude_classes = NULL,
+  include_classes = NULL,
+  verbose = getOption("possible_ids.verbose", default = FALSE),
+  min_combination_size = 1,
+  max_combination_size = 5,
+  max_processing_time = 60,
+  max_numb_possible_ids = 100,
+  get_all = FALSE
 )
 }
 \arguments{
 \item{dt}{data frame}
 
-\item{exclude}{character: Exclude variables to be selected as identifiers. It
-could be either the name of the variables of one type of the variable
-prefixed by "_". For instance, "_numeric" or "_character".}
+\item{vars}{character: A vector of variable names to consider for identifying unique combinations.}
+
+\item{exclude}{character: Names of variables to exclude from analysis}
 
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}
 
+\item{exclude_classes}{character: classes to exclude from analysis (e.g.,
+"numeric", "integer", "date")}
+
+\item{include_classes}{character: classes to include in the analysis (e.g.,
+"numeric", "integer", "date")}
+
 \item{verbose}{logical: If FALSE no message will be displayed. Default is
 TRUE}
+
+\item{min_combination_size}{numeric: Min number of combinations. Default is
+1, so all combinations.}
+
+\item{max_combination_size}{numeric. Max number of combinations. Default is
+5. If there is a combinations of identifiers larger than
+\code{max_combination_size}, they won't be found}
+
+\item{max_processing_time}{numeric: Max time to process in seconds. After
+that, it returns what it found.}
+
+\item{max_numb_possible_ids}{numeric: Max number of possible IDs to find. See
+details.}
+
+\item{get_all}{logical: get all possible combinations based on the parameters
+above.}
 }
 \value{
 list with possible identifiers
 }
 \description{
-Identify possible variables uniquely identifying x
+Identify possible combinations of variables that  uniquely identifying dt
 }
+\section{Number of possible IDs}{
+
+
+The number of possible IDs in a dataframe could be very large. This is why,
+\code{possible_ids()} makes use of heuristics to return something useful without
+wasting the time of the user. In addition, we provide multiple parameter so
+that the user can fine tune their search for possible IDs easily and
+quickly.
+
+Say for instance that you have a dataframe with 10 variables. Testing every
+possible pair of variables will give you 90 possible unique identifiers for
+this dataframe. If you want to test all the possible IDs, you will have to
+test more 5000 combinations. If the dataframe has many rows, it may take a
+while.
+}
+
 \examples{
 library(data.table)
 x4 = data.table(id1 = c(1, 1, 2, 3, 3),

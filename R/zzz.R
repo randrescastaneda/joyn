@@ -141,6 +141,13 @@ set_joyn_options <- function(...,
 
 }
 
+# ------------------------------------
+# -- Define global variables --
+# ------------------------------------
+
+utils::globalVariables(c("..byvar",
+                         "..vars"))
+
 # ------------------------------------------------------------------------------------------
 # Define custom .strong {cli} classes to emphasize messages subcomponents
 # --- to be used when creating/storing {joyn} messages
