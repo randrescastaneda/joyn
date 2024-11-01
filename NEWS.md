@@ -1,5 +1,7 @@
 # joyn (development version)
 
+* Impreove displaying messages. Now, they are clickable. 
+
 # joyn 0.2.3
 
 * Fix bug where the left join did not work when updating values and a full join was maintained.
