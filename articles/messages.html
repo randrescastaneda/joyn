@@ -61,7 +61,7 @@
       <h1>Messages</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/randrescastaneda/joyn/blob/wbpage-0.2.3/vignettes/messages.Rmd" class="external-link"><code>vignettes/messages.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/randrescastaneda/joyn/blob/DEV/vignettes/messages.Rmd" class="external-link"><code>vignettes/messages.Rmd</code></a></small>
       <div class="d-none name"><code>messages.Rmd</code></div>
     </div>
 
@@ -339,8 +339,8 @@ checks</em>
 <span><span class="co">#&gt; 6:     4    NA    NA    16      y</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000284</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.021118</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000272</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.022395</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span>
 <span></span>
 <span></span>
@@ -368,8 +368,8 @@ checks</em>
 <span><span class="co">#&gt; 5:    NA    NA    15    NA      x</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span><span class="st">"timing"</span><span class="op">)</span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000584</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.022753</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000585</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.021724</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span></code></pre></div>
 </div>
 <div class="section level3">
@@ -575,9 +575,10 @@ relationship between the variables being used for merging.
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>, y<span class="op">=</span><span class="va">y1</span>, by<span class="op">=</span><span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #D70000; font-weight: bold;">✖ Error: </span><span style="color: #9E9E9E;">table x is not uniquely identified by id</span></span></span>
 <span><span class="co">#&gt; Duplicate counts in <span style="color: #00BB00;">x</span>:</span></span>
-<span><span class="co">#&gt;       id copies</span></span>
-<span><span class="co">#&gt;    &lt;int&gt;  &lt;int&gt;</span></span>
-<span><span class="co">#&gt; 1:     1      2</span></span>
+<span><span class="co">#&gt;        id copies percent</span></span>
+<span><span class="co">#&gt;    &lt;char&gt;  &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:      1      2     40%</span></span>
+<span><span class="co">#&gt; 2:  total      5    100%</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `check_match_type()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> match type inconsistency</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> refer to the duplicate counts in the table(s) above to identify where the</span></span>
@@ -626,8 +627,8 @@ of them to be displayed, you can just set <code>type = 'all'</code></p>
 <span><span class="fu"><a href="../reference/joyn_msg.html">joyn_msg</a></span><span class="op">(</span>msg_type <span class="op">=</span> <span class="st">"all"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000274</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
-<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.020236</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;">The full joyn is executed in </span><span style="color: #0087FF; font-weight: bold;">0.000269</span><span style="color: #9E9E9E;"> seconds.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0087FF; font-weight: bold;">● Timing:</span><span style="color: #9E9E9E;"> The entire joyn function, including checks, is executed in </span><span style="color: #0087FF; font-weight: bold;">0.046357</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">seconds.</span></span></span>
 <span></span>
 <span><span class="co"># Print info messages only </span></span>
