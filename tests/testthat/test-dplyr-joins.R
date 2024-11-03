@@ -1709,7 +1709,7 @@ test_that("ANTI JOIN - Conducts ANTI join", {
   )
 
   jn_dplyr <- dplyr::anti_join(
-    x1, y1, by = "id", s
+    x1, y1, by = "id"
   )
 
   attr(
