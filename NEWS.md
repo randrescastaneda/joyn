@@ -1,6 +1,10 @@
 # joyn (development version)
 
-* Impreove displaying messages. Now, they are clickable. 
+* Improve displaying messages. Now, they are clickable.
+
+* Improve algorithm to find variables that work as possible IDs see `possible_ids()`.
+
+* Improve algorithm in `is_id()` and `freq_table()`. 
 
 # joyn 0.2.3
 
