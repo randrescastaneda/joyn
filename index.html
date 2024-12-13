@@ -8,8 +8,8 @@
 <title>An R package for joining tables • joyn</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="An R package for joining tables">
 <meta name="description" content="It is a joy to join tables in R with `joyn`">
 <meta property="og:description" content="It is a joy to join tables in R with `joyn`">
@@ -103,7 +103,7 @@
 <li>
 <strong>User-friendly summary:</strong> Quickly grasp the join’s outcome with a concise overview presented in a clear table.</li>
 </ul>
-<p>These valuable features contribute to a slightly slower performance compared to functions like <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge.data.table()</a></code> or <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join()</a></code>. However, the benefits of <strong>preventing errors and gaining invaluable insights</strong> far outweigh the minor speed difference.</p>
+<p>These valuable features contribute to a slightly slower performance compared to functions like <code><a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge.data.table()</a></code> or <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join()</a></code>. However, the benefits of <strong>preventing errors and gaining invaluable insights</strong> far outweigh the minor speed difference.</p>
 </div>
 <div class="section level3">
 <h3 id="know-your-needs-choose-your-tool">Know your needs, choose your tool<a class="anchor" aria-label="anchor" href="#know-your-needs-choose-your-tool"></a>
@@ -166,21 +166,22 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     merge</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://r-datatable.com" class="external-link">data.table</a></span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: package 'data.table' was built under R version 4.4.2</span></span>
 <span></span>
-<span><span class="va">x1</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
+<span><span class="va">x1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
 <span>                t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
 <span>                x  <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">x2</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
+<span><span class="va">x2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">3</span>, <span class="cn">NA</span><span class="op">)</span>,</span>
 <span>                t  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
 <span>                x  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span>, <span class="fl">12</span>, <span class="cn">NA</span>, <span class="cn">NA</span>, <span class="fl">15</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span></span>
-<span><span class="va">y2</span> <span class="op">=</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span>
+<span><span class="va">y2</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>                yd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">5</span>, <span class="fl">6</span>, <span class="fl">3</span><span class="op">)</span>,</span>
 <span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">20L</span>, <span class="fl">13L</span>, <span class="fl">10L</span><span class="op">)</span>,</span>
 <span>                x  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">16</span><span class="op">:</span><span class="fl">20</span><span class="op">)</span><span class="op">)</span></span>
@@ -291,11 +292,12 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        .joyn n percent</span></span>
-<span><span class="co">#&gt; 1          x 2   28.6%</span></span>
-<span><span class="co">#&gt; 2      x &amp; y 1   14.3%</span></span>
-<span><span class="co">#&gt; 3 NA updated 4   57.1%</span></span>
-<span><span class="co">#&gt; 4      total 7    100%</span></span>
+<span><span class="co">#&gt;         .joyn     n percent</span></span>
+<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:          x     2   28.6%</span></span>
+<span><span class="co">#&gt; 2:      x &amp; y     1   14.3%</span></span>
+<span><span class="co">#&gt; 3: NA updated     4   57.1%</span></span>
+<span><span class="co">#&gt; 4:      total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ Note: Removing key variables id from id, yd, y, and x</span></span>
@@ -317,11 +319,12 @@
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── JOYn Report ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;           .joyn n percent</span></span>
-<span><span class="co">#&gt; 1    NA updated 4   57.1%</span></span>
-<span><span class="co">#&gt; 2 value updated 1   14.3%</span></span>
-<span><span class="co">#&gt; 3   not updated 2   28.6%</span></span>
-<span><span class="co">#&gt; 4         total 7    100%</span></span>
+<span><span class="co">#&gt;            .joyn     n percent</span></span>
+<span><span class="co">#&gt;           &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:    NA updated     4   57.1%</span></span>
+<span><span class="co">#&gt; 2: value updated     1   14.3%</span></span>
+<span><span class="co">#&gt; 3:   not updated     2   28.6%</span></span>
+<span><span class="co">#&gt; 4:         total     7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of JOYn report ──</span></span>
 <span><span class="co">#&gt; ℹ Note: Joyn's report available in variable .joyn</span></span>
 <span><span class="co">#&gt; ℹ Note: Removing key variables id from id, yd, y, and x</span></span>
