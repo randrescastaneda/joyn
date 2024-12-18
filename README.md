@@ -6,7 +6,7 @@
 [![CRAN
 checks](https://badges.cranchecks.info/summary/joyn.svg)](https://cran.r-project.org/web/checks/check_results_joyn.html)
 [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
-[![](https://img.shields.io/badge/devel%20version-0.2.2.9001-blue.svg)](https://github.com/randrescastaneda/joyn)
+[![](https://img.shields.io/badge/devel%20version-0.2.3-blue.svg)](https://github.com/randrescastaneda/joyn)
 [![](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn)
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 
@@ -168,6 +168,7 @@ library(joyn)
 #> 
 #>     merge
 library(data.table)
+#> Warning: package 'data.table' was built under R version 4.4.2
 
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
@@ -293,11 +294,12 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>        .joyn n percent
-#> 1          x 2   28.6%
-#> 2      x & y 1   14.3%
-#> 3 NA updated 4   57.1%
-#> 4      total 7    100%
+#>         .joyn     n percent
+#>        <char> <int>  <char>
+#> 1:          x     2   28.6%
+#> 2:      x & y     1   14.3%
+#> 3: NA updated     4   57.1%
+#> 4:      total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, yd, y, and x
@@ -319,11 +321,12 @@ joyn(x = x2,
 #> 
 #> ── JOYn Report ──
 #> 
-#>           .joyn n percent
-#> 1    NA updated 4   57.1%
-#> 2 value updated 1   14.3%
-#> 3   not updated 2   28.6%
-#> 4         total 7    100%
+#>            .joyn     n percent
+#>           <char> <int>  <char>
+#> 1:    NA updated     4   57.1%
+#> 2: value updated     1   14.3%
+#> 3:   not updated     2   28.6%
+#> 4:         total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, yd, y, and x

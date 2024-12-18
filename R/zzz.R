@@ -7,7 +7,9 @@
     joyn.suffixes        = c(".x", ".y"),
     joyn.match_type      = c("1:1", "1:m", "m:1", "m:m"),
     joyn.na.last         = FALSE,
-    joyn.msg_type        = "basic"
+    joyn.msg_type        = "basic",
+    joyn.output_method   = cli::ansi_has_hyperlink_support()
+
   )
   toset <- !(names(op.joyn) %in% names(op))
 
@@ -138,6 +140,13 @@ set_joyn_options <- function(...,
   invisible(new_options)
 
 }
+
+# ------------------------------------
+# -- Define global variables --
+# ------------------------------------
+
+utils::globalVariables(c("..byvar",
+                         "..vars"))
 
 # ------------------------------------------------------------------------------------------
 # Define custom .strong {cli} classes to emphasize messages subcomponents

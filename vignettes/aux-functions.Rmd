@@ -68,10 +68,10 @@ possible_ids(dt      = x1,
 possible_ids(dt      = x1, 
              exclude = "_character")
 
-# Identify possible unique identifiers, excluding character variables but considering variable z
+# Identify possible unique identifiers, excluding character variables but considering variable c1
 possible_ids(dt      = x1, 
-             exclude = "_character",
-             include = "z")
+             exclude_classes = "character",
+             include = "c1")
 
 ```
 

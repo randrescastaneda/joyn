@@ -539,8 +539,59 @@ joyn <- function(x,
 
   # return messages
   joyn_report(verbose = verbose)
-  if (verbose == TRUE) joyn_msg(msg_type)
 
+  if (verbose == TRUE) {
+
+    type_element <- rlang::env_get(.joynenv,
+                                   "joyn_msgs")$type
+
+    warn_count <- fsum(type_element == "warn")
+
+    notes_count <- fsum(type_element %in% c("info", "note"))
+
+
+    warning_type <- "warn"
+    info_type    <- "info"
+    note_type    <- "note"
+
+    ## show messages ------------------
+
+    # get output method option
+    output_method <- getOption("joyn.output_method")
+
+    if (output_method == TRUE) {
+
+      if (notes_count > 0 || warn_count > 0) {
+
+        cli::cli_text("Joyn returned:")
+
+        # notes
+        if (notes_count > 0) {
+          cli::cli_li(
+            sprintf(
+              "{.run [{.strongArg {notes_count} notes}](joyn::joyn_msg('%s'))}
+          ",
+              info_type
+            )
+          )}
+
+        # warnings
+        if (warn_count > 0 ) {
+          cli::cli_li(
+            sprintf(
+              "
+          {.run [{.strongArg {warn_count} warnings}](joyn::joyn_msg('%s'))}
+          ",
+              warning_type
+            )
+          )}
+      }
+
+    } else {
+      joyn_msg(msg_type)
+    }
+
+  }
   setattr(jn, "class", class_x)
 
   jn

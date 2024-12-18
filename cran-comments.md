@@ -1,3 +1,9 @@
+# Version 0.2.4
+
+`devtools::check()` did not return any error, warning or note:
+
+0 errors | 0 warnings | 0 notes
+
 # Version 0.2.2
 
 0 errors | 0 warnings | 0 notes

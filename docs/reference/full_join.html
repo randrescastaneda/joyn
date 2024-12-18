@@ -12,7 +12,7 @@ fashion to dplyr::full_join"><!-- mathjax --><script src="https://cdnjs.cloudfla
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -80,7 +80,7 @@ fashion to <a href="https://rdrr.io/pkg/dplyr/man/mutate-joins.html" class="exte
 <span>  update_values <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  update_NAs <span class="op">=</span> <span class="va">update_values</span>,</span>
 <span>  reportvar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">getOption</a></span><span class="op">(</span><span class="st">"joyn.reportvar"</span><span class="op">)</span>,</span>
-<span>  reporttype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"character"</span>, <span class="st">"numeric"</span><span class="op">)</span>,</span>
+<span>  reporttype <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"factor"</span>, <span class="st">"character"</span>, <span class="st">"numeric"</span><span class="op">)</span>,</span>
 <span>  roll <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  keep_common_vars <span class="op">=</span> <span class="cn">FALSE</span>,</span>
 <span>  sort <span class="op">=</span> <span class="cn">TRUE</span>,</span>
@@ -243,7 +243,7 @@ variable in the joined table.</p></dd>
 
 <dt>sort</dt>
 <dd><p>logical: If TRUE, sort by key variables in <code>by</code>. Default is
-TRUE.</p></dd>
+FALSE.</p></dd>
 
 
 <dt>verbose</dt>
@@ -299,6 +299,7 @@ are as close as possible to the ones returned by the dplyr alternative.</p>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>Other dplyr alternatives: 
+<code><a href="anti_join.html">anti_join</a>()</code>,
 <code><a href="inner_join.html">inner_join</a>()</code>,
 <code><a href="left_join.html">left_join</a>()</code>,
 <code><a href="right_join.html">right_join</a>()</code></p></div>
@@ -318,24 +319,22 @@ are as close as possible to the ones returned by the dplyr alternative.</p>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     .joyn     n percent</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:      x     2   33.3%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:  x &amp; y     3     50%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:      y     1   16.7%</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:  total     6    100%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   .joyn n percent</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1     x 2   33.3%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2     y 1   16.7%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 x &amp; y 3     50%</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 total 6    100%</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Key: &lt;id&gt;</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>       id     t     x     y  .joyn</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1:    NA    NA    15    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     1    11    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     1     2    12    11  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     2     1    13    15  x &amp; y</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     3     2    14    NA      x</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6:     4    NA    NA    16      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1:     1     1    11    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2:     1     2    12    11  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3:     2     1    13    15  x &amp; y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4:     3     2    14    NA      x</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5:     4    NA    NA    16      y</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6:    NA    NA    15    NA      x</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>

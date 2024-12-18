@@ -1,3 +1,11 @@
+# joyn 0.2.4
+
+* Improve displaying messages. Now, they are clickable.
+
+* Improve algorithm to find variables that work as possible IDs see `possible_ids()`.
+
+* Improve algorithm in `is_id()` and `freq_table()`. 
+
 # joyn 0.2.3
 
 * Fix bug where the left join did not work when updating values and a full join was maintained.

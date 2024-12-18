@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -151,22 +151,21 @@ merging functions.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     2     40%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     3     60%</span></span>
-<span><span class="co">#&gt; 3:  total     5    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2     40%</span></span>
+<span><span class="co">#&gt; 2     y 1     20%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 2     40%</span></span>
+<span><span class="co">#&gt; 4 total 5    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
-<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA      x</span></span>
 <span></span>
 <span><span class="co"># Option 2 </span></span>
 <span></span>
@@ -176,24 +175,23 @@ merging functions.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     2     40%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     3     60%</span></span>
-<span><span class="co">#&gt; 3:  total     5    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2     40%</span></span>
+<span><span class="co">#&gt; 2     y 1     20%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 2     40%</span></span>
+<span><span class="co">#&gt; 4 total 5    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id and y</span></span></span>
-<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning:</span><span style="color: #9E9E9E;"> joyn does not currently allow inequality joins, so</span><span style="color: #585858; font-weight: bold; font-style: italic;"> keep = NULL</span><span style="color: #9E9E9E;"> will</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id and y</span></span></span>
+<span><span class="co">#&gt; <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;">joyn does not currently allow inequality joins, so keep = NULL will</span></span></span>
 <span><span class="co">#&gt; <span style="color: #9E9E9E;">retain only keys in x</span></span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
 <span><span class="co">#&gt;       id     t     x     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    11    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 3:     1     2    12    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 4:     2     1    13    15  x &amp; y</span></span>
-<span><span class="co">#&gt; 5:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    14    NA      x</span></span>
+<span><span class="co">#&gt; 5:    NA    NA    15    NA      x</span></span>
 <span></span>
 <span><span class="co"># Option 3</span></span>
 <span></span>
@@ -255,22 +253,21 @@ right one</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;         .joyn     n percent</span></span>
-<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1: NA updated     1   16.7%</span></span>
-<span><span class="co">#&gt; 2:          x     1   16.7%</span></span>
-<span><span class="co">#&gt; 3:      x &amp; y     4   66.7%</span></span>
-<span><span class="co">#&gt; 4:      total     6    100%</span></span>
+<span><span class="co">#&gt;        .joyn n percent</span></span>
+<span><span class="co">#&gt; 1          x 1   16.7%</span></span>
+<span><span class="co">#&gt; 2      x &amp; y 4   66.7%</span></span>
+<span><span class="co">#&gt; 3 NA updated 1   16.7%</span></span>
+<span><span class="co">#&gt; 4      total 6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, y, and t</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, y, and t</span></span></span>
 <span><span class="co">#&gt;   id t.x  x  y t.y      .joyn</span></span>
-<span><span class="co">#&gt; 5 NA  16 15 17  16 NA updated</span></span>
-<span><span class="co">#&gt; 6 NA   4 16 17  16      x &amp; y</span></span>
 <span><span class="co">#&gt; 1  1   1 11 11  13      x &amp; y</span></span>
 <span><span class="co">#&gt; 2  1   2 12 11  13      x &amp; y</span></span>
 <span><span class="co">#&gt; 3  2   1 13 15  14      x &amp; y</span></span>
-<span><span class="co">#&gt; 4  3   2 14 NA  NA          x</span></span></code></pre></div>
+<span><span class="co">#&gt; 4  3   2 14 NA  NA          x</span></span>
+<span><span class="co">#&gt; 5 NA  16 15 17  16 NA updated</span></span>
+<span><span class="co">#&gt; 6 NA   4 16 17  16      x &amp; y</span></span></code></pre></div>
 <p><strong><em>Specifying which variables to keep from the right table
 after the join</em></strong></p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
@@ -283,20 +280,20 @@ after the join</em></strong></p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     1   16.7%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     5   83.3%</span></span>
-<span><span class="co">#&gt; 3:  total     6    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 1   16.7%</span></span>
+<span><span class="co">#&gt; 2     y 2   33.3%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3     50%</span></span>
+<span><span class="co">#&gt; 4 total 6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
 <span><span class="co">#&gt;   id  t  x  y .joyn</span></span>
-<span><span class="co">#&gt; 5 NA NA 15 17 x &amp; y</span></span>
-<span><span class="co">#&gt; 6 NA  4 16 17 x &amp; y</span></span>
 <span><span class="co">#&gt; 1  1  1 11 11 x &amp; y</span></span>
 <span><span class="co">#&gt; 2  1  2 12 11 x &amp; y</span></span>
 <span><span class="co">#&gt; 3  2  1 13 15 x &amp; y</span></span>
-<span><span class="co">#&gt; 4  3  2 14 NA     x</span></span></code></pre></div>
+<span><span class="co">#&gt; 4  3  2 14 NA     x</span></span>
+<span><span class="co">#&gt; 5 NA NA 15 17 x &amp; y</span></span>
+<span><span class="co">#&gt; 6 NA  4 16 17 x &amp; y</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="right-join">2. Right join<a class="anchor" aria-label="anchor" href="#right-join"></a>
@@ -318,22 +315,22 @@ variable</em></strong></p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    right.joyn     n percent</span></span>
-<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x &amp; y     5   71.4%</span></span>
-<span><span class="co">#&gt; 2:          y     2   28.6%</span></span>
-<span><span class="co">#&gt; 3:      total     7    100%</span></span>
+<span><span class="co">#&gt;   right.joyn n percent</span></span>
+<span><span class="co">#&gt; 1          x 1   14.3%</span></span>
+<span><span class="co">#&gt; 2          y 2   28.6%</span></span>
+<span><span class="co">#&gt; 3      x &amp; y 4   57.1%</span></span>
+<span><span class="co">#&gt; 4      total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> right.joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, y, and t</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable right.joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, y, and t</span></span></span>
 <span><span class="co">#&gt;   id t.x  x  y t.y right.joyn</span></span>
-<span><span class="co">#&gt; 4 NA  NA 15 17  16      x &amp; y</span></span>
-<span><span class="co">#&gt; 5 NA   4 16 17  16      x &amp; y</span></span>
 <span><span class="co">#&gt; 1  1   1 11 11  13      x &amp; y</span></span>
 <span><span class="co">#&gt; 2  1   2 12 11  13      x &amp; y</span></span>
 <span><span class="co">#&gt; 3  2   1 13 15  14      x &amp; y</span></span>
-<span><span class="co">#&gt; 6  4  NA NA 16  15          y</span></span>
-<span><span class="co">#&gt; 7  8  NA NA 18  17          y</span></span></code></pre></div>
+<span><span class="co">#&gt; 4  4  NA NA 16  15          y</span></span>
+<span><span class="co">#&gt; 5  8  NA NA 18  17          y</span></span>
+<span><span class="co">#&gt; 6 NA  NA 15 17  16      x &amp; y</span></span>
+<span><span class="co">#&gt; 7 NA   4 16 17  16      x &amp; y</span></span></code></pre></div>
 <p><strong><em>Updating values in common variables</em></strong></p>
 <p>By setting <code>update_values = TRUE</code>, all values in x (both
 NAs and not) will be updated with the actual values of variables in y
@@ -349,22 +346,22 @@ update in the reporting variable.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    right.joyn     n percent</span></span>
-<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x &amp; y     5   71.4%</span></span>
-<span><span class="co">#&gt; 2:          y     2   28.6%</span></span>
-<span><span class="co">#&gt; 3:      total     7    100%</span></span>
+<span><span class="co">#&gt;   right.joyn n percent</span></span>
+<span><span class="co">#&gt; 1          x 1   14.3%</span></span>
+<span><span class="co">#&gt; 2          y 2   28.6%</span></span>
+<span><span class="co">#&gt; 3      x &amp; y 4   57.1%</span></span>
+<span><span class="co">#&gt; 4      total 7    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> right.joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, y, and t</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable right.joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, y, and t</span></span></span>
 <span><span class="co">#&gt;   id t.x  x  y t.y right.joyn</span></span>
-<span><span class="co">#&gt; 4 NA  NA 15 17  16      x &amp; y</span></span>
-<span><span class="co">#&gt; 5 NA   4 16 17  16      x &amp; y</span></span>
 <span><span class="co">#&gt; 1  1   1 11 11  13      x &amp; y</span></span>
 <span><span class="co">#&gt; 2  1   2 12 11  13      x &amp; y</span></span>
 <span><span class="co">#&gt; 3  2   1 13 15  14      x &amp; y</span></span>
-<span><span class="co">#&gt; 6  4  NA NA 16  15          y</span></span>
-<span><span class="co">#&gt; 7  8  NA NA 18  17          y</span></span></code></pre></div>
+<span><span class="co">#&gt; 4  4  NA NA 16  15          y</span></span>
+<span><span class="co">#&gt; 5  8  NA NA 18  17          y</span></span>
+<span><span class="co">#&gt; 6 NA  NA 15 17  16      x &amp; y</span></span>
+<span><span class="co">#&gt; 7 NA   4 16 17  16      x &amp; y</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="full-join">3. Full join<a class="anchor" aria-label="anchor" href="#full-join"></a>
@@ -381,24 +378,22 @@ non matching rows from <code>x</code>, i.e., the left table, and
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:      x     2   33.3%</span></span>
-<span><span class="co">#&gt; 2:  x &amp; y     3     50%</span></span>
-<span><span class="co">#&gt; 3:      y     1   16.7%</span></span>
-<span><span class="co">#&gt; 4:  total     6    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 2   33.3%</span></span>
+<span><span class="co">#&gt; 2     y 1   16.7%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 3     50%</span></span>
+<span><span class="co">#&gt; 4 total 6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id.y, id, and y</span></span></span>
-<span><span class="co">#&gt; Key: &lt;id&gt;</span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id.y, id, and y</span></span></span>
 <span><span class="co">#&gt;       id     t     x  id.y     y  .joyn</span></span>
-<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:    NA    NA    15    NA    NA      x</span></span>
-<span><span class="co">#&gt; 2:     1     1    11     1    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 3:     1     2    12     1    11  x &amp; y</span></span>
-<span><span class="co">#&gt; 4:     2     1    13     2    15  x &amp; y</span></span>
-<span><span class="co">#&gt; 5:     3     2    14    NA    NA      x</span></span>
-<span><span class="co">#&gt; 6:     4    NA    NA     4    16      y</span></span></code></pre></div>
+<span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt; &lt;num&gt; &lt;fctr&gt;</span></span>
+<span><span class="co">#&gt; 1:     1     1    11     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 2:     1     2    12     1    11  x &amp; y</span></span>
+<span><span class="co">#&gt; 3:     2     1    13     2    15  x &amp; y</span></span>
+<span><span class="co">#&gt; 4:     3     2    14    NA    NA      x</span></span>
+<span><span class="co">#&gt; 5:     4    NA    NA     4    16      y</span></span>
+<span><span class="co">#&gt; 6:    NA    NA    15    NA    NA      x</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="inner-join">4. Inner join<a class="anchor" aria-label="anchor" href="#inner-join"></a>
@@ -416,19 +411,20 @@ the right table.</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;     .joyn     n percent</span></span>
-<span><span class="co">#&gt;    &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
-<span><span class="co">#&gt; 1:  x &amp; y     5    100%</span></span>
-<span><span class="co">#&gt; 2:  total     5    100%</span></span>
+<span><span class="co">#&gt;   .joyn n percent</span></span>
+<span><span class="co">#&gt; 1     x 1     20%</span></span>
+<span><span class="co">#&gt; 2     y 2     40%</span></span>
+<span><span class="co">#&gt; 3 x &amp; y 2     40%</span></span>
+<span><span class="co">#&gt; 4 total 5    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ</span> <span style="color: #00AF00;">❯</span> <span style="color: #9E9E9E;">Joyn's report available in variable</span><span style="color: #585858; font-weight: bold; font-style: italic;"> .joyn</span></span></span>
-<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ ❯ </span><span style="color: #9E9E9E;">Removing key variables</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id</span><span style="color: #9E9E9E;"> from</span><span style="color: #585858; font-weight: bold; font-style: italic;"> id, y, and t</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
+<span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, y, and t</span></span></span>
 <span><span class="co">#&gt;   id t.x  x  y t.y .joyn</span></span>
-<span><span class="co">#&gt; 4 NA  NA 15 17  16 x &amp; y</span></span>
-<span><span class="co">#&gt; 5 NA   4 16 17  16 x &amp; y</span></span>
 <span><span class="co">#&gt; 1  1   1 11 11  13 x &amp; y</span></span>
 <span><span class="co">#&gt; 2  1   2 12 11  13 x &amp; y</span></span>
-<span><span class="co">#&gt; 3  2   1 13 15  14 x &amp; y</span></span></code></pre></div>
+<span><span class="co">#&gt; 3  2   1 13 15  14 x &amp; y</span></span>
+<span><span class="co">#&gt; 4 NA  NA 15 17  16 x &amp; y</span></span>
+<span><span class="co">#&gt; 5 NA   4 16 17  16 x &amp; y</span></span></code></pre></div>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
