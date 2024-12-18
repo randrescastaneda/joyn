@@ -8,8 +8,8 @@
 <title>dplyr joins wrappers • joyn</title>
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.4.2/css/all.min.css" rel="stylesheet">
-<link href="../deps/font-awesome-6.4.2/css/v4-shims.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="dplyr joins wrappers">
 <meta name="robots" content="noindex">
 </head>
@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.3.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.4.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -62,7 +62,7 @@
       <h1>dplyr joins wrappers</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/randrescastaneda/joyn/blob/wbpage_dev/vignettes/dplyr-joins.Rmd" class="external-link"><code>vignettes/dplyr-joins.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/randrescastaneda/joyn/blob/DEV/vignettes/dplyr-joins.Rmd" class="external-link"><code>vignettes/dplyr-joins.Rmd</code></a></small>
       <div class="d-none name"><code>dplyr-joins.Rmd</code></div>
     </div>
 
@@ -104,11 +104,11 @@ corresponding <code>dplyr</code> function.</p>
 </h2>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
+<span><span class="va">x1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">3L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
 <span>                 t   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1L</span>, <span class="fl">2L</span>, <span class="fl">1L</span>, <span class="fl">2L</span>, <span class="cn">NA_integer_</span><span class="op">)</span>,</span>
 <span>                 x   <span class="op">=</span> <span class="fl">11</span><span class="op">:</span><span class="fl">15</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
+<span><span class="va">y1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">data.table</a></span><span class="op">(</span>id  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span>
 <span>                 y   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Suppose you want to perform a <strong>simple left join</strong>
 between tables <code>x1</code> and <code>y1</code>.</p>
@@ -180,6 +180,8 @@ merging functions.</p>
 <span><span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">left_join</a></span><span class="op">(</span>x            <span class="op">=</span> <span class="va">x1</span>, </span>
 <span>                 y            <span class="op">=</span> <span class="va">y1</span>, </span>
 <span>                 relationship <span class="op">=</span> <span class="st">"many-to-one"</span><span class="op">)</span> </span>
+<span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span>
 <span><span class="co">#&gt; Joining with `by = join_by(id)`</span></span>
 <span><span class="co">#&gt;       id     t     x     y</span></span>
 <span><span class="co">#&gt;    &lt;num&gt; &lt;int&gt; &lt;int&gt; &lt;num&gt;</span></span>
@@ -235,11 +237,12 @@ right one</p>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── <span style="font-weight: bold;">JOYn Report</span> ──</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;        .joyn n percent</span></span>
-<span><span class="co">#&gt; 1          x 1   16.7%</span></span>
-<span><span class="co">#&gt; 2      x &amp; y 4   66.7%</span></span>
-<span><span class="co">#&gt; 3 NA updated 1   16.7%</span></span>
-<span><span class="co">#&gt; 4      total 6    100%</span></span>
+<span><span class="co">#&gt;         .joyn     n percent</span></span>
+<span><span class="co">#&gt;        &lt;char&gt; &lt;int&gt;  &lt;char&gt;</span></span>
+<span><span class="co">#&gt; 1:          x     1   16.7%</span></span>
+<span><span class="co">#&gt; 2:      x &amp; y     4   66.7%</span></span>
+<span><span class="co">#&gt; 3: NA updated     1   16.7%</span></span>
+<span><span class="co">#&gt; 4:      total     6    100%</span></span>
 <span><span class="co">#&gt; ────────────────────────────────────────────────────────── End of <span style="color: #00BB00;">JOYn</span> report ──</span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Joyn's report available in variable .joyn</span></span></span>
 <span><span class="co">#&gt; <span style="color: #00AF00;">ℹ Note: </span><span style="color: #9E9E9E;">Removing key variables id from id, y, and t</span></span></span>
