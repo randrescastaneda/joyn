@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.4</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -184,6 +184,8 @@ you can also set it to numeric using
 </ul>
 <p>You can see the difference between the two types in the table below<a class="footnote-ref" tabindex="0" data-bs-toggle="popover" data-bs-content="&lt;p&gt;For a better understanding of the &lt;em&gt;meaning&lt;/em&gt;
 column check the “Advanced functionalities” article&lt;/p&gt;"><sup>1</sup></a>:</p>
+<pre><code><span><span class="co">#&gt; Error in get(paste0(generic, ".", class), envir = get_method_env()) : </span></span>
+<span><span class="co">#&gt;   object 'type_sum.accel' not found</span></span></code></pre>
 <table class="table">
 <thead><tr class="header">
 <th align="left">numeric</th>
@@ -236,7 +238,7 @@ values in y</td>
 common between <code>x</code> and <code>y</code> as key(s) for the join,
 our suggestion is to make the keys explicit - i.e., specifying it/them
 in the <code>by</code> argument</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Join with one variable in common</span></span>
 <span></span>
@@ -257,7 +259,7 @@ in the <code>by</code> argument</p>
 as an element of <code>by</code> vector. This specification allows you
 to join on different variables between <code>x</code> and
 <code>y.</code></p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x4</span>, </span>
 <span>     y <span class="op">=</span> <span class="va">y4</span>, </span>
@@ -308,7 +310,7 @@ tables can have multiple matches for each observation</p></li>
 </ol>
 <p>We recommend you always specify the match type when joining tables to
 ensure the output is correct.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Many to one match type</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x1</span>,</span>
@@ -389,7 +391,7 @@ something is not right. Suppose you think your data is uniquely
 identified by variable <code>id</code>, while it is not. By setting
 <code>match_type = "1:1"</code> you will get and error, informing you
 that the match type is not as expected.</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Merging correctly but getting error because something is not right in the data</span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span><span class="va">x3</span>, <span class="va">y3</span>, by <span class="op">=</span> <span class="st">"id"</span>, match_type <span class="op">=</span> <span class="st">"1:1"</span><span class="op">)</span></span>
@@ -430,7 +432,7 @@ behavior of <code>dplyr</code>’s functions <code>left_join</code>,
 <p><strong><code>keep = "full"</code></strong>: the default, which
 keeps <em>all</em> the observations in x and y, regardless of whether
 they match or not.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># Full join </span></span>
 <span></span>
@@ -451,7 +453,7 @@ they match or not.</p>
 <strong><code>keep = "master"</code></strong> : keeps all observations
 in <code>x</code>, both matching and non, and only those observations in
 <code>y</code> that match in <code>x</code></p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># keep obs in x</span></span>
 <span></span>
@@ -472,7 +474,7 @@ in <code>x</code>, both matching and non, and only those observations in
 <strong><code>keep = "using"</code></strong> keeps all observations in
 <code>y</code>, both matching and non, and only those observations in
 <code>x</code> that match in <code>y</code></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># keep obs in y</span></span>
 <span></span>
@@ -490,7 +492,7 @@ in <code>x</code>, both matching and non, and only those observations in
 <li>
 <p><strong><code>keep = "inner"</code></strong> keeps only those
 observations that match in <em>both</em> tables.</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="co"># keep matching obs in both tables</span></span>
 <span></span>
@@ -516,7 +518,7 @@ variable, the number of rows that come from <code>x</code>, the number
 of rows that come from <code>y</code> and those that are common to both
 <code>x</code> and <code>y</code>. This info is also shown in percentage
 form in the <em>percent</em> column.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
 <span><span class="fu"><a href="../reference/joyn.html">joyn</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">x3</span>, </span>
 <span>     y <span class="op">=</span> <span class="va">y3</span>, </span>
