@@ -165,7 +165,7 @@ possible_ids <- function(dt,
       }
 
       # Remove unique identifiers from vars to reduce combinations
-      vars <- setdiff(vars, unique_ids)
+      #vars <- setdiff(vars, unique_ids)
       if (length(vars) == 0) {
         # All variables are unique identifiers
         ret_list <- store_checked_ids(checked_ids,

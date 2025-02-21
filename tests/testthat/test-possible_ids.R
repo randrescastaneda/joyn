@@ -522,8 +522,6 @@ test_that("get all works", {
     unlist() |>
     expect_setequal(c("id", "v", "foo"))
 
-
-
 })
 
 
