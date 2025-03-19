@@ -165,7 +165,8 @@ possible_ids <- function(dt,
       }
 
       # Remove unique identifiers from vars to reduce combinations
-      #vars <- setdiff(vars, unique_ids)
+      vars <- setdiff(vars, unique_ids)
+
       if (length(vars) == 0) {
         # All variables are unique identifiers
         ret_list <- store_checked_ids(checked_ids,
@@ -184,16 +185,22 @@ possible_ids <- function(dt,
   max_size     <- min(length(vars), max_combination_size)
   elapsed_time <- 0
 
-  # where there is only one variable or not enough vars to combine
-  if (min_size > max_size) {
+  if (min_size > max_size || length(vars) < min_size) {
     if (verbose) {
       cli::cli_alert_warning(
         "Can't make combinations of {.field {vars}} if the min number of
-        combinations is {min_size} and the max is {max_size}")
+      combinations is {min_size} and the max is {max_size}")
+    }
+
+    if (length(possible_ids_list) > 0) {
+      # Return the unique identifiers found so far
+      ret_list <- store_checked_ids(checked_ids, possible_ids_list)
+      return(ret_list)
     }
 
     cli::cli_abort("No unique identifier found.")
   }
+
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
