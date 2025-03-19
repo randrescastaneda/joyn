@@ -50,7 +50,7 @@
 #'                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x   = c(16, 12, NA, NA, 15))
 #' possible_ids(x4)
-possible_ids <- function(dt,
+possible_ids_old <- function(dt,
                          vars                        = NULL,
                          exclude                     = NULL,
                          include                     = NULL,
@@ -311,7 +311,7 @@ possible_ids <- function(dt,
 }
 
 
-filter_by_class <- function(dt, vars, include_classes, exclude_classes) {
+filter_by_class_old <- function(dt, vars, include_classes, exclude_classes) {
   # Compute the primary class of each variable
   vars_class <- vapply(dt, function(x) class(x)[1], character(1))
   names(vars_class) <- vars  # Ensure names are preserved
@@ -328,7 +328,7 @@ filter_by_class <- function(dt, vars, include_classes, exclude_classes) {
   vars
 }
 
-filter_by_name <- function(vars, include, exclude, verbose) {
+filter_by_name_old <- function(vars, include, exclude, verbose) {
   # Apply 'exclude' filter
   if (!is.null(exclude)) {
     wno_exc <- which(!exclude %in% vars) # which not excluded
