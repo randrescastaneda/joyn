@@ -289,7 +289,6 @@ check_possible_ids <- \(args) {
   # Now you can use arguments directly by name
   stopifnot(exprs = {
     is.data.frame(dt)
-
   }
   )
 
