@@ -76,33 +76,17 @@ possible_ids <- function(dt,
 
   # Exclude and include -------
 
-  ## classes ----------
-  vars <- filter_by_class(dt              = dt,
-                          vars            = vars,
-                          include_classes = include_classes,
-                          exclude_classes = exclude_classes)
+  vars <- filter_vars(dt              = dt,
+                      vars            = vars,
+                      exclude         = exclude,
+                      include         = include,
+                      exclude_classes = exclude_classes,
+                      include_classes = include_classes,
+                      verbose         = verbose)
 
-  ## var names --------
-  vars <- filter_by_name(vars, include, exclude, verbose)
+  if (length(vars) == 0) return(NULL)
+  if (verbose) cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
 
-  ##  no duplicated vars -------------
-  if (anyDuplicated(vars)) {
-    dupvars <- vars[duplicated(vars)] |>
-      unique()
-    cli::cli_abort("vars {.strongVar {dupvars}} are duplicated.")
-  }
-
-  if (verbose) {
-    cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
-  }
-
-  if (length(vars) == 0) {
-    if (verbose) {
-      cli::cli_alert_danger("No variables available after applying
-                            include/exclude filters.")
-    }
-    return(NULL) # should this be an error?
-  }
 
   # Unique values ---------
 
@@ -275,7 +259,7 @@ possible_ids <- function(dt,
   # Return ####
   # ----------------------------- #
 
-  ret_list <- store_checked_ids(checked_ids = checked_ids,
+  ret_list <- store_checked_ids(checked_ids  = checked_ids,
                                 possible_ids = possible_ids_list)
 
   return(ret_list)
@@ -477,3 +461,53 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
 
 }
 
+#' Auxiliary function to select vars of data table
+#' @param exclude character: Names of variables to exclude
+#' @param include character: Name of variable to be included, that might belong
+#'   to the group excluded in the `exclude`
+#' @param exclude_classes character: classes to exclude from analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @param include_classes character: classes to include in the analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @return character vector of selected vars
+#' @keywords internal
+filter_vars <- function(dt,
+                        vars = names(dt),
+                        include = NULL,
+                        exclude = NULL,
+                        include_classes = NULL,
+                        exclude_classes = NULL,
+                        verbose = TRUE) {
+
+  # Ensure dt is a data.table
+  stopifnot(is.data.table(dt))
+
+  ## classes ----------
+  vars <- filter_by_class(dt              = dt,
+                          vars            = vars,
+                          include_classes = include_classes,
+                          exclude_classes = exclude_classes)
+
+  ## var names --------
+  vars <- filter_by_name(vars,
+                         include,
+                         exclude,
+                         verbose)
+
+  ##  no duplicated vars -------------
+  if (anyDuplicated(vars)) {
+    dupvars <- vars[duplicated(vars)] |>
+      unique()
+    cli::cli_abort("The following variables are duplicated: {.var {dupvars}}.")
+  }
+
+  if (length(vars) == 0) {
+    if (verbose) {
+      cli::cli_alert_danger("No variables available after applying
+                            include/exclude filters.")
+    }
+    return(character(0))
+  }
+
+  return(vars)
+}
