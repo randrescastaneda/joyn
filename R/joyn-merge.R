@@ -213,6 +213,9 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  x_original <- copy(x)
+  y_original <- copy(y)
+
   start_joyn <- Sys.time()
 
   ## X and Y -----------
@@ -239,12 +242,61 @@ joyn <- function(x,
   ynames   <- copy(names(y))
 
   # maintain name that is bound to original inputs
-  x_original <- x
-  y_original <- y
+  # x_original <- x
+  # y_original <- y
 
   ## Modify BY when is expression ---------
+  print(names(y_original))
+
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
+
+  print(names(y_original))
+
+  # # --- Warn about join variable classes --- ####
+
+  # if (!is.null(fixby$by) & is.null(fixby$xby) & is.null(fixby$yby)) {
+  #   # common vars in both x and y
+  #   check_var_class(x, fixby$by)
+  #   check_var_class(y, fixby$by)
+  # }
+  # if (!is.null(fixby$xby)) {
+  #   check_var_class(x, fixby$xby)
+  # }
+  # if (!is.null(fixby$yby)) {
+  #   check_var_class(y, fixby$yby)
+  # }
+
+  warn_vars <- character()  # collect problem vars
+
+  if (!is.null(fixby$by) & is.null(fixby$xby) & is.null(fixby$yby)) {
+    warn_vars <- c(warn_vars, check_var_class(x_original, fixby$by))
+    warn_vars <- c(warn_vars, check_var_class(y_original, fixby$by))
+  }
+
+  if (!is.null(fixby$xby)) {
+    warn_vars <- c(warn_vars, check_var_class(x_original, fixby$xby))
+  }
+
+  if (!is.null(fixby$yby)) {
+    print(names(y_original))
+    warn_vars <- check_var_class(dt = y_original, fixby$yby)
+  }
+
+   #debug
+   print(warn_vars)
+
+  # abort if any problematic vars
+  if (length(warn_vars) > 0) {
+    joyn_msg()  # show the stored messages
+    cli::cli_abort("Aborting join due to unsupported class for join variables: {paste(warn_vars, collapse=', ')}")
+  }
+
+
+
+  ###################
+
+
 
   # Change names back on exit
   # Change names back for inputs------------------------------
@@ -281,6 +333,7 @@ joyn <- function(x,
   )
 
   ## Check suffixes -------------
+
   check_suffixes(suffixes)
 
   if (keep == "anti" &
@@ -373,6 +426,8 @@ joyn <- function(x,
   # keep relevant variables in y
   y <- y |>
     fselect(by, yvars_w)
+
+  check_suffixes(suffixes)
 
   # Perform workhorse join
   jn <- joyn_workhorse(
