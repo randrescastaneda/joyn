@@ -534,6 +534,34 @@ check_suffixes <- function(suffixes) {
 
 }
 
+#' Check join variable class
+#'
+#' Checks if a variable in a data.table is of a supported class for joining.
+#' Stores a warning via `store_joyn_msg()` if unsupported.
+#'
+#' @param dt data.table containing the variable
+#' @param var Name of the variable to check
+#' @return Variable name invisibly if unsupported, otherwise NULL
+#' @keywords internal
+check_var_class <- function(dt,
+                            var) {
+
+  allowed_classes <- c("character","integer","numeric",
+                       "factor","logical","Date","POSIXct")
+
+
+  primary_class <- class(dt[[var]])[1]
+
+  if (!(primary_class %in% allowed_classes)) {
+    store_joyn_msg(
+      warn = "Join variable {.strongVar {var}} is of class {primary_class}, which may cause issues. Consider coercing it to a standard type (e.g. character)."
+    )
+
+    return(invisible(var))
+  }
+
+  return(NULL)
+}
 
 
 

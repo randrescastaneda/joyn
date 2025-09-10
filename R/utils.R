@@ -163,55 +163,6 @@ correct_names <- function(by, x, y, order = TRUE) {
   out
 }
 
-#' Check class of 'by' variables
-#'
-#' @return invisible TRUE
-#'
-#' @keywords internal
-# check_var_class <- function(dt, vars) {
-#   allowed_classes <- c("character","integer","numeric",
-#                        "factor","logical","Date","POSIXct")
-#
-#   flagged <- lapply(vars, function(v) {
-#     if (v %in% names(dt)) {
-#       primary_class <- class(dt[[v]])[1]
-#       if (!(primary_class %in% allowed_classes)) {
-#         store_joyn_msg(
-#           warn = "Join variable {.strongVar {v}} is of class {primary_class}, which may cause issues. Consider coercing it to a standard type (e.g. character)."
-#         )
-#         return(v)
-#       }
-#     }
-#     NULL
-#   })
-#
-#   # flatten list and remove NULLs
-#   flagged <- unlist(flagged)
-#
-#   return(flagged)
-# }
-#
-#
-check_var_class <- function(dt, var) {
-
-  allowed_classes <- c("character","integer","numeric",
-                       "factor","logical","Date","POSIXct")
-
-
-      primary_class <- class(dt[[var]])[1]
-
-      if (!(primary_class %in% allowed_classes)) {
-        store_joyn_msg(
-          warn = "Join variable {.strongVar {var}} is of class {primary_class}, which may cause issues. Consider coercing it to a standard type (e.g. character)."
-        )
-
-        return(invisible(var))
-      }
-
-      return(NULL)
-}
-
-
 
 
 

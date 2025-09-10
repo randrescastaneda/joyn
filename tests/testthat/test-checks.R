@@ -403,4 +403,37 @@ test_that("is_valid_m_key works as expected", {
 
 })
 
+test_that("check_var_class works as expected", {
+
+  clear_joynenv()
+
+  dt <- data.table(a = 1:3,
+                   b = letters[1:3])
+
+  # Allowed class: integer
+  expect_null(check_var_class(dt,
+                              "a"))
+
+  # Allowed class: character
+  expect_null(check_var_class(dt,
+                              "b"))
+
+  # Disallowed class: list
+  dt$c <- list(1, 2, 3)
+
+  clear_joynenv()
+  res <- check_var_class(dt, "c")
+
+  expect_identical(res,
+                   invisible("c"))
+
+  expect_true(rlang::env_has(.joynenv,
+                             "joyn_msgs"))
+
+  msg <- rlang::env_get(.joynenv,
+                        "joyn_msgs")
+
+  expect_true(grepl("class",
+                    msg$msg))
+})
 
