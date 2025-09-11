@@ -247,8 +247,9 @@ joyn <- function(x,
 
   # # --- Warn about join variable classes --- ####
 
-  check_x_by <- check_var_class(dt = x_original, var = xbynames)
-  check_y_by <- check_var_class(dt = y_original, var = ybynames)
+  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
+  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
+
 
   # Abort if at least one of the two is not null
   if (!is.null(check_x_by) || !is.null(check_y_by)) {
