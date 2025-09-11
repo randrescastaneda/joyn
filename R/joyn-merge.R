@@ -247,17 +247,17 @@ joyn <- function(x,
 
   # # --- Warn about join variable classes --- ####
 
-  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-
-
-  # Abort if at least one of the two is not null
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
-  }
+  # check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
+  # check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
+  #
+  #
+  # # Abort if at least one of the two is not null
+  # if (!is.null(check_x_by) || !is.null(check_y_by)) {
+  #   joyn_msg()  # show stored messages first
+  #   cli::cli_abort(
+  #     "Aborting join due to unsupported class for join variables"
+  #   )
+  # }
 
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
