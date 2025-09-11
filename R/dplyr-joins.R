@@ -96,20 +96,6 @@ left_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
-  # # --- Warn about join variable classes --- ####
-
-  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-
-
-  # Abort if at least one of the two is not null
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
-  }
-
 
   if (keep == TRUE) {
     jn_type <- "left"
@@ -271,19 +257,6 @@ right_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
-  # # --- Warn about join variable classes --- ####
-
-  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-
-
-  # Abort if at least one of the two is not null
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
-  }
 
   if (keep == TRUE) {
     jn_type <- "right"
@@ -446,19 +419,6 @@ full_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
-  # # --- Warn about join variable classes --- ####
-
-  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-
-
-  # Abort if at least one of the two is not null
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
-  }
 
   if (keep == TRUE) {
     jn_type <- "full"
@@ -618,19 +578,6 @@ inner_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
-  # # --- Warn about join variable classes --- ####
-
-  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-
-
-  # Abort if at least one of the two is not null
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
-  }
 
   if (keep == TRUE) {
     jn_type <- "inner"
@@ -789,19 +736,6 @@ anti_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
-  # # --- Warn about join variable classes --- ####
-
-  check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-
-
-  # Abort if at least one of the two is not null
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
-  }
 
   if (keep == TRUE) {
     jn_type <- "anti"
