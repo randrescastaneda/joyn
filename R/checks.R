@@ -203,24 +203,29 @@ check_by_vars <- function(by, x, y) {
 #' @param var Name of the variable to check
 #' @return Variable name invisibly if unsupported, otherwise NULL
 #' @keywords internal
-check_var_class <- function(dt,
-                            var) {
+check_var_class <- function(dt, var) {
 
-  allowed_classes <- c("character","integer","numeric",
-                       "factor","logical","Date","POSIXct")
+  allowed_classes <- c("character", "integer", "numeric",
+                       "factor", "logical", "Date", "POSIXct")
 
+  bad_vars <- lapply(var, function(v) {
+    primary_class <- class(dt[[v]])[1]
 
-  primary_class <- class(dt[[var]])[1]
+    if (!(primary_class %in% allowed_classes)) {
+      store_joyn_msg(
+        warn = glue::glue(
+          "Join variable {.strongVar {v}} is of class {primary_class}, ",
+          "which may cause issues. Consider coercing it to a standard type (e.g. character)."
+        )
+      )
+      return(v)
+    }
+    NULL
+  })
 
-  if (!(primary_class %in% allowed_classes)) {
-    store_joyn_msg(
-      warn = "Join variable {.strongVar {var}} is of class {primary_class}, which may cause issues. Consider coercing it to a standard type (e.g. character)."
-    )
+  bad_vars <- unlist(bad_vars, use.names = FALSE)
 
-    return(invisible(var))
-  }
-
-  return(NULL)
+  if (length(bad_vars) > 0) invisible(bad_vars) else NULL
 }
 
 
