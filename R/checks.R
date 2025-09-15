@@ -214,8 +214,8 @@ check_var_class <- function(dt, var) {
     if (!(primary_class %in% allowed_classes)) {
       store_joyn_msg(
         warn = glue::glue(
-          "Join variable {.strongVar {v}} is of class {primary_class}, ",
-          "which may cause issues. Consider coercing it to a standard type (e.g. character)."
+          "Join `by` variable of secondary class {primary_class} ",
+          "may cause issues. Consider coercing it to a standard type (e.g. character)."
         )
       )
       return(v)
