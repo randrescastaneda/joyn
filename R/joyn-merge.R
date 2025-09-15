@@ -213,9 +213,6 @@ joyn <- function(x,
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   #                   Initial parameters   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  x_original <- copy(x)
-  y_original <- copy(y)
-
   start_joyn <- Sys.time()
 
   ## X and Y -----------
@@ -242,23 +239,10 @@ joyn <- function(x,
   ynames   <- copy(names(y))
 
   # maintain name that is bound to original inputs
+  x_original <- x
+  y_original <- y
 
   ## Modify BY when is expression ---------
-
-  # # --- Warn about join variable classes --- ####
-
-  # check_x_by <- check_var_class(x, if (length(xbynames)) xbynames else by)
-  # check_y_by <- check_var_class(y, if (length(ybynames)) ybynames else by)
-  #
-  #
-  # # Abort if at least one of the two is not null
-  # if (!is.null(check_x_by) || !is.null(check_y_by)) {
-  #   joyn_msg()  # show stored messages first
-  #   cli::cli_abort(
-  #     "Aborting join due to unsupported class for join variables"
-  #   )
-  # }
-
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
@@ -297,7 +281,6 @@ joyn <- function(x,
   )
 
   ## Check suffixes -------------
-
   check_suffixes(suffixes)
 
   if (keep == "anti" &
@@ -390,8 +373,6 @@ joyn <- function(x,
   # keep relevant variables in y
   y <- y |>
     fselect(by, yvars_w)
-
-  check_suffixes(suffixes)
 
   # Perform workhorse join
   jn <- joyn_workhorse(
@@ -505,13 +486,13 @@ joyn <- function(x,
   if (reporttype == "factor") {
 
     get_vars(jn, reportvar) <-  factor(jn[[reportvar]],
-                                      levels = 1:6,
-                                      labels = c("x",
-                                                 "y",
-                                                 "x & y",
-                                                 "NA updated",
-                                                 "value updated",
-                                                 "not updated"))
+                                       levels = 1:6,
+                                       labels = c("x",
+                                                  "y",
+                                                  "x & y",
+                                                  "NA updated",
+                                                  "value updated",
+                                                  "not updated"))
   }
 
   if (reporttype == "character") {
