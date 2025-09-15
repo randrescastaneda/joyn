@@ -124,6 +124,31 @@ test_that("check_xy works as expected", {
   expect_true(rlang::env_has(.joynenv,
                              "joyn_msgs"))
 
+  # ==============================
+  # Tests for 0 rows
+  # ==============================
+
+  x0_rows <- x1[0, ]
+  y0_rows <- y1[0, ]
+
+  # x has 0 rows
+  clear_joynenv()
+  check_xy(x = x0_rows, y = y1) |>
+    expect_error()
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+
+  # y has 0 rows
+  clear_joynenv()
+  check_xy(x = x1, y = y0_rows) |>
+    expect_error()
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+
+  # Both x and y have 0 rows
+  clear_joynenv()
+  check_xy(x = x0_rows, y = y0_rows) |>
+    expect_error()
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+
 })
 
 # Testing function checking duplicate var names in dt ---------------------------------------

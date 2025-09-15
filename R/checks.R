@@ -42,6 +42,25 @@ check_xy  <- function(x,y) {
 
   }
 
+  # -----------------------
+  # Check no rows
+  # -----------------------
+
+  x_rows0 <- nrow(x) == 0L
+  y_rows0 <- nrow(y) == 0L
+
+  if (x_rows0 || y_rows0) {
+    error_exists <- TRUE
+    if (x_rows0 && y_rows0) {
+      xy <- c("x", "y")
+      store_joyn_msg(err = "   Neither {.or {.strongTable {xy}}} table has rows.")
+    } else if (x_rows0) {
+      store_joyn_msg(err = "   Input table {.strongTable x} has no rows.")
+    } else {
+      store_joyn_msg(err = "   Input table {.strongTable y} has no rows.")
+    }
+  }
+
   # check names -----------
 
   error_exists <- error_exists || check_duplicate_names(x, "x")
