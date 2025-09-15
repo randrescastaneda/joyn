@@ -182,9 +182,9 @@ check_by_vars <- function(by, x, y) {
 
   if (!is.null(check_x_by) || !is.null(check_y_by)) {
     joyn_msg()  # show stored messages first
-    cli::cli_abort(
-      "Aborting join due to unsupported class for join variables"
-    )
+    # cli::cli_abort(
+    #   "Aborting join due to unsupported class for join variables"
+    # )
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -214,8 +214,8 @@ check_var_class <- function(dt, var) {
     if (!(primary_class %in% allowed_classes)) {
       store_joyn_msg(
         warn = glue::glue(
-          "Join `by` variable of secondary class {primary_class} ",
-          "may cause issues. Consider coercing it to a standard type (e.g. character)."
+          "Join `by` var of class {primary_class}
+          may cause issues. Consider coercing it to a standard type (e.g. character)."
         )
       )
       return(v)
