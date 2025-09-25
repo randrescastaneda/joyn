@@ -9,7 +9,7 @@ data.table::merge, which is why merge masks the other two."><meta name="robots" 
 
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.4.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -44,7 +44,7 @@ data.table::merge, which is why merge masks the other two."><meta name="robots" 
 
     <div class="ref-description section level2">
     <p>This is a joyn wrapper that works in a similar fashion to <a href="https://rdrr.io/r/base/merge.html" class="external-link">base::merge</a> and
-<a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge</a>, which is why merge masks the other two.</p>
+<a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge</a>, which is why merge masks the other two.</p>
     </div>
 
     <div class="section level2">
@@ -125,7 +125,7 @@ as any <code>by.x</code>.</p></dd>
 
 
 <dt id="arg-allow-cartesian">allow.cartesian<a class="anchor" aria-label="anchor" href="#arg-allow-cartesian"></a></dt>
-<dd><p>See <code>allow.cartesian</code> in <code><a href="https://rdrr.io/pkg/data.table/man/data.table.html" class="external-link">[.data.table</a></code>.</p></dd>
+<dd><p>See <code>allow.cartesian</code> in <code><a href="https://rdatatable.gitlab.io/data.table/reference/data.table.html" class="external-link">[.data.table</a></code>.</p></dd>
 
 
 <dt id="arg-match-type">match_type<a class="anchor" aria-label="anchor" href="#arg-match-type"></a></dt>
@@ -189,6 +189,7 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span><span class="va">y1</span> <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>,<span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>                y  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">11L</span>, <span class="fl">15L</span>, <span class="fl">16</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">joyn</span><span class="fu">::</span><span class="fu">merge</span><span class="op">(</span><span class="va">x1</span>, <span class="va">y1</span>, by <span class="op">=</span> <span class="st">"id"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;"> Supplied both </span><span style="color: #9E9E9E; font-weight: bold;">by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -221,6 +222,7 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span>            all.x <span class="op">=</span> <span class="cn">TRUE</span>,</span></span>
 <span class="r-in"><span>            by.x <span class="op">=</span> <span class="st">"id1"</span>,</span></span>
 <span class="r-in"><span>            by.y <span class="op">=</span> <span class="st">"id2"</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;"> Supplied both </span><span style="color: #9E9E9E; font-weight: bold;">by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -239,6 +241,7 @@ option). Default is TRUE.</p></dd>
 <span class="r-in"><span>            by.x <span class="op">=</span> <span class="st">"id1"</span>,</span></span>
 <span class="r-in"><span>            by.y <span class="op">=</span> <span class="st">"id2"</span>,</span></span>
 <span class="r-in"><span>            all <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #FF8700; font-weight: bold;">⚠ Warning: </span><span style="color: #9E9E9E;"> Supplied both </span><span style="color: #9E9E9E; font-weight: bold;">by and by.x/by.y. by</span><span style="color: #9E9E9E;"> argument will be ignored.</span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> ── <span style="font-weight: bold;">JOYn Report</span> ──</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> </span>
@@ -261,7 +264,7 @@ option). Default is TRUE.</p></dd>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>

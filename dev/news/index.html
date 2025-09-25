@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">joyn</a>
 
-    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.2.4.9000</small>
+    <small class="nav-text text-danger me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="In-development version">0.3.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -43,6 +43,9 @@
 <h2 class="pkg-version" data-toc-text="development version" id="joyn-development-version">joyn (development version)<a class="anchor" aria-label="anchor" href="#joyn-development-version"></a></h2>
 </div>
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.3.0" id="joyn-030">joyn 0.3.0<a class="anchor" aria-label="anchor" href="#joyn-030"></a></h2>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.4" id="joyn-024">joyn 0.2.4<a class="anchor" aria-label="anchor" href="#joyn-024"></a></h2><p class="text-muted">CRAN release: 2024-12-13</p>
 <ul><li><p>Improve displaying messages. Now, they are clickable.</p></li>
 <li><p>Improve algorithm to find variables that work as possible IDs see <code><a href="../reference/possible_ids.html">possible_ids()</a></code>.</p></li>
@@ -62,7 +65,7 @@
 <li><p>Add <code>unmask_joyn()</code> function to unmask <code>joyn</code> functions that mask <code>dplyr</code> equivalents.</p></li>
 <li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rathern than <code>m</code>.</p></li>
 <li><p>improve inefficiencies in deep copies with <code>m:m</code> joins</p></li>
-<li><p>Replace <code>m:m</code> joins from <code><a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge.data.table</a></code> to <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join</a></code>. Thanks to <a href="https://github.com/SebKrantz" class="external-link">@SebKrantz</a> for the suggestion (<a href="https://github.com/randrescastaneda/joyn/issues/58" class="external-link">#58</a>).</p></li>
+<li><p>Replace <code>m:m</code> joins from <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge.data.table</a></code> to <code><a href="https://sebkrantz.github.io/collapse/reference/join.html" class="external-link">collapse::join</a></code>. Thanks to <a href="https://github.com/SebKrantz" class="external-link">@SebKrantz</a> for the suggestion (<a href="https://github.com/randrescastaneda/joyn/issues/58" class="external-link">#58</a>).</p></li>
 <li><p>Add information about duplicated obs in <code>by</code> variable when match type is <code>1</code> rather than <code>m</code>.</p></li>
 <li><p>Internal: improve storing of joyn messages.</p></li>
 <li><p>Improve creation of reporting variable. Now, it is created in [collapse::join] rather than in <code>joyn</code> function. In addition, the reporting variable is created as factor to improve performance. Thanks to <a href="https://github.com/SebKrantz" class="external-link">@SebKrantz</a> for the suggestion (<a href="https://github.com/randrescastaneda/joyn/issues/58" class="external-link">#58</a>)</p></li>
@@ -83,7 +86,7 @@
 </ul></div>
 <div class="section level3">
 <h3 id="new-features-0-2-0">New features<a class="anchor" aria-label="anchor" href="#new-features-0-2-0"></a></h3>
-<ul><li><p>New function <code><a href="../reference/merge.html">joyn::merge()</a></code> works as a mask for the <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">base::merge()</a></code> or <code><a href="https://rdrr.io/pkg/data.table/man/merge.html" class="external-link">data.table::merge.data.table()</a></code>. <code><a href="../reference/merge.html">joyn::merge()</a></code> has the same features as the previous two, but includes the features of <code><a href="../reference/joyn.html">joyn::joyn()</a></code>.</p></li>
+<ul><li><p>New function <code><a href="../reference/merge.html">joyn::merge()</a></code> works as a mask for the <code><a href="https://rdrr.io/r/base/merge.html" class="external-link">base::merge()</a></code> or <code><a href="https://rdatatable.gitlab.io/data.table/reference/merge.html" class="external-link">data.table::merge.data.table()</a></code>. <code><a href="../reference/merge.html">joyn::merge()</a></code> has the same features as the previous two, but includes the features of <code><a href="../reference/joyn.html">joyn::joyn()</a></code>.</p></li>
 <li><p>Messages style have been improved and categorized. See <a href="https://randrescastaneda.github.io/joyn/articles/messages.html">message vignette</a> for more information.</p></li>
 <li><p>New functions to mimic <a href="https://dplyr.tidyverse.org/reference/mutate-joins.html" class="external-link">dplyr joins</a>. The <code>joyn</code> variants have all the features for <code><a href="../reference/joyn.html">joyn::joyn()</a></code> but lack some of the most advance features of <code>dplyr</code> joins like <a href="https://dplyr.tidyverse.org/reference/join_by.html" class="external-link"><code>joyn::join_by()</code></a></p></li>
 </ul></div>
@@ -130,7 +133,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.1.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
 </div>
 
     </footer></div>
