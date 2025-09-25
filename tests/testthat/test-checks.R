@@ -210,7 +210,7 @@ test_that("check_match_type works as expected", {
     c("m", "m")
   )
 
- })
+})
 
 test_that("y_vars_to_keep works", {
 
