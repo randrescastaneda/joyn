@@ -51,7 +51,7 @@
 #'                 x   = c(16, 12, NA, NA, 15))
 #' possible_ids(x4)
 possible_ids <- function(dt,
-                         vars                        = NULL,
+                         vars                        = names(dt),
                          exclude                     = NULL,
                          include                     = NULL,
                          exclude_classes             = NULL,
@@ -65,73 +65,28 @@ possible_ids <- function(dt,
                          get_all                     = FALSE) {
 
   # defenses ---------
-  # Ensure dt is a data.table
-  if (!is.data.frame(dt)) {
-    stop("data must be a data frame")
-  }
+  # Capture explicitly defined arguments
+  args <- as.list(environment())
+  check_possible_ids(args)
+
   if (!is.data.table(dt)) {
-    dt <- as.data.table(dt)
+    dt <- qDT(dt)
   }
 
-  # Get variable
-  # Vars --------
-
-   if (is.null(vars)) {
-     vars <- names(dt) |>
-       copy()
-     } else {
-
-    # check if all vars are in dt
-    missing_vars <- setdiff(vars, names(dt))
-
-    if (length(missing_vars) > 0) {
-       cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
-    }
-
-    # check at least 2 vars are provided
-
-     if (length(vars) < 2) {
-      cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
-     }
-
-    # exclude should not be used
-      if (!(is.null(exclude) & is.null(exclude_classes))) {
-        exclude         <- NULL
-        exclude_classes <- NULL
-        cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
-      }
-
-   }
 
   # Exclude and include -------
 
-  ## classes ----------
-  vars <- filter_by_class(dt              = dt,
-                          vars            = vars,
-                          include_classes = include_classes,
-                          exclude_classes = exclude_classes)
+  vars <- filter_vars(dt              = dt,
+                      vars            = vars,
+                      exclude         = exclude,
+                      include         = include,
+                      exclude_classes = exclude_classes,
+                      include_classes = include_classes,
+                      verbose         = verbose)
 
-  ## var names --------
-  vars <- filter_by_name(vars, include, exclude, verbose)
+  if (length(vars) == 0) return(NULL)
+  if (verbose) cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
 
-  ##  no duplicated vars -------------
-  if (anyDuplicated(vars)) {
-    dupvars <- vars[duplicated(vars)] |>
-      unique()
-    cli::cli_abort("vars {.strongVar {dupvars}} are duplicated.")
-  }
-
-  if (verbose) {
-    cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
-  }
-
-  if (length(vars) == 0) {
-    if (verbose) {
-      cli::cli_alert_danger("No variables available after applying
-                            include/exclude filters.")
-    }
-    return(NULL) # should this be an error?
-  }
 
   # Unique values ---------
 
@@ -166,6 +121,7 @@ possible_ids <- function(dt,
 
       # Remove unique identifiers from vars to reduce combinations
       vars <- setdiff(vars, unique_ids)
+
       if (length(vars) == 0) {
         # All variables are unique identifiers
         ret_list <- store_checked_ids(checked_ids,
@@ -184,16 +140,22 @@ possible_ids <- function(dt,
   max_size     <- min(length(vars), max_combination_size)
   elapsed_time <- 0
 
-  # where there is only one variable or not enough vars to combine
-  if (min_size > max_size) {
+  if (min_size > max_size || length(vars) < min_size) {
     if (verbose) {
       cli::cli_alert_warning(
         "Can't make combinations of {.field {vars}} if the min number of
-        combinations is {min_size} and the max is {max_size}")
+      combinations is {min_size} and the max is {max_size}")
+    }
+
+    if (length(possible_ids_list) > 0) {
+      # Return the unique identifiers found so far
+      ret_list <- store_checked_ids(checked_ids, possible_ids_list)
+      return(ret_list)
     }
 
     cli::cli_abort("No unique identifier found.")
   }
+
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
@@ -297,17 +259,71 @@ possible_ids <- function(dt,
   # Return ####
   # ----------------------------- #
 
-  ret_list <- store_checked_ids(checked_ids = checked_ids,
+  ret_list <- store_checked_ids(checked_ids  = checked_ids,
                                 possible_ids = possible_ids_list)
 
   return(ret_list)
 }
 
 
+check_possible_ids <- \(args) {
+  # Expand arguments directly into goo's environment
+  list2env(args, envir = environment())
+
+  # Now you can use arguments directly by name
+  stopifnot(exprs = {
+    is.data.frame(dt)
+  }
+  )
+
+  # include and and exclude classes
+  n_int <- intersect(exclude_classes, include_classes)
+  if (length(n_int) > 0) {
+
+    cli::cli_abort(c(x = "same classes can't be included and excluded simultaneously",
+                     i = "overlaping classes: {.strongVar {n_int}}"))
+  }
+
+  # include and exclude vars
+  n_int <- intersect(exclude, include)
+  if (length(n_int) > 0) {
+
+    cli::cli_abort(c(x = "same variables can't be included and excluded simultaneously",
+                     i = "overlaping variables: {.strongVar {n_int}}"))
+  }
+
+
+  # check if all vars are in dt
+  missing_vars <- setdiff(vars, names(dt))
+
+  if (length(missing_vars) > 0) {
+    cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
+  }
+
+  # check at least 2 vars are provided
+
+  if (length(vars) < 2) {
+    cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
+  }
+
+  # exclude should not be used
+  # if (!(is.null(exclude) & is.null(exclude_classes))) {
+  #   exclude         <- NULL
+  #   exclude_classes <- NULL
+  #   cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+  # }
+
+  invisible(NULL)
+
+}
+
+
+
 filter_by_class <- function(dt, vars, include_classes, exclude_classes) {
   # Compute the primary class of each variable
   vars_class <- vapply(dt, function(x) class(x)[1], character(1))
-  names(vars_class) <- vars  # Ensure names are preserved
+  names(vars_class) <- names(dt) |>   # Ensure names are preserved
+    copy()
 
   # Apply 'include_classes' filter
   if (!is.null(include_classes)) {
@@ -445,3 +461,53 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
 
 }
 
+#' Auxiliary function to select vars of data table
+#' @param exclude character: Names of variables to exclude
+#' @param include character: Name of variable to be included, that might belong
+#'   to the group excluded in the `exclude`
+#' @param exclude_classes character: classes to exclude from analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @param include_classes character: classes to include in the analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @return character vector of selected vars
+#' @keywords internal
+filter_vars <- function(dt,
+                        vars = names(dt),
+                        include = NULL,
+                        exclude = NULL,
+                        include_classes = NULL,
+                        exclude_classes = NULL,
+                        verbose = TRUE) {
+
+  # Ensure dt is a data.table
+  stopifnot(is.data.table(dt))
+
+  ## classes ----------
+  vars <- filter_by_class(dt              = dt,
+                          vars            = vars,
+                          include_classes = include_classes,
+                          exclude_classes = exclude_classes)
+
+  ## var names --------
+  vars <- filter_by_name(vars,
+                         include,
+                         exclude,
+                         verbose)
+
+  ##  no duplicated vars -------------
+  if (anyDuplicated(vars)) {
+    dupvars <- vars[duplicated(vars)] |>
+      unique()
+    cli::cli_abort("The following variables are duplicated: {.var {dupvars}}.")
+  }
+
+  if (length(vars) == 0) {
+    if (verbose) {
+      cli::cli_alert_danger("No variables available after applying
+                            include/exclude filters.")
+    }
+    return(character(0))
+  }
+
+  return(vars)
+}

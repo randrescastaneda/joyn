@@ -2,7 +2,7 @@
   op <- options()
   op.joyn <- list(
     joyn.verbose         = TRUE,
-    possible_ids.verbose = TRUE,
+    possible_ids.verbose = FALSE,
     joyn.reportvar       = ".joyn",
     joyn.suffixes        = c(".x", ".y"),
     joyn.match_type      = c("1:1", "1:m", "m:1", "m:m"),

@@ -64,6 +64,20 @@ merge <- function(x,
   check_logical(sort, "sort")
   check_logical(no.dups, "no.dups")
 
+  # # --- Warn about join variable classes --- ####
+
+  check_x_by <- check_var_class(x, if (length(by.x)) by.x else by)
+  check_y_by <- check_var_class(y, if (length(by.y)) by.y else by)
+
+
+  # Abort if at least one of the two is not null
+  if (!is.null(check_x_by) || !is.null(check_y_by)) {
+    joyn_msg()  # show stored messages first
+    cli::cli_abort(
+      "Aborting join due to unsupported class for join variables"
+    )
+  }
+
   ## by vars -----------
   by <- check_dt_by(x, y, by, by.x, by.y)
 

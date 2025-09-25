@@ -1,7 +1,7 @@
 Package: joyn
 Type: Package
 Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
-Version: 0.2.4.9000
+Version: 0.3.0.9000
 Authors@R: c(person(given = "R.Andres", 
                     family = "Castaneda", 
                     email = "acastanedaa@worldbank.org",
@@ -38,9 +38,10 @@ Imports:
     cli,
     utils,
     collapse (>= 2.0.15),
-    lifecycle
+    lifecycle,
+    glue
 Depends: 
-    R (>= 2.10)
+    R (>= 4.2.0)
 RoxygenNote: 7.3.2
 Roxygen: list(markdown = TRUE)
 VignetteBuilder: knitr

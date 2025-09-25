@@ -6,7 +6,7 @@
 \usage{
 possible_ids(
   dt,
-  vars = NULL,
+  vars = names(dt),
   exclude = NULL,
   include = NULL,
   exclude_classes = NULL,

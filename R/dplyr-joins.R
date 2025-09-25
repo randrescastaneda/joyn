@@ -96,6 +96,7 @@ left_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
+
   if (keep == TRUE) {
     jn_type <- "left"
     modified_cols <- set_col_names(x       = x,
@@ -255,6 +256,7 @@ right_join <- function(
   byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
+
 
   if (keep == TRUE) {
     jn_type <- "right"
@@ -417,6 +419,7 @@ full_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
+
   if (keep == TRUE) {
     jn_type <- "full"
     modified_cols <- set_col_names(x       = x,
@@ -575,6 +578,7 @@ inner_join <- function(
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
+
   if (keep == TRUE) {
     jn_type <- "inner"
     modified_cols <- set_col_names(x       = x,
@@ -731,6 +735,7 @@ anti_join <- function(
   byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
+
 
   if (keep == TRUE) {
     jn_type <- "anti"

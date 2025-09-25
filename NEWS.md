@@ -1,5 +1,7 @@
 # joyn (development version)
 
+# joyn 0.3.0
+
 # joyn 0.2.4
 
 * Improve displaying messages. Now, they are clickable.

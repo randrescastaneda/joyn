@@ -246,6 +246,7 @@ joyn <- function(x,
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
+
   # Change names back on exit
   # Change names back for inputs------------------------------
   on.exit(
@@ -279,6 +280,12 @@ joyn <- function(x,
     },
     add = TRUE
   )
+
+  if (any(grepl("Join `by` var of class", joyn_msg("warn"), ignore.case = TRUE))) {
+    cli::cli_abort(
+      "Aborting join due to unsupported class for join variables. See warning messages above."
+    )
+  }
 
   ## Check suffixes -------------
   check_suffixes(suffixes)
@@ -486,13 +493,13 @@ joyn <- function(x,
   if (reporttype == "factor") {
 
     get_vars(jn, reportvar) <-  factor(jn[[reportvar]],
-                                      levels = 1:6,
-                                      labels = c("x",
-                                                 "y",
-                                                 "x & y",
-                                                 "NA updated",
-                                                 "value updated",
-                                                 "not updated"))
+                                       levels = 1:6,
+                                       labels = c("x",
+                                                  "y",
+                                                  "x & y",
+                                                  "NA updated",
+                                                  "value updated",
+                                                  "not updated"))
   }
 
   if (reporttype == "character") {

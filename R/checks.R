@@ -42,6 +42,25 @@ check_xy  <- function(x,y) {
 
   }
 
+  # -----------------------
+  # Check no rows
+  # -----------------------
+
+  x_rows0 <- nrow(x) == 0L
+  y_rows0 <- nrow(y) == 0L
+
+  if (x_rows0 || y_rows0) {
+    error_exists <- TRUE
+    if (x_rows0 && y_rows0) {
+      xy <- c("x", "y")
+      store_joyn_msg(err = "   Neither {.or {.strongTable {xy}}} table has rows.")
+    } else if (x_rows0) {
+      store_joyn_msg(err = "   Input table {.strongTable x} has no rows.")
+    } else {
+      store_joyn_msg(err = "   Input table {.strongTable y} has no rows.")
+    }
+  }
+
   # check names -----------
 
   error_exists <- error_exists || check_duplicate_names(x, "x")
@@ -171,12 +190,65 @@ check_by_vars <- function(by, x, y) {
     )
   }
 
+  # ~~~~~~~~~~~~~~~~ #
+  # Check class  ####
+
+  check_x_by <- check_var_class(dt = x,
+                                if (length(fixby$xby)) fixby$tempkey else fixby$by)
+
+  check_y_by <- check_var_class(dt = y,
+                                if (length(fixby$yby)) fixby$tempkey else fixby$by)
+
+  if (!is.null(check_x_by) || !is.null(check_y_by)) {
+    joyn_msg()  # show stored messages first
+    # cli::cli_abort(
+    #   "Aborting join due to unsupported class for join variables"
+    # )
+  }
+
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   return(fixby)
 
 }
+
+#' Check join variable class
+#'
+#' Checks if a variable in a data.table is of a supported class for joining.
+#' Stores a warning via `store_joyn_msg()` if unsupported.
+#'
+#' @param dt data.table containing the variable
+#' @param var Name of the variable to check
+#' @return Variable name invisibly if unsupported, otherwise NULL
+#' @keywords internal
+check_var_class <- function(dt, var) {
+
+  allowed_classes <- c("character", "integer", "numeric",
+                       "factor", "logical", "Date", "POSIXct")
+
+  bad_vars <- lapply(var, function(v) {
+    primary_class <- class(dt[[v]])[1]
+
+    if (!(primary_class %in% allowed_classes)) {
+      store_joyn_msg(
+        warn = glue::glue(
+          "Join `by` var of class {primary_class}
+          may cause issues. Consider coercing it to a standard type (e.g. character)."
+        )
+      )
+      return(v)
+    }
+    NULL
+  })
+
+  bad_vars <- unlist(bad_vars, use.names = FALSE)
+
+  if (length(bad_vars) > 0) invisible(bad_vars) else NULL
+}
+
+
+
 
 
 #' Check match type consistency
@@ -533,7 +605,3 @@ check_suffixes <- function(suffixes) {
   }
 
 }
-
-
-
-
