@@ -213,40 +213,39 @@ check_by_vars <- function(by, x, y) {
 
 }
 
-#' Check join variable class
+##' Check join variable class
 #'
 #' Checks if a variable in a data.table is of a supported class for joining.
 #' Stores a warning via `store_joyn_msg()` if unsupported.
 #'
 #' @param dt data.table containing the variable
-#' @param var Name of the variable to check
+#' @param var Character vector of variable names to check
 #' @return Variable name invisibly if unsupported, otherwise NULL
 #' @keywords internal
 check_var_class <- function(dt, var) {
+  allowed_classes <- c(
+    "character", "integer", "numeric", "factor",
+    "logical", "Date", "POSIXct", "fs_path"
+  )
 
-  allowed_classes <- c("character", "integer", "numeric",
-                       "factor", "logical", "Date", "POSIXct")
-
-  bad_vars <- lapply(var, function(v) {
-    primary_class <- class(dt[[v]])[1]
-
-    if (!(primary_class %in% allowed_classes)) {
+  bad_vars <- vapply(var, function(v) {
+    value <- dt[[v]]
+    ok <- any(vapply(allowed_classes, function(cls) inherits(value, cls), logical(1)))
+    if (!ok) {
       store_joyn_msg(
         warn = glue::glue(
-          "Join `by` var of class {primary_class}
-          may cause issues. Consider coercing it to a standard type (e.g. character)."
+          "Join `by` var `{v}` of class {paste(class(value), collapse = '/')}
+           may cause issues. Consider coercing it to a standard type (e.g. character)."
         )
       )
       return(v)
     }
-    NULL
-  })
+    NA_character_
+  }, FUN.VALUE = character(1L))
 
-  bad_vars <- unlist(bad_vars, use.names = FALSE)
-
-  if (length(bad_vars) > 0) invisible(bad_vars) else NULL
+  bad_vars <- unname(na.omit(bad_vars))
+  if (length(bad_vars)) invisible(bad_vars) else NULL
 }
-
 
 
 

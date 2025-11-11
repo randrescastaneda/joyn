@@ -299,35 +299,36 @@ test_that("is_valid_m_key works", {
 
 })
 
-test_that("check_var_class works", {
-
+test_that("check_var_class works with inheritance", {
   clear_joynenv()
   dt <- data.table(
-    a = 1:3,
-    b = letters[1:3]
+    a = 1:3,                     # integer
+    b = letters[1:3],            # character
+    d = as.IDate(Sys.Date())     # inherits from "Date"
   )
 
-  expect_null(
-    check_var_class(dt, "a")
-  )
-  expect_null(
-    check_var_class(dt, "b")
-  )
+  # All valid classes
+  expect_null(check_var_class(dt, c("a", "b", "d")))
 
+  # Add a list column (unsupported)
   dt$c <- list(1, 2, 3)
   clear_joynenv()
   res <- check_var_class(dt, "c")
 
-  expect_identical(
-    res,
-    invisible("c")
-  )
-  expect_true(
-    rlang::env_has(.joynenv, "joyn_msgs")
-  )
-  msg <- rlang::env_get(.joynenv, "joyn_msgs")
-  expect_true(
-    grepl("class", msg$msg)
-  )
+  # Function should return invisible("c")
+  expect_identical(res, invisible("c"))
 
+  # Environment should have stored a message
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  msg <- rlang::env_get(.joynenv, "joyn_msgs")
+
+  # Warning should mention the variable and class
+  expect_true(grepl("class", msg$msg))
+  expect_true(grepl("c", msg$msg))
+
+  # Add multiple bad vars
+  dt$e <- as.list(1:3)
+  clear_joynenv()
+  res_multi <- check_var_class(dt, c("a", "c", "e"))
+  expect_identical(sort(res_multi), sort(invisible(c("c", "e"))))
 })
