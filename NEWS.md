@@ -1,22 +1,20 @@
 # joyn (development version)
 
 # joyn 0.2.5.9000
-
 #### Added
-- `check_var_class()` function to validate join (`by`) variables, with warnings and suggestions for coercion.  
-- `filter_var()` function for streamlined handling of include/exclude variables.  
-- `make_test_data()` helper providing named datasets for testing.  
+- `check_var_class()`: validates join (`by`) variables and suggests coercion if needed.  
+- `filter_var()`: simplifies inclusion/exclusion of variables in main functions.  
+- `make_test_data()`: provides named datasets to simplify testing.
 
-#### Changed / Improved
+#### Improved
 - `check_xy()` now warns when inputs have 0 rows.  
-- Handling of `by` expressions improved: temporary keys created when left/right matches differ.  
-- Upgraded GitHub Actions `upload-artifact` from v3 → v4.  
-- Added `glue` to `Imports` and raised required R version to ≥ 4.2.0.  
+- Improved handling of `by` expressions when joining data: temporary keys are automatically created if the left and right variables differ, and unchanged names are preserved when possible.  
+- Updated GitHub Actions `upload-artifact` workflow to v4.  
+- Requires R ≥ 4.2.0; added `glue` to package imports.
 
-#### Fixed / Refactored
-- Tests updated: `test-checks.R` rewritten to use helper data and explicit expectations; error tests added for unsupported `by` formats; `test-possible_ids.R` refactored.  
-- Minor formatting improvements in `R/utils.R`.  
-- Documentation added for `check_var_class()` and `filter_vars()`; internal helpers documented.
+#### Fixed
+- Tests rewritten and expanded to cover error cases and unsupported `by` formats.  
+- Minor code formatting and updated documentation for new functions.
 
 # joyn 0.2.4
 
