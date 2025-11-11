@@ -16,12 +16,12 @@ Source:
 
 Castaneda R, Prinsloo Z, Tatulli R (2025). *joyn: Tool for Diagnosis of
 Tables Joins and Complementary Join Features*. R package version
-0.3.0.9000, <https://github.com/randrescastaneda/joyn>.
+0.2.5.9000, <https://github.com/randrescastaneda/joyn>.
 
     @Manual{,
       title = {joyn: Tool for Diagnosis of Tables Joins and Complementary Join Features},
       author = {R.Andres Castaneda and Zander Prinsloo and Rossana Tatulli},
       year = {2025},
-      note = {R package version 0.3.0.9000},
+      note = {R package version 0.2.5.9000},
       url = {https://github.com/randrescastaneda/joyn},
     }
