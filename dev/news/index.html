@@ -47,25 +47,24 @@
 <div class="section level5">
 <h5 id="added-0-2-5-9000">Added<a class="anchor" aria-label="anchor" href="#added-0-2-5-9000"></a></h5>
 <ul><li>
-<code><a href="../reference/check_var_class.html">check_var_class()</a></code> function to validate join (<code>by</code>) variables, with warnings and suggestions for coercion.<br></li>
+<code><a href="../reference/check_var_class.html">check_var_class()</a></code>: validates join (<code>by</code>) variables and suggests coercion if needed.<br></li>
 <li>
-<code>filter_var()</code> function for streamlined handling of include/exclude variables.<br></li>
+<code>filter_var()</code>: simplifies inclusion/exclusion of variables in main functions.<br></li>
 <li>
-<code>make_test_data()</code> helper providing named datasets for testing.</li>
+<code>make_test_data()</code>: provides named datasets to simplify testing.</li>
 </ul></div>
 <div class="section level5">
-<h5 id="changed--improved-0-2-5-9000">Changed / Improved<a class="anchor" aria-label="anchor" href="#changed--improved-0-2-5-9000"></a></h5>
+<h5 id="improved-0-2-5-9000">Improved<a class="anchor" aria-label="anchor" href="#improved-0-2-5-9000"></a></h5>
 <ul><li>
 <code><a href="../reference/check_xy.html">check_xy()</a></code> now warns when inputs have 0 rows.<br></li>
-<li>Handling of <code>by</code> expressions improved: temporary keys created when left/right matches differ.<br></li>
-<li>Upgraded GitHub Actions <code>upload-artifact</code> from v3 → v4.<br></li>
-<li>Added <code>glue</code> to <code>Imports</code> and raised required R version to ≥ 4.2.0.</li>
+<li>Improved handling of <code>by</code> expressions when joining data: temporary keys are automatically created if the left and right variables differ, and unchanged names are preserved when possible.<br></li>
+<li>Updated GitHub Actions <code>upload-artifact</code> workflow to v4.<br></li>
+<li>Requires R ≥ 4.2.0; added <code>glue</code> to package imports.</li>
 </ul></div>
 <div class="section level5">
-<h5 id="fixed--refactored-0-2-5-9000">Fixed / Refactored<a class="anchor" aria-label="anchor" href="#fixed--refactored-0-2-5-9000"></a></h5>
-<ul><li>Tests updated: <code>test-checks.R</code> rewritten to use helper data and explicit expectations; error tests added for unsupported <code>by</code> formats; <code>test-possible_ids.R</code> refactored.<br></li>
-<li>Minor formatting improvements in <code>R/utils.R</code>.<br></li>
-<li>Documentation added for <code><a href="../reference/check_var_class.html">check_var_class()</a></code> and <code><a href="../reference/filter_vars.html">filter_vars()</a></code>; internal helpers documented.</li>
+<h5 id="fixed-0-2-5-9000">Fixed<a class="anchor" aria-label="anchor" href="#fixed-0-2-5-9000"></a></h5>
+<ul><li>Tests rewritten and expanded to cover error cases and unsupported <code>by</code> formats.<br></li>
+<li>Minor code formatting and updated documentation for new functions.</li>
 </ul></div>
 </div>
     <div class="section level2">
