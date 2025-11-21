@@ -281,11 +281,9 @@ joyn <- function(x,
     add = TRUE
   )
 
-  # if (any(grepl("Join `by` var of class", joyn_msg("warn"), ignore.case = TRUE))) {
-  #   cli::cli_abort(
-  #     "Aborting join due to unsupported class for join variables. See warning messages above."
-  #   )
-  # }
+  ## Check var class
+  # add a condition here if one of the stored joyn warning messages contains this string "coercing it to a
+  #standard type""
 
   ## Check suffixes -------------
   check_suffixes(suffixes)

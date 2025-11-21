@@ -199,12 +199,17 @@ check_by_vars <- function(by, x, y) {
   check_y_by <- check_var_class(dt = y,
                                 if (length(fixby$yby)) fixby$tempkey else fixby$by)
 
-  if (!is.null(check_x_by) || !is.null(check_y_by)) {
-    joyn_msg()  # show stored messages first
-    # cli::cli_abort(
-    #   "Aborting join due to unsupported class for join variables"
-    # )
-  }
+  # if (!is.null(check_x_by) || !is.null(check_y_by)) {
+  #
+  #
+  #
+  #
+  #   #joyn_msg()  # show stored messages first
+  #   cli::cli_abort(
+  #     "Aborting join due to unsupported class for join variables"
+  #   )
+  #
+  # }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
