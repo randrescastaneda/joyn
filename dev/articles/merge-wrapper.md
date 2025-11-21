@@ -164,7 +164,6 @@ joyn::merge(x          = x2,
             by.x       = "id1",
             by.y       = "id2",
             match_type = "m:m")
-#> ⚠ Warning:  Supplied both by and by.x/by.y. by argument will be ignored.
 #> 
 #> ── JOYn Report ──
 #> 
@@ -191,7 +190,6 @@ joyn::merge(x          = x1,
             y          = y1,
             by         = "id",
             match_type = "m:1")
-#> ⚠ Warning:  Supplied both by and by.x/by.y. by argument will be ignored.
 #> 
 #> ── JOYn Report ──
 #> 

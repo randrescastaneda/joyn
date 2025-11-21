@@ -153,7 +153,6 @@ x1 = data.frame(id = c(1L, 1L, 2L, 3L, NA_integer_),
 y1 = data.frame(id = c(1,2, 4),
                 y  = c(11L, 15L, 16))
 joyn::merge(x1, y1, by = "id")
-#> ⚠ Warning:  Supplied both by and by.x/by.y. by argument will be ignored.
 #> 
 #> ── JOYn Report ──
 #> 
@@ -186,7 +185,6 @@ jn <- joyn::merge(x2,
             all.x = TRUE,
             by.x = "id1",
             by.y = "id2")
-#> ⚠ Warning:  Supplied both by and by.x/by.y. by argument will be ignored.
 #> 
 #> ── JOYn Report ──
 #> 
@@ -205,7 +203,6 @@ jn <- joyn::merge(x2,
             by.x = "id1",
             by.y = "id2",
             all = TRUE)
-#> ⚠ Warning:  Supplied both by and by.x/by.y. by argument will be ignored.
 #> 
 #> ── JOYn Report ──
 #> 

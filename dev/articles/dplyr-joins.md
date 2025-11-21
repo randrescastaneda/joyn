@@ -102,8 +102,6 @@ joyn(x          = x1,
 joyn::left_join(x            = x1, 
                 y            = y1, 
                 relationship = "many-to-one") 
-#> ⚠ Warning: joyn does not currently allow inequality joins, so keep = NULL will
-#> retain only keys in x
 #> 
 #> ── JOYn Report ──
 #> 
