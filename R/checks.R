@@ -234,7 +234,7 @@ check_var_class <- function(dt, var) {
     if (!ok) {
       store_joyn_msg(
         warn = glue::glue(
-          "Join `by` var `{v}` of class {paste(class(value), collapse = '/')}
+          "Provided `by` var of class {paste(class(value), collapse = '/')}
            may cause issues. Consider coercing it to a standard type (e.g. character)."
         )
       )
