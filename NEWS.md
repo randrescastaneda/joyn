@@ -1,6 +1,6 @@
 # joyn (development version)
 
-# joyn 0.2.5.9000
+# joyn 0.2.5
 #### Added
 - `check_var_class()`: validates join (`by`) variables and suggests coercion if needed.  
 - `filter_var()`: simplifies inclusion/exclusion of variables in main functions.  
