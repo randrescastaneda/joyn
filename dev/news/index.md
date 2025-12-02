@@ -2,7 +2,7 @@
 
 ## joyn (development version)
 
-## joyn 0.2.5.9000
+## joyn 0.2.5
 
 ##### Added
 

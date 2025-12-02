@@ -64,7 +64,7 @@ joyn_msg("basic")
 joyn_msg("all")
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id and y
-#> ● Timing:The full joyn is executed in 0.000208 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.021128
+#> ● Timing:The full joyn is executed in 0.000217 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.020405
 #> seconds.
 ```
