@@ -19,7 +19,7 @@ check_var_class(dt, var)
 
 - var:
 
-  Name of the variable to check
+  Character vector of variable names to check
 
 ## Value
 

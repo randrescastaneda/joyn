@@ -18,6 +18,15 @@ filter_vars(
 
 ## Arguments
 
+- dt:
+
+  data frame
+
+- vars:
+
+  character: A vector of variable names to consider for identifying
+  unique combinations.
+
 - include:
 
   character: Name of variable to be included, that might belong to the
@@ -36,6 +45,10 @@ filter_vars(
 
   character: classes to exclude from analysis (e.g., "numeric",
   "integer", "date")
+
+- verbose:
+
+  logical: If FALSE no message will be displayed. Default is TRUE
 
 ## Value
 
