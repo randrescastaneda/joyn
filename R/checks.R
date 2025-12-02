@@ -20,8 +20,7 @@
 #'                 y  = c(11L, 15L, 16))
 #' joyn:::check_xy(x = x1, y=y1)
 #' }
-check_xy  <- function(x,y) {
-
+check_xy <- function(x, y) {
   error_exists <- FALSE
 
   # check no columns --------------
@@ -33,13 +32,14 @@ check_xy  <- function(x,y) {
     error_exists <- TRUE
     if (x0 && y0) {
       xy <- c("x", "y")
-      store_joyn_msg(err = "   Neither {.or {.strongTable {xy}}} table has columns.")
+      store_joyn_msg(
+        err = "   Neither {.or {.strongTable {xy}}} table has columns."
+      )
     } else if (x0) {
       store_joyn_msg(err = "   Input table {.strongTable x} has no columns.")
     } else {
       store_joyn_msg(err = "   Input table {.strongTable y} has no columns.")
     }
-
   }
 
   # -----------------------
@@ -53,7 +53,9 @@ check_xy  <- function(x,y) {
     error_exists <- TRUE
     if (x_rows0 && y_rows0) {
       xy <- c("x", "y")
-      store_joyn_msg(err = "   Neither {.or {.strongTable {xy}}} table has rows.")
+      store_joyn_msg(
+        err = "   Neither {.or {.strongTable {xy}}} table has rows."
+      )
     } else if (x_rows0) {
       store_joyn_msg(err = "   Input table {.strongTable x} has no rows.")
     } else {
@@ -101,8 +103,10 @@ check_duplicate_names <- \(dt, name) {
   if (anyDuplicated(nm_x)) {
     dups <- nm_x[duplicated(nm_x)] |>
       unique()
-    store_joyn_msg(err    = " Table {.strongTable {name}} has the following {cli::qty(length(dups))} column{?s} duplicated:
-                   {.strongVar {dups}}. \nPlease rename or remove and try again.")
+    store_joyn_msg(
+      err = " Table {.strongTable {name}} has the following {cli::qty(length(dups))} column{?s} duplicated:
+                   {.strongVar {dups}}. \nPlease rename or remove and try again."
+    )
     return(TRUE)
   }
   return(FALSE)
@@ -127,25 +131,24 @@ check_duplicate_names <- \(dt, name) {
 
 check_reportvar <-
   function(reportvar, verbose = getOption("joyn.verbose")) {
-
     if (is.character(reportvar)) {
-
       reportvar <- rename_to_valid(reportvar, verbose)
 
-      store_joyn_msg(info = "Joyn's report available in variable {.strongVar {reportvar}}")
+      store_joyn_msg(
+        info = "Joyn's report available in variable {.strongVar {reportvar}}"
+      )
 
       return(reportvar)
-
     } else if (is.null(reportvar) || isFALSE(reportvar)) {
-
-     store_joyn_msg(info = "  Reporting variable is {.strong NOT} returned")
+      store_joyn_msg(info = "  Reporting variable is {.strong NOT} returned")
 
       return(NULL)
-    } else  {
-      cli::cli_abort("{.strongArg reportvar} should be character, NULL or FALSE")
+    } else {
+      cli::cli_abort(
+        "{.strongArg reportvar} should be character, NULL or FALSE"
+      )
     }
   }
-
 
 
 #' Check `by` input
@@ -169,24 +172,24 @@ check_reportvar <-
 #' joyn:::check_by_vars(by = "id", x = x1, y = y1)
 #'}
 check_by_vars <- function(by, x, y) {
-
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # computations   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  fixby  <- fix_by_vars(by, x, y)
+  fixby <- fix_by_vars(by, x, y)
 
   if (length(fixby$by) == 0) {
-    msg     <- "no common variable names in `x` and `y`"
-    hint    <- "Make sure all variables are spelled correctly.
+    msg <- "no common variable names in `x` and `y`"
+    hint <- "Make sure all variables are spelled correctly.
       Check for upper and lower cases"
     problem <- "When `by = NULL`, joyn search for common variable
       names to be used as keys"
-    cli::cli_abort(c(
-      msg,
-      i = hint,
-      x = problem
-    ),
-    class = "joyn_error"
+    cli::cli_abort(
+      c(
+        msg,
+        i = hint,
+        x = problem
+      ),
+      class = "joyn_error"
     )
   }
 
@@ -194,25 +197,25 @@ check_by_vars <- function(by, x, y) {
   # Check class  ####
 
   check_x_by <- check_var_class(
-    dt  = x,
+    dt = x,
     var = if (!is.null(fixby$tempkey) && length(fixby$tempkey) > 0L) {
-            fixby$tempkey
-          } else if (!is.null(fixby$xby) && length(fixby$xby) > 0L) {
-            fixby$xby
-          } else {
-            fixby$by
-          }
+      fixby$tempkey
+    } else if (!is.null(fixby$xby) && length(fixby$xby) > 0L) {
+      fixby$xby
+    } else {
+      fixby$by
+    }
   )
 
   check_y_by <- check_var_class(
-    dt  = y,
+    dt = y,
     var = if (!is.null(fixby$tempkey) && length(fixby$tempkey) > 0L) {
-            fixby$tempkey
-          } else if (!is.null(fixby$yby) && length(fixby$yby) > 0L) {
-            fixby$yby
-          } else {
-            fixby$by
-          }
+      fixby$tempkey
+    } else if (!is.null(fixby$yby) && length(fixby$yby) > 0L) {
+      fixby$yby
+    } else {
+      fixby$by
+    }
   )
 
   # if (!is.null(check_x_by) || !is.null(check_y_by)) {
@@ -231,7 +234,6 @@ check_by_vars <- function(by, x, y) {
   # Return   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   return(fixby)
-
 }
 
 ##' Check join variable class
@@ -245,7 +247,9 @@ check_by_vars <- function(by, x, y) {
 #' @keywords internal
 check_var_class <- function(dt, var) {
   # Guard against NULL or empty input
-  if (is.null(var) || length(var) == 0L) return(NULL)
+  if (is.null(var) || length(var) == 0L) {
+    return(NULL)
+  }
 
   # Ensure requested vars exist in dt
   missing_vars <- setdiff(var, names(dt))
@@ -257,42 +261,54 @@ check_var_class <- function(dt, var) {
   }
 
   allowed_classes <- c(
-    "character", "integer", "numeric", "factor",
-    "logical", "Date", "POSIXct", "fs_path"
+    "character",
+    "integer",
+    "numeric",
+    "factor",
+    "logical",
+    "Date",
+    "POSIXct",
+    "fs_path"
   )
 
-  bad_vars <- vapply(var, function(v) {
-    value <- dt[[v]]
+  bad_vars <- vapply(
+    var,
+    function(v) {
+      value <- dt[[v]]
 
-    # Defensive: if column is NULL for any reason, treat as bad
-    if (is.null(value)) {
-      store_joyn_msg(
-        warn = glue::glue(
-          "Join variable `{v}` is NULL or missing a type; this may cause issues. ",
-          "Consider coercing it to a standard type (e.g., character)."
+      # Defensive: if column is NULL for any reason, treat as bad
+      if (is.null(value)) {
+        store_joyn_msg(
+          warn = glue::glue(
+            "Join variable `{v}` is NULL or missing a type; this may cause issues. ",
+            "Consider coercing it to a standard type (e.g., character)."
+          )
         )
-      )
-      return(v)
-    }
+        return(v)
+      }
 
-    ok <- any(vapply(allowed_classes, function(cls) inherits(value, cls), logical(1)))
-    if (!ok) {
-      store_joyn_msg(
-        warn = glue::glue(
-          "Join variable `{v}` has class {paste(class(value), collapse = '/')} ",
-          "which may cause issues. Consider coercing it to a standard type (e.g., character)."
+      ok <- any(vapply(
+        allowed_classes,
+        function(cls) inherits(value, cls),
+        logical(1)
+      ))
+      if (!ok) {
+        store_joyn_msg(
+          warn = glue::glue(
+            "Join variable `{v}` has class {paste(class(value), collapse = '/')} ",
+            "which may cause issues. Consider coercing it to a standard type (e.g., character)."
+          )
         )
-      )
-      return(v)
-    }
-    NA_character_
-  }, FUN.VALUE = character(1L))
+        return(v)
+      }
+      NA_character_
+    },
+    FUN.VALUE = character(1L)
+  )
 
-  bad_vars <- unname(na.omit(bad_vars))
+  bad_vars <- unname(na_omit(bad_vars))
   if (length(bad_vars)) invisible(bad_vars) else NULL
 }
-
-
 
 
 #' Check match type consistency
@@ -319,50 +335,51 @@ check_var_class <- function(dt, var) {
 #' # Inconsistent match type
 #' joyn:::check_match_type(x = x1, y=y1, by="id", match_type = "1:1")
 #' }
-check_match_type <- function(x, y, by,
-                             match_type,
-                             verbose = getOption("joyn.verbose")) {
-
+check_match_type <- function(
+  x,
+  y,
+  by,
+  match_type,
+  verbose = getOption("joyn.verbose")
+) {
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # computations   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   mts <- split_match_type(match_type)
-  tx  <- mts[1]
-  ty  <- mts[2]
+  tx <- mts[1]
+  ty <- mts[2]
 
   # Check which messages to return
   match_type_error <- FALSE
-  x_m    <-  y_m   <- TRUE
-  mte_x  <- mte_y  <- FALSE
+  x_m <- y_m <- TRUE
+  mte_x <- mte_y <- FALSE
 
   if (tx == "1") {
-      mte_x <- is_match_type_error(x, "x", by, verbose, match_type_error)
+    mte_x <- is_match_type_error(x, "x", by, verbose, match_type_error)
   } else {
     x_m <- is_valid_m_key(x, by)
   }
 
   if (ty == "1") {
-      mte_y <- is_match_type_error(y, "y", by, verbose, match_type_error)
+    mte_y <- is_match_type_error(y, "y", by, verbose, match_type_error)
   } else {
-      y_m <- is_valid_m_key(y, by)
-    }
+    y_m <- is_valid_m_key(y, by)
+  }
 
   if (TRUE %in% c(mte_x, mte_y)) {
-    match_type_error <-TRUE
-    }
+    match_type_error <- TRUE
+  }
 
   # Error if user chooses "1" but actually "m" ----
   if (match_type_error) {
-
-    msg     <- "match type inconsistency"
-    hint    <-
+    msg <- "match type inconsistency"
+    hint <-
       "set verbose to TRUE to see where the issue is"
     joyn_msg("err")
 
     if (verbose == TRUE) {
-
-      msg     <- "match type inconsistency"
-      hint    <-
+      msg <- "match type inconsistency"
+      hint <-
         "refer to the duplicate counts in the table(s) above
        to identify where the issue occurred"
 
@@ -388,51 +405,50 @@ check_match_type <- function(x, y, by,
         cli::cli_inform("Duplicate counts in {.field y}:")
         print(display_id_y)
       }
-
     }
 
-    cli::cli_abort(c(msg,
-                     i = hint),
-                     class = "joyn_error")
-
+    cli::cli_abort(c(msg, i = hint), class = "joyn_error")
   }
 
   # Warning if user chooses "m" but actually "1" ----
   m_m <- data.table::fcase(
-    isTRUE(x_m)  & isTRUE(y_m),  "none",
-    isTRUE(x_m)  & isFALSE(y_m), "warn_y",
-    isFALSE(x_m) & isTRUE(y_m),  "warn_x",
-    isFALSE(x_m) & isFALSE(y_m), "warn_both"
+    isTRUE(x_m) & isTRUE(y_m)   , "none"      ,
+    isTRUE(x_m) & isFALSE(y_m)  , "warn_y"    ,
+    isFALSE(x_m) & isTRUE(y_m)  , "warn_x"    ,
+    isFALSE(x_m) & isFALSE(y_m) , "warn_both"
   )
 
   if (!m_m == "none") {
-
     switch(
       m_m,
       "warn_y" = {
-        store_joyn_msg(warn = "The keys supplied uniquely identify {.strongTable y},
-                               therefore a {.strong {tx}:1} join is executed")
+        store_joyn_msg(
+          warn = "The keys supplied uniquely identify {.strongTable y},
+                               therefore a {.strong {tx}:1} join is executed"
+        )
       },
 
       "warn_x" = {
-        store_joyn_msg(warn = "The keys supplied uniquely identify {.strongTable x},
-                               therefore a {.strong 1:{ty}} join is executed")
+        store_joyn_msg(
+          warn = "The keys supplied uniquely identify {.strongTable x},
+                               therefore a {.strong 1:{ty}} join is executed"
+        )
       },
 
       #},
       "warn_both" = {
-        store_joyn_msg(warn = "The keys supplied uniquely identify both {.strongTable x and y},
-                               therefore a {.strong 1:1} join is executed")
+        store_joyn_msg(
+          warn = "The keys supplied uniquely identify both {.strongTable x and y},
+                               therefore a {.strong 1:1} join is executed"
+        )
       }
     )
-
   }
 
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   # Return   ---------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   return(mts)
-
 }
 
 #' Confirm if match type error
@@ -454,19 +470,17 @@ check_match_type <- function(x, y, by,
 #' }
 
 is_match_type_error <- function(x, name, by, verbose, match_type_error) {
-
   isidx <- is_id(x, by = by, verbose = FALSE)
 
   if (isFALSE(isidx)) {
-
     match_type_error <- TRUE
     by2 <- by
-    store_joyn_msg(err = "table {.strongTable {name}} is not uniquely identified by {.strongVar {by2}}")
-
+    store_joyn_msg(
+      err = "table {.strongTable {name}} is not uniquely identified by {.strongVar {by2}}"
+    )
   }
   match_type_error
-  }
-
+}
 
 
 #' Check variables in y that will be kept in returning table
@@ -493,10 +507,11 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 #' }
 
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
-
   if (length(y_vars_to_keep) > 1 && !is.character(y_vars_to_keep)) {
-    cli::cli_abort("argumet {.arg {y_vars_to_keep}} must be of length 1
-                   when it is not class character")
+    cli::cli_abort(
+      "argumet {.arg {y_vars_to_keep}} must be of length 1
+                   when it is not class character"
+    )
   }
 
   if (isTRUE(y_vars_to_keep)) {
@@ -504,12 +519,9 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
   }
 
   if (isFALSE(y_vars_to_keep) || is.null(y_vars_to_keep)) {
-
     y_vars_to_keep <- NULL
-
   } else if (is.character(y_vars_to_keep)) {
-
-    yvars    <- names(y)
+    yvars <- names(y)
     is_avail <- !(y_vars_to_keep %in% yvars)
 
     if (any(is_avail)) {
@@ -527,20 +539,22 @@ check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
     y_in_by <- y_vars_to_keep %in% by
 
     if (any(y_in_by)) {
-      store_joyn_msg(info = "Removing key variables {.strongVar {y_vars_to_keep[y_in_by]}} from {.strongVar {y_vars_to_keep}}")
+      store_joyn_msg(
+        info = "Removing key variables {.strongVar {y_vars_to_keep[y_in_by]}} from {.strongVar {y_vars_to_keep}}"
+      )
     }
 
     y_vars_to_keep <- y_vars_to_keep[!y_in_by]
-
   } else {
     valid <- c("character", "FALSE", "NULL")
-    cli::cli_abort(c("{.val {y_vars_to_keep}} is not valid for argument
+    cli::cli_abort(c(
+      "{.val {y_vars_to_keep}} is not valid for argument
                    {.arg y_vars_to_keep}",
-                   "i" = "Only {.or {.field {valid}}}"))
+      "i" = "Only {.or {.field {valid}}}"
+    ))
   }
 
   return(y_vars_to_keep)
-
 }
 
 
@@ -578,25 +592,22 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
     y.upvars <- paste0(upvars, ".y")
     y_vars_to_keep[y_vars_to_keep %in% upvars] <- y.upvars
 
- #   if (isFALSE(update_NAs) && isFALSE(update_values)) {
-#      store_msg(
-#        "note",
-#        ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
-#        pale        = "variable{?s} ",
-#        bolded_pale = "{upvars}",
-#        pale        = "  in table",
-#        bolded_pale = "  {y}",
-#        pale        = "  {?is/are} ignored because arguments",
-#        bolded_pale = "  update_NAs and update_values",
-#        pale        = "  are FALSE.")
-#    }
-
+    #   if (isFALSE(update_NAs) && isFALSE(update_values)) {
+    #      store_msg(
+    #        "note",
+    #        ok          = paste(cli::symbol$info, "  ", cli::symbol$pointer, "  "),
+    #        pale        = "variable{?s} ",
+    #        bolded_pale = "{upvars}",
+    #        pale        = "  in table",
+    #        bolded_pale = "  {y}",
+    #        pale        = "  {?is/are} ignored because arguments",
+    #        bolded_pale = "  update_NAs and update_values",
+    #        pale        = "  are FALSE.")
+    #    }
   } # end of update vars
-
 
   return(y_vars_to_keep)
 }
-
 
 
 #' Check whether specified "many" relationship is valid
@@ -623,11 +634,11 @@ check_new_y_vars <- \(x, by, y_vars_to_keep) {
 #'                  x  = 11:15)
 #' joyn:::is_valid_m_key(x2, by = c("id", "t"))
 #' }
-is_valid_m_key <- function(dt, by){
-
+is_valid_m_key <- function(dt, by) {
   # Argument checks
-  if ( !is.character(by))
+  if (!is.character(by)) {
     stop("`by` argument must be character")
+  }
 
   # by <- unname(by)
   duplicates <-
@@ -635,17 +646,18 @@ is_valid_m_key <- function(dt, by){
     get_vars(by) |>
     any_duplicated()
 
-  if (duplicates)
+  if (duplicates) {
     TRUE
-  else
+  } else {
     FALSE
+  }
 }
 
 
 check_suffixes <- function(suffixes) {
-
   if (length(suffixes) != 2) {
-    cli::cli_abort("argumet {.arg suffixes} must be a character vector of length 2")
+    cli::cli_abort(
+      "argumet {.arg suffixes} must be a character vector of length 2"
+    )
   }
-
 }

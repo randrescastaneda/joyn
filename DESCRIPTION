@@ -30,7 +30,8 @@ Suggests:
     testthat (>= 3.0.0),
     withr,
     dplyr,
-    tibble
+    tibble,
+    fs
 Config/testthat/edition: 3
 Imports: 
     rlang,
