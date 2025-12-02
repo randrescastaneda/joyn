@@ -228,6 +228,18 @@ check_by_vars <- function(by, x, y) {
 #' @return Variable name invisibly if unsupported, otherwise NULL
 #' @keywords internal
 check_var_class <- function(dt, var) {
+  # Guard against NULL or empty input
+  if (is.null(var) || length(var) == 0L) return(NULL)
+
+  # Ensure requested vars exist in dt
+  missing_vars <- setdiff(var, names(dt))
+  if (length(missing_vars) > 0L) {
+    cli::cli_abort(c(
+      "{.val {missing_vars}} {?is/are} not found in the table {.arg dt}",
+      "i" = "Available names are {.val {names(dt)}}"
+    ))
+  }
+
   allowed_classes <- c(
     "character", "integer", "numeric", "factor",
     "logical", "Date", "POSIXct", "fs_path"
@@ -235,12 +247,24 @@ check_var_class <- function(dt, var) {
 
   bad_vars <- vapply(var, function(v) {
     value <- dt[[v]]
+
+    # Defensive: if column is NULL for any reason, treat as bad
+    if (is.null(value)) {
+      store_joyn_msg(
+        warn = glue::glue(
+          "Join variable `{v}` is NULL or missing a type; this may cause issues. ",
+          "Consider coercing it to a standard type (e.g., character)."
+        )
+      )
+      return(v)
+    }
+
     ok <- any(vapply(allowed_classes, function(cls) inherits(value, cls), logical(1)))
     if (!ok) {
       store_joyn_msg(
         warn = glue::glue(
-          "Provided `by` var of class {paste(class(value), collapse = '/')}
-           may cause issues. Consider coercing it to a standard type (e.g. character)."
+          "Join variable `{v}` has class {paste(class(value), collapse = '/')} ",
+          "which may cause issues. Consider coercing it to a standard type (e.g., character)."
         )
       )
       return(v)
