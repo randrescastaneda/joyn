@@ -100,7 +100,7 @@ dt_large <- dt_large[sample(.N)]
 dt <- copy(dt_large)
 
 
-test_that("Manual testinh", {
+test_that("Manual testing", {
   skip()
   possible_ids(
     dt = dt_large,

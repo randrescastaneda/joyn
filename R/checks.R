@@ -195,12 +195,24 @@ check_by_vars <- function(by, x, y) {
 
   check_x_by <- check_var_class(
     dt  = x,
-    var = if (length(fixby$tempkey)) fixby$tempkey else if (length(fixby$xby)) fixby$xby else fixby$by
+    var = if (!is.null(fixby$tempkey) && length(fixby$tempkey) > 0L) {
+            fixby$tempkey
+          } else if (!is.null(fixby$xby) && length(fixby$xby) > 0L) {
+            fixby$xby
+          } else {
+            fixby$by
+          }
   )
 
   check_y_by <- check_var_class(
     dt  = y,
-    var = if (length(fixby$tempkey)) fixby$tempkey else if (length(fixby$yby)) fixby$yby else fixby$by
+    var = if (!is.null(fixby$tempkey) && length(fixby$tempkey) > 0L) {
+            fixby$tempkey
+          } else if (!is.null(fixby$yby) && length(fixby$yby) > 0L) {
+            fixby$yby
+          } else {
+            fixby$by
+          }
   )
 
   # if (!is.null(check_x_by) || !is.null(check_y_by)) {

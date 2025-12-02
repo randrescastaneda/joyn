@@ -15,6 +15,10 @@ filter_vars(
 )
 }
 \arguments{
+\item{dt}{data frame}
+
+\item{vars}{character: A vector of variable names to consider for identifying unique combinations.}
+
 \item{include}{character: Name of variable to be included, that might belong
 to the group excluded in the \code{exclude}}
 
@@ -25,6 +29,9 @@ to the group excluded in the \code{exclude}}
 
 \item{exclude_classes}{character: classes to exclude from analysis (e.g.,
 "numeric", "integer", "date")}
+
+\item{verbose}{logical: If FALSE no message will be displayed. Default is
+TRUE}
 }
 \value{
 character vector of selected vars

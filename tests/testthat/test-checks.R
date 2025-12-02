@@ -300,7 +300,7 @@ test_that("check_var_class works with inheritance", {
   res <- check_var_class(dt, "c")
 
   # Function should return invisible("c")
-  expect_identical(res, invisible("c"))
+  expect_identical(res, "c")
 
   # Environment should have stored a message
   expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
@@ -314,7 +314,7 @@ test_that("check_var_class works with inheritance", {
   dt$e <- as.list(1:3)
   clear_joynenv()
   res_multi <- check_var_class(dt, c("a", "c", "e"))
-  expect_identical(sort(res_multi), sort(invisible(c("c", "e"))))
+  expect_identical(sort(res_multi), sort(c("c", "e")))
 })
 
 test_that("check_var_class handles NULL and empty inputs", {

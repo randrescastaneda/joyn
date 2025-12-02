@@ -9,7 +9,7 @@ check_var_class(dt, var)
 \arguments{
 \item{dt}{data.table containing the variable}
 
-\item{var}{Name of the variable to check}
+\item{var}{Character vector of variable names to check}
 }
 \value{
 Variable name invisibly if unsupported, otherwise NULL
