@@ -1,20 +1,26 @@
-# joyn (development version)
+# joyn 0.3.0
 
-# joyn 0.2.5
-#### Added
-- `check_var_class()`: validates join (`by`) variables and suggests coercion if needed.  
-- `filter_var()`: simplifies inclusion/exclusion of variables in main functions.  
-- `make_test_data()`: provides named datasets to simplify testing.
+## Breaking Changes
+- **Minimum R version:** Now requires R ≥ 4.2.0 (previously R ≥ 2.10.0) due to use of native pipe operator (`|>`) introduced in R 4.1.0 and  uses the pipe
+  placeholder syntax added in R 4.2.0. Users on R 4.0.x must upgrade to use this version.
+- **Default verbosity:** `possible_ids.verbose` default changed from `TRUE` to `FALSE` to reduce console output by default.
 
-#### Improved
-- `check_xy()` now warns when inputs have 0 rows.  
-- Improved handling of `by` expressions when joining data: temporary keys are automatically created if the left and right variables differ, and unchanged names are preserved when possible.  
-- Updated GitHub Actions `upload-artifact` workflow to v4.  
-- Requires R ≥ 4.2.0; added `glue` to package imports.
+## New Features
+- **Variable class validation:** New internal function `check_var_class()` validates that join (`by`) variables have supported classes (character, integer, numeric, factor, logical, Date, POSIXct, fs_path). Warns users when unsupported classes (e.g., list, complex, raw) are detected and suggests coercion.
+- **Variable filtering helper:** New `filter_vars()` function simplifies inclusion/exclusion of variables based on names or classes in `possible_ids()` and related functions.
+- **Test data helper:** New `make_test_data()` function provides standardized test datasets to improve test maintainability.
 
-#### Fixed
-- Tests rewritten and expanded to cover error cases and unsupported `by` formats.  
-- Minor code formatting and updated documentation for new functions.
+## Improvements
+- **Zero-row input handling:** `check_xy()` now detects and reports when input tables have zero rows (previously would silently proceed).
+- **Enhanced `by` expression support:** Improved handling of `by` expressions (e.g., `"x == y"`). Temporary keys are now created only when necessary, and original column names are preserved when possible, reducing unnecessary data.table modifications.
+- **CI/CD updates:** GitHub Actions workflow upgraded from `upload-artifact@v3` to `v4` for better compatibility.
+- **Dependencies:** Added `glue` package to Imports for improved string interpolation in messages.
+
+## Bug Fixes
+- **Test suite improvements:** Rewrote and expanded test coverage in `test-checks.R` to use helper data and explicit expectations. Added error tests for unsupported `by` variable types and formats.
+- **Documentation updates:** Added complete documentation for `check_var_class()`, `filter_vars()`, and other internal helpers. Updated `man/possible_ids.Rd` to reflect new default parameter values.
+- **Code formatting:** Minor formatting improvements throughout codebase for consistency.
+
 
 # joyn 0.2.4
 

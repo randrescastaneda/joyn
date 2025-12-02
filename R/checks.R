@@ -50,16 +50,17 @@ check_xy <- function(x, y) {
   y_rows0 <- nrow(y) == 0L
 
   if (x_rows0 || y_rows0) {
-    error_exists <- TRUE
+    # Note: Zero-row tables are valid join inputs (e.g., LEFT JOIN with empty RHS)
+    # So we warn instead of error
     if (x_rows0 && y_rows0) {
       xy <- c("x", "y")
       store_joyn_msg(
-        err = "   Neither {.or {.strongTable {xy}}} table has rows."
+        warn = "   Neither {.or {.strongTable {xy}}} table has rows."
       )
     } else if (x_rows0) {
-      store_joyn_msg(err = "   Input table {.strongTable x} has no rows.")
+      store_joyn_msg(warn = "   Input table {.strongTable x} has no rows.")
     } else {
-      store_joyn_msg(err = "   Input table {.strongTable y} has no rows.")
+      store_joyn_msg(warn = "   Input table {.strongTable y} has no rows.")
     }
   }
 

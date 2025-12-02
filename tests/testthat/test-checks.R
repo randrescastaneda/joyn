@@ -17,24 +17,35 @@ df2 <- data$df2
 test_that("check_xy works as expected", {
   empty_df <- data.frame()
 
-  # Errors
+  # Errors - missing arguments
   expect_error(
     check_xy(x = x1)
   )
   expect_error(
     check_xy(y = y1)
   )
-  expect_error(
+
+  # Zero-row inputs now generate warnings, not errors
+  clear_joynenv()
+  expect_no_error(
     check_xy(x = empty_df, y = y1)
   )
-  expect_error(
-    check_xy(x = x1, y = empty_df)
-  )
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   clear_joynenv()
-  expect_error(
+  expect_no_error(
+    check_xy(x = x1, y = empty_df)
+  )
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
+
+  clear_joynenv()
+  expect_no_error(
     check_xy(x = empty_df, y = empty_df)
   )
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   # No msg when no duplicate names
   clear_joynenv()
@@ -42,28 +53,33 @@ test_that("check_xy works as expected", {
     check_xy(x = x1, y = y1)
   )
 
-  # Duplicate names
+  # Duplicate names still cause errors
   clear_joynenv()
   expect_error(
     check_xy(x = x1_duplicates, y = y1)
   )
 
-  # 0 rows tests
+  # 0 rows tests - now warnings instead of errors
   x0_rows <- x1[0, ]
   y0_rows <- y1[0, ]
 
   clear_joynenv()
-  expect_error(
+  expect_no_error(
     check_xy(x = x0_rows, y = y1)
   )
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+
   clear_joynenv()
-  expect_error(
+  expect_no_error(
     check_xy(x = x1, y = y0_rows)
   )
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+
   clear_joynenv()
-  expect_error(
+  expect_no_error(
     check_xy(x = x0_rows, y = y0_rows)
   )
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
 })
 
 test_that("check_duplicate_names works as expected", {
