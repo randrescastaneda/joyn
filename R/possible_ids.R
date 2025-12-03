@@ -50,98 +50,56 @@
 #'                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
 #'                 x   = c(16, 12, NA, NA, 15))
 #' possible_ids(x4)
-possible_ids <- function(dt,
-                         vars                        = NULL,
-                         exclude                     = NULL,
-                         include                     = NULL,
-                         exclude_classes             = NULL,
-                         include_classes             = NULL,
-                         verbose                     = getOption("possible_ids.verbose",
-                                                        default = FALSE),
-                         min_combination_size        = 1,
-                         max_combination_size        = 5,
-                         max_processing_time         = 60, # in seconds
-                         max_numb_possible_ids       = 100,
-                         get_all                     = FALSE) {
-
+possible_ids <- function(
+  dt,
+  vars = names(dt),
+  exclude = NULL,
+  include = NULL,
+  exclude_classes = NULL,
+  include_classes = NULL,
+  verbose = getOption("possible_ids.verbose", default = FALSE),
+  min_combination_size = 1,
+  max_combination_size = 5,
+  max_processing_time = 60, # in seconds
+  max_numb_possible_ids = 100,
+  get_all = FALSE
+) {
   # defenses ---------
-  # Ensure dt is a data.table
-  if (!is.data.frame(dt)) {
-    stop("data must be a data frame")
-  }
+  # Capture explicitly defined arguments
+  args <- as.list(environment())
+  check_possible_ids(args)
+
   if (!is.data.table(dt)) {
-    dt <- as.data.table(dt)
+    dt <- qDT(dt)
   }
-
-  # Get variable
-  # Vars --------
-
-   if (is.null(vars)) {
-     vars <- names(dt) |>
-       copy()
-     } else {
-
-    # check if all vars are in dt
-    missing_vars <- setdiff(vars, names(dt))
-
-    if (length(missing_vars) > 0) {
-       cli::cli_abort("The following variables are not in the data table: {.strongVar {missing_vars}}")
-    }
-
-    # check at least 2 vars are provided
-
-     if (length(vars) < 2) {
-      cli::cli_abort("Can't make combinations with a single var: {.strongVar {vars}}")
-     }
-
-    # exclude should not be used
-      if (!(is.null(exclude) & is.null(exclude_classes))) {
-        exclude         <- NULL
-        exclude_classes <- NULL
-        cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
-      }
-
-   }
 
   # Exclude and include -------
 
-  ## classes ----------
-  vars <- filter_by_class(dt              = dt,
-                          vars            = vars,
-                          include_classes = include_classes,
-                          exclude_classes = exclude_classes)
-
-  ## var names --------
-  vars <- filter_by_name(vars, include, exclude, verbose)
-
-  ##  no duplicated vars -------------
-  if (anyDuplicated(vars)) {
-    dupvars <- vars[duplicated(vars)] |>
-      unique()
-    cli::cli_abort("vars {.strongVar {dupvars}} are duplicated.")
-  }
-
-  if (verbose) {
-    cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
-  }
+  vars <- filter_vars(
+    dt = dt,
+    vars = vars,
+    exclude = exclude,
+    include = include,
+    exclude_classes = exclude_classes,
+    include_classes = include_classes,
+    verbose = verbose
+  )
 
   if (length(vars) == 0) {
-    if (verbose) {
-      cli::cli_alert_danger("No variables available after applying
-                            include/exclude filters.")
-    }
-    return(NULL) # should this be an error?
+    return(NULL)
+  }
+  if (verbose) {
+    cli::cli_alert_info("Variables to test: {.strongVar {vars}}")
   }
 
   # Unique values ---------
 
   # Sort variables by number of unique values (ascending order)
   unique_counts <- vapply(dt[, ..vars], fnunique, numeric(1))
-  vars          <- vars[order(unique_counts)]
+  vars <- vars[order(unique_counts)]
   unique_counts <- unique_counts[order(unique_counts)]
-  n_rows        <- fnrow(dt)
-  init_index    <- 0
-
+  n_rows <- fnrow(dt)
+  init_index <- 0
 
   # Initialize list to store possible IDs
   possible_ids_list <- vector("list", max_numb_possible_ids)
@@ -150,7 +108,7 @@ possible_ids <- function(dt,
     copy()
 
   if (min_combination_size == 1) {
-    unique_ids    <- vars[unique_counts == n_rows]
+    unique_ids <- vars[unique_counts == n_rows]
     # Add individual unique variables
     init_index <- length(unique_ids)
     if (init_index > 0) {
@@ -159,17 +117,16 @@ possible_ids <- function(dt,
         cli::cli_alert_info("Found unique identifiers: {.code {unique_ids}}")
       }
       if (!get_all) {
-        ret_list <- store_checked_ids(checked_ids,
-                                      possible_ids_list)
+        ret_list <- store_checked_ids(checked_ids, possible_ids_list)
         return(ret_list)
       }
 
       # Remove unique identifiers from vars to reduce combinations
       vars <- setdiff(vars, unique_ids)
+
       if (length(vars) == 0) {
         # All variables are unique identifiers
-        ret_list <- store_checked_ids(checked_ids,
-                                      possible_ids_list)
+        ret_list <- store_checked_ids(checked_ids, possible_ids_list)
         return(ret_list)
       }
       unique_counts <- unique_counts[vars]
@@ -179,17 +136,23 @@ possible_ids <- function(dt,
   # combinations -----------
 
   # Start testing combinations
-  start_time   <- Sys.time()
-  min_size     <- max(min_combination_size, 2)
-  max_size     <- min(length(vars), max_combination_size)
+  start_time <- Sys.time()
+  min_size <- max(min_combination_size, 2)
+  max_size <- min(length(vars), max_combination_size)
   elapsed_time <- 0
 
-  # where there is only one variable or not enough vars to combine
-  if (min_size > max_size) {
+  if (min_size > max_size || length(vars) < min_size) {
     if (verbose) {
       cli::cli_alert_warning(
         "Can't make combinations of {.field {vars}} if the min number of
-        combinations is {min_size} and the max is {max_size}")
+      combinations is {min_size} and the max is {max_size}"
+      )
+    }
+
+    if (length(possible_ids_list) > 0) {
+      # Return the unique identifiers found so far
+      ret_list <- store_checked_ids(checked_ids, possible_ids_list)
+      return(ret_list)
     }
 
     cli::cli_abort("No unique identifier found.")
@@ -197,7 +160,6 @@ possible_ids <- function(dt,
 
   j <- init_index + 1
   for (comb_size in min_size:max_size) {
-
     # make sure length of vars is >= comb_size
     if (length(vars) < comb_size) {
       next
@@ -208,27 +170,31 @@ possible_ids <- function(dt,
 
     # Prune combinations where the product of unique counts is less
     # than n_rows
-    combos_to_keep <- vapply(combos,
-                             \(combo) {
-                               prod(unique_counts[combo]) >= n_rows
-                               },
-                             logical(1))
+    combos_to_keep <- vapply(
+      combos,
+      \(combo) {
+        prod(unique_counts[combo]) >= n_rows
+      },
+      logical(1)
+    )
 
     combos <- combos[combos_to_keep]
 
     # Estimate processing time and prune combinations
-    est_times <- vapply(combos,
-                        \(combo) {
-                          estimate_combination_time(n_rows,
-                                                    unique_counts[combo])
-                          },
-                        numeric(1))
+    est_times <- vapply(
+      combos,
+      \(combo) {
+        estimate_combination_time(n_rows, unique_counts[combo])
+      },
+      numeric(1)
+    )
 
     if (verbose) {
       cli::cli_progress_bar(
         format = "combs of {cli::pb_extra$comb_size} vars: {cli::pb_bar} {cli::pb_percent} | ETA: {cli::pb_eta} | {cli::pb_current}/{cli::pb_total}",
         extra = list(comb_size = comb_size),
-        total = length(combos))
+        total = length(combos)
+      )
     }
 
     for (combo in combos) {
@@ -243,19 +209,22 @@ possible_ids <- function(dt,
         if (j > max_numb_possible_ids) {
           if (verbose) {
             cli::cli_alert_warning(
-            "Max number of possible IDs ({max_numb_possible_ids}) reached.
-            You may modify it in argument {.arg max_numb_possible_ids}")
+              "Max number of possible IDs ({max_numb_possible_ids}) reached.
+            You may modify it in argument {.arg max_numb_possible_ids}"
+            )
           }
-          ret_list <- store_checked_ids(checked_ids = checked_ids,
-                                        possible_ids = possible_ids_list)
+          ret_list <- store_checked_ids(
+            checked_ids = checked_ids,
+            possible_ids = possible_ids_list
+          )
           return(ret_list)
         }
         if (!get_all) {
-
-          ret_list <- store_checked_ids(checked_ids = checked_ids,
-                                        possible_ids = possible_ids_list)
+          ret_list <- store_checked_ids(
+            checked_ids = checked_ids,
+            possible_ids = possible_ids_list
+          )
           return(ret_list)
-
         }
         # Remove variables in the current combo from vars to
         # avoid redundant checks
@@ -266,9 +235,11 @@ possible_ids <- function(dt,
         if (!get_all) break
       }
       # Check processing time
-      elapsed_time <- as.numeric(difftime(Sys.time(),
-                                          start_time,
-                                          units = "secs"))
+      elapsed_time <- as.numeric(difftime(
+        Sys.time(),
+        start_time,
+        units = "secs"
+      ))
       if (elapsed_time > max_processing_time) {
         if (verbose) {
           mxt_msg <- "Maximum processing time exceeded.
@@ -297,17 +268,75 @@ possible_ids <- function(dt,
   # Return ####
   # ----------------------------- #
 
-  ret_list <- store_checked_ids(checked_ids = checked_ids,
-                                possible_ids = possible_ids_list)
+  ret_list <- store_checked_ids(
+    checked_ids = checked_ids,
+    possible_ids = possible_ids_list
+  )
 
   return(ret_list)
+}
+
+
+check_possible_ids <- \(args) {
+  # Expand arguments directly into goo's environment
+  list2env(args, envir = environment())
+
+  # Now you can use arguments directly by name
+  stopifnot(exprs = {
+    is.data.frame(dt)
+  })
+
+  # include and and exclude classes
+  n_int <- intersect(exclude_classes, include_classes)
+  if (length(n_int) > 0) {
+    cli::cli_abort(c(
+      x = "same classes can't be included and excluded simultaneously",
+      i = "overlaping classes: {.strongVar {n_int}}"
+    ))
+  }
+
+  # include and exclude vars
+  n_int <- intersect(exclude, include)
+  if (length(n_int) > 0) {
+    cli::cli_abort(c(
+      x = "same variables can't be included and excluded simultaneously",
+      i = "overlaping variables: {.strongVar {n_int}}"
+    ))
+  }
+
+  # check if all vars are in dt
+  missing_vars <- setdiff(vars, names(dt))
+
+  if (length(missing_vars) > 0) {
+    cli::cli_abort(
+      "The following variables are not in the data table: {.strongVar {missing_vars}}"
+    )
+  }
+
+  # check at least 2 vars are provided
+
+  if (length(vars) < 2) {
+    cli::cli_abort(
+      "Can't make combinations with a single var: {.strongVar {vars}}"
+    )
+  }
+
+  # exclude should not be used
+  # if (!(is.null(exclude) & is.null(exclude_classes))) {
+  #   exclude         <- NULL
+  #   exclude_classes <- NULL
+  #   cli::cli_alert_danger("Args {.strongArg `exclude`} and {.strongArg `exclude_classes`} not available when using {.strongArg `vars`}")
+  # }
+
+  invisible(NULL)
 }
 
 
 filter_by_class <- function(dt, vars, include_classes, exclude_classes) {
   # Compute the primary class of each variable
   vars_class <- vapply(dt, function(x) class(x)[1], character(1))
-  names(vars_class) <- vars  # Ensure names are preserved
+  names(vars_class) <- names(dt) |> # Ensure names are preserved
+    copy()
 
   # Apply 'include_classes' filter
   if (!is.null(include_classes)) {
@@ -333,11 +362,8 @@ filter_by_name <- function(vars, include, exclude, verbose) {
   }
   # Apply 'include' filter
 
-  c(vars,
-    setdiff(include, vars))
-
+  c(vars, setdiff(include, vars))
 }
-
 
 
 # Function to estimate processing time based on unique counts
@@ -370,25 +396,18 @@ remove_null <- \(x) {
 #'
 #'
 #' @keywords internal
-store_checked_ids <- function(checked_ids,
-                              possible_ids,
-                              env = .joynenv) {
-
+store_checked_ids <- function(checked_ids, possible_ids, env = .joynenv) {
   # Remove null from possible ids
   possible_ids <- remove_null(possible_ids)
 
   # Store checked_ids in environment
-  rlang::env_poke(env   = env,
-                  nm    = "checked_ids",
-                  value = checked_ids)
+  rlang::env_poke(env = env, nm = "checked_ids", value = checked_ids)
 
   # Store attribute
-  attr(possible_ids,
-       "checked_ids") <- checked_ids
+  attr(possible_ids, "checked_ids") <- checked_ids
 
   # Return
   return(possible_ids)
-
 }
 
 #' Create variables that uniquely identify rows in a data table
@@ -404,9 +423,7 @@ store_checked_ids <- function(checked_ids,
 #'
 #' @keywords internal
 create_ids <- function(n_rows, n_ids, prefix = "id") {
-
-  vars <- vector("list",
-                 n_ids)
+  vars <- vector("list", n_ids)
 
   # If n_ids is 1, simply generate a sequence of IDs
   if (n_ids == 1) {
@@ -415,21 +432,18 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
 
     return(vars)
   } else {
-
     # Get max unique values each variable can have
     max_vals <- ceiling(n_rows^(1 / n_ids))
 
     # Generate a sequence of unique identifiers
 
-    all_ids <- expand.grid(rep(list(seq_len(max_vals)),
-                               n_ids))
+    all_ids <- expand.grid(rep(list(seq_len(max_vals)), n_ids))
 
     #collapse::fnrow faster?
 
     if (fnrow(all_ids) > n_rows) {
       # Randomly sample the unique combinations
-      all_ids <- all_ids[sample(fnrow(all_ids),
-                                    n_rows), ]
+      all_ids <- all_ids[sample(fnrow(all_ids), n_rows), ]
     }
 
     # Store each unique identifier in the vars list
@@ -437,11 +451,62 @@ create_ids <- function(n_rows, n_ids, prefix = "id") {
       vars[[i]] <- all_ids[[i]]
     }
 
-    names(vars) <- paste0(prefix,
-                          seq_len(n_ids))
+    names(vars) <- paste0(prefix, seq_len(n_ids))
 
     return(vars)
   }
-
 }
 
+#' Auxiliary function to select vars of data table
+#' @inheritParams possible_ids
+#' @param exclude character: Names of variables to exclude
+#' @param include character: Name of variable to be included, that might belong
+#'   to the group excluded in the `exclude`
+#' @param exclude_classes character: classes to exclude from analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @param include_classes character: classes to include in the analysis (e.g.,
+#'   "numeric", "integer", "date")
+#' @return character vector of selected vars
+#' @keywords internal
+filter_vars <- function(
+  dt,
+  vars = names(dt),
+  include = NULL,
+  exclude = NULL,
+  include_classes = NULL,
+  exclude_classes = NULL,
+  verbose = TRUE
+) {
+  # Ensure dt is a data.table
+  stopifnot(is.data.table(dt))
+
+  ## classes ----------
+  vars <- filter_by_class(
+    dt = dt,
+    vars = vars,
+    include_classes = include_classes,
+    exclude_classes = exclude_classes
+  )
+
+  ## var names --------
+  vars <- filter_by_name(vars, include, exclude, verbose)
+
+  ##  no duplicated vars -------------
+  if (anyDuplicated(vars)) {
+    dupvars <- vars[duplicated(vars)] |>
+      unique()
+    cli::cli_abort("The following variables are duplicated: {.var {dupvars}}.")
+  }
+
+  if (length(vars) == 0) {
+    if (verbose) {
+      cli::cli_alert_danger(
+        "No variables available after applying
+                            include/exclude filters."
+      )
+    }
+    return(character(0))
+  }
+
+  return(vars)
+}

@@ -32,7 +32,6 @@ x4 = data.table(id1 = c(1, 1, 2, 3, 3),
                 t   = c(1L, 2L, 1L, 2L, NA_integer_),
                 x   = c(16, 12, NA, NA, 15))
 
-
 y4 = data.table(id  = c(1, 2, 5, 6, 3),
                 id2 = c(1, 1, 2, 3, 4),
                 y   = c(11L, 15L, 20L, 13L, 10L),
@@ -42,6 +41,15 @@ x5 = data.table(id = c(1, 2, 5, 6, 3),
                 yd = c(1, 2, 5, 6, 3),
                 y  = c(11L, 15L, 20L, 13L, 10L),
                 x  = c(16:18, NA, NA))
+
+x6 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
+                t  = c(1L, 2L, 1L, 2L, NA_integer_),
+                x  = 11:15,
+                lx = list(1, 2 ,3))
+
+y6 = data.table(id = c(1,2, 4),
+                y  = c(11L, 15L, 16),
+                ly = list(1, 2, 3))
 
 #-------------------------------------------------------------------------------
 # TESTS ------------------------------------------------------------------------
@@ -94,6 +102,23 @@ test_that("all types of by argument raise no error", {
        by         = c("id2", "x"),
        match_type = "1:1") |>
     expect_no_error()
+
+})
+
+test_that("non supported types of by argument raise error", {
+
+  joyn(x          = x6,
+       y          = y6,
+       by         = "x=ly") |>
+    expect_error()
+
+
+  # with multiple by vars
+  joyn(x          = x6,
+       y          = y6,
+       by         = c("t = ly", "id"),
+       match_type = "m:1") |>
+    expect_error()
 
 })
 

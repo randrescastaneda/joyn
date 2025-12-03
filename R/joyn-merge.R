@@ -246,6 +246,7 @@ joyn <- function(x,
   fixby  <- check_by_vars(by, x, y)
   by     <- fixby$by
 
+
   # Change names back on exit
   # Change names back for inputs------------------------------
   on.exit(
@@ -279,6 +280,10 @@ joyn <- function(x,
     },
     add = TRUE
   )
+
+  ## Check var class
+  # add a condition here if one of the stored joyn warning messages contains this string "coercing it to a
+  #standard type""
 
   ## Check suffixes -------------
   check_suffixes(suffixes)
@@ -486,13 +491,13 @@ joyn <- function(x,
   if (reporttype == "factor") {
 
     get_vars(jn, reportvar) <-  factor(jn[[reportvar]],
-                                      levels = 1:6,
-                                      labels = c("x",
-                                                 "y",
-                                                 "x & y",
-                                                 "NA updated",
-                                                 "value updated",
-                                                 "not updated"))
+                                       levels = 1:6,
+                                       labels = c("x",
+                                                  "y",
+                                                  "x & y",
+                                                  "NA updated",
+                                                  "value updated",
+                                                  "not updated"))
   }
 
   if (reporttype == "character") {
