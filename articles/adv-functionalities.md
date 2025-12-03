@@ -147,11 +147,12 @@ joyn(x = x,
 #> 
 #> ── JOYn Report ──
 #> 
-#>        .joyn n percent
-#> 1          x 2   28.6%
-#> 2      x & y 2   28.6%
-#> 3 NA updated 3   42.9%
-#> 4      total 7    100%
+#>         .joyn     n percent
+#>        <char> <int>  <char>
+#> 1:          x     2   28.6%
+#> 2:      x & y     2   28.6%
+#> 3: NA updated     3   42.9%
+#> 4:      total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, gdp, and country
@@ -200,11 +201,12 @@ joyn(x = x,
 #> 
 #> ── JOYn Report ──
 #> 
-#>           .joyn n percent
-#> 1    NA updated 3   42.9%
-#> 2 value updated 2   28.6%
-#> 3   not updated 2   28.6%
-#> 4         total 7    100%
+#>            .joyn     n percent
+#>           <char> <int>  <char>
+#> 1:    NA updated     3   42.9%
+#> 2: value updated     2   28.6%
+#> 3:   not updated     2   28.6%
+#> 4:         total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, gdp, and country

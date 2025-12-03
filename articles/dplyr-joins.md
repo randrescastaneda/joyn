@@ -188,11 +188,12 @@ left_join(x            = df1,
 #> 
 #> ── JOYn Report ──
 #> 
-#>        .joyn n percent
-#> 1          x 1   16.7%
-#> 2      x & y 4   66.7%
-#> 3 NA updated 1   16.7%
-#> 4      total 6    100%
+#>         .joyn     n percent
+#>        <char> <int>  <char>
+#> 1:          x     1   16.7%
+#> 2:      x & y     4   66.7%
+#> 3: NA updated     1   16.7%
+#> 4:      total     6    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, y, and t

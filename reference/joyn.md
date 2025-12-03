@@ -304,11 +304,12 @@ joyn(x2, y2, by = "id", update_NAs = TRUE, match_type = "m:1")
 #> 
 #> ── JOYn Report ──
 #> 
-#>        .joyn n percent
-#> 1          x 1   14.3%
-#> 2      x & y 2   28.6%
-#> 3 NA updated 4   57.1%
-#> 4      total 7    100%
+#>         .joyn     n percent
+#>        <char> <int>  <char>
+#> 1:          x     1   14.3%
+#> 2:      x & y     2   28.6%
+#> 3: NA updated     4   57.1%
+#> 4:      total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, yd, y, and x
@@ -327,11 +328,12 @@ joyn(x2, y2, by = "id", update_values = TRUE, match_type = "m:1")
 #> 
 #> ── JOYn Report ──
 #> 
-#>           .joyn n percent
-#> 1    NA updated 4   57.1%
-#> 2 value updated 2   28.6%
-#> 3   not updated 1   14.3%
-#> 4         total 7    100%
+#>            .joyn     n percent
+#>           <char> <int>  <char>
+#> 1:    NA updated     4   57.1%
+#> 2: value updated     2   28.6%
+#> 3:   not updated     1   14.3%
+#> 4:         total     7    100%
 #> ────────────────────────────────────────────────────────── End of JOYn report ──
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id, yd, y, and x

@@ -281,8 +281,8 @@ joyn(x          = x1,
 #> 6:     4    NA    NA    16      y
 
 joyn_msg("timing")
-#> ● Timing:The full joyn is executed in 0.000326 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.022713
+#> ● Timing:The full joyn is executed in 0.000278 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.025177
 #> seconds.
 
 
@@ -310,8 +310,8 @@ left_join(x            = x1,
 #> 5:    NA    NA    15    NA      x
 
 joyn_msg("timing")
-#> ● Timing:The full joyn is executed in 0.000656 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.021788
+#> ● Timing:The full joyn is executed in 0.000921 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.030934
 #> seconds.
 ```
 
@@ -530,9 +530,10 @@ display the following message:
 joyn(x = x1, y=y1, by="id", match_type = "1:1")
 #> ✖ Error: table x is not uniquely identified by id
 #> Duplicate counts in x:
-#>       id copies
-#>    <int>  <int>
-#> 1:     1      2
+#>        id copies percent
+#>    <char>  <int>  <char>
+#> 1:      1      2     40%
+#> 2:  total      5    100%
 #> Error in `check_match_type()`:
 #> ! match type inconsistency
 #> ℹ refer to the duplicate counts in the table(s) above to identify where the
@@ -582,8 +583,8 @@ joyn(x = x1,
 joyn_msg(msg_type = "all")
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id and y
-#> ● Timing:The full joyn is executed in 0.000298 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.023031
+#> ● Timing:The full joyn is executed in 0.000276 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.021114
 #> seconds.
 
 # Print info messages only 

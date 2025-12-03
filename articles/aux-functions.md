@@ -43,13 +43,7 @@ y1 <- data.table(id = c(1,2, 4),
 
 is_id(dt = x1, 
       by = "id")
-#> 
-#> ── Duplicates in terms of `id`
-#>   copies n percent
-#> 1      1 3     75%
-#> 2      2 1     25%
-#> 3  total 4    100%
-#> ─────────────────────────────────────────────────────── End of is_id() report ──
+#> ! Duplicates found by: `id`
 #> [1] FALSE
 
 # Checking duplicates in x1 with return_report = FALSE
@@ -57,13 +51,7 @@ is_id(dt = x1,
 is_id(dt = x1, 
       by = "id", 
       return_report = FALSE)
-#> 
-#> ── Duplicates in terms of `id`
-#>   copies n percent
-#> 1      1 3     75%
-#> 2      2 1     25%
-#> 3  total 4    100%
-#> ─────────────────────────────────────────────────────── End of is_id() report ──
+#> ! Duplicates found by: `id`
 #> [1] FALSE
 ```
 
@@ -79,30 +67,39 @@ function. For example,
 # Identify possible unique identifier excluding variable t
 possible_ids(dt      = x1, 
              exclude = "t")
-#> ✔ There are no duplicates in data frame
-#> → we found 2 possible ids
-#> $V1
+#> [[1]]
 #> [1] "x"
 #> 
-#> $V2
+#> [[2]]
 #> [1] "c1"
+#> 
+#> attr(,"checked_ids")
+#> [1] "id" "c"  "x"  "c1"
 
 # Identify possible unique identifier excluding character variables
 possible_ids(dt      = x1, 
              exclude = "_character")
-#> ✔ There are no duplicates in data frame
-#> → we found 1 possible id
-#> $V1
+#> [[1]]
 #> [1] "x"
+#> 
+#> [[2]]
+#> [1] "c1"
+#> 
+#> attr(,"checked_ids")
+#> [1] "t"  "id" "c"  "x"  "c1"
 
-# Identify possible unique identifiers, excluding character variables but considering variable z
+# Identify possible unique identifiers, excluding character variables but considering variable c1
 possible_ids(dt      = x1, 
-             exclude = "_character",
-             include = "z")
-#> ✔ There are no duplicates in data frame
-#> → we found 1 possible id
-#> $V1
+             exclude_classes = "character",
+             include = "c1")
+#> [[1]]
 #> [1] "x"
+#> 
+#> [[2]]
+#> [1] "c1"
+#> 
+#> attr(,"checked_ids")
+#> [1] "t"  "id" "x"  "c1"
 ```
 
 ## Verifying if data table is balanced
@@ -147,21 +144,23 @@ values within your data tables.
 
 freq_table(x     = x1, 
            byvar = "id")[]
-#>      id n percent
-#> 1     1 2     40%
-#> 2     2 1     20%
-#> 3     3 1     20%
-#> 4  <NA> 1     20%
-#> 5 total 5    100%
+#>        id     n percent
+#>    <char> <int>  <char>
+#> 1:      1     2     40%
+#> 2:      2     1     20%
+#> 3:      3     1     20%
+#> 4:   <NA>     1     20%
+#> 5:  total     5    100%
 
 # Removing NAs from the calculation
 
 freq_table(x     = x1, 
            byvar = "id", 
            na.rm = TRUE)[]
-#>      id n percent
-#> 1     1 2     50%
-#> 2     2 1     25%
-#> 3     3 1     25%
-#> 4 total 4    100%
+#>        id     n percent
+#>    <char> <int>  <char>
+#> 1:      1     2     50%
+#> 2:      2     1     25%
+#> 3:      3     1     25%
+#> 4:  total     4    100%
 ```

@@ -65,9 +65,9 @@ merge(
   logical. If `TRUE` (default), the rows of the merged `data.table` are
   sorted by setting the key to the `by / by.x` columns. If `FALSE`,
   unlike base R's `merge` for which row order is unspecified, the row
-  order in `x` is retained (including retaining the position of missings
-  when `all.x=TRUE`), followed by `y` rows that don't match `x` (when
-  `all.y=TRUE`) retaining the order those appear in `y`.
+  order in `x` is retained (including retaining the position of missing
+  entries when `all.x=TRUE`), followed by `y` rows that don't match `x`
+  (when `all.y=TRUE`) retaining the order those appear in `y`.
 
 - suffixes:
 

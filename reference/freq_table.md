@@ -5,7 +5,7 @@ tabulate one variable frequencies
 ## Usage
 
 ``` r
-freq_table(x, byvar, digits = 1, na.rm = FALSE)
+freq_table(x, byvar, digits = 1, na.rm = FALSE, freq_var_name = "n")
 ```
 
 ## Arguments
@@ -25,6 +25,10 @@ freq_table(x, byvar, digits = 1, na.rm = FALSE)
 - na.rm:
 
   logical: report NA values in frequencies. Default is FALSE.
+
+- freq_var_name:
+
+  character: name for frequency variable. Default is "n"
 
 ## Value
 

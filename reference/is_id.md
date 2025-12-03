@@ -6,7 +6,12 @@ the duplicates in `by` variable
 ## Usage
 
 ``` r
-is_id(dt, by, verbose = getOption("joyn.verbose"), return_report = FALSE)
+is_id(
+  dt,
+  by,
+  verbose = getOption("joyn.verbose", default = FALSE),
+  return_report = FALSE
+)
 ```
 
 ## Arguments
@@ -44,38 +49,23 @@ library(data.table)
 y <- data.table(id = c("c","b", "c", "a"),
                  y  = c(11L, 15L, 18L, 20L))
 is_id(y, by = "id")
-#> 
-#> ── Duplicates in terms of `id` 
-#>   copies n percent
-#> 1      1 2   66.7%
-#> 2      2 1   33.3%
-#> 3  total 3    100%
-#> ─────────────────────────────────────────────────────── End of is_id() report ──
+#> ! Duplicates found by: `id`
 #> [1] FALSE
 is_id(y, by = "id", return_report = TRUE)
+#> ! Duplicates found by: `id`
 #> 
 #> ── Duplicates in terms of `id` 
-#>   copies n percent
-#> 1      1 2   66.7%
-#> 2      2 1   33.3%
-#> 3  total 3    100%
+#>        id copies percent
+#>    <char>  <int>  <char>
+#> 1:      c      2     50%
+#> 2:  total      4    100%
 #> ─────────────────────────────────────────────────────── End of is_id() report ──
-#>        id copies
-#>    <char>  <int>
-#> 1:      c      2
-#> 2:      b      1
-#> 3:      a      1
 
 # example with data frame uniquely identified by `by` var
 
 y1 <- data.table(id = c("1","3", "2", "9"),
                  y  = c(11L, 15L, 18L, 20L))
 is_id(y1, by = "id")
-#> 
-#> ── Duplicates in terms of `id` 
-#>   copies n percent
-#> 1      1 4    100%
-#> 2  total 4    100%
-#> ─────────────────────────────────────────────────────── End of is_id() report ──
+#> ✔ No duplicates found by `id`
 #> [1] TRUE
 ```
