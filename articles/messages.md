@@ -281,8 +281,8 @@ joyn(x          = x1,
 #> 6:     4    NA    NA    16      y
 
 joyn_msg("timing")
-#> ● Timing:The full joyn is executed in 0.000278 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.025177
+#> ● Timing:The full joyn is executed in 0.000275 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.021469
 #> seconds.
 
 
@@ -310,8 +310,8 @@ left_join(x            = x1,
 #> 5:    NA    NA    15    NA      x
 
 joyn_msg("timing")
-#> ● Timing:The full joyn is executed in 0.000921 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.030934
+#> ● Timing:The full joyn is executed in 0.000559 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.022755
 #> seconds.
 ```
 
@@ -583,8 +583,8 @@ joyn(x = x1,
 joyn_msg(msg_type = "all")
 #> ℹ Note: Joyn's report available in variable .joyn
 #> ℹ Note: Removing key variables id from id and y
-#> ● Timing:The full joyn is executed in 0.000276 seconds.
-#> ● Timing: The entire joyn function, including checks, is executed in 0.021114
+#> ● Timing:The full joyn is executed in 0.000301 seconds.
+#> ● Timing: The entire joyn function, including checks, is executed in 0.022119
 #> seconds.
 
 # Print info messages only 

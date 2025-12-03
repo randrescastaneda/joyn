@@ -12,7 +12,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/randrescastaneda/joyn/blob/DEV/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/randrescastaneda/joyn/blob/v0.3.0/DESCRIPTION)
 
 Castaneda R, Prinsloo Z, Tatulli R (2025). *joyn: Tool for Diagnosis of
 Tables Joins and Complementary Join Features*. R package version 0.3.0,
