@@ -15,7 +15,11 @@ df2 <- data$df2
 # ----------------- TESTS -----------------
 
 test_that("check_xy works as expected", {
-  empty_df <- data.frame()
+  # Zero-column dataframe (invalid - should error)
+  zero_col_df <- data.frame()
+
+  # Zero-row dataframe with columns (valid - should warn)
+  zero_row_df <- x1[0, ]
 
   # Errors - missing arguments
   expect_error(
@@ -25,24 +29,43 @@ test_that("check_xy works as expected", {
     check_xy(y = y1)
   )
 
+  # Zero-column inputs should error
+  clear_joynenv()
+  expect_error(
+    check_xy(x = zero_col_df, y = y1),
+    "wrong input specification"
+  )
+
+  clear_joynenv()
+  expect_error(
+    check_xy(x = x1, y = zero_col_df),
+    "wrong input specification"
+  )
+
+  clear_joynenv()
+  expect_error(
+    check_xy(x = zero_col_df, y = zero_col_df),
+    "wrong input specification"
+  )
+
   # Zero-row inputs now generate warnings, not errors
   clear_joynenv()
   expect_no_error(
-    check_xy(x = empty_df, y = y1)
+    check_xy(x = zero_row_df, y = y1)
   )
   expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
   expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   clear_joynenv()
   expect_no_error(
-    check_xy(x = x1, y = empty_df)
+    check_xy(x = x1, y = zero_row_df)
   )
   expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
   expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   clear_joynenv()
   expect_no_error(
-    check_xy(x = empty_df, y = empty_df)
+    check_xy(x = zero_row_df, y = zero_row_df)
   )
   expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
   expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
@@ -58,28 +81,6 @@ test_that("check_xy works as expected", {
   expect_error(
     check_xy(x = x1_duplicates, y = y1)
   )
-
-  # 0 rows tests - now warnings instead of errors
-  x0_rows <- x1[0, ]
-  y0_rows <- y1[0, ]
-
-  clear_joynenv()
-  expect_no_error(
-    check_xy(x = x0_rows, y = y1)
-  )
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
-
-  clear_joynenv()
-  expect_no_error(
-    check_xy(x = x1, y = y0_rows)
-  )
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
-
-  clear_joynenv()
-  expect_no_error(
-    check_xy(x = x0_rows, y = y0_rows)
-  )
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
 })
 
 test_that("check_duplicate_names works as expected", {

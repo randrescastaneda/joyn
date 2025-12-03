@@ -6,7 +6,7 @@
 [![CRAN
 checks](https://badges.cranchecks.info/summary/joyn.svg)](https://cran.r-project.org/web/checks/check_results_joyn.html)
 [![](https://www.r-pkg.org/badges/version/joyn?color=orange)](https://cran.r-project.org/package=joyn)
-[![](https://img.shields.io/badge/devel%20version-0.2.3-blue.svg)](https://github.com/randrescastaneda/joyn)
+[![](https://img.shields.io/badge/devel%20version-0.2.4-blue.svg)](https://github.com/randrescastaneda/joyn)
 [![](https://codecov.io/gh/randrescastaneda/joyn/branch/master/graph/badge.svg)](https://app.codecov.io/gh/randrescastaneda/joyn)
 [![](https://img.shields.io/badge/lifecycle-maturing-green.svg)](https://lifecycle.r-lib.org/articles/stages.html#maturing)
 
@@ -168,7 +168,6 @@ library(joyn)
 #> 
 #>     merge
 library(data.table)
-#> Warning: package 'data.table' was built under R version 4.4.2
 
 x1 = data.table(id = c(1L, 1L, 2L, 3L, NA_integer_),
                 t  = c(1L, 2L, 1L, 2L, NA_integer_),
