@@ -28,11 +28,14 @@ joyn_msg <- function(msg_type = getOption("joyn.msg_type"),
   type_to_use <- match.arg(arg = msg_type,
                            choices = c("all", "basic", type_choices()),
                            several.ok = TRUE)
+
+  # Flush list accumulator to data.frame before any read (P1.2 fix) ------
+  flush_joyn_msgs()
+
   joyn_msgs_exist()
 
   # get msgs ---------
-  dt <- rlang::env_get(.joynenv, "joyn_msgs") |>
-    roworder(type)
+  dt <- rlang::env_get(.joynenv, "joyn_msgs")
 
   dt <-
     if (!any(c("all", "basic") %in% type_to_use)) {
@@ -48,11 +51,11 @@ joyn_msg <- function(msg_type = getOption("joyn.msg_type"),
 
   # display results --------
   # cat(dt[["msg"]], "\n", sep = "\n")
-  l <- lapply(dt[["msg"]], \(.) {
+  lapply(dt[["msg"]], \(.) {
     cli::cli_text(.)
   })
 
-  if ("err" %in% type_to_use & is.character(msg)) {
+  if ("err" %in% type_to_use && is.character(msg)) {
     cli::cli_abort(msg)
   }
 
@@ -89,32 +92,29 @@ store_msg <- function(type, ...) {
   type <- match.arg(type, choices = type_choices())
   check_style(...)
 
-  # style type in dt form -----------
+  # style type into a single string -----------
   style_args <- list(...) |>
     lapply(\(x){
       cli::format_inline(x, .envir = parent.frame(3))
     })
 
-  type_dt_args <- append(list(type = type), style_args)
-  dt_msg <-  do.call(msg_type_dt, type_dt_args)
+  msg_str <- do.call(style, style_args)
 
+  # accumulate into list (O(n) per call due to R copy-on-modify; acceptable
+  # for the small number of messages expected per join) ------
+  new_entry <- list(type = type, msg = msg_str)
 
-  # create new messages   ---------
-  if (rlang::env_has(.joynenv, "joyn_msgs")) {
-    dt_old_msgs <- rlang::env_get(.joynenv, "joyn_msgs")
-    dt_new_msgs <- rowbind(dt_old_msgs, dt_msg)
+  if (rlang::env_has(.joynenv, "joyn_msgs_list")) {
+    lst <- rlang::env_get(.joynenv, "joyn_msgs_list")
+    lst[[length(lst) + 1L]] <- new_entry
   } else {
-    dt_new_msgs <- dt_msg
+    lst <- list(new_entry)
   }
 
-  dt_new_msgs <- funique(dt_new_msgs)
-
-  # store in env ------
-  rlang::env_poke(.joynenv, "joyn_msgs", dt_new_msgs)
-
+  rlang::env_poke(.joynenv, "joyn_msgs_list", lst)
 
   # Return   ---------
-  return(invisible(dt_new_msgs))
+  return(invisible(TRUE))
 
 }
 
@@ -126,7 +126,7 @@ store_msg <- function(type, ...) {
 #' @param timing A character string representing a timing message to be stored. Default value is NULL
 #' @param info A character string representing an info message to be stored. Default value is NULL
 #'
-#' @section Hot to pass the message string:
+#' @section How to pass the message string:
 #' The function allows for the customization of the message string using cli classes to emphasize specific components of the message
 #' Here's how to format the message string:
 #' *For variables:            .strongVar
@@ -348,6 +348,50 @@ style <- function(..., sep = "") {
   paste(unlist(x), collapse = sep)
 }
 
+#' Flush list accumulator to data.frame
+#'
+#' Materializes the `joyn_msgs_list` list accumulator into `joyn_msgs` data.frame.
+#' Called at the top of `joyn_msg()` so all read paths (including mid-join error
+#' sinks) always see a fresh data.frame.
+#'
+#' @return `invisible(TRUE)` if messages were flushed; `invisible(FALSE)` if the
+#'   accumulator was absent or empty.
+#' @family messages
+#' @keywords internal
+#' @examples
+#' \dontrun{
+#' joyn:::store_msg("info", ok = "a message")
+#' joyn:::flush_joyn_msgs()  # materializes list to data.frame
+#' }
+flush_joyn_msgs <- function() {
+  if (!rlang::env_has(.joynenv, "joyn_msgs_list")) {
+    return(invisible(FALSE))
+  }
+
+  lst <- rlang::env_get(.joynenv, "joyn_msgs_list")
+
+  if (length(lst) == 0L) {
+    return(invisible(FALSE))
+  }
+
+  # Convert list of {type, msg} entries to data.frame using two O(n) vapply
+  # passes — avoids O(n²) repeated rbind from do.call(rbind, lapply(...))
+  dt_new <- data.frame(
+    type = vapply(lst, `[[`, character(1L), "type"),
+    msg  = vapply(lst, `[[`, character(1L), "msg"),
+    stringsAsFactors = FALSE
+  )
+  dt_new <- funique(dt_new)
+  # Sort by type once at materialisation so subsequent reads are already ordered
+  dt_new <- dt_new[order(dt_new$type), , drop = FALSE]
+  # joyn_msgs_list is intentionally preserved; only clear_joynenv() removes it
+  # so that repeated flush calls remain idempotent.
+
+  rlang::env_poke(.joynenv, "joyn_msgs", dt_new)
+  invisible(TRUE)
+}
+
+
 #' Presence of joyn msgs in the environment
 #'
 #' Checks the presence of joyn messages stored in joyn environment
@@ -363,7 +407,11 @@ style <- function(..., sep = "") {
 #' print(joyn:::joyn_msgs_exist())
 #' }
 joyn_msgs_exist <- \() {
-  if (!rlang::env_has(.joynenv, "joyn_msgs")) {
+  has_list <- rlang::env_has(.joynenv, "joyn_msgs_list") &&
+    length(rlang::env_get(.joynenv, "joyn_msgs_list")) > 0L
+  has_dt   <- rlang::env_has(.joynenv, "joyn_msgs")
+
+  if (!has_list && !has_dt) {
     cli::cli_abort(c("no messages stored in .joynenv",
                      "i" = "make sure that joyn has been executed at least once"))
   }
@@ -372,6 +420,11 @@ joyn_msgs_exist <- \() {
 
 
 #' Clearing joyn environment
+#'
+#' Clears `joyn_msgs_list`, `joyn_msgs`, and `joyn_source` from `.joynenv`.
+#' No-op when `.joynenv$joyn_active` is set (i.e., a join is already running),
+#' preventing nested calls (e.g., `left_join()` -> `joyn()`) from wiping the
+#' message accumulator mid-flight.
 #' @keywords internal
 #' @family messages
 #' @examples
@@ -386,21 +439,25 @@ joyn_msgs_exist <- \() {
 #' print(joyn:::joyn_msgs_exist())
 #' }
 clear_joynenv <- \(){
-  # get the source function
-  .joyn_source  <- sys.call(-1)[[1]]
-
-  # get what function call clear_joynenv before
-  first_source <- rlang::env_get(.joynenv, "joyn_source", default = NULL)
-
-  # if the first function was joyn or it is null, then clear everything
-  if (first_source == "joyn" || is.null(first_source) || is.symbol(first_source)) {
-    rlang::env_unbind(.joynenv, "joyn_msgs")
-    rlang::env_unbind(.joynenv, "joyn_source")
+  # Nesting protection: each entry function sets joyn_active = TRUE AFTER
+  # calling clear_joynenv(), so nested calls (e.g., joyn() from left_join())
+  # see the flag and skip. Calling clear_joynenv() directly (e.g., in tests)
+  # has no flag set, so it always clears. The flag is never set here.
+  if (rlang::env_has(.joynenv, "joyn_active")) {
+    return(invisible(FALSE))  # nested call — skip
   }
 
-  # replace the source with the current call
-  rlang::env_poke(.joynenv, "joyn_source", .joyn_source)
-  invisible(.joyn_source)
+  # Clear messages from previous run
+  if (rlang::env_has(.joynenv, "joyn_msgs_list")) {
+    rlang::env_unbind(.joynenv, "joyn_msgs_list")
+  }
+  if (rlang::env_has(.joynenv, "joyn_msgs")) {
+    rlang::env_unbind(.joynenv, "joyn_msgs")
+  }
+  if (rlang::env_has(.joynenv, "joyn_source")) {
+    rlang::env_unbind(.joynenv, "joyn_source")
+  }
+  invisible(TRUE)
 }
 
 
