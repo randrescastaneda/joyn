@@ -2,6 +2,10 @@
 .Rhistory
 .RData
 .Ruserdata
+.Renviron
+*.Rcheck/
+.DS_Store
+Thumbs.db
 
 inst/doc
 doc
