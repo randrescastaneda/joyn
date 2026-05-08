@@ -1,3 +1,6 @@
+# WIP — m:m join expansion logic. Not yet implemented.
+# All code below is commented out pending a design decision on m:m handling.
+# Do not uncomment without a corresponding test suite.
 # this needs work
 
 

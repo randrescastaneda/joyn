@@ -43,7 +43,7 @@ left_join <- function(
     na_matches       = c("na", "never"),
     multiple         = "all",
     unmatched        = "drop",
-    relationship     = NULL,
+    relationship     = "one-to-one",
     y_vars_to_keep   = TRUE,
     update_values    = FALSE,
     update_NAs       = update_values,
@@ -57,6 +57,11 @@ left_join <- function(
 ) {
 
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   # Argument checks ---------------------------------
   na_matches <- match.arg(na_matches,
@@ -150,7 +155,7 @@ left_join <- function(
                          jn_type = "left")
   }
   # Should report be kept---------------------------------
-  if (dropreport == T) {
+  if (isTRUE(dropreport)) {
     get_vars(lj, reportvar) <- NULL
   }
 
@@ -217,6 +222,11 @@ right_join <- function(
 ) {
 
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   # Argument checks ---------------------------------
   na_matches <- match.arg(na_matches,
@@ -312,7 +322,7 @@ right_join <- function(
   }
 
   # Should reportvar be kept
-  if (dropreport == T) {
+  if (isTRUE(dropreport)) {
     get_vars(rj, reportvar) <- NULL
   }
 
@@ -380,6 +390,11 @@ full_join <- function(
 ) {
 
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   # Argument checks ---------------------------------
   na_matches <- match.arg(na_matches,
@@ -472,7 +487,7 @@ full_join <- function(
   }
 
   # Should reportvar be kept
-  if (dropreport == T) {
+  if (isTRUE(dropreport)) {
     get_vars(fj, reportvar) <- NULL
   }
 
@@ -539,6 +554,11 @@ inner_join <- function(
 ) {
 
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   # Argument checks ---------------------------------
   na_matches <- match.arg(na_matches,
@@ -632,8 +652,8 @@ inner_join <- function(
                          jn_type = "inner")
   }
 
-  ### if dropreport = T
-  if (dropreport == T) {
+  ### if dropreport
+  if (isTRUE(dropreport)) {
     get_vars(ij, reportvar) <- NULL
   }
 
@@ -700,6 +720,11 @@ anti_join <- function(
 ) {
 
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   # Argument checks ---------------------------------
   na_matches <- match.arg(na_matches,
@@ -782,7 +807,7 @@ anti_join <- function(
   }
 
   # # Unmatched Keys ---------------------------------------
-  if (dropreport == T) {
+  if (isTRUE(dropreport)) {
     get_vars(aj, reportvar) <- NULL
   }
 
@@ -863,7 +888,7 @@ arguments_checks <- function(x, y, by, copy, keep, suffix, na_matches, multiple,
     "many-to-many" = "m:m"
   )
   if (
-    relationship %in% c("1:m", "m:m") &
+    relationship %in% c("1:m", "m:m") &&
     !multiple == "all"
   ) {
     cli::cli_abort(

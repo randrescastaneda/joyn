@@ -105,12 +105,19 @@ joyn_workhorse <- function(
 
     ) # End of trycatch
 
-    # change values of .joyn1 to numeric to make it consistent with joyn
-    mapping <- c('1' = 3, '2' = 1, '3' = 2)
-    dt_result <- dt_result |>
-      ftransform(.joyn1 = as.numeric(.joyn1)) |>
-      ftransform(.joyn1 = mapping[as.character(.joyn1)]) |>
-      frename(.joyn1 = reportvar, .nse = FALSE)
+    # Remap .joyn1 values in one pass.
+    # collapse::join returns: 1=matched (both), 2=x-only, 3=y-only
+    # joyn convention (by factor label order): 1=x-only, 2=y-only, 3=matched
+    # So we remap: collapse 1 → joyn 3 (matched "x & y"),
+    # collapse 2 → joyn 1 (x-only), collapse 3 → joyn 2 (y-only).
+    # Verified against factor level ordering.
+    # Unnamed double vector: position i maps collapse code i → joyn code.
+    # Must remain double (not integer) to preserve class=="numeric" contract
+    # when reporttype="numeric". Avoids as.character() allocation.
+    mapping <- c(3, 1, 2)
+    dt_result <- ftransform(dt_result,
+                            .joyn1 = mapping[as.integer(.joyn1)])
+    data.table::setnames(dt_result, ".joyn1", reportvar)
 
 
   # Calculate the time taken

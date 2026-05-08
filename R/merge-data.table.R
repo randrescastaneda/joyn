@@ -55,8 +55,13 @@ merge <- function(x,
                   keep_common_vars = TRUE,
                   ...) {
 
-  # clear joun env
+  # clear joyn env
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   # Check arguments ------------
   # this comes directly from data.table::merge.data.table()

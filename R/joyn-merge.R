@@ -89,19 +89,21 @@
 #'   `by`  uniquely identify single observations in both table.
 #'
 #'   **1:m and m:1**: specify _one-to-many_ and _many-to-one_ match merges,
-#'   respectively. This means that in of the tables the observations are
-#'   uniquely identify by the variables in `by`, while in the other table many
+#'   respectively. This means that in one of the tables the observations are
+#'   uniquely identified by the variables in `by`, while in the other table many
 #'   (two or more)  of the observations are identify by the variables in `by`
 #'
-#'   **m:m** refers to _many-to-many merge_. variables in `by` does not uniquely
-#'   identify the observations in either table. Matching is performed by
-#'   combining observations with equal values in `by`; within matching values,
-#'   the first observation in the master (i.e. left or x) table is matched with
-#'   the first matching observation in the using (i.e. right or y) table; the
-#'   second, with the second; and so on. If there is an unequal number of
-#'   observations within a group, then the last observation of the shorter group
-#'   is used repeatedly to match with subsequent observations of the longer
-#'   group.
+#'   **m:m** refers to _many-to-many merge_. Variables in `by` do not uniquely
+#'   identify observations in either table. The current implementation performs
+#'   a **Cartesian product** within each group of matching key values: every row
+#'   in `x` with a given key is matched with every row in `y` sharing the same
+#'   key (via `collapse::join()`). For example, if `x` has 2 rows and `y` has 2
+#'   rows for `id == 1`, the result contains 4 rows for that key.
+#'
+#'   *Note*: A future release plans to support sequential (Stata-style) m:m
+#'   matching, where within-group rows are paired positionally and the last row
+#'   of the shorter group is recycled. Until then, `match_type = "m:m"` always
+#'   produces a Cartesian-product result.
 #'
 #' @section reporttype:
 #'
@@ -176,6 +178,11 @@ joyn <- function(x,
                  msg_type         = getOption("joyn.msg_type")) {
 
   clear_joynenv()
+  rlang::env_poke(.joynenv, "joyn_active", TRUE)
+  on.exit(
+    if (rlang::env_has(.joynenv, "joyn_active")) rlang::env_unbind(.joynenv, "joyn_active"),
+    add = TRUE, after = TRUE
+  )
 
   ## correct inputs --------
   #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -424,7 +431,7 @@ joyn <- function(x,
     var_use <- common_vars
   }
 
-  if (isTRUE(update_NAs || update_values) & length(var_use) > 0 ) {
+  if (isTRUE(update_NAs || update_values) && length(var_use) > 0 ) {
     # filter_var <- jn |>
     #   fselect(get(reportvar))
     #print(filter_var)
@@ -541,6 +548,11 @@ joyn <- function(x,
 
   store_joyn_msg(timing = paste("  The entire joyn function, including checks,
     is executed in  ", round(time_taken_joyn, 6)))
+
+  # Flush list accumulator to data.frame once, unconditionally.
+  # This ensures joyn_msgs is always available after joyn() returns,
+  # regardless of the verbose setting.
+  flush_joyn_msgs()
 
   # return messages
   joyn_report(verbose = verbose)
