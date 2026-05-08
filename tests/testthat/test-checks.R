@@ -53,21 +53,24 @@ test_that("check_xy works as expected", {
   expect_no_error(
     check_xy(x = zero_row_df, y = y1)
   )
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
+  flush_joyn_msgs()
   expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   clear_joynenv()
   expect_no_error(
     check_xy(x = x1, y = zero_row_df)
   )
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
+  flush_joyn_msgs()
   expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   clear_joynenv()
   expect_no_error(
     check_xy(x = zero_row_df, y = zero_row_df)
   )
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
+  flush_joyn_msgs()
   expect_equal(rlang::env_get(.joynenv, "joyn_msgs")$type, "warn")
 
   # No msg when no duplicate names
@@ -99,7 +102,7 @@ test_that("check_duplicate_names works as expected", {
     "x"
   )
   expect_true(
-    rlang::env_has(.joynenv, "joyn_msgs")
+    rlang::env_has(.joynenv, "joyn_msgs_list")
   )
 })
 
@@ -204,7 +207,7 @@ test_that("check_match_type works as expected", {
     match_type = "m:m"
   )
   expect_contains(
-    rlang::env_get(.joynenv, "joyn_msgs")$type,
+    { flush_joyn_msgs(); rlang::env_get(.joynenv, "joyn_msgs")$type },
     "warn"
   )
 
@@ -320,7 +323,8 @@ test_that("check_var_class works with inheritance", {
   expect_identical(res, "c")
 
   # Environment should have stored a message
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
+  flush_joyn_msgs()
   msg <- rlang::env_get(.joynenv, "joyn_msgs")
 
   # Warning should mention the variable and class
@@ -400,25 +404,25 @@ test_that("check_var_class handles unsupported classes", {
   # List column
   clear_joynenv()
   res <- check_var_class(dt, "list_col")
-  expect_identical(res, invisible("list_col"))
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_equal(res, "list_col")
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
 
   # Complex column
   clear_joynenv()
   res <- check_var_class(dt, "complex_col")
-  expect_identical(res, invisible("complex_col"))
+  expect_equal(res, "complex_col")
 
   # Raw column
   clear_joynenv()
   res <- check_var_class(dt, "raw_col")
-  expect_identical(res, invisible("raw_col"))
+  expect_equal(res, "raw_col")
 
   # Multiple unsupported
   clear_joynenv()
   res <- check_var_class(dt, c("list_col", "complex_col", "raw_col"))
   expect_identical(
     sort(res),
-    sort(invisible(c("list_col", "complex_col", "raw_col")))
+    sort(c("list_col", "complex_col", "raw_col"))
   )
 })
 
@@ -445,6 +449,7 @@ test_that("check_var_class stores correct warning messages", {
   clear_joynenv()
   check_var_class(dt, "invalid")
 
+  flush_joyn_msgs()
   msgs <- rlang::env_get(.joynenv, "joyn_msgs")
 
   # Check message type is warning
@@ -469,10 +474,11 @@ test_that("check_var_class works with mixed valid and invalid variables", {
   res <- check_var_class(dt, c("good1", "bad1", "good2", "bad2", "good3"))
 
   # Should return only the bad variables
-  expect_identical(sort(res), sort(invisible(c("bad1", "bad2"))))
+  expect_identical(sort(res), sort(c("bad1", "bad2")))
 
   # Should have stored warnings
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
+  flush_joyn_msgs()
   msgs <- rlang::env_get(.joynenv, "joyn_msgs")
   expect_equal(length(msgs$msg), 2)
 })

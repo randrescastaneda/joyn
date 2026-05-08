@@ -16,12 +16,7 @@ df2 <- data.frame(
 
 df3 <- df2[, c("id1", "id2")]
 
-collapse::join(df1,df3, on = c("id1", "id2"), how = "inner")
-
 x <- c("id1", "id2")
-
-df1 |>
-  fselect(x)
 
 # Test that joyn_msg works as expected ####
 test_that("joyn_msg works as expected", {
@@ -42,7 +37,7 @@ test_that("joyn_msg works as expected", {
     expect_equal("data.frame")
 
   class(out_warn) |>
-    expect_equal(class(out_warn))
+    expect_equal("data.frame")
 
   #print(out_warn)$type |>
   #  expect_equal("warn")
@@ -77,26 +72,34 @@ test_that("storing messages works as expected", {
 
   # output --------
   clear_joynenv()
-  expect_false(rlang::env_has(.joynenv, "joyn_msgs"))
-  dt <- store_msg("info",
-                  ok = cli::symbol$tick, "  ",
-                  pale = "first try")
+  expect_false(rlang::env_has(.joynenv, "joyn_msgs_list"))
+  store_msg("info",
+            ok = cli::symbol$tick, "  ",
+            pale = "first try")
 
-  expect_true(rlang::env_has(.joynenv, "joyn_msgs"))
+  # joyn_msgs_list is populated after store_msg (before flush)
+  expect_true(rlang::env_has(.joynenv, "joyn_msgs_list"))
+
+  # flush and inspect
+  flush_joyn_msgs()
+  dt <- rlang::env_get(.joynenv, "joyn_msgs")
   expect_equal(nrow(dt), 1)
   expect_equal(names(dt), c("type", "msg"))
 
-  dt <- store_msg("info",
-                  ok = cli::symbol$tick, "  ",
-                  pale = "second try")
+  store_msg("info",
+            ok = cli::symbol$tick, "  ",
+            pale = "second try")
+  flush_joyn_msgs()
+  dt <- rlang::env_get(.joynenv, "joyn_msgs")
   expect_equal(nrow(dt), 2)
 
   # if env is emptied
   clear_joynenv()
-  dt <- store_msg("info",
-                  ok = cli::symbol$tick, "  ",
-                  pale = "first try")
-
+  store_msg("info",
+            ok = cli::symbol$tick, "  ",
+            pale = "first try")
+  flush_joyn_msgs()
+  dt <- rlang::env_get(.joynenv, "joyn_msgs")
   expect_equal(nrow(dt), 1)
 
 
@@ -104,7 +107,9 @@ test_that("storing messages works as expected", {
   clear_joynenv()
   store_msg("info", "simple message")
   store_msg("info", "simple message")
-  dt <- store_msg("info", "simple message")
+  store_msg("info", "simple message")
+  flush_joyn_msgs()
+  dt <- rlang::env_get(.joynenv, "joyn_msgs")
 
   nrow(dt) |>
     expect_equal(1)

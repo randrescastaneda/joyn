@@ -804,7 +804,7 @@ test_that("check_dt_by aborts as expected", {
   check_dt_by(x4, y4, by.x = "id1", by.y = "id", by = "id2")
 
   expect_true(rlang::env_has(.joynenv,
-                             "joyn_msgs"))
+                             "joyn_msgs_list"))
 
 
 })
@@ -829,6 +829,13 @@ test_that("check_dt_by output", {
               y4,
               by = "t") |>
     expect_error()
+})
+
+test_that("joyn_active flag is released after merge() exits", {
+  x <- data.table(id = 1:2, val_x = c(10, 20))
+  y <- data.table(id = 1:2, val_y = c(100, 200))
+  joyn::merge(x, y, by = "id", match_type = "1:1")
+  expect_false(rlang::env_has(.joynenv, "joyn_active"))
 })
 
 
