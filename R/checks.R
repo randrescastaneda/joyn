@@ -237,7 +237,7 @@ check_by_vars <- function(by, x, y) {
   return(fixby)
 }
 
-##' Check join variable class
+#' Check join variable class
 #'
 #' Checks if a variable in a data.table is of a supported class for joining.
 #' Stores a warning via `store_joyn_msg()` if unsupported.
@@ -261,17 +261,6 @@ check_var_class <- function(dt, var) {
     ))
   }
 
-  allowed_classes <- c(
-    "character",
-    "integer",
-    "numeric",
-    "factor",
-    "logical",
-    "Date",
-    "POSIXct",
-    "fs_path"
-  )
-
   bad_vars <- vapply(
     var,
     function(v) {
@@ -280,24 +269,21 @@ check_var_class <- function(dt, var) {
       # Defensive: if column is NULL for any reason, treat as bad
       if (is.null(value)) {
         store_joyn_msg(
-          warn = glue::glue(
-            "Join variable `{v}` is NULL or missing a type; this may cause issues. ",
-            "Consider coercing it to a standard type (e.g., character)."
+          warn = sprintf(
+            "Join variable `%s` is NULL or missing a type; this may cause issues. Consider coercing it to a standard type (e.g., character).",
+            v
           )
         )
         return(v)
       }
 
-      ok <- any(vapply(
-        allowed_classes,
-        function(cls) inherits(value, cls),
-        logical(1)
-      ))
+      ok <- any(class(value) %in% .joyn_allowed_classes)
       if (!ok) {
         store_joyn_msg(
-          warn = glue::glue(
-            "Join variable `{v}` has class {paste(class(value), collapse = '/')} ",
-            "which may cause issues. Consider coercing it to a standard type (e.g., character)."
+          warn = sprintf(
+            "Join variable `%s` has class %s which may cause issues. Consider coercing it to a standard type (e.g., character).",
+            v,
+            paste(class(value), collapse = "/")
           )
         )
         return(v)
@@ -510,7 +496,7 @@ is_match_type_error <- function(x, name, by, verbose, match_type_error) {
 check_y_vars_to_keep <- function(y_vars_to_keep, y, by) {
   if (length(y_vars_to_keep) > 1 && !is.character(y_vars_to_keep)) {
     cli::cli_abort(
-      "argumet {.arg {y_vars_to_keep}} must be of length 1
+      "argument {.arg {y_vars_to_keep}} must be of length 1
                    when it is not class character"
     )
   }
@@ -658,7 +644,7 @@ is_valid_m_key <- function(dt, by) {
 check_suffixes <- function(suffixes) {
   if (length(suffixes) != 2) {
     cli::cli_abort(
-      "argumet {.arg suffixes} must be a character vector of length 2"
+      "argument {.arg suffixes} must be a character vector of length 2"
     )
   }
 }
