@@ -24,7 +24,9 @@ URL: https://github.com/randrescastaneda/joyn, https://randrescastaneda.github.i
 BugReports: https://github.com/randrescastaneda/joyn/issues
 Suggests: 
     badger,
+    bench,
     covr,
+    devtools,
     knitr,
     rmarkdown,
     testthat (>= 3.0.0),
@@ -39,8 +41,7 @@ Imports:
     cli,
     utils,
     collapse (>= 2.0.15),
-    lifecycle,
-    glue
+    lifecycle
 Depends: 
     R (>= 4.2.0)
 RoxygenNote: 7.3.2
