@@ -5,13 +5,13 @@
       "id": "we-are-working-on-improving",
       "title": "We are working on improving the efficiency and accuracy of the whole package.",
       "objective": "We are working on improving the efficiency and accuracy of the whole package. We need to make sure that all the edge cases are covered, and we also need to make sure that the package is as fast as possible. In addition, we could improve a little bit more the documentation if needed, and add more unit tests.",
-      "status": "in-progress",
+      "status": "done",
       "features": [
         {
           "id": "initial-focus",
           "title": "We are working on improving the efficiency and accuracy of the whole package.",
-          "status": "in-progress",
-          "plan": null
+          "status": "done",
+          "plan": ".cg-docs/plans/2026-05-08-performance-testing-audit.md"
         }
       ]
     }
