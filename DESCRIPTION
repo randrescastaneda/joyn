@@ -33,7 +33,8 @@ Suggests:
     withr,
     dplyr,
     tibble,
-    fs
+    fs,
+    microbenchmark
 Config/testthat/edition: 3
 Imports: 
     rlang,
