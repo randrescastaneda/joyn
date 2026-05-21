@@ -205,11 +205,11 @@ store_joyn_msg <- function(err       = NULL,
 
   else if (!is.null(timing)) {
 
-    # detect number
+    # detect number — extract character vector (not a list) from regmatches()
     num_pattern <- "[0-9]+\\.?[0-9]*"
 
     timing_num <- regmatches(timing,
-                             gregexpr(num_pattern, timing))
+                             gregexpr(num_pattern, timing))[[1L]]
 
     timing <- cli::format_inline(timing, .envir = parent.frame(1))
 

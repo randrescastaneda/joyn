@@ -240,7 +240,6 @@ joyn <- function(x,
                                  x  = x,
                                  y  = y,
                                  order = FALSE)
-  byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
   ynames   <- copy(names(y))

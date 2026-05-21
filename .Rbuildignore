@@ -21,3 +21,5 @@ cran-comments.md
 ^inst/benchmarks$
 ^roadmap\.json$
 ^compound-gpid\.md$
+^compound-gpid\.context\.md$
+^compound-gpid\.local\.md$

@@ -405,7 +405,7 @@ check_match_type <- function(
     isFALSE(x_m) & isFALSE(y_m) , "warn_both"
   )
 
-  if (!m_m == "none") {
+  if (m_m != "none") {
     switch(
       m_m,
       "warn_y" = {
@@ -633,11 +633,7 @@ is_valid_m_key <- function(dt, by) {
     get_vars(by) |>
     any_duplicated()
 
-  if (duplicates) {
-    TRUE
-  } else {
-    FALSE
-  }
+  duplicates
 }
 
 

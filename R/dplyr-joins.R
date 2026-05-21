@@ -97,7 +97,6 @@ left_join <- function(
   correct_names <- correct_names(by = by,
                                  x  = x,
                                  y  = y)
-  byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
@@ -263,7 +262,6 @@ right_join <- function(
   correct_names <- correct_names(by = by,
                                  x  = x,
                                  y  = y)
-  byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
@@ -430,7 +428,6 @@ full_join <- function(
   correct_names <- correct_names(by = by,
                                  x  = x,
                                  y  = y)
-  byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
@@ -594,7 +591,6 @@ inner_join <- function(
   correct_names <- correct_names(by = by,
                                  x  = x,
                                  y  = y)
-  byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
@@ -757,7 +753,6 @@ anti_join <- function(
   correct_names <- correct_names(by = by,
                                  x  = x,
                                  y  = y)
-  byexp    <- correct_names$byexp
   xbynames <- correct_names$xbynames
   ybynames <- correct_names$ybynames
 
@@ -946,7 +941,8 @@ set_col_names <- function(x, y, by, suffix, jn_type) {
       by_x_names <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\1", byexp))
     }
 
-    else if (jn_type == "left" | jn_type == "full" | jn_type == "inner") {
+    else if (jn_type == "left" | jn_type == "full" |
+             jn_type == "inner" | jn_type == "anti") {
       by_y_names <- trimws(gsub("([^=]+)(\\s*==?\\s*)([^=]+)", "\\3", byexp))
     }
 
