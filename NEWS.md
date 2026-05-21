@@ -1,5 +1,3 @@
-# joyn (development version)
-
 # joyn 0.3.0
 
 ## Breaking Changes
@@ -16,7 +14,6 @@
 - **Zero-row input handling:** `check_xy()` now detects and reports when input tables have zero rows (previously would silently proceed).
 - **Enhanced `by` expression support:** Improved handling of `by` expressions (e.g., `"x == y"`). Temporary keys are now created only when necessary, and original column names are preserved when possible, reducing unnecessary data.table modifications.
 - **CI/CD updates:** GitHub Actions workflow upgraded from `upload-artifact@v3` to `v4` for better compatibility.
-- **Dependencies:** Added `glue` package to Imports for improved string interpolation in messages.
 
 ## Bug Fixes
 - **Test suite improvements:** Rewrote and expanded test coverage in `test-checks.R` to use helper data and explicit expectations. Added error tests for unsupported `by` variable types and formats.

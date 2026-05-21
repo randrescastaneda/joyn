@@ -1,11 +1,11 @@
 Package: joyn
 Type: Package
 Title: Tool for Diagnosis of Tables Joins and Complementary Join Features
-Version: 0.3.0.9000
+Version: 0.3.0
 Authors@R: c(person(given = "R.Andres", 
                     family = "Castaneda", 
                     email = "acastanedaa@worldbank.org",
-                    role = c("aut", "cre")),
+                    role = c("aut", "cre", "cph")),
              person(given = "Zander",
                     family = "Prinsloo",
                     role = "aut",
