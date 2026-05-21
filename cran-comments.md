@@ -8,7 +8,7 @@
 - GitHub Actions ubuntu-latest, macOS-latest, windows-latest: all pass
 - win-builder (r-devel): pending
 
-## Summary of changes in 0.3.0
+## Summary of changes in 0.3.1
 
 - Minimum R version raised to 4.2.0 (uses native pipe `|>` and pipe placeholder).
 - Zero-row input handling: `check_xy()` now warns (not errors) for zero-row tables.

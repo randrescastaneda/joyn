@@ -1,3 +1,5 @@
+# joyn 0.3.1
+
 # joyn 0.3.0
 
 ## Breaking Changes
