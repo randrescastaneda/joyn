@@ -101,7 +101,7 @@ However, let's consider other possible cases:
 
 -   If, for the same matching observations, the values between the two *country* variables were the same, the reporting variable would report *x & y* instead (so you know that there is no update to make).
 
--   if there are NAs in *country* from `y`, the actual values in `x` will be unchanged, and you would see a *not updated* status in the reporting variable. Nevertheless, notice there is another way for you to bring *country* from `y` to `x`. This is done through the argument `keep_y_in_x` (*see 5. below* ⬇️)
+-   if there are NAs in *country* from `y`, the actual values in `x` will be unchanged, and you would see a *not updated* status in the reporting variable. Nevertheless, notice there is another way for you to bring *country* from `y` to `x`. This is done through the argument `keep_common_vars` (*see 5. below* ⬇️)
 
 ```{r ex4}
 

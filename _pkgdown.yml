@@ -46,6 +46,10 @@ articles:
   - merge-wrapper
   - messages
   - aux-functions
+- title: Performance
+  navbar: Performance
+  contents:
+  - articles/benchmarking
 reference:
 - title: Main function
   desc: |
