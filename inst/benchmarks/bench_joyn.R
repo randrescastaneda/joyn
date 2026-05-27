@@ -1,43 +1,27 @@
 # joyn Benchmark Suite
 #
-# Purpose: Measure performance of joyn functions using microbenchmark.
-#          Covers small (1K–100K), large (500K), and very large (1M) sizes.
+# Purpose: Measure performance of joyn joins and comparison engines.
+#          The authoritative structured runner is
+#          inst/benchmarks/bench_joyn_microbenchmark.R, which writes
+#          benchmark-results-latest.{rds,csv} for the vignette.
 #
 # Location: inst/benchmarks/ — NOT in tests/ (microbenchmark is in Suggests).
 #
 # Usage:
-#   devtools::load_all(); source("inst/benchmarks/bench_joyn.R")
-#   # or: Rscript inst/benchmarks/bench_joyn.R
+#   # Preferred, from a shell at the package root:
+#   #   Rscript inst/benchmarks/bench_joyn_microbenchmark.R \
+#   #     > inst/benchmarks/bench_joyn_microbenchmark.log 2>&1
+#   #
+#   # Optional smoke run:
+#   #   JOYN_BENCH_SMOKE=true Rscript inst/benchmarks/bench_joyn_microbenchmark.R
+#   #
+#   # This script remains a lightweight exploratory helper for manual runs.
 #
 # ===========================================================================
-# BASELINE TIMINGS (recorded 2026-05-08, before optimization)
-# Platform: macOS, R 4.6.0, collapse 2.1.6, data.table 1.18.4
-#
-# store_msg() x50:          23.6ms
-# check_var_class() x10:    175µs (int), 153µs (chr)
-# joyn_workhorse() 10K:     4.57ms
-# joyn() 1K  (1:1):         24.6ms
-# joyn() 10K (1:1):         18.0ms
-# joyn() 100K (1:1):        53.7ms
-# left_join()  10K:         22.7ms
-# right_join() 10K:         22.5ms
-# full_join()  10K:         22.3ms
-# inner_join() 10K:         23.6ms
-# anti_join()  10K:         17.1ms
-#
-# POST-OPTIMIZATION TIMINGS (recorded 2026-05-08, after Phase 1-4 work)
-#
-# store_msg() x50:          21.2ms  (-11%)
-# check_var_class() x10:    171µs (int), 141µs (chr)
-# joyn_workhorse() 10K:     3.37ms  (-26%)
-# joyn() 1K  (1:1):         24.5ms
-# joyn() 10K (1:1):         17.4ms  (-3%)
-# joyn() 100K (1:1):        41.3ms  (-23%)
-# left_join()  10K:         20.0ms  (-12%)
-# right_join() 10K:         22.7ms
-# full_join()  10K:         20.6ms  (-8%)
-# inner_join() 10K:         28.9ms
-# anti_join()  10K:         17.9ms
+# NOTE
+# The benchmarking vignette should read from:
+#   inst/benchmarks/results/benchmark-results-latest.rds
+# not from hard-coded values.
 # ===========================================================================
 
 # -- Dependencies ------------------------------------------------------------
@@ -226,4 +210,12 @@ for (cfg in wrapper_cfg) {
 # ---------------------------------------------------------------------------
 sep("BENCHMARK COMPLETE")
 # ---------------------------------------------------------------------------
-cat("Re-run after future optimizations and update the BASELINE comment block.\n\n")
+cat(
+  paste(
+    "For reproducible benchmark artifacts used by the vignette, run:",
+    "Rscript inst/benchmarks/bench_joyn_microbenchmark.R",
+    sep = "\n"
+  ),
+  "\n\n",
+  sep = ""
+)

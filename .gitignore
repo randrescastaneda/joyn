@@ -21,7 +21,12 @@ PRODUCTION_READINESS_ASSESSMENT.md
 compound-gpid.local.md
 
 # Generated benchmark outputs
-inst/benchmarks/results/
+inst/benchmarks/results/*
+!inst/benchmarks/results/benchmark-results-latest.csv
+!inst/benchmarks/results/benchmark-results-latest.rds
+inst/benchmarks/results/checkpoints/
+inst/benchmarks/results/benchmark-results-*.csv
+inst/benchmarks/results/benchmark-results-*.rds
 
 # Compound GPID managed items (junctions + copied file - do not commit)
 .github/prompts/

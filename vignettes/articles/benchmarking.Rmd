@@ -14,6 +14,97 @@ knitr::opts_chunk$set(
   message   = FALSE,
   warning   = FALSE
 )
+
+read_benchmark_artifact <- function() {
+  candidates <- c(
+    file.path("inst", "benchmarks", "results", "benchmark-results-latest.rds"),
+    file.path("..", "inst", "benchmarks", "results", "benchmark-results-latest.rds"),
+    file.path("..", "..", "inst", "benchmarks", "results", "benchmark-results-latest.rds"),
+    system.file("benchmarks", "results", "benchmark-results-latest.rds", package = "joyn")
+  )
+
+  candidates <- unique(candidates[nzchar(candidates)])
+  existing <- candidates[file.exists(candidates)]
+
+  if (length(existing) == 0) {
+    stop(
+      paste(
+        "Benchmark artifact not found.",
+        "Run `Rscript inst/benchmarks/bench_joyn_microbenchmark.R` from the package root first.",
+        sep = "\n"
+      ),
+      call. = FALSE
+    )
+  }
+
+  readRDS(existing[[1]])
+}
+
+benchmark_artifact <- read_benchmark_artifact()
+benchmark_results <- benchmark_artifact$results
+benchmark_meta <- benchmark_artifact$metadata
+
+benchmark_results$n_label <- paste0(
+  "n = ",
+  ifelse(
+    benchmark_results$n >= 1e6,
+    paste0(format(benchmark_results$n / 1e6, trim = TRUE), "M"),
+    paste0(format(benchmark_results$n / 1e3, trim = TRUE), "K")
+  )
+)
+benchmark_results$n_label <- factor(
+  benchmark_results$n_label,
+  levels = paste0(
+    "n = ",
+    ifelse(
+      benchmark_meta$sizes >= 1e6,
+      paste0(format(benchmark_meta$sizes / 1e6, trim = TRUE), "M"),
+      paste0(format(benchmark_meta$sizes / 1e3, trim = TRUE), "K")
+    )
+  )
+)
+benchmark_results$join_label <- factor(
+  benchmark_results$join_label,
+  levels = c("left join", "right join", "full join", "inner join", "anti join")
+)
+benchmark_results$tool <- factor(
+  benchmark_results$tool,
+  levels = c(
+    "collapse::join",
+    "dplyr::left_join",
+    "joyn::left_join",
+    "data.table::merge",
+    "base::merge",
+    "dplyr::right_join",
+    "joyn::right_join",
+    "dplyr::full_join",
+    "joyn::full_join",
+    "dplyr::inner_join",
+    "joyn::inner_join",
+    "dplyr::anti_join",
+    "joyn::anti_join",
+    "data.table anti join",
+    "base anti join"
+  )
+)
+
+palette_tools <- c(
+  "collapse::join" = "#355070",
+  "dplyr::left_join" = "#6D597A",
+  "joyn::left_join" = "#B56576",
+  "data.table::merge" = "#E09F3E",
+  "base::merge" = "#81B29A",
+  "dplyr::right_join" = "#6D597A",
+  "joyn::right_join" = "#B56576",
+  "dplyr::full_join" = "#6D597A",
+  "joyn::full_join" = "#B56576",
+  "dplyr::inner_join" = "#6D597A",
+  "joyn::inner_join" = "#B56576",
+  "dplyr::anti_join" = "#6D597A",
+  "joyn::anti_join" = "#B56576",
+  "data.table anti join" = "#E09F3E",
+  "base anti join" = "#81B29A"
+)
 ```
 
 ## Overview
@@ -24,18 +115,21 @@ adds a **diagnostic layer**: match-type validation, reporting (the `.joyn` varia
 and structured message logging. This layer is what sets `joyn` apart from a plain
 merge — but it also comes at a cost.
 
-This article presents benchmark results comparing `joyn` against:
+This article presents two complementary benchmark views:
 
-- `dplyr::left_join()` (vctrs-backed, compiled)
-- `data.table::merge.data.table()` (C-backed)
-- `collapse::join()` (the underlying engine)
-- `base::merge()` (pure R)
+- **Cross-engine comparison** for the join type all tools share most naturally: a
+  left join.
+- **Complete join-type coverage** for left, right, full, inner, and anti joins
+  using the latest benchmark artifact generated from `inst/benchmarks/bench_joyn_microbenchmark.R`.
+
+The numbers below are not hard-coded. The vignette reads the current benchmark
+artifact directly, so rerunning the benchmark script refreshes the tables and plots.
 
 > **Bottom line:** `joyn` is comparable in speed to `data.table::merge` and
-> `base::merge`. The overhead relative to raw `collapse::join` is the cost of
-> joyn's diagnostic features — match-type checking, `.joyn` report generation,
-> and message logging. That overhead is small and fixed (~3–5 ms per join call),
-> meaning it matters less as table size grows.
+> `base::merge` in the common left-join case. Relative to raw `collapse::join`,
+> the extra time is the price of diagnostics — match-type checking, `.joyn`
+> report generation, and message logging. That overhead is small and mostly fixed,
+> so it matters less as table size grows.
 
 ---
 
@@ -43,38 +137,101 @@ This article presents benchmark results comparing `joyn` against:
 
 All benchmarks were run with:
 
-- **Platform:** `aarch64-apple-darwin23` (Apple Silicon)
-- **R version:** 4.6.0
-- **Packages:** joyn 0.3.1, dplyr 1.1.x, data.table 1.18.4, collapse 2.1.6
-- **Join type:** left join on a single integer key (`id`), 1:1 match
-- **Repetitions:** 30 (10K), 20 (100K), 10 (500K), 5 (1M)
+- **Platform:** `r benchmark_meta$platform`
+- **R version:** `r benchmark_meta$r_version`
+- **Packages:** `r paste(names(benchmark_meta$package_versions), benchmark_meta$package_versions, collapse = ", ")`
+- **Key structure:** single integer key (`id`), partially overlapping 1:1 key space
+- **Shared-key overlap:** `r sprintf("%.0f%%", 100 * benchmark_meta$overlap)`
+- **Sizes:** `r paste(format(benchmark_meta$sizes, big.mark = ","), collapse = ", ")`
 - **Metric:** median elapsed time (ms)
+- **Generated:** `r benchmark_meta$generated_at`
 
-Data were generated as two random-keyed `data.table`s with no duplicate keys
-(pure 1:1 join, the simplest case — results would differ for m:m joins).
+Data are generated as two random-keyed tables with unique integer keys in each
+input and controlled overlap between `x` and `y`. That makes left, right, full,
+inner, and anti joins all meaningful in the same benchmark run.
 
----
+For left, right, full, and inner joins, the comparison includes `joyn`, `dplyr`,
+`collapse`, `data.table`, and base R. For anti joins, `data.table` and base R are
+benchmarked using equivalent filtering expressions rather than a single dedicated
+verb.
 
 ## Results
 
+### Cross-engine comparison: left join
+
 ```{r results-table}
 library(knitr)
+library(data.table)
 
-results <- data.frame(
-  Tool        = c("collapse::join", "dplyr::left_join", "joyn::left_join",
-                  "data.table::merge", "base::merge"),
-  `n = 10K`   = c(0.16, 0.89, 17.51, 22.04, 22.29),
-  `n = 100K`  = c(4.02, 6.95, 35.29, 38.73, 38.41),
-  `n = 500K`  = c(1.53, 36.04, 101.53, 98.17, 98.18),
-  `n = 1M`    = c(6.13, 84.16, 207.14, 178.37, 208.02),
-  check.names = FALSE
+left_results <- benchmark_results[benchmark_results$join_type == "left", , drop = FALSE]
+left_table <- data.table::dcast(
+  data.table::as.data.table(left_results[, c("tool", "n_label", "median")]),
+  tool ~ n_label,
+  value.var = "median"
 )
+left_table <- as.data.frame(left_table)
+left_table <- left_table[match(
+  c("collapse::join", "dplyr::left_join", "joyn::left_join", "data.table::merge", "base::merge"),
+  left_table$tool
+), , drop = FALSE]
+names(left_table)[1] <- "Tool"
 
 kable(
-  results,
-  digits    = 1,
-  align     = c("l", "r", "r", "r", "r"),
-  caption   = "Median elapsed time (ms) — left join on a single integer key, 1:1 match"
+  left_table,
+  digits = 1,
+  align = c("l", rep("r", ncol(left_table) - 1L)),
+  caption = "Median elapsed time (ms) — left join on a single integer key"
+)
+```
+
+As expected, `collapse::join()` is the raw-speed leader. `joyn::left_join()` is
+slower because it performs validation and reporting work around the underlying
+join, but it stays in the same broad range as `data.table::merge()` and
+`base::merge()`.
+
+### Complete join-type coverage
+
+```{r complete-results-table}
+complete_table <- data.table::dcast(
+  data.table::as.data.table(benchmark_results[, c("join_label", "tool", "n_label", "median")]),
+  join_label + tool ~ n_label,
+  value.var = "median"
+)
+complete_table <- as.data.frame(complete_table)
+names(complete_table)[1:2] <- c("Join", "Tool")
+
+kable(
+  complete_table,
+  digits = 1,
+  align = c("l", "l", rep("r", ncol(complete_table) - 2L)),
+  caption = "Median elapsed time (ms) — all benchmarked join types and engines"
+)
+```
+
+This table is generated from the same latest artifact used for the plots, so it
+updates automatically whenever the benchmark runner is re-executed.
+
+### joyn wrapper summary
+
+```{r wrapper-results-table}
+joyn_table <- data.table::dcast(
+  data.table::as.data.table(
+    benchmark_results[
+      benchmark_results$engine == "joyn",
+      c("join_label", "n_label", "median")
+    ]
+  ),
+  join_label ~ n_label,
+  value.var = "median"
+)
+joyn_table <- as.data.frame(joyn_table)
+names(joyn_table)[1] <- "Join"
+
+kable(
+  joyn_table,
+  digits = 1,
+  align = c("l", rep("r", ncol(joyn_table) - 1L)),
+  caption = "Median elapsed time (ms) — joyn wrapper joins"
 )
 ```
 
@@ -93,49 +250,51 @@ joyn does more than a plain merge on every call:
 4. **Message logging** — stores structured info/warning/error messages for later
    retrieval via `joyn_msg()`.
 
-These steps add a **fixed overhead of ~3–5 ms per call**, which is the direct cost
-of getting join diagnostics automatically. As table size increases, this overhead
+These steps add a modest fixed overhead per call, which is the direct cost of
+getting join diagnostics automatically. As table size increases, this overhead
 becomes a smaller fraction of total time.
 
-```{r overhead-plot, fig.width = 6.5, fig.height = 3.8, fig.alt = "Bar chart showing median join time (ms) for five tools at four table sizes. collapse is fastest, joyn is comparable to data.table and base merge."}
-# Static plot — results are pre-computed, not re-run here
+```{r left-join-plot, fig.width = 6.7, fig.height = 4.0, fig.alt = "Grouped bar chart of left-join benchmark times across engines and sizes."}
 library(ggplot2)
 
-bench <- data.frame(
-  tool = rep(c("collapse", "dplyr", "joyn", "data.table", "base"), each = 4),
-  n    = rep(c("10K", "100K", "500K", "1M"), times = 5),
-  ms   = c(
-    0.16, 4.02,  1.53,   6.13,   # collapse
-    0.89, 6.95, 36.04,  84.16,   # dplyr
-   17.51,35.29,101.53, 207.14,   # joyn
-   22.04,38.73, 98.17, 178.37,   # data.table
-   22.29,38.41, 98.18, 208.02    # base
-  )
-)
+left_plot_data <- benchmark_results[benchmark_results$join_type == "left", , drop = FALSE]
 
-bench$n    <- factor(bench$n,    levels = c("10K","100K","500K","1M"))
-bench$tool <- factor(bench$tool, levels = c("collapse","dplyr","joyn","data.table","base"))
-
-ggplot(bench, aes(n, ms, fill = tool)) +
+ggplot(left_plot_data, aes(n_label, median, fill = tool)) +
   geom_col(position = position_dodge(0.8), width = 0.7) +
-  scale_fill_manual(
-    values = c(
-      collapse   = "#2166AC",
-      dplyr      = "#4DAF4A",
-      joyn       = "#E41A1C",
-      data.table = "#FF7F00",
-      base       = "#984EA3"
-    )
-  ) +
+  scale_fill_manual(values = palette_tools, drop = FALSE) +
   labs(
-    x    = "Table size (rows per side)",
-    y    = "Median time (ms)",
+    x = "Table size (rows per side)",
+    y = "Median time (ms)",
     fill = NULL,
-    title   = "Left join performance: joyn vs alternatives",
-    caption = "Lower is faster. 1:1 match on a single integer key."
+    title = "Left join: cross-engine comparison",
+    caption = "Lower is faster. Unique integer keys with partial overlap."
   ) +
   theme_minimal(base_size = 11) +
-  theme(legend.position = "bottom")
+  theme(
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    plot.title.position = "plot"
+  )
+```
+
+```{r all-joins-plot, fig.width = 7.2, fig.height = 6.2, fig.alt = "Faceted grouped bar charts showing benchmark times for left, right, full, inner, and anti joins across engines and sizes."}
+ggplot(benchmark_results, aes(n_label, median, fill = tool)) +
+  geom_col(position = position_dodge(0.8), width = 0.7) +
+  facet_wrap(~ join_label, scales = "free_y") +
+  scale_fill_manual(values = palette_tools, drop = FALSE) +
+  labs(
+    x = "Table size (rows per side)",
+    y = "Median time (ms)",
+    fill = NULL,
+    title = "Join benchmark coverage",
+    subtitle = "Left, right, full, inner, and anti joins from the latest benchmark artifact"
+  ) +
+  theme_minimal(base_size = 11) +
+  theme(
+    legend.position = "bottom",
+    panel.grid.minor = element_blank(),
+    plot.title.position = "plot"
+  )
 ```
 
 ---
@@ -144,11 +303,11 @@ ggplot(bench, aes(n, ms, fill = tool)) +
 
 | Tool | Use when… |
 |---|---|
-| **joyn** | You want join diagnostics, match-type validation, and a report — i.e., always when data quality matters |
-| **collapse::join** | You need maximum raw speed and trust your data's structure |
-| **dplyr** | You are already in a tidyverse pipeline and don't need diagnostics |
-| **data.table::merge** | You are working in data.table and need a plain merge |
-| **base::merge** | You have no dependencies and small data |
+| **joyn** | You want join diagnostics, match-type validation, and a report — especially when data quality matters |
+| **collapse::join** | You need maximum raw speed and direct support for left, right, full, inner, and anti joins |
+| **dplyr** | You are already in a tidyverse pipeline and do not need diagnostics |
+| **data.table** | You are working in data.table and want low-level control, including custom anti-join idioms |
+| **base** | You want dependency-free joins or simple filtering-based anti-join logic |
 
 > **Tip:** `joyn` and `collapse` are complementary. Use `joyn` during data
 > preparation and validation; switch to `collapse::join` directly in
@@ -158,10 +317,15 @@ ggplot(bench, aes(n, ms, fill = tool)) +
 
 ## Reproducing these benchmarks
 
-The benchmark script is included in the package at `inst/benchmarks/bench_joyn.R`
-and `inst/benchmarks/bench_joyn_microbenchmark.R`. To run them:
+The benchmark artifact used in this vignette is generated by
+`inst/benchmarks/bench_joyn_microbenchmark.R`.
 
 ```r
-# From the package root
-source(system.file("benchmarks", "bench_joyn.R", package = "joyn"))
+# From the package root, in a terminal
+Rscript inst/benchmarks/bench_joyn_microbenchmark.R
 ```
+
+The latest artifact is written to:
+
+- `inst/benchmarks/results/benchmark-results-latest.rds`
+- `inst/benchmarks/results/benchmark-results-latest.csv`
