@@ -27,14 +27,16 @@ Suggests:
     bench,
     covr,
     devtools,
+    dplyr,
+    fs,
+    highcharter,
+    htmltools,
     knitr,
+    microbenchmark,
     rmarkdown,
     testthat (>= 3.0.0),
-    withr,
-    dplyr,
     tibble,
-    fs,
-    microbenchmark
+    withr
 Config/testthat/edition: 3
 Imports: 
     rlang,
